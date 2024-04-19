@@ -1,11 +1,6 @@
 package org.openapitools.api;
 
-import org.openapitools.model.CreditCardApiAlertsPost200Response;
-import org.openapitools.model.CreditCardApiDetailsGet200Response;
-import org.openapitools.model.CreditCardApiDetailsGet400Response;
-import org.openapitools.model.CreditCardApiDetailsGet401Response;
-import org.openapitools.model.CreditCardApiPaymentsPost200Response;
-import org.openapitools.model.CreditCardApiPaymentsPostRequest;
+import org.openapitools.model.PaymentPlanProposalRequest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +26,15 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-04-19T11:57:54.777818+05:30[Asia/Kolkata]", comments = "Generator version: 7.4.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-04-19T17:24:41.195299+05:30[Asia/Kolkata]", comments = "Generator version: 7.4.0")
 @Controller
-@RequestMapping("${openapi.creditCardManagementSystem.base-path:}")
-public class CreditCardApiApiController implements CreditCardApiApi {
+@RequestMapping("${openapi.creditCardNotificationsAndAlerts.base-path:}")
+public class PaymentPlanProposalApiController implements PaymentPlanProposalApi {
 
     private final NativeWebRequest request;
 
     @Autowired
-    public CreditCardApiApiController(NativeWebRequest request) {
+    public PaymentPlanProposalApiController(NativeWebRequest request) {
         this.request = request;
     }
 

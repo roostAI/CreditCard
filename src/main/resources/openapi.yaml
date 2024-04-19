@@ -1,132 +1,252 @@
-openapi: 3.0.2
+openapi: 3.0.0
 info:
-  description: This page documents the Credit Card Management System API
-  title: Credit Card Management System API
+  title: Credit Card Notifications and Alerts API
   version: 1.0.0
 servers:
 - url: http://localhost:3000
 paths:
-  /credit-card-api/details:
-    get:
-      parameters:
-      - description: Credit Card number to fetch details
-        explode: true
-        in: query
-        name: cardNumber
-        required: true
-        schema:
-          pattern: "^[0-9]{10}$"
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_credit_card_api_details_get_200_response'
-          description: Credit card details successfully fetched
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_credit_card_api_details_get_400_response'
-          description: Invalid card number provided
-        "401":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_credit_card_api_details_get_401_response'
-          description: Unauthorized access
-      x-accepts: application/json
-  /credit-card-api/alerts:
+  /payment-reminder:
     post:
-      parameters:
-      - description: Credit Card number with overdue payment
-        explode: true
-        in: query
-        name: cardNumber
-        required: true
-        schema:
-          pattern: "^[0-9]{10}$"
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_credit_card_api_alerts_post_200_response'
-          description: Overdue payment alert action successfully initiated
-      x-accepts: application/json
-  /credit-card-api/payments:
-    post:
+      operationId: paymentReminder
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/_credit_card_api_payments_post_request'
+              $ref: '#/components/schemas/paymentReminder_request'
         required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      x-content-type: application/json
+      x-accepts: text/plain
+  /balance-alert:
+    post:
+      operationId: balanceAlert
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/balanceAlert_request'
+        required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      x-content-type: application/json
+      x-accepts: text/plain
+  /collection-notification:
+    post:
+      operationId: collectionNotification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/collectionNotification_request'
+        required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      x-content-type: application/json
+      x-accepts: text/plain
+  /payment-plan-proposal:
+    post:
+      operationId: paymentPlanProposal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/paymentPlanProposal_request'
+        required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      x-content-type: application/json
+      x-accepts: text/plain
+  /collection-agency:
+    post:
+      operationId: collectionAgencyInvolvement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/collectionAgencyInvolvement_request'
+        required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      x-content-type: application/json
+      x-accepts: text/plain
+  /legal-action:
+    post:
+      operationId: legalActionInitiation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/legalActionInitiation_request'
+        required: true
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      x-content-type: application/json
+      x-accepts: text/plain
+  /notifications:
+    get:
+      operationId: getNotifications
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_credit_card_api_payments_post_200_response'
-          description: Payment successful and balance updated
-      x-content-type: application/json
+                type: object
+          description: OK
+      x-accepts: application/json
+  /card-details:
+    get:
+      operationId: getCardDetails
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCardDetails_200_response'
+          description: OK
       x-accepts: application/json
 components:
   schemas:
-    _credit_card_api_payments_post_request:
-      properties:
-        CardNumber:
-          pattern: "^[0-9]{10}$"
-          type: string
-        Amount:
-          type: number
-      type: object
-    _credit_card_api_details_get_401_response:
+    getCardDetails_200_response:
       example:
-        error: Access denied
+        cardNumberPartial: cardNumberPartial
       properties:
-        error:
-          example: Access denied
+        cardNumberPartial:
           type: string
       type: object
-    _credit_card_api_payments_post_200_response:
-      example:
-        newBalance: 0.8008281904610115
-        message: Payment successful
+    legalActionInitiation_request:
       properties:
-        message:
-          example: Payment successful
+        nonPaymentStatus:
           type: string
-        newBalance:
-          type: number
+        legalStatus:
+          type: string
+        cardLast4:
+          maxLength: 4
+          minLength: 4
+          type: string
+      required:
+      - cardLast4
+      - legalStatus
+      - nonPaymentStatus
       type: object
-    _credit_card_api_alerts_post_200_response:
-      example:
-        message: Call initiated
+    paymentPlanProposal_request:
       properties:
-        message:
-          example: Call initiated
+        outstandingBalance:
+          type: string
+        paymentPlan:
+          $ref: '#/components/schemas/paymentPlanProposal_request_paymentPlan'
+        cardLast4:
+          maxLength: 4
+          minLength: 4
+          type: string
+      required:
+      - cardLast4
+      - outstandingBalance
+      - paymentPlan
+      type: object
+    balanceAlert_request:
+      properties:
+        paymentDueDate:
+          format: date
+          type: string
+        currentDate:
+          format: date
+          type: string
+        cardLast4:
+          maxLength: 4
+          minLength: 4
+          type: string
+      required:
+      - cardLast4
+      - currentDate
+      - paymentDueDate
+      type: object
+    collectionNotification_request:
+      properties:
+        delinquencyStatus:
+          type: string
+        outstandingBalance:
+          type: string
+        additionalCharges:
+          type: string
+        cardLast4:
+          maxLength: 4
+          minLength: 4
+          type: string
+      required:
+      - additionalCharges
+      - cardLast4
+      - delinquencyStatus
+      - outstandingBalance
+      type: object
+    paymentPlanProposal_request_paymentPlan:
+      properties:
+        installmentAmount:
+          type: string
+        interestRate:
+          type: string
+        termLength:
           type: string
       type: object
-    _credit_card_api_details_get_400_response:
-      example:
-        error: Invalid card number
+    paymentReminder_request:
       properties:
-        error:
-          example: Invalid card number
+        currentDate:
+          format: date
           type: string
+        paymentDueDate:
+          format: date
+          type: string
+        cardLast4:
+          maxLength: 4
+          minLength: 4
+          type: string
+      required:
+      - cardLast4
+      - currentDate
+      - paymentDueDate
       type: object
-    _credit_card_api_details_get_200_response:
-      example:
-        balance: 0
-        dueDate: dueDate
+    collectionAgencyInvolvement_request:
       properties:
-        dueDate:
+        previousNotifications:
           type: string
-        balance:
-          type: integer
+        responseStatus:
+          type: string
+        cardLast4:
+          maxLength: 4
+          minLength: 4
+          type: string
+      required:
+      - cardLast4
+      - previousNotifications
+      - responseStatus
       type: object
