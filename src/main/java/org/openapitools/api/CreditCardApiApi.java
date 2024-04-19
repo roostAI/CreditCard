@@ -29,7 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.server.ResponseStatusException;
+import java.math.BigDecimal;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
@@ -67,19 +68,12 @@ public interface CreditCardApiApi {
     )
     
     default ResponseEntity<CreditCardApiAlertsPost200Response> creditCardApiAlertsPost(
-        @NotNull @Pattern(regexp = "^[0-9]{10}$") @Parameter(name = "cardNumber", description = "Credit Card number with overdue payment", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "cardNumber", required = true) String cardNumber
+          //@NotNull @Pattern(regexp = "^[0-9]{10}$") @Parameter(name = "cardNumber", description = "Credit Card number with overdue payment", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "cardNumber", required = true) String cardNumber
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"message\" : \"Call initiated\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+        // Dummy logic for example purposes
+        CreditCardApiAlertsPost200Response response = new CreditCardApiAlertsPost200Response();
+        response.setMessage("Alert has been triggered for overdue payment.");
+        return ResponseEntity.ok(response);
     }
 
 
@@ -110,31 +104,19 @@ public interface CreditCardApiApi {
         value = "/credit-card-api/details",
         produces = { "application/json" }
     )
-    
-    default ResponseEntity<CreditCardApiDetailsGet200Response> creditCardApiDetailsGet(
-        @NotNull @Pattern(regexp = "^[0-9]{10}$") @Parameter(name = "cardNumber", description = "Credit Card number to fetch details", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "cardNumber", required = true) String cardNumber
-    ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"balance\" : 0, \"dueDate\" : \"dueDate\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"error\" : \"Invalid card number\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"error\" : \"Access denied\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
+    @GetMapping("/credit-card-api/details")
+    default ResponseEntity<?> creditCardApiDetailsGet(
+        @NotNull @Pattern(regexp = "^[0-9]{10}$") @RequestParam(value = "cardNumber", required = true) String cardNumber
+    ) {
+        if (cardNumber.equals("1234567890")) {
+            CreditCardApiDetailsGet200Response response = new CreditCardApiDetailsGet200Response();
+            response.setBalance(100);
+            response.setDueDate("2024-05-01");
+            return ResponseEntity.ok(response);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid card number provided");
+        }
     }
 
 
@@ -158,21 +140,21 @@ public interface CreditCardApiApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    
-    default ResponseEntity<CreditCardApiPaymentsPost200Response> creditCardApiPaymentsPost(
-        @Parameter(name = "CreditCardApiPaymentsPostRequest", description = "", required = true) @Valid @RequestBody CreditCardApiPaymentsPostRequest creditCardApiPaymentsPostRequest
+
+        
+    default ResponseEntity<?> creditCardApiPaymentsPost(
+        @Valid @RequestBody CreditCardApiPaymentsPostRequest request
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"newBalance\" : 0.8008281904610115, \"message\" : \"Payment successful\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
+        if (request.getCardNumber() != null && request.getCardNumber().matches("^[0-9]{10}$")) {
+            BigDecimal deduction = new BigDecimal(50);  // Example deduction amount
+            BigDecimal newBalance = request.getAmount().subtract(deduction);  // Using BigDecimal's subtract method
+    
+            CreditCardApiPaymentsPost200Response response = new CreditCardApiPaymentsPost200Response();
+            response.setNewBalance(newBalance);  // Set the new balance after deduction
+            response.setMessage("Payment successful");
+            return ResponseEntity.ok(response);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid card number");
+        }
+}
 }
