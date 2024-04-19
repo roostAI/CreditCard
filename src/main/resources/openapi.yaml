@@ -1,0 +1,132 @@
+openapi: 3.0.2
+info:
+  description: This page documents the Credit Card Management System API
+  title: Credit Card Management System API
+  version: 1.0.0
+servers:
+- url: http://localhost:3000
+paths:
+  /credit-card-api/details:
+    get:
+      parameters:
+      - description: Credit Card number to fetch details
+        explode: true
+        in: query
+        name: cardNumber
+        required: true
+        schema:
+          pattern: "^[0-9]{10}$"
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_credit_card_api_details_get_200_response'
+          description: Credit card details successfully fetched
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_credit_card_api_details_get_400_response'
+          description: Invalid card number provided
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_credit_card_api_details_get_401_response'
+          description: Unauthorized access
+      x-accepts: application/json
+  /credit-card-api/alerts:
+    post:
+      parameters:
+      - description: Credit Card number with overdue payment
+        explode: true
+        in: query
+        name: cardNumber
+        required: true
+        schema:
+          pattern: "^[0-9]{10}$"
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_credit_card_api_alerts_post_200_response'
+          description: Overdue payment alert action successfully initiated
+      x-accepts: application/json
+  /credit-card-api/payments:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_credit_card_api_payments_post_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_credit_card_api_payments_post_200_response'
+          description: Payment successful and balance updated
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    _credit_card_api_payments_post_request:
+      properties:
+        CardNumber:
+          pattern: "^[0-9]{10}$"
+          type: string
+        Amount:
+          type: number
+      type: object
+    _credit_card_api_details_get_401_response:
+      example:
+        error: Access denied
+      properties:
+        error:
+          example: Access denied
+          type: string
+      type: object
+    _credit_card_api_payments_post_200_response:
+      example:
+        newBalance: 0.8008281904610115
+        message: Payment successful
+      properties:
+        message:
+          example: Payment successful
+          type: string
+        newBalance:
+          type: number
+      type: object
+    _credit_card_api_alerts_post_200_response:
+      example:
+        message: Call initiated
+      properties:
+        message:
+          example: Call initiated
+          type: string
+      type: object
+    _credit_card_api_details_get_400_response:
+      example:
+        error: Invalid card number
+      properties:
+        error:
+          example: Invalid card number
+          type: string
+      type: object
+    _credit_card_api_details_get_200_response:
+      example:
+        balance: 0
+        dueDate: dueDate
+      properties:
+        dueDate:
+          type: string
+        balance:
+          type: integer
+      type: object
