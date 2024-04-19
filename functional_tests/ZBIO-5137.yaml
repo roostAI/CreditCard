@@ -77,6 +77,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - CardNumber
+                - Amount
               properties:
                 CardNumber:
                   type: string
@@ -96,3 +99,13 @@ paths:
                     example: 'Payment successful'
                   newBalance:
                     type: number
+        '400':
+          description: Bad request - Invalid payment details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    example: 'Invalid payment details'
