@@ -11,11 +11,9 @@ The development process for this project followed the following steps:
   This was the user description in jira ticket.
   
 ```
-
   Fetch the credit card due date and balance for a given credit card
   Arrange for a call to the user if the balance is unpaid and overdue
   Once payment is collected, update the card balance
-
 
 ```
 
@@ -43,7 +41,7 @@ To get started with the CreditCard Application, follow these steps:
 
 2. Build the project using maven:
 
-```mvn compile```  or  ```mvn install```
+ ```mvn install``` or ```mvn compile```
 
 3. Run the application:
 
@@ -53,30 +51,26 @@ To get started with the CreditCard Application, follow these steps:
   
   Install Prism (https://github.com/stoplightio/prism) for mocking server -
   
-   ```
-    npm install -g @stoplight/prism-cli
-   ```
+   ```npm install -g @stoplight/prism-cli```
 
   Start prism mock server - 
   
-  ```
-     prism mock functional_tests/ZBIO-5137.yaml
-  ```
+  ```prism mock functional_tests/ZBIO-5137.yaml```
 
   Export hosted API_HOST and AUTH_TOKEN -
     
-    ```
-     export API_HOST=http://127.0.0.1:4010
-     export AUTH_TOKEN=token
-    ```
+  ```
+  export API_HOST=http://127.0.0.1:4010 
+  export AUTH_TOKEN=token
+  ```
 
   Run tests -
     
-    ```mvn test```
+  ```mvn test```
 
   Analyse test report -
     
-    ```target/karate-reports/karate-summary.html```
+  ```target/karate-reports/karate-summary.html```
 
 5. Explore the code, tests, and documentation to understand the implementation details and the AI-powered tools used in the development process.
 
