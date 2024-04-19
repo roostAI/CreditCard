@@ -24,8 +24,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  dueDate: string
-                  balance: integer
+                  dueDate:
+                    type: string
+                  balance:
+                    type: integer
         '400':
           description: Invalid card number provided
           content:
