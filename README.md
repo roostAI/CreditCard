@@ -50,6 +50,18 @@ To get started with the CreditCard Application, follow these steps:
 ```mvn spring-boot:run```
 
 4. Run Karate Tests:
+  
+  Install Prism (https://github.com/stoplightio/prism) for mocking server -
+  
+   ```
+    npm install -g @stoplight/prism-cli
+   ```
+
+  Start prism mock server - 
+  
+  ```
+     prism mock functional_tests/ZBIO-5137.yaml
+  ```
 
   Export hosted API_HOST and AUTH_TOKEN -
     
