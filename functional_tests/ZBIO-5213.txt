@@ -1,0 +1,51 @@
+Functional Test Cases:
+
+1. Credit Card Due Reminder:
+    - Input: Current date, Payment due date, Last 4 digits of Credit Card
+    - Scenario: Verify that the reminder notification is sent to the user when the payment due date approaches.
+    - Expected Output: User receives notification showing the last 4 digits of their credit card number and the due date. 
+
+2. Overdue Balance Alert:
+    - Input: Payment Due Date, Current date, Last 4 digits of Credit Card
+    - Scenario: Verify that an alert is sent to the user if the payment due date has passed and payment is not received.
+    - Expected Output: User receives alert notification showing overdue balance, potential consequences, and last 4 digits of their credit card number.
+
+3. Collection Notification:
+    - Input: Delinquency Status, Outstanding Balance, Additional Charges, Last 4 digits of Credit Card
+    - Scenario: Verify that a collection notification is sent when the account has become significantly delinquent.
+    - Expected Output: User receives an official notification detailing amount owed, additional charges, and last 4 digits of their credit card number.
+
+4. Payment Plan Proposal:
+    - Input: Outstanding Balance, Payment Plan, Last 4 digits of Credit Card
+    - Scenario: Verify that a payment plan is proposed to the user when they cannot pay the full overdue balance.
+    - Expected Output: User receives a payment plan proposal outlining a structured repayment schedule with reduced interest rates or fees & last 4 digits of their credit card number.
+
+5. Collection Agency Involvement:
+    - Input: Previous Notifications, Response Status, Last 4 digits of Credit Card
+    - Scenario: Verify that a collection agency gets involved when cardholder fails to respond to previous notifications and reminders.
+    - Expected Output: Collection agency receives information including last 4 digits of card number and other required data.
+
+6. Legal Action Initiation:
+    - Input: Non-payment Status, Legal Status, Last 4 digits of Credit Card
+    - Scenario: Verify that legal action is initiated in extreme cases of non-payment or default.
+    - Expected Output: Legal documents contain the last 4 digits of credit card number and other necessary information.
+
+
+Non-functional Test Cases:
+
+1. Performance Testing:
+   - Scenario: Verify that the system should be able to handle high volumes of reminders/alerts/notifications at the same time.
+   - Expected Output: System functions correctly with no delay during high traffic times.
+
+2. Security Testing:
+    - Input: Full credit card number
+    - Scenario: Verify that full credit card number is not shown in communications or documentation. Only the last 4 digits should be visible.
+    - Expected Output: Only the last four digits of the credit card number are visible in any communication or documentation.
+
+3. Compatibility Testing:
+    - Scenario: Verify that the reminders, alerts, and notifications are rendered correctly on all supported platforms (email, mobile notifications, web browsers, etc.).
+    - Expected Output: Reminders, alerts, and notifications are correctly displayed across all supported platforms.
+
+4. Usability Testing:
+    - Scenario: Verify the clarity and understandability of the reminders, alerts, and notifications text content.
+    - Expected Output: The text content in the notifications should be understandable and clear to the users.

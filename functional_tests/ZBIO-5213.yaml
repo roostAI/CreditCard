@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: Credit Card Notifications and Alerts API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+
+paths:
+
+  /payment-reminder:
+    post:
+      operationId: paymentReminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - currentDate
+                - paymentDueDate
+                - cardLast4
+              properties:
+                currentDate:
+                  type: string
+                  format: date
+                paymentDueDate:
+                  type: string
+                  format: date
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /balance-alert:
+    post:
+      operationId: balanceAlert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - paymentDueDate
+                - currentDate
+                - cardLast4
+              properties:
+                paymentDueDate:
+                  type: string
+                  format: date
+                currentDate:
+                  type: string
+                  format: date
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                
+  /collection-notification:
+    post:
+      operationId: collectionNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - delinquencyStatus
+                - outstandingBalance
+                - additionalCharges
+                - cardLast4
+              properties:
+                delinquencyStatus:
+                  type: string
+                outstandingBalance:
+                  type: string
+                additionalCharges:
+                  type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /payment-plan-proposal:
+    post:
+      operationId: paymentPlanProposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - outstandingBalance
+                - paymentPlan
+                - cardLast4
+              properties:
+                outstandingBalance:
+                  type: string
+                paymentPlan:
+                  type: object
+                  properties:
+                    installmentAmount:
+                      type: string
+                    interestRate:
+                      type: string
+                    termLength:
+                      type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /collection-agency:
+    post:
+      operationId: collectionAgencyInvolvement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - previousNotifications
+                - responseStatus
+                - cardLast4
+              properties:
+                previousNotifications:
+                  type: string
+                responseStatus:
+                  type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /legal-action:
+    post:
+      operationId: legalActionInitiation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nonPaymentStatus
+                - legalStatus
+                - cardLast4
+              properties:
+                nonPaymentStatus:
+                  type: string
+                legalStatus:
+                  type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /notifications:
+    get:
+      operationId: getNotifications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /card-details:
+    get:
+      operationId: getCardDetails
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cardNumberPartial:
+                    type: string
