@@ -1,0 +1,38 @@
+FUNCTIONAL TEST CASE:
+
+1. Credit Card Detail Verification:
+   - Input: Valid Credit card number
+   - Expected Output: System should fetch and display the due date and balance
+   - Edge Case: Examine behavior for an invalid credit card number or an empty field.
+
+2. Overdue Payment Alert:
+   - Input: Valid Credit card number with overdue payment
+   - Expected Output: System should initiate a call to the card holder
+   - Edge Case: Check what happens if the user's contact information isn't available or is incorrect.
+
+3. Payment Collection and Balance Updating:
+   - Input: Payment information
+   - Expected Output: System should collect the payment and correctly update the balance 
+   - Edge Case: Investigate behavior if the payment collection fails, is delayed or is more than the due amount.
+
+NON-FUNCTIONAL TEST CASE:
+
+1. Application Performance:
+   - Goal: Determine the application's performance and responsiveness when fetching due date and balance details, initiate a call, and process a payment.
+   - Expected Outcome: The operations should be completed within an acceptable timeframe.
+
+2. Security Testing:
+   - Goal: Ensure that credit card details and contact information are handled and stored securely.
+   - Expected Outcome: Sensitive information should be encrypted and unauthorised access should be prohibited.
+
+3. Usability Testing:
+   - Goal: Test the application's user interface and ease of use in fetching due date and initiating calls
+   - Expected Outcome: The user interface should be intuitive and user-friendly.
+
+4. Load Testing:
+   - Goal: Assess the application's behaviour under peak load conditions when multiple users are fetching balance details and initiating calls simultaneously.
+   - Expected Outcome: The application should effectively manage high loads and operate without crashing or slowing down.
+
+5. Compatibility Testing:
+   - Goal: Evaluate the application's compatibility with various operating systems and web browsers
+   - Expected Outcome: The application should function optimally across all tested platforms.
