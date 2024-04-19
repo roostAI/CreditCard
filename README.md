@@ -51,17 +51,20 @@ To get started with the CreditCard Application, follow these steps:
 
 4. Run Karate Tests:
 
-Export hosted API_HOST and AUTH_TOKEN
-```
-   export API_HOST=http://127.0.0.1:4010
-   export AUTH_TOKEN=token
-```
+  Export hosted API_HOST and AUTH_TOKEN -
+    
+    ```
+     export API_HOST=http://127.0.0.1:4010
+     export AUTH_TOKEN=token
+    ```
 
-Run tests 
-```mvn test```
+  Run tests -
+    
+    ```mvn test```
 
-Analyse test report
-```target/karate-reports/karate-summary.html```
+  Analyse test report -
+    
+    ```target/karate-reports/karate-summary.html```
 
 5. Explore the code, tests, and documentation to understand the implementation details and the AI-powered tools used in the development process.
 
