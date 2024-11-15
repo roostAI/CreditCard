@@ -1,0 +1,79 @@
+Based on the given user story, I'll generate comprehensive test scenarios covering both functional and non-functional aspects. Here are the test scenarios:
+
+Functional Tests:
+
+1. Portfolio Composition Retrieval:
+   - Test the API endpoint for retrieving portfolio composition
+   - Verify that the response includes all asset types (Stock, Liquid funds, Commodities, Real Estate)
+   - Check if the response includes the current percentage allocation for each asset type
+
+2. Asset Concentration Detection:
+   - Test when Stock concentration exceeds 50%
+   - Test when Commodities concentration exceeds 30%
+   - Test when Real Estate concentration exceeds 30%
+   - Verify that the program suggests rebalancing in each case
+
+3. Poor Representation Detection:
+   - Test when any asset type falls below 10% representation
+   - Verify that the program suggests rebalancing in this case
+
+4. Rebalancing Suggestion:
+   - Test that the program suggests selling overrepresented assets
+   - Test that the program suggests buying underrepresented assets
+   - Verify that the suggested transactions would bring the portfolio back into balance
+
+5. Multiple Asset Imbalance:
+   - Test scenarios where multiple assets are out of balance simultaneously
+   - Verify that the program suggests appropriate rebalancing for all affected assets
+
+6. Edge Cases:
+   - Test when all assets are within acceptable ranges (no rebalancing needed)
+   - Test with a portfolio that's exactly at the limit (e.g., 50% Stock, 30% Commodities, 10% Real Estate, 10% Liquid funds)
+   - Test with extreme imbalances (e.g., 90% Stock, 10% Liquid funds, 0% others)
+
+7. Transaction API:
+   - Test the API endpoint for selling assets
+   - Test the API endpoint for buying assets
+   - Verify that the transaction APIs update the portfolio composition correctly
+
+Non-Functional Tests:
+
+1. Performance:
+   - Measure the response time of the portfolio composition retrieval API
+   - Measure the time taken to calculate and suggest rebalancing
+   - Test the system's performance with a large portfolio (e.g., hundreds of individual assets)
+
+2. Scalability:
+   - Test the system's ability to handle multiple concurrent users requesting portfolio analysis
+   - Verify that the system can handle a growing number of assets and transactions
+
+3. Reliability:
+   - Test the system's behavior when the API server is temporarily unavailable
+   - Verify that the system recovers gracefully from network interruptions
+
+4. Security:
+   - Ensure that the API endpoints are properly authenticated and authorized
+   - Test for common vulnerabilities (e.g., SQL injection, XSS) in the API endpoints
+
+5. Usability:
+   - Verify that the rebalancing suggestions are clear and actionable for users
+   - Test the user interface for displaying portfolio composition and rebalancing suggestions
+
+6. Accuracy:
+   - Verify the precision of percentage calculations in portfolio composition
+   - Ensure that rounding errors don't significantly impact rebalancing suggestions
+
+7. Compliance:
+   - Verify that the system adheres to financial regulations regarding portfolio management
+   - Ensure that all transactions and suggestions are properly logged for auditing purposes
+
+Suggestions and Comments:
+
+1. Consider implementing a simulation mode where users can see the potential outcomes of rebalancing suggestions before executing them.
+2. It might be helpful to allow users to set custom thresholds for asset concentrations and minimum representations.
+3. Implement a feature to schedule regular portfolio analysis and automated rebalancing suggestions.
+4. Consider adding support for more asset types in the future to increase the system's flexibility.
+5. Implement a notification system to alert users when their portfolio requires rebalancing.
+6. Consider adding historical performance tracking to help users understand the impact of rebalancing over time.
+
+These test scenarios cover the main functionality described in the user story while also addressing important non-functional aspects of the system. The suggestions provide potential enhancements to improve the overall user experience and system capabilities.
