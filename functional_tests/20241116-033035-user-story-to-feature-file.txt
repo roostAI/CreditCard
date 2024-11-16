@@ -1,0 +1,79 @@
+Based on the given user story, I'll generate comprehensive test scenarios covering both functional and non-functional aspects. Here's a structured set of test cases:
+
+Functional Tests:
+
+1. Portfolio Composition Retrieval:
+   • Test the API endpoint for retrieving portfolio composition
+   • Verify that all asset types (Stock, Liquid funds, Commodities, Real Estate) are correctly represented
+   • Ensure the API returns accurate percentages for each asset type
+
+2. Asset Concentration Detection:
+   • Test when Stocks exceed 50% of the portfolio
+   • Test when Commodities exceed 30% of the portfolio
+   • Test when Real Estate exceeds 30% of the portfolio
+   • Verify that the program suggests rebalancing in each case
+
+3. Poor Representation Detection:
+   • Test when any asset type falls below 10% representation
+   • Verify that the program suggests rebalancing in this case
+
+4. Rebalancing Suggestions:
+   • Test that the program suggests selling overrepresented assets
+   • Test that the program suggests buying underrepresented assets
+   • Verify that the suggestions maintain the balance within specified limits (50% for Stocks, 30% for Commodities and Real Estate, minimum 10% for each asset)
+
+5. Transaction API Testing:
+   • Test the API endpoint for selling assets
+   • Test the API endpoint for buying assets
+   • Verify that the transaction APIs correctly update the portfolio composition
+
+6. Edge Cases:
+   • Test when multiple assets are overrepresented simultaneously
+   • Test when multiple assets are underrepresented simultaneously
+   • Test with a portfolio that's perfectly balanced (no rebalancing needed)
+   • Test with a new portfolio that has only one asset type
+
+7. Calculation Accuracy:
+   • Verify that percentage calculations are accurate and round to appropriate decimal places
+   • Test with large portfolio values to ensure no overflow errors
+
+Non-Functional Tests:
+
+1. Performance Testing:
+   • Measure response time of the portfolio composition API under different loads
+   • Measure response time of the transaction APIs under different loads
+   • Test the system's ability to handle multiple simultaneous rebalancing requests
+
+2. Scalability Testing:
+   • Test with a very large portfolio (e.g., millions of dollars in assets)
+   • Test with a high number of concurrent users requesting rebalancing suggestions
+
+3. Security Testing:
+   • Verify that all API endpoints require proper authentication
+   • Test for SQL injection vulnerabilities in API parameters
+   • Ensure that user data and transaction details are encrypted in transit
+
+4. Reliability Testing:
+   • Test system behavior when one or more API endpoints are down
+   • Verify data consistency after unexpected system shutdowns
+
+5. Usability Testing:
+   • Ensure that rebalancing suggestions are clear and easy to understand
+   • Test the user interface for intuitive navigation and clear presentation of portfolio data
+
+6. Compatibility Testing:
+   • Test API functionality across different client platforms (web, mobile, etc.)
+   • Verify system compatibility with different browsers and operating systems
+
+7. Compliance Testing:
+   • Ensure that the system adheres to relevant financial regulations and data protection laws
+
+Suggestions and Comments:
+
+1. Consider implementing a feature to allow users to set custom thresholds for asset concentration and minimum representation.
+2. Add a simulation feature to show users the potential outcomes of following the rebalancing suggestions.
+3. Implement a notification system to alert users when their portfolio requires rebalancing.
+4. Consider adding historical performance tracking to help users understand the effectiveness of rebalancing over time.
+5. Ensure that the system provides clear explanations for its rebalancing suggestions to educate users on portfolio management principles.
+
+These test scenarios cover a wide range of functional and non-functional aspects of the described user story. They should help ensure the reliability, accuracy, and usability of the portfolio rebalancing suggestion system.
