@@ -1,0 +1,79 @@
+Functional Test Cases:
+
+1. Credit Card Due Reminder:
+   - Verify if an automated notification is sent to the cardholder reminding them of their upcoming credit card payment due date.
+     Input: Due date is in 5 days
+     Expected Output: An automated notification is sent
+   - Verify if the notification includes the last 4 digits of the credit card number for identification purposes.
+     Input: Credit card number is 1234567812345678
+     Expected Output: The notification includes the last 4 digits (5678)
+
+2. Overdue Balance Alert:
+   - Verify if an alert is sent to the cardholder when they miss their payment due date.
+     Input: Due date has passed
+     Expected Output: An alert is sent
+   - Verify if the alert includes the last 4 digits of the credit card number.
+     Input: Credit card number is 1234567812345678
+     Expected Output: The alert includes the last 4 digits (5678)
+
+3. Collection Notification:
+   - Verify if a formal collection notification is sent to the cardholder when an account becomes significantly delinquent.
+     Input: Account is significantly delinquent
+     Expected Output: A collection notification is sent
+   - Verify if the notification includes the last 4 digits of the credit card number.
+     Input: Credit card number is 1234567812345678
+     Expected Output: The notification includes the last 4 digits (5678)
+
+4. Payment Plan Proposal:
+   - Verify if a payment plan proposal is offered to the cardholder who is unable to pay the full overdue balance at once.
+     Input: Cardholder unable to pay full overdue balance
+     Expected Output: A payment plan proposal is offered
+   - Verify if the proposal includes the last 4 digits of the credit card number.
+     Input: Credit card number is 1234567812345678
+     Expected Output: The proposal includes the last 4 digits (5678)
+
+5. Collection Agency Involvement:
+   - Verify if a collection agency is involved when the cardholder fails to respond to previous notifications and reminders.
+     Input: Cardholder fails to respond to notifications and reminders
+     Expected Output: A collection agency is involved
+   - Verify if the collection agency is provided with the last 4 digits of the credit card number for identification purposes.
+     Input: Credit card number is 1234567812345678
+     Expected Output: The collection agency is provided with the last 4 digits (5678)
+
+6. Legal Action Initiation:
+   - Verify if legal action is initiated against the cardholder in extreme cases of non-payment or default.
+     Input: Extreme cases of non-payment or default
+     Expected Output: Legal action is initiated
+   - Verify if any legal documentation includes the last 4 digits of the credit card number for identification purposes.
+     Input: Credit card number is 1234567812345678
+     Expected Output: The legal documentation includes the last 4 digits (5678)
+
+Non-functional Test Cases:
+
+1. Performance:
+   - Verify if the system can handle the load of sending notifications to all cardholders.
+     Input: 10000 cardholders
+     Expected Output: All notifications are sent without system failure
+
+2. Security:
+   - Verify if only the last 4 digits of the credit card number are included in any communication or documentation related to the collection process.
+     Input: Credit card number is 1234567812345678
+     Expected Output: Only the last 4 digits (5678) are included in the communication or documentation
+   - Verify if the full credit card number is never shared or displayed in plain text.
+     Input: Full credit card number
+     Expected Output: Full credit card number is not displayed
+
+3. Usability:
+   - Verify if the notifications and alerts are clear and understandable to the cardholders.
+     Input: Automated notification, Overdue balance alert, Collection notification, Payment plan proposal, Collection agency involvement notice, Legal action initiation notice
+     Expected Output: All communications are clear and understandable
+
+4. Compatibility:
+   - Verify if the notifications are correctly displayed on different devices and browsers.
+     Input: Different devices and browsers
+     Expected Output: Notifications are correctly displayed
+
+5. Reliability:
+   - Verify if the system consistently sends the notifications on time.
+     Input: Due dates, overdue dates
+     Expected Output: Notifications are sent on time consistently.
