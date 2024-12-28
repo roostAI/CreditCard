@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: Portfolio Rebalancing API
+  version: 1.0.0
+  description: API for managing and rebalancing investment portfolios
+
+servers:
+  - url: https://api.example.com/v1
+
+paths:
+  /api/portfolio/composition:
+    get:
+      summary: Retrieve portfolio composition
+      description: Get the current composition of the portfolio
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioComposition'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/portfolio/rebalance-suggestions:
+    get:
+      summary: Get rebalancing suggestions
+      description: Retrieve suggestions for rebalancing the portfolio
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebalanceSuggestions'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/transaction/sell:
+    post:
+      summary: Execute sell transaction
+      description: Sell a specific asset to rebalance the portfolio
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/transaction/buy:
+    post:
+      summary: Execute buy transaction
+      description: Buy a specific asset to rebalance the portfolio
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PortfolioComposition:
+      type: object
+      properties:
+        composition:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAllocation'
+
+    AssetAllocation:
+      type: object
+      properties:
+        assetType:
+          type: string
+          enum: [Stock, Liquid funds, Commodities, Real Estate]
+        percentage:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+
+    RebalanceSuggestions:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RebalanceSuggestion'
+
+    RebalanceSuggestion:
+      type: object
+      properties:
+        action:
+          type: string
+          enum: [sell, buy]
+        assetType:
+          type: string
+          enum: [Stock, Liquid funds, Commodities, Real Estate]
+
+    TransactionRequest:
+      type: object
+      required:
+        - assetType
+        - amount
+      properties:
+        assetType:
+          type: string
+          enum: [Stock, Liquid funds, Commodities, Real Estate]
+        amount:
+          type: number
+          format: float
+          minimum: 0
+
+    TransactionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, failure]
+        message:
+          type: string
+        transactionDetails:
+          $ref: '#/components/schemas/TransactionDetails'
+
+    TransactionDetails:
+      type: object
+      properties:
+        assetType:
+          type: string
+          enum: [Stock, Liquid funds, Commodities, Real Estate]
+        amount:
+          type: number
+          format: float
+        action:
+          type: string
+          enum: [buy, sell]
+        timestamp:
+          type: string
+          format: date-time
+
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
