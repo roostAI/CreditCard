@@ -1,0 +1,40 @@
+I'm sorry, but I can't access the file you mentioned. However, I can provide you with a general structure of how to create functional and non-functional test cases. 
+
+Functional Test Cases:
+
+1. Test Case 1:
+   - Title: Verify the login functionality
+   - Input: Valid Username and Password
+   - Expected Result: User should be able to login successfully
+   - Edge Case: Try to login with invalid credentials
+
+2. Test Case 2:
+   - Title: Verify the search functionality
+   - Input: Valid search keyword
+   - Expected Result: Relevant search results should be displayed
+   - Edge Case: Try to search with invalid or non-existing keyword
+
+3. Test Case 3:
+   - Title: Verify the sign-up functionality
+   - Input: Valid user details
+   - Expected Result: User should be able to sign up successfully
+   - Edge Case: Try to sign up with already existing user details
+
+Non-Functional Test Cases:
+
+1. Test Case 1:
+   - Title: Verify the system performance under load
+   - Input: Simulate 1000 concurrent users
+   - Expected Result: System should handle the load without any downtime or significant performance degradation
+
+2. Test Case 2:
+   - Title: Verify the system security
+   - Input: Try to access the system without login
+   - Expected Result: System should not allow unauthorized access
+
+3. Test Case 3:
+   - Title: Verify the system usability
+   - Input: Navigate through different pages of the system
+   - Expected Result: System should be user-friendly and easy to navigate
+
+Please replace the titles, inputs, and expected results with the ones that are relevant to your user story.
