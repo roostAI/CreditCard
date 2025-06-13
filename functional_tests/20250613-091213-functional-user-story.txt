@@ -1,0 +1,42 @@
+Without the actual user story or the content of the file, it's difficult to provide specific test cases. However, I can provide a general structure of how the test cases should be written.
+
+**Functional Test Cases:**
+
+1. Test Case 1:
+   - **Test Case ID:** FT001
+   - **Test Scenario:** Verify if the user can open the file.
+   - **Test Steps:** 
+     1. Navigate to the file location.
+     2. Double click on the file to open it.
+   - **Input:** /var/tmp/Roost/RoostGPT/functional-user-story/da25d31b-332d-49f7-a93d-204a42db960c/roost_user_input.txt
+   - **Expected Result:** The file should open successfully.
+   - **Edge Case:** If the file does not exist, an error message should be displayed.
+
+2. Test Case 2:
+   - **Test Case ID:** FT002
+   - **Test Scenario:** Verify if the user can read the content of the file.
+   - **Test Steps:** 
+     1. Open the file.
+     2. Read the content of the file.
+   - **Input:** /var/tmp/Roost/RoostGPT/functional-user-story/da25d31b-332d-49f7-a93d-204a42db960c/roost_user_input.txt
+   - **Expected Result:** The user should be able to read the content of the file.
+   - **Edge Case:** If the file is empty, no content should be displayed.
+
+**Non-Functional Test Cases:**
+
+1. Test Case 1:
+   - **Test Case ID:** NFT001
+   - **Test Scenario:** Verify the response time when opening the file.
+   - **Test Steps:** 
+     1. Navigate to the file location.
+     2. Double click on the file to open it.
+   - **Input:** /var/tmp/Roost/RoostGPT/functional-user-story/da25d31b-332d-49f7-a93d-204a42db960c/roost_user_input.txt
+   - **Expected Result:** The file should open within an acceptable time frame (e.g., less than 2 seconds).
+
+2. Test Case 2:
+   - **Test Case ID:** NFT002
+   - **Test Scenario:** Verify the system's behavior when multiple users are trying to access the file simultaneously.
+   - **Test Steps:** 
+     1. Have multiple users try to open the file at the same time.
+   - **Input:** /var/tmp/Roost/RoostGPT/functional-user-story/da25d31b-332d-49f7-a93d-204a42db960c/roost_user_input.txt
+   - **Expected Result:** The system should handle multiple requests without crashing or slowing down significantly.
