@@ -1,0 +1,58 @@
+**Functional Test Cases:**
+
+- **Test Case 1: Credit Card Due Reminder Notification**
+  - **Input:** Cardholder with an upcoming payment due date.
+  - **Expected Output:** Automated notification is sent to the cardholder reminding them of their upcoming credit card payment due date.
+  - **Edge Case:** Ensure notification is sent even if the due date falls on a weekend or public holiday.
+
+- **Test Case 2: Overdue Balance Alert**
+  - **Input:** Cardholder who has missed their payment due date.
+  - **Expected Output:** Alert is sent to notify the cardholder of the overdue balance and potential consequences.
+  - **Edge Case:** Verify alert is sent immediately after the due date is missed.
+
+- **Test Case 3: Collection Notification**
+  - **Input:** Account that has become significantly delinquent.
+  - **Expected Output:** Formal collection notification is sent detailing the amount owed and any additional charges.
+  - **Edge Case:** Check if the notification includes all applicable charges and is sent to the correct contact information.
+
+- **Test Case 4: Payment Plan Proposal**
+  - **Input:** Cardholder unable to pay the full overdue balance.
+  - **Expected Output:** Payment plan proposal is offered outlining a structured repayment schedule with reduced interest rates or fees.
+  - **Edge Case:** Ensure the proposal is tailored to the cardholder's financial situation and is sent promptly.
+
+- **Test Case 5: Collection Agency Involvement**
+  - **Input:** Cardholder fails to respond to previous notifications and reminders.
+  - **Expected Output:** Collection agency is involved to recover the overdue balance.
+  - **Edge Case:** Verify that all prior notifications were sent and documented before involving a collection agency.
+
+- **Test Case 6: Legal Action Initiation**
+  - **Input:** Extreme cases of non-payment or default.
+  - **Expected Output:** Legal action is initiated against the cardholder.
+  - **Edge Case:** Confirm that all other avenues have been exhausted and documented before proceeding with legal action.
+
+**Non-Functional Test Cases:**
+
+- **Test Case 1: Notification Delivery Time**
+  - **Input:** Various notification types (due reminder, overdue alert, collection notice).
+  - **Expected Output:** Notifications are delivered within a specified time frame (e.g., within 1 hour of trigger).
+  - **Edge Case:** Test delivery times during peak hours and off-peak hours.
+
+- **Test Case 2: System Load Handling**
+  - **Input:** High volume of notifications triggered simultaneously.
+  - **Expected Output:** System handles the load without delays or failures.
+  - **Edge Case:** Simulate peak end-of-month scenarios with maximum notifications.
+
+- **Test Case 3: Data Security and Privacy**
+  - **Input:** Personal and financial information of cardholders.
+  - **Expected Output:** Data is encrypted and securely transmitted, ensuring privacy.
+  - **Edge Case:** Test for vulnerabilities in data transmission and storage.
+
+- **Test Case 4: User Accessibility**
+  - **Input:** Notifications sent to cardholders with different accessibility needs.
+  - **Expected Output:** Notifications are accessible to all users, including those with disabilities.
+  - **Edge Case:** Verify compatibility with screen readers and other assistive technologies.
+
+- **Test Case 5: Multi-language Support**
+  - **Input:** Cardholders with different language preferences.
+  - **Expected Output:** Notifications are sent in the preferred language of the cardholder.
+  - **Edge Case:** Test for correct language delivery in regions with multiple official languages.
