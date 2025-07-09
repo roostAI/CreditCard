@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Karate Timeline</title>
+    <style>
+      body, html { font-family: arial, sans-serif; font-size: 11pt; }
+      #visualization { box-sizing: border-box; width: 100%; height: 300px; }
+      .vis-item.failed { background-color: #F2928C; }
+      .page-heading { padding: 0.5em; margin-bottom: 0.5em; background-color: lightcyan; border: 1px solid gray; }
+    </style>
+    <script src="res/vis.min.js"></script>
+    <link href="res/vis.min.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="page-heading">
+      <a href="karate-summary.html">Summary</a>
+    </div>     
+    <div id="visualization"></div>
+    <script>
+var groups = [{"content":"main","id":1}];
+var items = [{"id":1,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.1:73]","start":1752047652404,"end":1752047653328,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.1:73] 07:54:12.404-07:54:13.328 Get current weather data with valid parameters"},{"id":2,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.2:73]","start":1752047653339,"end":1752047653561,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.2:73] 07:54:13.339-07:54:13.561 Get current weather data with valid parameters"},{"id":3,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.3:73]","start":1752047653569,"end":1752047653781,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.3:73] 07:54:13.569-07:54:13.781 Get current weather data with valid parameters"},{"id":4,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.4:73]","start":1752047653790,"end":1752047654228,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[1.4:73] 07:54:13.790-07:54:14.228 Get current weather data with valid parameters","className":"failed"},{"id":5,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[2:75]","start":1752047654239,"end":1752047654435,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[2:75] 07:54:14.239-07:54:14.435 Get current weather data with required parameter only"},{"id":6,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[3.1:130]","start":1752047654443,"end":1752047654813,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[3.1:130] 07:54:14.443-07:54:14.813 Handle 400 Bad Request errors"},{"id":7,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[3.2:131]","start":1752047654821,"end":1752047655166,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[3.2:131] 07:54:14.821-07:54:15.166 Handle 400 Bad Request errors"},{"id":8,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[4:133]","start":1752047655171,"end":1752047655506,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[4:133] 07:54:15.171-07:54:15.506 Handle 400 Bad Request - Missing required parameter q"},{"id":9,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[5:142]","start":1752047655511,"end":1752047655846,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[5:142] 07:54:15.511-07:54:15.846 Handle 401 Unauthorized - Missing API key"},{"id":10,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[6:151]","start":1752047655852,"end":1752047656182,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[6:151] 07:54:15.852-07:54:16.182 Handle 401 Unauthorized - Invalid API key"},{"id":11,"group":1,"content":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[7:161]","start":1752047656187,"end":1752047656360,"title":"src\/test\/java\/org\/springframework\/boot\/api_tests\/Weather\/current.json_get[7:161] 07:54:16.187-07:54:16.360 Handle 403 Forbidden - API key quota exceeded","className":"failed"}];
+</script>
+    <script>
+      var container = document.getElementById('visualization');
+      var timeline = new vis.Timeline(container);
+      timeline.setOptions({groupOrder: 'content'});
+      timeline.setGroups(new vis.DataSet(groups));
+      timeline.setItems(new vis.DataSet(items));
+    </script>
+  </body>
+</html>
