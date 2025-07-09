@@ -49,7 +49,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
     <div>Scenarios</div>
   </div>
   <div id="nav-date">
-    <div>2025-07-08 05:10:38 PM</div>
+    <div>2025-07-08 05:11:00 PM</div>
   </div>
 </div>
 
@@ -111,7 +111,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
               </div>
             </div>
             <div class="scenario-time passed">
-              <span>ms:</span>&nbsp;<span>1257</span>
+              <span>ms:</span>&nbsp;<span>813</span>
             </div>
           </div>
           <div class="step-row">
@@ -134,7 +134,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>*</span>&nbsp;<span>def urlBase = karate.properties[&#39;API_HOST&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">31</div>
+    <div class="time-cell passed">22</div>
   </div>
 
    
@@ -162,7 +162,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>*</span>&nbsp;<span>url urlBase</span>
       </div>
     </div>
-    <div class="time-cell passed">8</div>
+    <div class="time-cell passed">5</div>
   </div>
 
    
@@ -190,7 +190,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">3</div>
   </div>
 
    
@@ -358,7 +358,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">1132</div>
+    <div class="time-cell passed">711</div>
   </div>
 
    
@@ -367,7 +367,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 
   
 
-  <div class="preformatted" data-parent="1.24">17:10:34.242 request:
+  <div class="preformatted" data-parent="1.24">17:10:57.327 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=New+York&amp;lang=en&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -376,14 +376,14 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:35.046 response time in milliseconds: 799
+17:10:57.788 response time in milliseconds: 457
 1 &lt; 200
-1 &lt; Date: Tue, 08 Jul 2025 17:10:35 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:57 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
@@ -397,7 +397,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 1 &lt; CDN-RequestPullCode: 200
 1 &lt; CDN-CachedAt: 07/08/2025 17:10:13
 1 &lt; CDN-EdgeStorageId: 1173
-1 &lt; CDN-RequestId: 819ce406bb87d39d470d281b48c3a5b2
+1 &lt; CDN-RequestId: 8fcbabe0bce6b66f9f5c67ddbfca28ef
 1 &lt; CDN-Cache: HIT
 1 &lt; CDN-Status: 200
 1 &lt; CDN-RequestTime: 0
@@ -422,7 +422,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>Then</span>&nbsp;<span>status 200</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">3</div>
   </div>
 
    
@@ -450,7 +450,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>And</span>&nbsp;<span>match response.location == &#39;#object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">31</div>
+    <div class="time-cell passed">27</div>
   </div>
 
    
@@ -1486,7 +1486,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>And</span>&nbsp;<span>match response.current.air_quality.co == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -1598,7 +1598,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>And</span>&nbsp;<span>match response.current.air_quality.pm2_5 == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">3</div>
   </div>
 
    
@@ -1930,7 +1930,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>And</span>&nbsp;<span>param lang = &#39;es&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -1958,7 +1958,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">191</div>
+    <div class="time-cell passed">195</div>
   </div>
 
    
@@ -1967,7 +1967,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 
   
 
-  <div class="preformatted" data-parent="2.24">17:10:35.152 request:
+  <div class="preformatted" data-parent="2.24">17:10:57.887 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=10001&amp;lang=es&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -1976,14 +1976,14 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:35.340 response time in milliseconds: 187
+17:10:58.078 response time in milliseconds: 189
 1 &lt; 200
-1 &lt; Date: Tue, 08 Jul 2025 17:10:35 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:58 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
@@ -1997,7 +1997,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 1 &lt; CDN-RequestPullCode: 200
 1 &lt; CDN-CachedAt: 07/08/2025 17:10:13
 1 &lt; CDN-EdgeStorageId: 977
-1 &lt; CDN-RequestId: d31b5f79d578d4a5c292552f604ce829
+1 &lt; CDN-RequestId: 867b3b0ec9e22bd81a5b7bb822d7f6db
 1 &lt; CDN-Cache: HIT
 1 &lt; CDN-Status: 200
 1 &lt; CDN-RequestTime: 0
@@ -2358,7 +2358,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>And</span>&nbsp;<span>match response.current.last_updated == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -2834,7 +2834,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>And</span>&nbsp;<span>match response.current.cloud == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -3311,7 +3311,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>364</span>
+              <span>ms:</span>&nbsp;<span>366</span>
             </div>
           </div>
           <div class="step-row">
@@ -3558,7 +3558,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">350</div>
+    <div class="time-cell passed">355</div>
   </div>
 
    
@@ -3567,7 +3567,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 
   
 
-  <div class="preformatted" data-parent="3.24">17:10:35.400 request:
+  <div class="preformatted" data-parent="3.24">17:10:58.131 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=40&amp;lang=fr&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -3576,28 +3576,28 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:35.746 response time in milliseconds: 344
+17:10:58.484 response time in milliseconds: 352
 1 &lt; 400
-1 &lt; Date: Tue, 08 Jul 2025 17:10:35 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:58 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
-1 &lt; Age: 0
+1 &lt; Age: 22
 1 &lt; Cache-Control: public, max-age=5
 1 &lt; Via: 1.1 varnish (Varnish/7.1)
 1 &lt; x-weatherapi-qpm-left: 4999808
-1 &lt; x-varnish: 448682313
+1 &lt; x-varnish: 349273166 448682314
 1 &lt; CDN-ProxyVer: 1.31
 1 &lt; CDN-RequestPullSuccess: True
 1 &lt; CDN-RequestPullCode: 400
-1 &lt; CDN-CachedAt: 07/08/2025 17:10:35
+1 &lt; CDN-CachedAt: 07/08/2025 17:10:58
 1 &lt; CDN-EdgeStorageId: 977
-1 &lt; CDN-RequestId: 9c15e3c87cd1d7774400204022471fb8
+1 &lt; CDN-RequestId: 6cfc9b593b2820229503ece4e1a0693e
 1 &lt; CDN-Cache: EXPIRED
 1 &lt; CDN-Status: 400
 1 &lt; CDN-RequestTime: 0
@@ -3622,7 +3622,7 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
         <span>Then</span>&nbsp;<span>status 200</span>
       </div>
     </div>
-    <div class="time-cell failed">10</div>
+    <div class="time-cell failed">7</div>
   </div>
 
    
@@ -3631,9 +3631,9 @@ posthog.init('phc_M6fKk3dSX9HjglkqPSybauGas45NINb7EgsPGU8N9g1',{
 
   
 
-  <div class="preformatted" data-parent="3.25">17:10:35.762 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:25
+  <div class="preformatted" data-parent="3.25">17:10:58.495 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:25
 Then status 200
-status code was: 400, expected: 200, response time in milliseconds: 344, url: https://api.weatherapi.com/v1/v1/current.json?q=40&amp;lang=fr&amp;key=e84a8261d3cd4786a8281927250707, response: 
+status code was: 400, expected: 200, response time in milliseconds: 352, url: https://api.weatherapi.com/v1/v1/current.json?q=40&amp;lang=fr&amp;key=e84a8261d3cd4786a8281927250707, response: 
 {&quot;error&quot;:{&quot;code&quot;:1006,&quot;message&quot;:&quot;No matching location found.&quot;}}
 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:25
 </div>   
@@ -4916,7 +4916,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time passed">
-              <span>ms:</span>&nbsp;<span>286</span>
+              <span>ms:</span>&nbsp;<span>208</span>
             </div>
           </div>
           <div class="step-row">
@@ -4995,7 +4995,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5163,7 +5163,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">203</div>
+    <div class="time-cell passed">187</div>
   </div>
 
    
@@ -5172,7 +5172,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="4.24">17:10:35.783 request:
+  <div class="preformatted" data-parent="4.24">17:10:58.508 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=London&amp;lang=&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -5181,14 +5181,14 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:35.980 response time in milliseconds: 195
+17:10:58.692 response time in milliseconds: 183
 1 &lt; 200
-1 &lt; Date: Tue, 08 Jul 2025 17:10:35 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:58 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
@@ -5202,7 +5202,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &lt; CDN-RequestPullCode: 200
 1 &lt; CDN-CachedAt: 07/08/2025 17:10:14
 1 &lt; CDN-EdgeStorageId: 1179
-1 &lt; CDN-RequestId: a6b2aa2e6870222b998d9d455259fdf0
+1 &lt; CDN-RequestId: fbbe96e271803eea850cba2b30b8d2de
 1 &lt; CDN-Cache: HIT
 1 &lt; CDN-Status: 200
 1 &lt; CDN-RequestTime: 0
@@ -5283,7 +5283,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.name == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -5311,7 +5311,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.region == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5339,7 +5339,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.country == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5367,7 +5367,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.lat == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5395,7 +5395,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.lon == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5423,7 +5423,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.tz_id == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5451,7 +5451,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.localtime_epoch == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5479,7 +5479,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.localtime == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5507,7 +5507,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current == &#39;#object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5535,7 +5535,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.last_updated_epoch == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5563,7 +5563,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.last_updated == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5591,7 +5591,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.temp_c == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5619,7 +5619,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.temp_f == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5647,7 +5647,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.is_day == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5675,7 +5675,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.condition == &#39;#object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5703,7 +5703,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.condition.text == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5731,7 +5731,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.condition.icon == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5759,7 +5759,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.condition.code == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5787,7 +5787,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.wind_mph == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5815,7 +5815,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.wind_kph == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5843,7 +5843,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.wind_degree == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5871,7 +5871,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.wind_dir == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5899,7 +5899,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.pressure_mb == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5927,7 +5927,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.pressure_in == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5955,7 +5955,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.precip_mm == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -5983,7 +5983,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.precip_in == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6011,7 +6011,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.humidity == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6039,7 +6039,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.cloud == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6067,7 +6067,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.feelslike_c == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6095,7 +6095,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.feelslike_f == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6123,7 +6123,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.vis_km == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6151,7 +6151,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.vis_miles == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6207,7 +6207,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.gust_mph == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6235,7 +6235,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.gust_kph == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6263,7 +6263,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality == &#39;##object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6291,7 +6291,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality.co == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">12</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -6319,7 +6319,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality.no2 == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6347,7 +6347,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality.o3 == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6375,7 +6375,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality.so2 == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6403,7 +6403,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality.pm2_5 == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6431,7 +6431,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality.pm10 == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6459,7 +6459,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality[&#39;us-epa-index&#39;] == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6487,7 +6487,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.air_quality[&#39;gb-defra-index&#39;] == &#39;##number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6516,7 +6516,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time passed">
-              <span>ms:</span>&nbsp;<span>214</span>
+              <span>ms:</span>&nbsp;<span>190</span>
             </div>
           </div>
           <div class="step-row">
@@ -6595,7 +6595,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -6735,7 +6735,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">187</div>
+    <div class="time-cell passed">169</div>
   </div>
 
    
@@ -6744,7 +6744,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.79">17:10:36.092 request:
+  <div class="preformatted" data-parent="0.79">17:10:58.723 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=London&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -6753,14 +6753,14 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:36.274 response time in milliseconds: 181
+17:10:58.889 response time in milliseconds: 164
 1 &lt; 200
-1 &lt; Date: Tue, 08 Jul 2025 17:10:36 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:58 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
@@ -6774,7 +6774,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &lt; CDN-RequestPullCode: 200
 1 &lt; CDN-CachedAt: 07/08/2025 17:10:15
 1 &lt; CDN-EdgeStorageId: 747
-1 &lt; CDN-RequestId: ed2b905aa9b49714395a83f9081eaacd
+1 &lt; CDN-RequestId: 2911cc63f63c7eaa415a56c921226a43
 1 &lt; CDN-Cache: HIT
 1 &lt; CDN-Status: 200
 1 &lt; CDN-RequestTime: 0
@@ -6995,7 +6995,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.location.tz_id == &#39;#string&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7079,7 +7079,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current == &#39;#object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7191,7 +7191,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.temp_f == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -7219,7 +7219,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.is_day == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">2</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7331,7 +7331,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.condition.code == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -7415,7 +7415,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.wind_degree == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7471,7 +7471,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.pressure_mb == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -7639,7 +7639,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.feelslike_c == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -7667,7 +7667,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.feelslike_f == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7751,7 +7751,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.uv == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7779,7 +7779,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.gust_mph == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -7807,7 +7807,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.current.gust_kph == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -7836,7 +7836,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>362</span>
+              <span>ms:</span>&nbsp;<span>428</span>
             </div>
           </div>
           <div class="step-row">
@@ -8055,7 +8055,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">344</div>
+    <div class="time-cell passed">411</div>
   </div>
 
    
@@ -8064,7 +8064,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="1.122">17:10:36.321 request:
+  <div class="preformatted" data-parent="1.122">17:10:58.927 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -8073,28 +8073,28 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:36.660 response time in milliseconds: 338
+17:10:59.334 response time in milliseconds: 406
 1 &lt; 400
-1 &lt; Date: Tue, 08 Jul 2025 17:10:36 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:59 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
-1 &lt; Age: 21
+1 &lt; Age: 43
 1 &lt; Cache-Control: public, max-age=5
 1 &lt; Via: 1.1 varnish (Varnish/7.1)
 1 &lt; x-weatherapi-qpm-left: 4999808
-1 &lt; x-varnish: 430427060 402777564
+1 &lt; x-varnish: 473852698 402777564
 1 &lt; CDN-ProxyVer: 1.31
 1 &lt; CDN-RequestPullSuccess: True
 1 &lt; CDN-RequestPullCode: 400
-1 &lt; CDN-CachedAt: 07/08/2025 17:10:36
+1 &lt; CDN-CachedAt: 07/08/2025 17:10:59
 1 &lt; CDN-EdgeStorageId: 981
-1 &lt; CDN-RequestId: d917c48c81a61a3f19c5e32a3afcc187
+1 &lt; CDN-RequestId: e6ac6f2d3450717e470595520f5cf57e
 1 &lt; CDN-Cache: EXPIRED
 1 &lt; CDN-Status: 400
 1 &lt; CDN-RequestTime: 0
@@ -8212,7 +8212,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="1.126">17:10:36.679 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:126
+  <div class="preformatted" data-parent="1.126">17:10:59.351 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:126
 And match response.code == &#39;#number&#39;
 match failed: EQUALS
 
@@ -8265,7 +8265,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>366</span>
+              <span>ms:</span>&nbsp;<span>331</span>
             </div>
           </div>
           <div class="step-row">
@@ -8344,7 +8344,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -8400,7 +8400,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>Given</span>&nbsp;<span>path &#39;/v1/current.json&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">3</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -8484,7 +8484,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">356</div>
+    <div class="time-cell passed">327</div>
   </div>
 
    
@@ -8493,7 +8493,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="2.122">17:10:36.702 request:
+  <div class="preformatted" data-parent="2.122">17:10:59.360 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=invalid_location_xyz&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -8502,28 +8502,28 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:37.055 response time in milliseconds: 352
+17:10:59.684 response time in milliseconds: 324
 1 &lt; 400
-1 &lt; Date: Tue, 08 Jul 2025 17:10:37 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:10:59 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
-1 &lt; Age: 0
+1 &lt; Age: 22
 1 &lt; Cache-Control: public, max-age=5
 1 &lt; Via: 1.1 varnish (Varnish/7.1)
 1 &lt; x-weatherapi-qpm-left: 4999808
-1 &lt; x-varnish: 493209299
+1 &lt; x-varnish: 523175084 493209300
 1 &lt; CDN-ProxyVer: 1.31
 1 &lt; CDN-RequestPullSuccess: True
 1 &lt; CDN-RequestPullCode: 400
-1 &lt; CDN-CachedAt: 07/08/2025 17:10:37
+1 &lt; CDN-CachedAt: 07/08/2025 17:10:59
 1 &lt; CDN-EdgeStorageId: 982
-1 &lt; CDN-RequestId: 397e2fbcbfb72fd8a027eb6ec5e1b508
+1 &lt; CDN-RequestId: f1aebd39129c3f74bcb9780e2f4c8ac5
 1 &lt; CDN-Cache: EXPIRED
 1 &lt; CDN-Status: 400
 1 &lt; CDN-RequestTime: 0
@@ -8641,7 +8641,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="2.126">17:10:37.058 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:126
+  <div class="preformatted" data-parent="2.126">17:10:59.687 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:126
 And match response.code == &#39;#number&#39;
 match failed: EQUALS
 
@@ -8694,7 +8694,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>350</span>
+              <span>ms:</span>&nbsp;<span>337</span>
             </div>
           </div>
           <div class="step-row">
@@ -8773,7 +8773,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -8885,7 +8885,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">344</div>
+    <div class="time-cell passed">335</div>
   </div>
 
    
@@ -8894,7 +8894,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.137">17:10:37.068 request:
+  <div class="preformatted" data-parent="0.137">17:10:59.694 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=London
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -8903,27 +8903,27 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:37.409 response time in milliseconds: 340
+17:11:00.027 response time in milliseconds: 332
 1 &lt; 401
-1 &lt; Date: Tue, 08 Jul 2025 17:10:37 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:11:00 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
-1 &lt; Age: 0
+1 &lt; Age: 43
 1 &lt; Cache-Control: public, max-age=5
 1 &lt; Via: 1.1 varnish (Varnish/7.1)
-1 &lt; x-varnish: 329906191
+1 &lt; x-varnish: 518849782 523078899
 1 &lt; CDN-ProxyVer: 1.31
 1 &lt; CDN-RequestPullSuccess: True
 1 &lt; CDN-RequestPullCode: 401
-1 &lt; CDN-CachedAt: 07/08/2025 17:10:37
+1 &lt; CDN-CachedAt: 07/08/2025 17:11:00
 1 &lt; CDN-EdgeStorageId: 982
-1 &lt; CDN-RequestId: 0a0f76df8e35f1d11ddbdb372503c509
+1 &lt; CDN-RequestId: 4469d703b01e697c4b59259950893749
 1 &lt; CDN-Cache: EXPIRED
 1 &lt; CDN-Status: 401
 1 &lt; CDN-RequestTime: 0
@@ -9004,7 +9004,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response == &#39;#object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -9032,7 +9032,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response.code == &#39;#number&#39;</span>
       </div>
     </div>
-    <div class="time-cell failed">4</div>
+    <div class="time-cell failed">1</div>
   </div>
 
    
@@ -9041,7 +9041,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.141">17:10:37.416 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:141
+  <div class="preformatted" data-parent="0.141">17:11:00.029 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:141
 And match response.code == &#39;#number&#39;
 match failed: EQUALS
 
@@ -9094,7 +9094,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>346</span>
+              <span>ms:</span>&nbsp;<span>336</span>
             </div>
           </div>
           <div class="step-row">
@@ -9117,7 +9117,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def urlBase = karate.properties[&#39;API_HOST&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -9173,7 +9173,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -9285,7 +9285,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>param q = &#39;London&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">4</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -9313,7 +9313,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">334</div>
+    <div class="time-cell passed">333</div>
   </div>
 
    
@@ -9322,7 +9322,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.148">17:10:37.439 request:
+  <div class="preformatted" data-parent="0.148">17:11:00.039 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=London&amp;key=invalid_api_key
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -9331,27 +9331,27 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:37.771 response time in milliseconds: 331
+17:11:00.368 response time in milliseconds: 328
 1 &lt; 401
-1 &lt; Date: Tue, 08 Jul 2025 17:10:37 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:11:00 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
 1 &lt; Age: 0
 1 &lt; Cache-Control: public, max-age=5
 1 &lt; Via: 1.1 varnish (Varnish/7.1)
-1 &lt; x-varnish: 470659674
+1 &lt; x-varnish: 523175104
 1 &lt; CDN-ProxyVer: 1.31
 1 &lt; CDN-RequestPullSuccess: True
 1 &lt; CDN-RequestPullCode: 401
-1 &lt; CDN-CachedAt: 07/08/2025 17:10:37
+1 &lt; CDN-CachedAt: 07/08/2025 17:11:00
 1 &lt; CDN-EdgeStorageId: 1174
-1 &lt; CDN-RequestId: 98854c2bdd7ad322605d91bcffc47024
+1 &lt; CDN-RequestId: d93b491aa9e4f9afe9e83badd26ae4a4
 1 &lt; CDN-Cache: EXPIRED
 1 &lt; CDN-Status: 401
 1 &lt; CDN-RequestTime: 0
@@ -9469,7 +9469,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.152">17:10:37.773 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:152
+  <div class="preformatted" data-parent="0.152">17:11:00.371 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:152
 And match response.code == &#39;#number&#39;
 match failed: EQUALS
 
@@ -9522,7 +9522,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>192</span>
+              <span>ms:</span>&nbsp;<span>179</span>
             </div>
           </div>
           <div class="step-row">
@@ -9545,7 +9545,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def urlBase = karate.properties[&#39;API_HOST&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -9601,7 +9601,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -9741,7 +9741,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">190</div>
+    <div class="time-cell passed">176</div>
   </div>
 
    
@@ -9750,7 +9750,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.159">17:10:37.780 request:
+  <div class="preformatted" data-parent="0.159">17:11:00.383 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?q=London&amp;key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -9759,14 +9759,14 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:37.968 response time in milliseconds: 187
+17:11:00.556 response time in milliseconds: 172
 1 &lt; 200
-1 &lt; Date: Tue, 08 Jul 2025 17:10:37 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:11:00 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
@@ -9780,7 +9780,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &lt; CDN-RequestPullCode: 200
 1 &lt; CDN-CachedAt: 07/08/2025 17:10:15
 1 &lt; CDN-EdgeStorageId: 747
-1 &lt; CDN-RequestId: 50b9d6fbc3e500feb520250a9b77dcbd
+1 &lt; CDN-RequestId: e0bb4596302c1914f8bf952decad94f1
 1 &lt; CDN-Cache: HIT
 1 &lt; CDN-Status: 200
 1 &lt; CDN-RequestTime: 0
@@ -9805,7 +9805,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>Then</span>&nbsp;<span>assert responseStatus != 200</span>
       </div>
     </div>
-    <div class="time-cell failed">1</div>
+    <div class="time-cell failed">0</div>
   </div>
 
    
@@ -9814,7 +9814,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.160">17:10:37.970 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:160
+  <div class="preformatted" data-parent="0.160">17:11:00.558 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:160
 Then assert responseStatus != 200
 did not evaluate to &#39;true&#39;: responseStatus != 200
 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:160
@@ -9950,7 +9950,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
               </div>
             </div>
             <div class="scenario-time failed">
-              <span>ms:</span>&nbsp;<span>343</span>
+              <span>ms:</span>&nbsp;<span>349</span>
             </div>
           </div>
           <div class="step-row">
@@ -10029,7 +10029,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>*</span>&nbsp;<span>def authToken = karate.properties[&#39;key&#39;]</span>
       </div>
     </div>
-    <div class="time-cell passed">1</div>
+    <div class="time-cell passed">0</div>
   </div>
 
    
@@ -10141,7 +10141,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>When</span>&nbsp;<span>method GET</span>
       </div>
     </div>
-    <div class="time-cell passed">339</div>
+    <div class="time-cell passed">346</div>
   </div>
 
    
@@ -10150,7 +10150,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.169">17:10:37.981 request:
+  <div class="preformatted" data-parent="0.169">17:11:00.565 request:
 1 &gt; GET https://api.weatherapi.com/v1/v1/current.json?key=e84a8261d3cd4786a8281927250707
 1 &gt; Accept: application/json
 1 &gt; Host: api.weatherapi.com
@@ -10159,28 +10159,28 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 1 &gt; Accept-Encoding: gzip,deflate
 
 
-17:10:38.318 response time in milliseconds: 336
+17:11:00.909 response time in milliseconds: 343
 1 &lt; 400
-1 &lt; Date: Tue, 08 Jul 2025 17:10:38 GMT
+1 &lt; Date: Tue, 08 Jul 2025 17:11:00 GMT
 1 &lt; Content-Type: application/json
 1 &lt; Transfer-Encoding: chunked
 1 &lt; Connection: keep-alive
 1 &lt; Vary: Accept-Encoding
-1 &lt; Server: BunnyCDN-SG1-979
+1 &lt; Server: BunnyCDN-SG1-714
 1 &lt; CDN-PullZone: 93447
 1 &lt; CDN-Uid: 8fa3a04a-75d9-4707-8056-b7b33c8ac7fe
 1 &lt; CDN-RequestCountryCode: IN
-1 &lt; Age: 0
+1 &lt; Age: 43
 1 &lt; Cache-Control: public, max-age=5
 1 &lt; Via: 1.1 varnish (Varnish/7.1)
 1 &lt; x-weatherapi-qpm-left: 4999808
-1 &lt; x-varnish: 430392023
+1 &lt; x-varnish: 523239887 523142857
 1 &lt; CDN-ProxyVer: 1.31
 1 &lt; CDN-RequestPullSuccess: True
 1 &lt; CDN-RequestPullCode: 400
-1 &lt; CDN-CachedAt: 07/08/2025 17:10:38
+1 &lt; CDN-CachedAt: 07/08/2025 17:11:00
 1 &lt; CDN-EdgeStorageId: 980
-1 &lt; CDN-RequestId: 8541a3d8907e341aefe08e5dc10dc485
+1 &lt; CDN-RequestId: e355ae68053f67fef7f4fb921cbe7e69
 1 &lt; CDN-Cache: EXPIRED
 1 &lt; CDN-Status: 400
 1 &lt; CDN-RequestTime: 0
@@ -10261,7 +10261,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
         <span>And</span>&nbsp;<span>match response == &#39;#object&#39;</span>
       </div>
     </div>
-    <div class="time-cell passed">0</div>
+    <div class="time-cell passed">1</div>
   </div>
 
    
@@ -10298,7 +10298,7 @@ src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.featur
 
   
 
-  <div class="preformatted" data-parent="0.173">17:10:38.320 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:173
+  <div class="preformatted" data-parent="0.173">17:11:00.912 src/test/java/org/springframework/boot/api_tests/Weather/current.json_get.feature:173
 And match response.code == &#39;#number&#39;
 match failed: EQUALS
 
