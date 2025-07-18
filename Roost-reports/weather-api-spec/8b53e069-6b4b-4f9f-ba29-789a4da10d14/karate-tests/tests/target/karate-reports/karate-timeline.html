@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Karate Timeline</title>
+    <style>
+      body, html { font-family: arial, sans-serif; font-size: 11pt; }
+      #visualization { box-sizing: border-box; width: 100%; height: 300px; }
+      .vis-item.failed { background-color: #F2928C; }
+      .page-heading { padding: 0.5em; margin-bottom: 0.5em; background-color: lightcyan; border: 1px solid gray; }
+    </style>
+    <script src="res/vis.min.js"></script>
+    <link href="res/vis.min.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="page-heading">
+      <a href="karate-summary.html">Summary</a>
+    </div>     
+    <div id="visualization"></div>
+    <script>
+var groups = [{"content":"main","id":1}];
+var items = [{"id":1,"group":1,"content":"current.json_get[1.1:73]","start":1752819336584,"end":1752819336608,"title":"current.json_get[1.1:73] 06:15:36.584-06:15:36.608 Get current weather data with valid parameters","className":"failed"},{"id":2,"group":1,"content":"current.json_get[1.2:73]","start":1752819336616,"end":1752819336629,"title":"current.json_get[1.2:73] 06:15:36.616-06:15:36.629 Get current weather data with valid parameters","className":"failed"},{"id":3,"group":1,"content":"current.json_get[1.3:73]","start":1752819336634,"end":1752819336640,"title":"current.json_get[1.3:73] 06:15:36.634-06:15:36.640 Get current weather data with valid parameters","className":"failed"},{"id":4,"group":1,"content":"current.json_get[1.4:73]","start":1752819336645,"end":1752819336650,"title":"current.json_get[1.4:73] 06:15:36.645-06:15:36.650 Get current weather data with valid parameters","className":"failed"},{"id":5,"group":1,"content":"current.json_get[2:75]","start":1752819336655,"end":1752819336663,"title":"current.json_get[2:75] 06:15:36.655-06:15:36.663 Get current weather data without language parameter","className":"failed"},{"id":6,"group":1,"content":"current.json_get[3.1:130]","start":1752819336673,"end":1752819336678,"title":"current.json_get[3.1:130] 06:15:36.673-06:15:36.678 Handle 400 Bad Request errors","className":"failed"},{"id":7,"group":1,"content":"current.json_get[3.2:131]","start":1752819336684,"end":1752819336692,"title":"current.json_get[3.2:131] 06:15:36.684-06:15:36.692 Handle 400 Bad Request errors","className":"failed"},{"id":8,"group":1,"content":"current.json_get[4:133]","start":1752819336698,"end":1752819336705,"title":"current.json_get[4:133] 06:15:36.698-06:15:36.705 Handle 401 Unauthorized - Missing API key","className":"failed"},{"id":9,"group":1,"content":"current.json_get[5:142]","start":1752819336711,"end":1752819336716,"title":"current.json_get[5:142] 06:15:36.711-06:15:36.716 Handle 401 Unauthorized - Invalid API key","className":"failed"},{"id":10,"group":1,"content":"current.json_get[6:152]","start":1752819336721,"end":1752819336729,"title":"current.json_get[6:152] 06:15:36.721-06:15:36.729 Handle 403 Forbidden - API key quota exceeded","className":"failed"}];
+</script>
+    <script>
+      var container = document.getElementById('visualization');
+      var timeline = new vis.Timeline(container);
+      timeline.setOptions({groupOrder: 'content'});
+      timeline.setGroups(new vis.DataSet(groups));
+      timeline.setItems(new vis.DataSet(items));
+    </script>
+  </body>
+</html>
