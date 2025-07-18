@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Karate Timeline</title>
+    <style>
+      body, html { font-family: arial, sans-serif; font-size: 11pt; }
+      #visualization { box-sizing: border-box; width: 100%; height: 300px; }
+      .vis-item.failed { background-color: #F2928C; }
+      .page-heading { padding: 0.5em; margin-bottom: 0.5em; background-color: lightcyan; border: 1px solid gray; }
+    </style>
+    <script src="res/vis.min.js"></script>
+    <link href="res/vis.min.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="page-heading">
+      <a href="karate-summary.html">Summary</a>
+    </div>     
+    <div id="visualization"></div>
+    <script>
+var groups = [{"content":"main","id":1}];
+var items = [{"id":1,"group":1,"content":"current.json_get[1.1:73]","start":1752819875167,"end":1752819875173,"title":"current.json_get[1.1:73] 11:54:35.167-11:54:35.173 Get current weather data with valid parameters","className":"failed"},{"id":2,"group":1,"content":"current.json_get[1.2:73]","start":1752819875177,"end":1752819875184,"title":"current.json_get[1.2:73] 11:54:35.177-11:54:35.184 Get current weather data with valid parameters","className":"failed"},{"id":3,"group":1,"content":"current.json_get[1.3:73]","start":1752819875188,"end":1752819875195,"title":"current.json_get[1.3:73] 11:54:35.188-11:54:35.195 Get current weather data with valid parameters","className":"failed"},{"id":4,"group":1,"content":"current.json_get[1.4:73]","start":1752819875198,"end":1752819875202,"title":"current.json_get[1.4:73] 11:54:35.198-11:54:35.202 Get current weather data with valid parameters","className":"failed"},{"id":5,"group":1,"content":"current.json_get[2:75]","start":1752819875206,"end":1752819875773,"title":"current.json_get[2:75] 11:54:35.206-11:54:35.773 Get current weather data with required parameter only","className":"failed"},{"id":6,"group":1,"content":"current.json_get[3.1:130]","start":1752819875779,"end":1752819875785,"title":"current.json_get[3.1:130] 11:54:35.779-11:54:35.785 Get current weather data with invalid parameters - 400 Bad Request","className":"failed"},{"id":7,"group":1,"content":"current.json_get[3.2:131]","start":1752819875790,"end":1752819875797,"title":"current.json_get[3.2:131] 11:54:35.790-11:54:35.797 Get current weather data with invalid parameters - 400 Bad Request","className":"failed"},{"id":8,"group":1,"content":"current.json_get[4:133]","start":1752819875802,"end":1752819876328,"title":"current.json_get[4:133] 11:54:35.802-11:54:36.328 Get current weather data without required parameter q - 400 Bad Request","className":"failed"},{"id":9,"group":1,"content":"current.json_get[5:142]","start":1752819876332,"end":1752819876789,"title":"current.json_get[5:142] 11:54:36.332-11:54:36.789 Get current weather data without API key - 401 Unauthorized","className":"failed"},{"id":10,"group":1,"content":"current.json_get[6:151]","start":1752819876793,"end":1752819877300,"title":"current.json_get[6:151] 11:54:36.793-11:54:37.300 Get current weather data with invalid API key - 401 Unauthorized","className":"failed"},{"id":11,"group":1,"content":"current.json_get[7.1:173]","start":1752819877303,"end":1752819877306,"title":"current.json_get[7.1:173] 11:54:37.303-11:54:37.306 Get current weather data with API key access issues - 403 Forbidden","className":"failed"},{"id":12,"group":1,"content":"current.json_get[7.2:174]","start":1752819877310,"end":1752819877315,"title":"current.json_get[7.2:174] 11:54:37.310-11:54:37.315 Get current weather data with API key access issues - 403 Forbidden","className":"failed"},{"id":13,"group":1,"content":"current.json_get[7.3:175]","start":1752819877319,"end":1752819877323,"title":"current.json_get[7.3:175] 11:54:37.319-11:54:37.323 Get current weather data with API key access issues - 403 Forbidden","className":"failed"},{"id":14,"group":1,"content":"current.json_get[8:177]","start":1752819877327,"end":1752819877872,"title":"current.json_get[8:177] 11:54:37.327-11:54:37.872 Get current weather data with IP address as location","className":"failed"},{"id":15,"group":1,"content":"current.json_get[9:186]","start":1752819877876,"end":1752819878410,"title":"current.json_get[9:186] 11:54:37.876-11:54:38.410 Get current weather data with coordinates as location","className":"failed"},{"id":16,"group":1,"content":"current.json_get[10:197]","start":1752819878417,"end":1752819878920,"title":"current.json_get[10:197] 11:54:38.417-11:54:38.920 Get current weather data with UK postcode","className":"failed"},{"id":17,"group":1,"content":"current.json_get[11:206]","start":1752819878923,"end":1752819879504,"title":"current.json_get[11:206] 11:54:38.923-11:54:39.504 Get current weather data with Canada postal code","className":"failed"}];
+</script>
+    <script>
+      var container = document.getElementById('visualization');
+      var timeline = new vis.Timeline(container);
+      timeline.setOptions({groupOrder: 'content'});
+      timeline.setGroups(new vis.DataSet(groups));
+      timeline.setItems(new vis.DataSet(items));
+    </script>
+  </body>
+</html>
