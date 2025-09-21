@@ -1,0 +1,374 @@
+openapi: 3.0.3
+info:
+  title: API לניהול משתמשים
+  description: API מקיף לניהול משתמשים עם פעולות CRUD ובדיקות אבטחה
+  version: 1.0.0
+  contact:
+    name: צוות הפיתוח
+    email: dev-team@example.com
+
+servers:
+  - url: '{API_BASE_URL}'
+    description: שרת הפיתוח
+    variables:
+      API_BASE_URL:
+        default: 'https://api.example.com'
+        description: כתובת הבסיס של ה-API
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: טוקן הרשאה נדרש לגישה ל-API
+
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+          description: מזהה ייחודי של המשתמש
+          example: 123
+        name:
+          type: string
+          description: שם המשתמש
+          example: "יוסי כהן"
+          minLength: 1
+        email:
+          type: string
+          format: email
+          description: כתובת אימייל של המשתמש
+          example: "yossi@example.com"
+        age:
+          type: integer
+          description: גיל המשתמש
+          minimum: 0
+          maximum: 150
+          example: 30
+
+    UserInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          description: שם המשתמש
+          example: "יוסי כהן"
+          minLength: 1
+        email:
+          type: string
+          format: email
+          description: כתובת אימייל של המשתמש
+          example: "yossi@example.com"
+        age:
+          type: integer
+          description: גיל המשתמש
+          minimum: 0
+          maximum: 150
+          example: 30
+
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: שם המשתמש
+          example: "יוסי כהן מעודכן"
+          minLength: 1
+        email:
+          type: string
+          format: email
+          description: כתובת אימייל של המשתמש
+          example: "yossi.updated@example.com"
+        age:
+          type: integer
+          description: גיל המשתמש
+          minimum: 0
+          maximum: 150
+          example: 31
+
+    UserPartialUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: שם המשתמש
+          minLength: 1
+        email:
+          type: string
+          format: email
+          description: כתובת אימייל של המשתמש
+          example: "new.email@example.com"
+        age:
+          type: integer
+          description: גיל המשתמש
+          minimum: 0
+          maximum: 150
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: הודעת השגיאה
+          example: "משתמש לא נמצא"
+        errors:
+          type: array
+          items:
+            type: string
+          description: רשימת שגיאות אימות
+          example: ["שם חובה", "אימייל לא תקין"]
+
+    UsersArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+
+paths:
+  /api/users:
+    get:
+      summary: קבלת רשימת משתמשים
+      description: מחזיר רשימה של כל המשתמשים במערכת עם אפשרות לחיפוש וסינון
+      parameters:
+        - name: search
+          in: query
+          description: מילת חיפוש לסינון משתמשים לפי שם
+          required: false
+          schema:
+            type: string
+            example: "יוסי"
+        - name: limit
+          in: query
+          description: מספר התוצאות המקסימלי להחזיר
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+            example: 10
+        - name: offset
+          in: query
+          description: מספר התוצאות לדלג עליהן
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+            example: 0
+      responses:
+        '200':
+          description: רשימת משתמשים הוחזרה בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersArray'
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "נדרשת הרשאה"
+
+    post:
+      summary: יצירת משתמש חדש
+      description: יוצר משתמש חדש במערכת
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+            example:
+              name: "יוסי כהן"
+              email: "yossi@example.com"
+              age: 30
+      responses:
+        '201':
+          description: משתמש נוצר בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "נתונים לא תקינים"
+                errors: ["שם חובה", "אימייל לא תקין"]
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: מזהה המשתמש
+        schema:
+          type: integer
+          example: 123
+
+    get:
+      summary: קבלת פרטי משתמש ספציפי
+      description: מחזיר את פרטי המשתמש לפי המזהה
+      responses:
+        '200':
+          description: פרטי המשתמש הוחזרו בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: משתמש לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "משתמש לא נמצא"
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: עדכון מלא של משתמש
+      description: מעדכן את כל פרטי המשתמש
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+            example:
+              name: "יוסי כהן מעודכן"
+              email: "yossi.updated@example.com"
+              age: 31
+      responses:
+        '200':
+          description: משתמש עודכן בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: משתמש לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      summary: עדכון חלקי של משתמש
+      description: מעדכן חלק מפרטי המשתמש
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPartialUpdate'
+            example:
+              email: "new.email@example.com"
+      responses:
+        '200':
+          description: משתמש עודכן בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: משתמש לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: מחיקת משתמש
+      description: מוחק משתמש מהמערכת
+      responses:
+        '204':
+          description: משתמש נמחק בהצלחה
+        '404':
+          description: משתמש לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users/protected:
+    get:
+      summary: נקודת קצה מוגנת לבדיקת הרשאות
+      description: נקודת קצה הדורשת הרשאה מלאה
+      responses:
+        '200':
+          description: גישה מורשית
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "גישה מורשית למשאב מוגן"
+        '401':
+          description: נדרשת הרשאה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "נדרשת הרשאה"
