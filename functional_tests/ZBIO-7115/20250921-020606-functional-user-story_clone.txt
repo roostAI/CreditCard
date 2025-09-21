@@ -1,0 +1,114 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Add a Connector",
+      "description": "Test the functionality of adding a new connector.",
+      "testId": "TC-001",
+      "testDescription": "Verify that a new connector can be added successfully with valid configurations.",
+      "prerequisites": "1. The user has the necessary permissions to add connectors.\n2. The application is running and accessible.",
+      "stepsToPerform": "1. Navigate to the 'Add Connector' page.\n2. Select the desired connector type from the available options.\n3. Enter valid configuration details for the selected connector type (e.g., hostname, port, credentials).\n4. Optionally, provide any additional required parameters.\n5. Submit the form to create the new connector.",
+      "expectedResult": "The new connector is created successfully and added to the list of available connectors."
+    },
+    {
+      "type": "functional",
+      "title": "Edit a Connector",
+      "description": "Test the functionality of editing an existing connector.",
+      "testId": "TC-002",
+      "testDescription": "Verify that an existing connector can be edited with updated configurations.",
+      "prerequisites": "1. At least one connector exists in the system.\n2. The user has the necessary permissions to edit connectors.",
+      "stepsToPerform": "1. Navigate to the list of available connectors.\n2. Select the connector to be edited.\n3. Modify the desired configuration fields (e.g., hostname, port, credentials).\n4. Submit the changes to update the connector configuration.",
+      "expectedResult": "The selected connector is updated successfully with the new configuration details."
+    },
+    {
+      "type": "functional",
+      "title": "Add a Test",
+      "description": "Test the functionality of creating a new test.",
+      "testId": "TC-003",
+      "testDescription": "Verify that a new test can be created with valid configurations and associated with a connector.",
+      "prerequisites": "1. At least one connector exists in the system.\n2. The user has the necessary permissions to create tests.",
+      "stepsToPerform": "1. Navigate to the 'Add Test' page.\n2. Select the desired connector to associate with the test.\n3. Enter a name and description for the new test.\n4. Configure the test parameters (e.g., input data, expected output, assertions).\n5. Optionally, provide any additional required parameters.\n6. Submit the form to create the new test.",
+      "expectedResult": "The new test is created successfully and associated with the selected connector."
+    },
+    {
+      "type": "functional",
+      "title": "Edit a Test",
+      "description": "Test the functionality of editing an existing test.",
+      "testId": "TC-004",
+      "testDescription": "Verify that an existing test can be edited with updated configurations and associated with a different connector if needed.",
+      "prerequisites": "1. At least one test and connector exist in the system.\n2. The user has the necessary permissions to edit tests.",
+      "stepsToPerform": "1. Navigate to the list of available tests.\n2. Select the test to be edited.\n3. Modify the desired test configurations (e.g., name, description, parameters, assertions).\n4. Optionally, associate the test with a different connector.\n5. Submit the changes to update the test configuration.",
+      "expectedResult": "The selected test is updated successfully with the new configuration details and associated with the correct connector."
+    },
+    {
+      "type": "functional",
+      "title": "Trigger a Test",
+      "description": "Test the functionality of triggering an existing test for execution.",
+      "testId": "TC-005",
+      "testDescription": "Verify that an existing test can be triggered for execution, and the test results are displayed correctly.",
+      "prerequisites": "1. At least one test exists in the system and is associated with a valid connector.\n2. The user has the necessary permissions to trigger tests.",
+      "stepsToPerform": "1. Navigate to the list of available tests.\n2. Select the test to be executed.\n3. Provide any required input data or parameters for the test.\n4. Trigger the test execution.\n5. Monitor the test execution progress and wait for the results.",
+      "expectedResult": "The selected test is triggered and executed successfully, and the test results (pass/fail) are displayed correctly."
+    },
+    {
+      "type": "functional",
+      "title": "Visit the Insights View",
+      "description": "Test the functionality of accessing and viewing insights related to test execution.",
+      "testId": "TC-006",
+      "testDescription": "Verify that the insights view is accessible and displays relevant information about test executions, such as test history, performance metrics, and visualizations.",
+      "prerequisites": "1. At least one test has been executed in the system.\n2. The user has the necessary permissions to access the insights view.",
+      "stepsToPerform": "1. Navigate to the 'Insights' page or section.\n2. Verify that the insights view loads correctly and displays the available information.\n3. Explore different sections or filters to view specific insights (e.g., test history, performance trends, error logs).",
+      "expectedResult": "The insights view is accessible, and relevant information about test executions is displayed correctly."
+    },
+    {
+      "type": "functional",
+      "title": "Download a Test Config",
+      "description": "Test the functionality of downloading the configuration for an existing test.",
+      "testId": "TC-007",
+      "testDescription": "Verify that the test configuration can be downloaded in a specific format (e.g., JSON, YAML) for backup or sharing purposes.",
+      "prerequisites": "1. At least one test exists in the system.\n2. The user has the necessary permissions to download test configurations.",
+      "stepsToPerform": "1. Navigate to the list of available tests.\n2. Select the test for which you want to download the configuration.\n3. Locate the option to download the test configuration (e.g., a button or menu item).\n4. Select the desired format for the configuration file (e.g., JSON, YAML).\n5. Initiate the download process.",
+      "expectedResult": "The test configuration is downloaded successfully in the selected format, and the file is accessible for further use."
+    },
+    {
+      "type": "non-functional",
+      "title": "Performance Testing",
+      "description": "Test the performance and scalability of the application under different load conditions.",
+      "testId": "TC-008",
+      "testDescription": "Verify that the application can handle a high number of concurrent users, test executions, and data processing without significant performance degradation.",
+      "prerequisites": "1. A performance testing environment is set up and configured.\n2. Performance testing tools and scripts are available.",
+      "stepsToPerform": "1. Define the performance testing scenarios and load profiles (e.g., number of concurrent users, test execution rates).\n2. Set up the performance testing environment and tools.\n3. Execute the performance tests under different load conditions.\n4. Monitor and collect performance metrics (e.g., response times, throughput, resource utilization).",
+      "expectedResult": "The application should maintain acceptable performance levels and respond within defined Service Level Agreements (SLAs) under various load conditions."
+    },
+    {
+      "type": "non-functional",
+      "title": "Security Testing",
+      "description": "Test the security aspects of the application to ensure data protection and prevent unauthorized access.",
+      "testId": "TC-009",
+      "testDescription": "Verify that the application implements secure communication protocols, authentication mechanisms, and data encryption to protect sensitive information.",
+      "prerequisites": "1. A security testing environment is set up and configured.\n2. Security testing tools and scripts are available.",
+      "stepsToPerform": "1. Perform vulnerability scanning and penetration testing on the application.\n2. Test authentication mechanisms (e.g., password strength, multi-factor authentication).\n3. Verify data encryption and secure communication protocols (e.g., HTTPS, SSL/TLS).\n4. Test for common web application vulnerabilities (e.g., XSS, SQL injection, CSRF).\n5. Assess access control mechanisms and privilege management.",
+      "expectedResult": "The application should be free from critical security vulnerabilities and implement industry-standard security practices."
+    },
+    {
+      "type": "non-functional",
+      "title": "Usability Testing",
+      "description": "Test the user experience and usability aspects of the application.",
+      "testId": "TC-010",
+      "testDescription": "Verify that the application provides an intuitive and user-friendly interface, making it easy for users to navigate, perform tasks, and understand the application's functionality.",
+      "prerequisites": "1. A usability testing environment is set up and configured.\n2. Usability testing tools and scripts are available.",
+      "stepsToPerform": "1. Recruit a diverse group of users to participate in usability testing.\n2. Conduct user interviews and observe user interactions with the application.\n3. Assess the application's user interface design, navigation, and information architecture.\n4. Evaluate the ease of use and learnability of the application's features.\n5. Gather feedback from users on areas for improvement.",
+      "expectedResult": "The application should provide a positive and efficient user experience, with intuitive navigation, clear instructions, and minimal user frustration."
+    },
+    {
+      "type": "functional",
+      "title": "Credit Card Notification Scenarios",
+      "description": "Test the functionality of sending notifications related to credit card payments and collections.",
+      "testId": "TC-011",
+      "testDescription": "Verify that the application correctly generates and sends notifications to cardholders in various scenarios related to credit card payments, overdue balances, and collections.",
+      "prerequisites": "1. The application has access to cardholder information and credit card data.\n2. The notification system is configured and integrated with the application.",
+      "stepsToPerform": "1. Set up test data with different cardholder scenarios (e.g., upcoming due date, overdue balance, delinquent account).\n2. Trigger the notification generation process for each scenario.\n3. Verify that the correct notification is generated and sent to the cardholder.\n4. Validate the content of the notification, including the last 4 digits of the credit card number.\n5. Test edge cases, such as invalid or missing cardholder data.",
+      "expectedResult": "The application generates and sends the appropriate notifications for each scenario, including the correct information (e.g., last 4 digits of the credit card number) and following any applicable data privacy and security guidelines."
+    }
+  ]
+}
