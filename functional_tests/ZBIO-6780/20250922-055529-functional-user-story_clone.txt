@@ -1,0 +1,104 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Credit Card Due Reminder",
+      "description": "Verify that a notification is sent to the cardholder reminding them of their upcoming credit card payment due date.",
+      "testId": "TC-001",
+      "testDescription": "The system should send a notification to the cardholder reminding them of their upcoming credit card payment due date. The notification should include the last 4 digits of the credit card number for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The cardholder's payment due date is approaching.",
+      "stepsToPerform": "1. Set the test environment with a cardholder account and an upcoming payment due date.\n2. Trigger the credit card due reminder notification process.\n3. Verify that the notification is sent to the cardholder.\n4. Check that the notification includes the last 4 digits of the credit card number.",
+      "expectedResult": "The cardholder receives a notification reminding them of their upcoming credit card payment due date, which includes the last 4 digits of their credit card number for identification purposes."
+    },
+    {
+      "type": "functional",
+      "title": "Overdue Balance Alert",
+      "description": "Verify that an alert is sent to the cardholder if they miss their payment due date, including the last 4 digits of the credit card number.",
+      "testId": "TC-002",
+      "testDescription": "If a cardholder misses their credit card payment due date, the system should send an alert notifying them of the overdue balance and potential consequences. The alert should include the last 4 digits of the credit card number for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The cardholder has missed their payment due date.",
+      "stepsToPerform": "1. Set the test environment with a cardholder account and a missed payment due date.\n2. Trigger the overdue balance alert process.\n3. Verify that the alert is sent to the cardholder.\n4. Check that the alert includes the last 4 digits of the credit card number.",
+      "expectedResult": "The cardholder receives an alert notifying them of the overdue balance and potential consequences of not making the payment promptly. The alert includes the last 4 digits of their credit card number for identification purposes."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Notification",
+      "description": "Verify that a formal collection notification is sent to the cardholder when the account becomes significantly delinquent, including the last 4 digits of the credit card number.",
+      "testId": "TC-003",
+      "testDescription": "When a cardholder's account becomes significantly delinquent, the system should send a formal collection notification detailing the amount owed and any additional charges. The notification should include the last 4 digits of the credit card number for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The cardholder's account is significantly delinquent (e.g., past due for several months).",
+      "stepsToPerform": "1. Set the test environment with a cardholder account in a significantly delinquent state.\n2. Trigger the collection notification process.\n3. Verify that the collection notification is sent to the cardholder.\n4. Check that the notification includes the last 4 digits of the credit card number.",
+      "expectedResult": "The cardholder receives a formal collection notification detailing the amount owed and any additional charges. The notification includes the last 4 digits of their credit card number for identification purposes."
+    },
+    {
+      "type": "functional",
+      "title": "Payment Plan Proposal",
+      "description": "Verify that a payment plan proposal is sent to the cardholder when they are unable to pay the full overdue balance, including the last 4 digits of the credit card number.",
+      "testId": "TC-004",
+      "testDescription": "If a cardholder is unable to pay the full overdue balance at once, the system should offer a payment plan proposal outlining a structured repayment schedule with reduced interest rates or fees. The proposal should include the last 4 digits of the credit card number for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The cardholder has an overdue balance and is unable to pay the full amount at once.",
+      "stepsToPerform": "1. Set the test environment with a cardholder account having an overdue balance and unable to pay the full amount.\n2. Trigger the payment plan proposal process.\n3. Verify that the payment plan proposal is sent to the cardholder.\n4. Check that the proposal includes the last 4 digits of the credit card number.",
+      "expectedResult": "The cardholder receives a payment plan proposal outlining a structured repayment schedule with reduced interest rates or fees. The proposal includes the last 4 digits of their credit card number for identification purposes."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Agency Involvement",
+      "description": "Verify that if the cardholder fails to respond, a collection agency is involved and provided with the last 4 digits of the credit card number.",
+      "testId": "TC-005",
+      "testDescription": "If the cardholder fails to respond to previous notifications and reminders, the system should involve a collection agency to recover the overdue balance. The collection agency should be provided with the last 4 digits of the credit card number for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The cardholder has failed to respond to previous notifications and reminders.",
+      "stepsToPerform": "1. Set the test environment with a cardholder account that has not responded to previous notifications and reminders.\n2. Trigger the collection agency involvement process.\n3. Verify that the collection agency is provided with the account information, including the last 4 digits of the credit card number.",
+      "expectedResult": "The collection agency is involved and provided with the account information, including the last 4 digits of the cardholder's credit card number for identification purposes."
+    },
+    {
+      "type": "functional",
+      "title": "Legal Action Initiation",
+      "description": "Verify that in extreme cases of non-payment or default, legal action is initiated, and the legal documentation includes the last 4 digits of the credit card number.",
+      "testId": "TC-006",
+      "testDescription": "In extreme cases of non-payment or default, the system should initiate legal action against the cardholder. Any legal documentation should include the last 4 digits of the credit card number for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The cardholder has defaulted on payments or is in an extreme case of non-payment.",
+      "stepsToPerform": "1. Set the test environment with a cardholder account in an extreme case of non-payment or default.\n2. Trigger the legal action initiation process.\n3. Verify that legal documentation is generated.\n4. Check that the legal documentation includes the last 4 digits of the credit card number.",
+      "expectedResult": "In an extreme case of non-payment or default, legal action is initiated against the cardholder. The legal documentation includes the last 4 digits of the cardholder's credit card number for identification purposes."
+    },
+    {
+      "type": "non-functional",
+      "title": "Data Privacy and Security",
+      "description": "Ensure that the system adheres to data privacy and security standards by never exposing the full credit card number in plain text.",
+      "testId": "TC-007",
+      "testDescription": "The system should never expose or share the full credit card number in plain text during any stage of the collection process, including notifications, alerts, proposals, and legal documentation. Only the last 4 digits of the credit card number should be included for identification purposes.",
+      "prerequisites": "1. A cardholder has an active credit card account.\n2. The system has various components and processes related to the collection process.",
+      "stepsToPerform": "1. Review the system's codebase and configuration settings to identify any instances where the full credit card number may be exposed or shared in plain text.\n2. Test various scenarios and processes related to the collection process, including notifications, alerts, proposals, and legal documentation.\n3. Inspect the output and data flow to ensure that only the last 4 digits of the credit card number are included, and the full number is never exposed.",
+      "expectedResult": "The system adheres to data privacy and security standards by never exposing or sharing the full credit card number in plain text during any stage of the collection process. Only the last 4 digits of the credit card number are included for identification purposes."
+    },
+    {
+      "type": "non-functional",
+      "title": "Compliance with Regulations",
+      "description": "Verify that the system complies with relevant regulations and industry standards related to debt collection and consumer protection.",
+      "testId": "TC-008",
+      "testDescription": "The system should comply with relevant regulations and industry standards related to debt collection and consumer protection, such as the Fair Debt Collection Practices Act (FDCPA) and the Truth in Lending Act (TILA).",
+      "prerequisites": "1. A list of relevant regulations and industry standards related to debt collection and consumer protection.\n2. Access to legal and compliance experts for guidance and interpretation.",
+      "stepsToPerform": "1. Review the system's processes and practices related to debt collection and consumer protection.\n2. Consult legal and compliance experts to identify any potential areas of non-compliance.\n3. Test various scenarios and processes to ensure compliance with relevant regulations and industry standards.\n4. Document any instances of non-compliance and work with the development team to address them.",
+      "expectedResult": "The system complies with relevant regulations and industry standards related to debt collection and consumer protection, such as the Fair Debt Collection Practices Act (FDCPA) and the Truth in Lending Act (TILA)."
+    },
+    {
+      "type": "non-functional",
+      "title": "Scalability and Performance",
+      "description": "Assess the system's ability to handle high volumes of credit card accounts and collection processes without performance degradation.",
+      "testId": "TC-009",
+      "testDescription": "The system should be capable of handling high volumes of credit card accounts and collection processes simultaneously without experiencing performance issues or delays.",
+      "prerequisites": "1. Access to a performance testing environment or tools.\n2. Knowledge of expected load and usage patterns.",
+      "stepsToPerform": "1. Identify the system's performance requirements and expected load based on the number of credit card accounts and collection processes.\n2. Set up a performance testing environment or use appropriate tools.\n3. Simulate various load scenarios by generating high volumes of credit card accounts and collection processes.\n4. Monitor system performance metrics, such as response times, throughput, and resource utilization.\n5. Identify any bottlenecks or performance issues and work with the development team to address them.",
+      "expectedResult": "The system can handle high volumes of credit card accounts and collection processes simultaneously without experiencing performance degradation or delays."
+    },
+    {
+      "type": "non-functional",
+      "title": "Auditability and Traceability",
+      "description": "Ensure that the system maintains proper audit logs and traceability for all collection-related activities and communications.",
+      "testId": "TC-010",
+      "testDescription": "The system should maintain audit logs and traceability for all collection-related activities and communications, including notifications, alerts, proposals, and legal actions. These logs should be accessible for auditing and reporting purposes.",
+      "prerequisites": "1. Access to the system's logging and auditing mechanisms.\n2. Knowledge of auditing and compliance requirements.",
+      "stepsToPerform": "1. Review the system's logging and auditing mechanisms to ensure that collection-related activities and communications are properly logged.\n2. Test various scenarios and processes related to the collection process, such as sending notifications, alerts, proposals, and legal actions.\n3. Verify that all relevant activities and communications are properly logged and traceable.\n4. Ensure that the audit logs are accessible and can be used for auditing and reporting purposes.",
+      "expectedResult": "The system maintains proper audit logs and traceability for all collection-related activities and communications, including notifications, alerts, proposals, and legal actions. These logs are accessible for auditing and reporting purposes."
+    }
+  ]
+}
