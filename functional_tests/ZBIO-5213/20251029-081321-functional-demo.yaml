@@ -1,0 +1,550 @@
+openapi: 3.0.3
+info:
+  title: Credit Card Collection Lifecycle API
+  description: API for managing credit card collection processes including notifications, overdue alerts, payment plans, and legal documentation
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: api-support@company.com
+
+servers:
+  - url: ${API_BASE_URL}
+    description: Environment-based server URL
+
+security:
+  - bearerAuth: []
+
+paths:
+  /notifications/due-reminder:
+    post:
+      summary: Send Credit Card Due Reminder Notification
+      description: Sends a payment due reminder notification to cardholders
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - cardLastFour
+                - dueDate
+                - amountDue
+                - contactMethod
+              properties:
+                accountId:
+                  type: string
+                  example: "ACC123456"
+                cardLastFour:
+                  type: string
+                  pattern: "^[0-9]{4}$"
+                  example: "1234"
+                dueDate:
+                  type: string
+                  format: date
+                  example: "2024-01-15"
+                amountDue:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 250.00
+                contactMethod:
+                  type: string
+                  enum: [email, sms, phone]
+                  example: "email"
+      responses:
+        '201':
+          description: Due reminder sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificationId:
+                    type: string
+                    example: "NOTIF_123456789"
+                  status:
+                    type: string
+                    example: "sent"
+                  cardLastFour:
+                    type: string
+                    example: "1234"
+                  message:
+                    type: string
+                    example: "Due reminder sent successfully"
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /notifications/overdue-alert:
+    post:
+      summary: Generate Overdue Balance Alert
+      description: Creates an alert for overdue credit card balances
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - cardLastFour
+                - overdueAmount
+                - daysPastDue
+                - contactMethod
+              properties:
+                accountId:
+                  type: string
+                  example: "ACC123457"
+                cardLastFour:
+                  type: string
+                  pattern: "^[0-9]{4}$"
+                  example: "5678"
+                overdueAmount:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 500.00
+                daysPastDue:
+                  type: integer
+                  minimum: 1
+                  example: 15
+                contactMethod:
+                  type: string
+                  enum: [email, sms, phone]
+                  example: "sms"
+      responses:
+        '201':
+          description: Overdue alert generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alertId:
+                    type: string
+                    example: "ALERT_987654321"
+                  status:
+                    type: string
+                    example: "generated"
+                  cardLastFour:
+                    type: string
+                    example: "5678"
+                  overdueAmount:
+                    type: number
+                    format: float
+                    example: 500.00
+                  consequences:
+                    type: string
+                    example: "Late fees and interest charges may apply"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /collections/formal-notice:
+    post:
+      summary: Create Collection Notification for Delinquent Account
+      description: Creates formal collection notice for severely delinquent accounts
+      tags:
+        - Collections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - cardLastFour
+                - totalAmountOwed
+                - additionalCharges
+                - delinquencyDays
+              properties:
+                accountId:
+                  type: string
+                  example: "ACC123458"
+                cardLastFour:
+                  type: string
+                  pattern: "^[0-9]{4}$"
+                  example: "9012"
+                totalAmountOwed:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 1500.00
+                additionalCharges:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 75.00
+                delinquencyDays:
+                  type: integer
+                  minimum: 60
+                  example: 65
+      responses:
+        '201':
+          description: Formal notice created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  noticeId:
+                    type: string
+                    example: "NOTICE_456789123"
+                  status:
+                    type: string
+                    example: "created"
+                  cardLastFour:
+                    type: string
+                    example: "9012"
+                  totalAmount:
+                    type: number
+                    format: float
+                    example: 1575.00
+                  paymentDeadline:
+                    type: string
+                    format: date
+                    example: "2024-02-15"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /collections/payment-plan:
+    post:
+      summary: Generate Payment Plan Proposal
+      description: Creates a payment plan proposal for accounts with financial hardship
+      tags:
+        - Collections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - cardLastFour
+                - totalBalance
+                - hardshipStatus
+                - proposedMonthlyPayment
+              properties:
+                accountId:
+                  type: string
+                  example: "ACC123459"
+                cardLastFour:
+                  type: string
+                  pattern: "^[0-9]{4}$"
+                  example: "3456"
+                totalBalance:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 2000.00
+                hardshipStatus:
+                  type: boolean
+                  example: true
+                proposedMonthlyPayment:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 200.00
+      responses:
+        '201':
+          description: Payment plan proposal created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  planId:
+                    type: string
+                    example: "PLAN_789123456"
+                  cardLastFour:
+                    type: string
+                    example: "3456"
+                  monthlyPayment:
+                    type: number
+                    format: float
+                    example: 200.00
+                  reducedInterestRate:
+                    type: number
+                    format: float
+                    example: 5.99
+                  paymentSchedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dueDate:
+                          type: string
+                          format: date
+                        amount:
+                          type: number
+                          format: float
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /collections/agency-transfer:
+    post:
+      summary: Transfer Account Data to Collection Agency
+      description: Transfers severely delinquent account to external collection agency
+      tags:
+        - Collections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - cardLastFour
+                - agencyId
+                - transferReason
+              properties:
+                accountId:
+                  type: string
+                  example: "ACC123460"
+                cardLastFour:
+                  type: string
+                  pattern: "^[0-9]{4}$"
+                  example: "7890"
+                agencyId:
+                  type: string
+                  example: "AGENCY001"
+                transferReason:
+                  type: string
+                  enum: [failed_internal_collection, account_default, legal_requirement]
+                  example: "failed_internal_collection"
+      responses:
+        '200':
+          description: Account transferred successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transferId:
+                    type: string
+                    example: "TRANSFER_321654987"
+                  status:
+                    type: string
+                    example: "transferred"
+                  cardLastFour:
+                    type: string
+                    example: "7890"
+                  agencyId:
+                    type: string
+                    example: "AGENCY001"
+                  transferDate:
+                    type: string
+                    format: date-time
+                    example: "2024-01-15T10:30:00Z"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /legal/documentation:
+    post:
+      summary: Prepare Legal Action Documentation
+      description: Prepares legal documentation for accounts in default status
+      tags:
+        - Legal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountId
+                - cardLastFour
+                - defaultAmount
+                - legalActionType
+              properties:
+                accountId:
+                  type: string
+                  example: "ACC123461"
+                cardLastFour:
+                  type: string
+                  pattern: "^[0-9]{4}$"
+                  example: "2468"
+                defaultAmount:
+                  type: number
+                  format: float
+                  minimum: 0
+                  example: 5000.00
+                legalActionType:
+                  type: string
+                  enum: [court_filing, judgment_request, asset_seizure]
+                  example: "court_filing"
+      responses:
+        '201':
+          description: Legal documentation prepared successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documentId:
+                    type: string
+                    example: "DOC_654987321"
+                  status:
+                    type: string
+                    example: "prepared"
+                  cardLastFour:
+                    type: string
+                    example: "2468"
+                  documentType:
+                    type: string
+                    example: "court_filing"
+                  createdDate:
+                    type: string
+                    format: date-time
+                    example: "2024-01-15T14:20:00Z"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /collections/account/{accountId}:
+    get:
+      summary: Get Collection Account Information
+      description: Retrieves masked account information for collection purposes
+      tags:
+        - Collections
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "ACC123456"
+      responses:
+        '200':
+          description: Account information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountId:
+                    type: string
+                    example: "ACC123456"
+                  cardLastFour:
+                    type: string
+                    example: "1234"
+                  status:
+                    type: string
+                    example: "overdue"
+                  balance:
+                    type: number
+                    format: float
+                    example: 1500.00
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /notifications/bulk-trigger:
+    post:
+      summary: Trigger Bulk Notifications
+      description: Triggers notifications for multiple accounts simultaneously
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accounts
+                - notificationType
+                - triggerTime
+              properties:
+                accounts:
+                  type: array
+                  items:
+                    type: string
+                  example: ["ACC001", "ACC002", "ACC003"]
+                notificationType:
+                  type: string
+                  enum: [due_reminder, overdue_alert, collection_notice]
+                  example: "due_reminder"
+                triggerTime:
+                  type: string
+                  enum: [immediate, scheduled]
+                  example: "immediate"
+      responses:
+        '202':
+          description: Bulk notification processing started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batchId:
+                    type: string
+                    example: "BATCH_987654321"
+                  totalAccounts:
+                    type: integer
+                    example: 100
+                  status:
+                    type: string
+                    example: "processing"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Account not found"
+        code:
+          type: string
+          example: "ACCOUNT_NOT_FOUND"
+        message:
+          type: string
+          example: "The specified account ID does not exist"
+
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Unauthorized"
+              message:
+                type: string
+                example: "Valid authorization token required"
+
+tags:
+  - name: Notifications
+    description: Credit card notification management
+  - name: Collections
+    description: Collection process management
+  - name: Legal
+    description: Legal action documentation
