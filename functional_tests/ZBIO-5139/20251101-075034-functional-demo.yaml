@@ -1,0 +1,433 @@
+openapi: 3.0.3
+info:
+  title: Credit Card Management System API
+  description: API for managing credit card applications, charges, rewards, and customer accounts
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: api-support@creditcard.com
+
+servers:
+  - url: '{BASE_URL}'
+    description: Environment-specific base URL
+    variables:
+      BASE_URL:
+        default: https://api.creditcard.com
+        description: Base URL from environment variable
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Address:
+      type: object
+      required:
+        - street
+        - city
+        - state
+        - zipCode
+      properties:
+        street:
+          type: string
+          example: "123 Main St"
+        city:
+          type: string
+          example: "Anytown"
+        state:
+          type: string
+          example: "CA"
+        zipCode:
+          type: string
+          example: "12345"
+
+    CreditCardApplication:
+      type: object
+      required:
+        - ssn
+        - annualIncome
+        - email
+        - phone
+        - firstName
+        - lastName
+        - address
+      properties:
+        ssn:
+          type: string
+          pattern: '^\d{3}-\d{2}-\d{4}$'
+          example: "123-45-6789"
+        annualIncome:
+          type: number
+          minimum: 0
+          example: 50000
+        email:
+          type: string
+          format: email
+          example: "test@email.com"
+        phone:
+          type: string
+          example: "555-1234"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        address:
+          $ref: '#/components/schemas/Address'
+
+    ApplicationResponse:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          example: "APP123456"
+        status:
+          type: string
+          enum: [submitted, approved, rejected, pending]
+          example: "submitted"
+        email:
+          type: string
+          format: email
+          example: "test@email.com"
+
+    ValidationError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+          example: ["ssn is required", "invalid email format", "income must be positive"]
+
+    ChargeWaiverRequest:
+      type: object
+      required:
+        - customerId
+        - chargeId
+        - chargeAmount
+        - reason
+        - approvedBy
+      properties:
+        customerId:
+          type: string
+          example: "CUST123"
+        chargeId:
+          type: string
+          example: "CHG456"
+        chargeAmount:
+          type: number
+          format: float
+          example: 25.00
+        reason:
+          type: string
+          example: "good payment history"
+        approvedBy:
+          type: string
+          example: "REP001"
+
+    ChargeWaiverResponse:
+      type: object
+      properties:
+        waiverApproved:
+          type: boolean
+          example: true
+        newBalance:
+          type: number
+          format: float
+          example: 1500.00
+        confirmationNumber:
+          type: string
+          example: "WAIVER123456"
+
+    RewardRedemptionRequest:
+      type: object
+      required:
+        - customerId
+        - pointsToRedeem
+        - rewardId
+        - rewardType
+      properties:
+        customerId:
+          type: string
+          example: "CUST123"
+        pointsToRedeem:
+          type: integer
+          minimum: 1
+          example: 2000
+        rewardId:
+          type: string
+          example: "GIFT20"
+        rewardType:
+          type: string
+          enum: [gift_card, cash_back, travel, merchandise]
+          example: "gift_card"
+
+    RewardRedemptionResponse:
+      type: object
+      properties:
+        redemptionId:
+          type: string
+          example: "REDEEM123456"
+        remainingPoints:
+          type: integer
+          example: 3000
+        status:
+          type: string
+          enum: [processed, pending, failed]
+          example: "processed"
+
+    InsufficientPointsError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "insufficient points"
+        availablePoints:
+          type: integer
+          example: 1000
+        requiredPoints:
+          type: integer
+          example: 2000
+
+    CreditLimitUpdateRequest:
+      type: object
+      required:
+        - customerId
+        - newCreditLimit
+        - previousLimit
+        - reason
+        - approvedBy
+      properties:
+        customerId:
+          type: string
+          example: "CUST123"
+        newCreditLimit:
+          type: number
+          format: float
+          example: 7500
+        previousLimit:
+          type: number
+          format: float
+          example: 5000
+        reason:
+          type: string
+          example: "creditworthiness improvement"
+        approvedBy:
+          type: string
+          example: "SYSTEM"
+
+    CreditLimitUpdateResponse:
+      type: object
+      properties:
+        limitUpdated:
+          type: boolean
+          example: true
+        newLimit:
+          type: number
+          format: float
+          example: 7500
+        effectiveDate:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+    BalanceTransferRequest:
+      type: object
+      required:
+        - customerId
+        - externalCardLast4
+        - transferAmount
+        - promotionalOffer
+      properties:
+        customerId:
+          type: string
+          example: "CUST123"
+        externalCardLast4:
+          type: string
+          pattern: '^\d{4}$'
+          example: "1234"
+        transferAmount:
+          type: number
+          format: float
+          minimum: 0
+          example: 2000
+        promotionalOffer:
+          type: object
+          properties:
+            aprRate:
+              type: number
+              format: float
+              example: 0
+            termMonths:
+              type: integer
+              example: 12
+
+    BalanceTransferResponse:
+      type: object
+      properties:
+        transferId:
+          type: string
+          example: "TRANSFER123456"
+        status:
+          type: string
+          enum: [approved, pending, rejected]
+          example: "approved"
+        promotionalTerms:
+          type: object
+          properties:
+            aprRate:
+              type: number
+              format: float
+              example: 0
+            termMonths:
+              type: integer
+              example: 12
+
+    CustomerAccount:
+      type: object
+      properties:
+        customerId:
+          type: string
+          example: "CUST123"
+        creditLimit:
+          type: number
+          format: float
+          example: 7500
+        availableCredit:
+          type: number
+          format: float
+          example: 5500
+        rewardPoints:
+          type: integer
+          example: 5000
+
+paths:
+  /api/credit-card/applications:
+    post:
+      summary: Submit credit card application
+      description: Submit a new credit card application with customer details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardApplication'
+      responses:
+        '201':
+          description: Application submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+        '400':
+          description: Invalid application data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /api/charges/waiver:
+    post:
+      summary: Process charge waiver
+      description: Process a charge waiver request for a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeWaiverRequest'
+      responses:
+        '200':
+          description: Charge waiver processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeWaiverResponse'
+
+  /api/rewards/redeem:
+    post:
+      summary: Redeem reward points
+      description: Redeem customer reward points for rewards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardRedemptionRequest'
+      responses:
+        '200':
+          description: Points redeemed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RewardRedemptionResponse'
+        '400':
+          description: Insufficient points or invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsufficientPointsError'
+
+  /api/credit-limit/update:
+    put:
+      summary: Update credit limit
+      description: Update customer credit limit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditLimitUpdateRequest'
+      responses:
+        '200':
+          description: Credit limit updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditLimitUpdateResponse'
+
+  /api/balance-transfer:
+    post:
+      summary: Process balance transfer
+      description: Process a balance transfer from external card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceTransferRequest'
+      responses:
+        '201':
+          description: Balance transfer approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceTransferResponse'
+
+  /api/customers/{customerId}/account:
+    get:
+      summary: Retrieve customer account details
+      description: Get detailed account information for a specific customer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "CUST123"
+      responses:
+        '200':
+          description: Customer account details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerAccount'
+        '404':
+          description: Customer not found
