@@ -1,0 +1,54 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Verify Correct Base Path for Swagger 2.0",
+      "description": "Ensure the base path is correctly appended to the Prism server URL for Swagger 2.0 API specifications.",
+      "testId": "TC-001",
+      "testDescription": "When a Swagger 2.0 API specification includes a base path, the base path should be appended to the Prism server URL during API execution.",
+      "prerequisites": "1. A Swagger 2.0 API specification containing a 'basePath' property.\n2. Access to the Prism mock server utility.",
+      "stepsToPerform": "1. Obtain the Swagger 2.0 API specification file.\n2. Parse the specification and extract the 'basePath' value.\n3. Start the Prism mock server with the following command: 'prism mock -p [PORT] [SPEC_FILE_PATH]'.\n4. Verify that the Prism server URL includes the base path by sending a request to 'http://localhost:[PORT]/[BASE_PATH]/[ENDPOINT_PATH]'.",
+      "expectedResult": "The API request sent to the Prism server URL with the appended base path should be successful, and the response should match the expected output defined in the API specification."
+    },
+    {
+      "type": "functional",
+      "title": "Verify Correct URL for Swagger 3.0",
+      "description": "Ensure the correct URL is used for Swagger 3.0 API specifications when running the Prism mock server.",
+      "testId": "TC-002",
+      "testDescription": "For Swagger 3.0 API specifications, the URL can be either a fully qualified host or a relative URI. The Prism mock server should be able to handle both scenarios correctly.",
+      "prerequisites": "1. A Swagger 3.0 API specification containing either a fully qualified host or a relative URI.\n2. Access to the Prism mock server utility.",
+      "stepsToPerform": "1. Obtain the Swagger 3.0 API specification file.\n2. Parse the specification and extract the 'servers' or 'host' and 'basePath' values.\n3. If a fully qualified host is provided, start the Prism mock server with the following command: 'prism mock -p [PORT] [SPEC_FILE_PATH]'.\n4. If a relative URI is provided, start the Prism mock server with the following command: 'prism mock -p [PORT] --host [HOST_VALUE] [SPEC_FILE_PATH]'.\n5. Verify that the Prism server URL is constructed correctly by sending a request to the appropriate endpoint.",
+      "expectedResult": "The API request sent to the Prism server URL with the correct host and base path should be successful, and the response should match the expected output defined in the API specification."
+    },
+    {
+      "type": "non-functional",
+      "title": "Validate Prism Server Performance",
+      "description": "Ensure the Prism mock server can handle a high volume of concurrent requests without performance degradation.",
+      "testId": "TC-003",
+      "testDescription": "The Prism mock server should be able to handle a large number of simultaneous API requests without experiencing performance issues or timeouts.",
+      "prerequisites": "1. A Swagger API specification file.\n2. Access to a load testing tool (e.g., JMeter, Locust).",
+      "stepsToPerform": "1. Start the Prism mock server with the provided API specification file.\n2. Configure the load testing tool to simulate a high volume of concurrent requests to the Prism server.\n3. Gradually increase the number of concurrent users or threads sending requests.\n4. Monitor the Prism server's response times, error rates, and resource utilization (CPU, memory) during the load test.",
+      "expectedResult": "The Prism mock server should be able to handle the increased load without significant performance degradation. Response times should remain within acceptable limits, and error rates should be low or negligible."
+    },
+    {
+      "type": "non-functional",
+      "title": "Verify Prism Server Behavior with Multiple Specifications",
+      "description": "Ensure the Prism mock server handles multiple API specifications correctly, without conflicts or unexpected behavior.",
+      "testId": "TC-004",
+      "testDescription": "When multiple API specifications are provided to the Prism mock server, it should start separate mock servers for each specification and handle requests for different endpoints correctly.",
+      "prerequisites": "1. Multiple Swagger API specification files.\n2. Access to the Prism mock server utility.",
+      "stepsToPerform": "1. Start the Prism mock server with multiple API specification files, each on a different port.\n2. Send requests to different endpoints defined across the API specifications.\n3. Verify that the Prism server responds correctly for each endpoint, based on the corresponding API specification.",
+      "expectedResult": "The Prism mock server should handle requests for different endpoints correctly, based on the corresponding API specification. Each mock server instance should operate independently, without interference or conflicts."
+    },
+    {
+      "type": "non-functional",
+      "title": "Validate Prism Server Error Handling",
+      "description": "Ensure the Prism mock server handles errors and edge cases gracefully, providing meaningful error messages and responses.",
+      "testId": "TC-005",
+      "testDescription": "The Prism mock server should handle invalid requests, malformed payloads, and other error scenarios in a consistent and user-friendly manner.",
+      "prerequisites": "1. A Swagger API specification file.\n2. Access to the Prism mock server utility.",
+      "stepsToPerform": "1. Start the Prism mock server with the provided API specification file.\n2. Send requests with invalid parameters, missing required fields, or incorrect data types.\n3. Send requests to non-existent endpoints.\n4. Verify the Prism server's response for each error scenario.",
+      "expectedResult": "The Prism mock server should respond with appropriate error messages and status codes for invalid requests or scenarios not defined in the API specification. The error responses should be clear, informative, and follow best practices for error handling."
+    }
+  ]
+}
