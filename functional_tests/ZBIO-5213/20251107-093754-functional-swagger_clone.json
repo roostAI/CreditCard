@@ -1,0 +1,100 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Credit Card Due Reminder Notification",
+      "description": "Verify that automated due reminder notifications are sent to cardholders before payment due date with last 4 digits of card number.",
+      "testId": "TC-001",
+      "testDescription": "Test the system's ability to automatically send payment due reminders to cardholders within the specified timeframe before the due date, ensuring the notification contains the last 4 digits of the credit card number for identification.",
+      "prerequisites": "Active credit card account with upcoming payment due date, notification system configured, cardholder contact information available.",
+      "stepsToPerform": "1. Set up a credit card account with payment due date 3 days from current date.\n2. Configure system to send due reminders 5 days before due date.\n3. Wait for automated notification trigger.\n4. Verify notification is sent to cardholder's registered email/SMS.\n5. Check notification content for last 4 digits of card number.\n6. Verify due date and amount information accuracy.",
+      "expectedResult": "Cardholder receives automated notification containing payment due date, amount due, and last 4 digits of credit card number (e.g., ****1234). Full card number is not displayed.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API provides POST /payment-reminder endpoint that supports sending due reminder notifications with last 4 digits of card number. The endpoint accepts currentDate, paymentDueDate, and cardLast4 parameters which fulfill the core business requirement. However, the test scenario requires automated triggering based on timeframes (5 days before due date), cardholder contact information integration, and structured response data including amount due. Currently missing: automated scheduling system, cardholder contact retrieval, amount due calculation, and detailed notification content structure. Recommendation: Add automated scheduling capabilities and enhance response structure with comprehensive payment details."
+    },
+    {
+      "type": "functional",
+      "title": "Overdue Balance Alert Generation",
+      "description": "Verify that overdue balance alerts are sent when payment due date is missed, including consequences and card identification.",
+      "testId": "TC-002",
+      "testDescription": "Test the system's capability to detect missed payment due dates and automatically send overdue balance alerts with appropriate warning messages and card identification using last 4 digits.",
+      "prerequisites": "Credit card account with missed payment due date, overdue balance present, cardholder contact information available.",
+      "stepsToPerform": "1. Create credit card account with payment due date that has passed.\n2. Ensure payment has not been received by due date.\n3. Wait for system to detect overdue status.\n4. Verify overdue alert is automatically generated.\n5. Check alert content for overdue amount and consequences.\n6. Confirm last 4 digits of card number are included.\n7. Verify full card number is not exposed.",
+      "expectedResult": "Overdue balance alert is sent containing overdue amount, potential consequences (late fees, interest charges), last 4 digits of card number, and payment instructions. Full card number remains protected.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API provides POST /balance-alert endpoint that can generate overdue balance alerts with card identification using last 4 digits. The endpoint accepts paymentDueDate, currentDate, and cardLast4 parameters supporting the basic alert functionality. However, the test scenario requires automatic detection of missed payments, overdue amount calculation, consequence details (late fees, interest charges), and structured alert content. Currently missing: automated overdue detection system, amount calculation logic, consequence details in response, and payment instruction generation. Recommendation: Add automated overdue detection and enhance response with detailed overdue information and consequences."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Notification for Delinquent Account",
+      "description": "Verify formal collection notifications are sent for significantly delinquent accounts with detailed amount owed and additional charges.",
+      "testId": "TC-003",
+      "testDescription": "Test the escalation process for delinquent accounts by generating formal collection notifications that include total amount owed, additional charges, and secure card identification.",
+      "prerequisites": "Credit card account in significantly delinquent status, multiple missed payments, collection notification templates configured.",
+      "stepsToPerform": "1. Set up credit card account with 60+ days overdue status.\n2. Configure account as significantly delinquent.\n3. Trigger collection notification process.\n4. Verify formal collection notification is generated.\n5. Check notification includes total amount owed.\n6. Verify additional charges (late fees, interest) are detailed.\n7. Confirm last 4 digits of card number are present.\n8. Ensure full card number is not displayed.",
+      "expectedResult": "Formal collection notification is sent with detailed breakdown of amount owed, additional charges, payment deadline, and last 4 digits of card number. Full card number remains secure.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API provides POST /collection-notification endpoint that supports formal collection notifications with delinquencyStatus, outstandingBalance, additionalCharges, and cardLast4 parameters. This covers the core business requirement for collection notifications with secure card identification. However, the test scenario requires detailed breakdown of charges, payment deadline specification, and structured notification templates. Currently missing: detailed charge breakdown structure, payment deadline handling, and comprehensive notification formatting. Recommendation: Enhance response structure to include detailed charge breakdowns and payment deadline information."
+    },
+    {
+      "type": "functional",
+      "title": "Payment Plan Proposal Generation",
+      "description": "Verify payment plan proposals are generated for cardholders unable to pay full overdue balance with structured repayment schedule.",
+      "testId": "TC-004",
+      "testDescription": "Test the system's ability to generate payment plan proposals with structured repayment schedules, reduced interest rates, and secure card identification for cardholders facing financial hardship.",
+      "prerequisites": "Overdue credit card account, cardholder financial hardship status, payment plan templates configured.",
+      "stepsToPerform": "1. Create overdue credit card account with substantial balance.\n2. Mark account for payment plan eligibility.\n3. Generate payment plan proposal.\n4. Verify structured repayment schedule is included.\n5. Check for reduced interest rates or fee waivers.\n6. Confirm last 4 digits of card number are present.\n7. Verify payment plan terms and conditions.\n8. Ensure full card number is not exposed.",
+      "expectedResult": "Payment plan proposal is generated containing structured repayment schedule, reduced interest rates/fees, payment amounts, due dates, and last 4 digits of card number. Full card number remains protected.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API provides POST /payment-plan-proposal endpoint that generates payment plan proposals with outstandingBalance, paymentPlan details (installmentAmount, interestRate, termLength), and cardLast4 for secure identification. This supports the core business requirement for structured repayment schedules. However, the test scenario requires financial hardship assessment, fee waiver capabilities, and detailed terms and conditions. Currently missing: hardship status evaluation, fee waiver logic, and comprehensive terms structure. Recommendation: Add hardship assessment parameters and enhance payment plan structure with fee waiver options and detailed terms."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Agency Data Transfer",
+      "description": "Verify secure transfer of account information to collection agency including last 4 digits of card number when escalation occurs.",
+      "testId": "TC-005",
+      "testDescription": "Test the process of transferring delinquent account information to collection agencies while maintaining security protocols and providing necessary identification data.",
+      "prerequisites": "Severely delinquent credit card account, failed response to previous notifications, collection agency partnership established.",
+      "stepsToPerform": "1. Set up credit card account with no response to previous collection attempts.\n2. Mark account for collection agency escalation.\n3. Initiate collection agency transfer process.\n4. Verify account data is prepared for transfer.\n5. Check that last 4 digits of card number are included.\n6. Confirm full card number is not transferred.\n7. Verify other necessary account details are included.\n8. Validate secure transfer protocols are followed.",
+      "expectedResult": "Account information is securely transferred to collection agency including cardholder details, overdue amount, payment history, and last 4 digits of card number. Full card number is not shared.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API provides POST /collection-agency endpoint that handles collection agency data transfer with previousNotifications, responseStatus, and cardLast4 parameters. This supports the basic business requirement for secure account information transfer with card identification. However, the test scenario requires comprehensive account data preparation, secure transfer protocols validation, and detailed account history inclusion. Currently missing: complete account data structure, secure transfer validation, payment history details, and transfer protocol specifications. Recommendation: Enhance endpoint to include comprehensive account data structure and secure transfer validation mechanisms."
+    },
+    {
+      "type": "functional",
+      "title": "Legal Action Documentation",
+      "description": "Verify legal documentation preparation includes last 4 digits of card number for identification in extreme non-payment cases.",
+      "testId": "TC-006",
+      "testDescription": "Test the generation of legal documentation for extreme cases of non-payment or default, ensuring proper card identification while maintaining security standards.",
+      "prerequisites": "Credit card account in default status, failed collection attempts, legal action authorization, legal documentation templates.",
+      "stepsToPerform": "1. Create credit card account in default status.\n2. Document failed collection attempts.\n3. Initiate legal action documentation process.\n4. Generate legal documents for court proceedings.\n5. Verify account details are accurately documented.\n6. Check that last 4 digits of card number are included.\n7. Confirm full card number is not present in documents.\n8. Validate legal document completeness and accuracy.",
+      "expectedResult": "Legal documentation is prepared containing all necessary account information, payment history, collection attempts, and last 4 digits of card number for identification. Full card number is not included in any legal documents.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API provides POST /legal-action endpoint that supports legal documentation preparation with nonPaymentStatus, legalStatus, and cardLast4 parameters. This covers the basic business requirement for legal action documentation with secure card identification. However, the test scenario requires comprehensive account documentation, collection attempt history, and detailed legal document generation. Currently missing: detailed account history structure, collection attempt documentation, and comprehensive legal document formatting. Recommendation: Enhance endpoint to include detailed account history and collection attempt documentation structure."
+    },
+    {
+      "type": "non-functional",
+      "title": "Card Number Security Validation",
+      "description": "Verify that full credit card numbers are never displayed or transmitted in plain text throughout the collection lifecycle.",
+      "testId": "TC-007",
+      "testDescription": "Test security measures to ensure full credit card numbers are properly masked and only last 4 digits are used for identification across all collection lifecycle communications.",
+      "prerequisites": "Collection lifecycle system configured, security protocols implemented, test credit card data available.",
+      "stepsToPerform": "1. Execute all collection lifecycle scenarios.\n2. Monitor all generated notifications and documents.\n3. Check database logs for card number exposure.\n4. Verify API responses mask full card numbers.\n5. Test email and SMS notifications for security compliance.\n6. Validate collection agency data transfers.\n7. Review legal documentation for card number security.\n8. Perform penetration testing on card data exposure.",
+      "expectedResult": "Full credit card numbers are never displayed in plain text. Only last 4 digits are shown for identification. All communications, documents, and data transfers comply with security standards.",
+      "implementationStatus": "Partially Implemented",
+      "implementationAnalysis": "⚠ PARTIALLY IMPLEMENTED: The API demonstrates security awareness by including cardLast4 parameters across all endpoints and providing GET /card-details endpoint that returns cardNumberPartial for secure card identification. This supports the core business requirement of protecting full card numbers. However, the test scenario requires comprehensive security validation across all communications, database logging security, API response monitoring, and penetration testing capabilities. Currently missing: security validation endpoints, audit logging mechanisms, and comprehensive security monitoring tools. Recommendation: Add security validation endpoints and audit logging capabilities for comprehensive card number protection verification."
+    },
+    {
+      "type": "non-functional",
+      "title": "Notification Delivery Performance",
+      "description": "Verify that collection lifecycle notifications are delivered within acceptable time frames and with high reliability.",
+      "testId": "TC-008",
+      "testDescription": "Test the performance and reliability of the notification delivery system across all collection lifecycle stages to ensure timely communication with cardholders.",
+      "prerequisites": "Collection lifecycle system operational, notification delivery infrastructure configured, performance monitoring tools available.",
+      "stepsToPerform": "1. Set up 100 test accounts across different collection stages.\n2. Trigger notifications for all test accounts simultaneously.\n3. Monitor notification delivery times.\n4. Track delivery success rates.\n5. Measure system response times.\n6. Test during peak and off-peak hours.\n7. Verify notification queue processing efficiency.\n8. Monitor system resource utilization.",
+      "expectedResult": "95% of notifications are delivered within 5 minutes of trigger. System maintains 99.9% delivery success rate. Response times remain under 2 seconds during peak loads.",
+      "implementationStatus": "Not Implemented",
+      "implementationAnalysis": "✗ NOT IMPLEMENTED: The API spec does not provide any endpoints or mechanisms for notification delivery performance monitoring, delivery time tracking, or reliability measurement. While the API has notification endpoints (payment-reminder, balance-alert, etc.), there are no capabilities to monitor delivery performance, track success rates, or measure system response times. This prevents businesses from ensuring timely communication with cardholders and maintaining service level agreements. Recommendation: Add comprehensive performance monitoring endpoints including delivery tracking, success rate monitoring, and system performance metrics."
+    }
+  ]
+}

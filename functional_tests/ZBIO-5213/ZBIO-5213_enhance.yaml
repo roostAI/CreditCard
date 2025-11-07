@@ -1,0 +1,632 @@
+openapi: 3.0.0
+info:
+  title: Credit Card Notifications and Alerts API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /payment-reminder:
+    post:
+      operationId: paymentReminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - currentDate
+                - paymentDueDate
+                - cardLast4
+              properties:
+                currentDate:
+                  type: string
+                  format: date
+                paymentDueDate:
+                  type: string
+                  format: date
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                amountDue:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added amountDue field to payment reminder request. Required for test scenario TC-001: Credit Card Due Reminder Notification.'
+                  type: number
+                  description: Amount due for the payment
+                cardholderEmail:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added cardholderEmail field to payment reminder request. Required for test scenario TC-001: Credit Card Due Reminder Notification.'
+                  type: string
+                  format: email
+                  description: Cardholder's email address for notification delivery
+                cardholderPhone:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added cardholderPhone field to payment reminder request. Required for test scenario TC-001: Credit Card Due Reminder Notification.'
+                  type: string
+                  description: Cardholder's phone number for SMS notification delivery
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              x-roost-enhancement: true
+              x-roost-description: 'Enhanced payment reminder response structure. Required for test scenario TC-001: Credit Card Due Reminder Notification.'
+              schema:
+                type: object
+                properties:
+                  notificationId:
+                    type: string
+                  deliveryStatus:
+                    type: string
+                    enum:
+                      - sent
+                      - pending
+                      - failed
+                  deliveryMethod:
+                    type: array
+                    items:
+                      type: string
+                      enum:
+                        - email
+                        - sms
+                  amountDue:
+                    type: number
+                  dueDate:
+                    type: string
+                    format: date
+                  cardLast4:
+                    type: string
+  /balance-alert:
+    post:
+      operationId: balanceAlert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - paymentDueDate
+                - currentDate
+                - cardLast4
+              properties:
+                paymentDueDate:
+                  type: string
+                  format: date
+                currentDate:
+                  type: string
+                  format: date
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                overdueAmount:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added overdueAmount field to balance alert request. Required for test scenario TC-002: Overdue Balance Alert Generation.'
+                  type: number
+                  description: Amount that is overdue
+                lateFees:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added lateFees field to balance alert request. Required for test scenario TC-002: Overdue Balance Alert Generation.'
+                  type: number
+                  description: Late fees applied to the account
+                interestCharges:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added interestCharges field to balance alert request. Required for test scenario TC-002: Overdue Balance Alert Generation.'
+                  type: number
+                  description: Interest charges applied to the account
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              x-roost-enhancement: true
+              x-roost-description: 'Enhanced balance alert response structure. Required for test scenario TC-002: Overdue Balance Alert Generation.'
+              schema:
+                type: object
+                properties:
+                  alertId:
+                    type: string
+                  overdueAmount:
+                    type: number
+                  consequences:
+                    type: object
+                    properties:
+                      lateFees:
+                        type: number
+                      interestCharges:
+                        type: number
+                      additionalPenalties:
+                        type: array
+                        items:
+                          type: string
+                  paymentInstructions:
+                    type: string
+                  cardLast4:
+                    type: string
+  /collection-notification:
+    post:
+      operationId: collectionNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - delinquencyStatus
+                - outstandingBalance
+                - additionalCharges
+                - cardLast4
+              properties:
+                delinquencyStatus:
+                  type: string
+                outstandingBalance:
+                  type: string
+                additionalCharges:
+                  type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                paymentDeadline:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added paymentDeadline field to collection notification request. Required for test scenario TC-003: Collection Notification for Delinquent Account.'
+                  type: string
+                  format: date
+                  description: Final payment deadline for collection notification
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              x-roost-enhancement: true
+              x-roost-description: 'Enhanced collection notification response structure. Required for test scenario TC-003: Collection Notification for Delinquent Account.'
+              schema:
+                type: object
+                properties:
+                  notificationId:
+                    type: string
+                  totalAmountOwed:
+                    type: number
+                  chargeBreakdown:
+                    type: object
+                    properties:
+                      principalAmount:
+                        type: number
+                      lateFees:
+                        type: number
+                      interestCharges:
+                        type: number
+                      additionalCharges:
+                        type: number
+                  paymentDeadline:
+                    type: string
+                    format: date
+                  cardLast4:
+                    type: string
+  /payment-plan-proposal:
+    post:
+      operationId: paymentPlanProposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - outstandingBalance
+                - paymentPlan
+                - cardLast4
+              properties:
+                outstandingBalance:
+                  type: string
+                paymentPlan:
+                  type: object
+                  properties:
+                    installmentAmount:
+                      type: string
+                    interestRate:
+                      type: string
+                    termLength:
+                      type: string
+                    feeWaivers:
+                      x-roost-enhancement: true
+                      x-roost-description: 'Added feeWaivers to payment plan structure. Required for test scenario TC-004: Payment Plan Proposal Generation.'
+                      type: object
+                      properties:
+                        lateFeeWaiver:
+                          type: boolean
+                        interestReduction:
+                          type: number
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                hardshipStatus:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added hardshipStatus field to payment plan proposal request. Required for test scenario TC-004: Payment Plan Proposal Generation.'
+                  type: boolean
+                  description: Indicates if cardholder is experiencing financial hardship
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              x-roost-enhancement: true
+              x-roost-description: 'Enhanced payment plan proposal response structure. Required for test scenario TC-004: Payment Plan Proposal Generation.'
+              schema:
+                type: object
+                properties:
+                  proposalId:
+                    type: string
+                  repaymentSchedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        paymentDate:
+                          type: string
+                          format: date
+                        paymentAmount:
+                          type: number
+                  termsAndConditions:
+                    type: string
+                  cardLast4:
+                    type: string
+  /collection-agency:
+    post:
+      operationId: collectionAgencyInvolvement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - previousNotifications
+                - responseStatus
+                - cardLast4
+              properties:
+                previousNotifications:
+                  type: string
+                responseStatus:
+                  type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                accountData:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added comprehensive accountData structure for collection agency transfer. Required for test scenario TC-005: Collection Agency Data Transfer.'
+                  type: object
+                  properties:
+                    cardholderName:
+                      type: string
+                    cardholderAddress:
+                      type: string
+                    overdueAmount:
+                      type: number
+                    paymentHistory:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          date:
+                            type: string
+                            format: date
+                          amount:
+                            type: number
+                          status:
+                            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              x-roost-enhancement: true
+              x-roost-description: 'Enhanced collection agency response structure. Required for test scenario TC-005: Collection Agency Data Transfer.'
+              schema:
+                type: object
+                properties:
+                  transferId:
+                    type: string
+                  transferStatus:
+                    type: string
+                    enum:
+                      - initiated
+                      - completed
+                      - failed
+                  securityValidation:
+                    type: object
+                    properties:
+                      dataEncrypted:
+                        type: boolean
+                      fullCardNumberExcluded:
+                        type: boolean
+                  cardLast4:
+                    type: string
+  /legal-action:
+    post:
+      operationId: legalActionInitiation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nonPaymentStatus
+                - legalStatus
+                - cardLast4
+              properties:
+                nonPaymentStatus:
+                  type: string
+                legalStatus:
+                  type: string
+                cardLast4:
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                accountHistory:
+                  x-roost-enhancement: true
+                  x-roost-description: 'Added accountHistory field to legal action request. Required for test scenario TC-006: Legal Action Documentation.'
+                  type: object
+                  properties:
+                    collectionAttempts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          date:
+                            type: string
+                            format: date
+                          method:
+                            type: string
+                          outcome:
+                            type: string
+                    paymentHistory:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          date:
+                            type: string
+                            format: date
+                          amount:
+                            type: number
+                          status:
+                            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              x-roost-enhancement: true
+              x-roost-description: 'Enhanced legal action response structure. Required for test scenario TC-006: Legal Action Documentation.'
+              schema:
+                type: object
+                properties:
+                  documentId:
+                    type: string
+                  legalDocuments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        documentType:
+                          type: string
+                        documentUrl:
+                          type: string
+                  securityCompliance:
+                    type: object
+                    properties:
+                      fullCardNumberExcluded:
+                        type: boolean
+                      onlyLast4Included:
+                        type: boolean
+                  cardLast4:
+                    type: string
+  /notifications:
+    get:
+      operationId: getNotifications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+  /card-details:
+    get:
+      operationId: getCardDetails
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cardNumberPartial:
+                    type: string
+  /security/validate:
+    x-roost-enhancement: true
+    x-roost-description: 'Added security validation endpoint for comprehensive card number protection verification. Required for test scenario TC-007: Card Number Security Validation.'
+    post:
+      operationId: validateSecurity
+      summary: Validate card number security across all communications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                validationType:
+                  type: string
+                  enum:
+                    - full_system
+                    - specific_endpoint
+                    - data_transfer
+                targetEndpoint:
+                  type: string
+      responses:
+        '200':
+          description: Security validation results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  validationId:
+                    type: string
+                  securityStatus:
+                    type: string
+                    enum:
+                      - compliant
+                      - non_compliant
+                      - warning
+                  findings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        location:
+                          type: string
+                        issue:
+                          type: string
+                        severity:
+                          type: string
+                          enum:
+                            - high
+                            - medium
+                            - low
+  /performance/monitoring:
+    x-roost-enhancement: true
+    x-roost-description: 'Added performance monitoring endpoint for notification delivery tracking. Required for test scenario TC-008: Notification Delivery Performance.'
+    get:
+      operationId: getPerformanceMetrics
+      summary: Get notification delivery performance metrics
+      parameters:
+        - name: timeRange
+          in: query
+          schema:
+            type: string
+            enum:
+              - 1h
+              - 24h
+              - 7d
+              - 30d
+        - name: notificationType
+          in: query
+          schema:
+            type: string
+            enum:
+              - payment-reminder
+              - balance-alert
+              - collection-notification
+              - all
+      responses:
+        '200':
+          description: Performance metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deliveryMetrics:
+                    type: object
+                    properties:
+                      totalNotifications:
+                        type: integer
+                      successfulDeliveries:
+                        type: integer
+                      failedDeliveries:
+                        type: integer
+                      successRate:
+                        type: number
+                      averageDeliveryTime:
+                        type: number
+                  systemPerformance:
+                    type: object
+                    properties:
+                      averageResponseTime:
+                        type: number
+                      peakResponseTime:
+                        type: number
+                      systemUptime:
+                        type: number
+  /audit/logs:
+    x-roost-enhancement: true
+    x-roost-description: 'Added audit logging endpoint for security compliance monitoring. Required for test scenario TC-007: Card Number Security Validation.'
+    get:
+      operationId: getAuditLogs
+      summary: Retrieve audit logs for security compliance
+      parameters:
+        - name: logType
+          in: query
+          schema:
+            type: string
+            enum:
+              - card_access
+              - data_transfer
+              - notification_delivery
+              - all
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Audit log entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: date-time
+                        action:
+                          type: string
+                        endpoint:
+                          type: string
+                        cardDataAccess:
+                          type: string
+                          enum:
+                            - last4_only
+                            - full_number_masked
+                            - no_card_data
+                        securityCompliant:
+                          type: boolean
