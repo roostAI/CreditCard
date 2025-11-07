@@ -1,0 +1,17 @@
+Send payment due reminder notification via API
+Generate overdue balance alert via API
+Create collection notification for delinquent account via API
+Generate payment plan proposal via API
+Transfer account data to collection agency via API
+Initiate legal action documentation via API
+Validate card number security across system via API
+Retrieve performance metrics for notification delivery via API
+Retrieve audit logs for security compliance via API
+View payment reminder notification in UI
+Acknowledge overdue balance alert in UI
+Review collection notification details in UI
+Accept payment plan proposal in UI
+View account transfer notification in UI
+Access legal action documentation in UI
+Monitor notification delivery status in admin UI
+Perform security audit in admin UI
