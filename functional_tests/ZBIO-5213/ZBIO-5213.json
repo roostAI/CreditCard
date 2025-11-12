@@ -1,0 +1,104 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Credit Card Due Reminder Notification",
+      "description": "Verify that automated due reminder notifications are sent to cardholders before payment due date.",
+      "testId": "TC-001",
+      "testDescription": "Test that the system automatically sends a due reminder notification to cardholders with upcoming payment due dates, including the last 4 digits of the credit card number.",
+      "prerequisites": "Credit card account exists with upcoming due date within reminder threshold (e.g., 3-5 days before due date).",
+      "stepsToPerform": "1. Set up a credit card account with due date 3 days from current date.\n2. Configure system to send due reminders 3 days before due date.\n3. Wait for automated notification trigger.\n4. Verify notification is sent to cardholder's registered email/SMS.\n5. Check notification content includes last 4 digits of card number.\n6. Verify full card number is not displayed anywhere in the notification.",
+      "expectedResult": "Cardholder receives due reminder notification containing last 4 digits of card number (e.g., ****1234) and due date information. Full card number is not exposed."
+    },
+    {
+      "type": "functional",
+      "title": "Overdue Balance Alert Generation",
+      "description": "Verify that overdue balance alerts are sent when payment due date is missed.",
+      "testId": "TC-002",
+      "testDescription": "Test that the system sends overdue balance alerts to cardholders who have missed their payment due date.",
+      "prerequisites": "Credit card account with missed payment due date and outstanding balance.",
+      "stepsToPerform": "1. Create credit card account with due date in the past (e.g., 1 day overdue).\n2. Ensure payment has not been made.\n3. Trigger overdue alert process.\n4. Verify alert is sent to cardholder.\n5. Check alert contains overdue balance amount.\n6. Verify last 4 digits of card number are included.\n7. Confirm potential consequences are mentioned in alert.",
+      "expectedResult": "Cardholder receives overdue balance alert with last 4 digits of card number, overdue amount, and consequences of non-payment. Full card number remains protected."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Notification for Delinquent Account",
+      "description": "Verify formal collection notifications are sent for significantly delinquent accounts.",
+      "testId": "TC-003",
+      "testDescription": "Test that formal collection notifications are generated and sent when an account becomes significantly delinquent.",
+      "prerequisites": "Credit card account with significant delinquency (e.g., 60+ days overdue) and outstanding balance with additional charges.",
+      "stepsToPerform": "1. Set up credit card account with 60+ days delinquency.\n2. Add additional charges (late fees, interest) to the account.\n3. Trigger collection notification process.\n4. Verify formal collection notification is generated.\n5. Check notification includes total amount owed.\n6. Verify additional charges are detailed.\n7. Confirm last 4 digits of card number are present.\n8. Ensure notification tone is formal and escalated.",
+      "expectedResult": "Formal collection notification is sent containing detailed amount owed, additional charges, last 4 digits of card number (****1234), and escalated language regarding collection process."
+    },
+    {
+      "type": "functional",
+      "title": "Payment Plan Proposal Generation",
+      "description": "Verify payment plan proposals are offered to cardholders unable to pay full overdue balance.",
+      "testId": "TC-004",
+      "testDescription": "Test that the system generates payment plan proposals for cardholders who cannot pay the full overdue balance at once.",
+      "prerequisites": "Overdue credit card account where cardholder has indicated inability to pay full balance and qualifies for payment plan.",
+      "stepsToPerform": "1. Create overdue credit card account with substantial balance.\n2. Set cardholder status as eligible for payment plan.\n3. Generate payment plan proposal.\n4. Verify proposal includes structured repayment schedule.\n5. Check for reduced interest rates or fees in proposal.\n6. Confirm last 4 digits of card number are included.\n7. Verify payment plan terms are clearly outlined.",
+      "expectedResult": "Payment plan proposal is generated with structured repayment schedule, reduced rates/fees, last 4 digits of card number (****1234), and clear terms and conditions."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Agency Involvement Process",
+      "description": "Verify collection agency involvement when cardholders fail to respond to previous notifications.",
+      "testId": "TC-005",
+      "testDescription": "Test that collection agency involvement is initiated when cardholders do not respond to previous collection efforts.",
+      "prerequisites": "Credit card account with failed collection attempts and no response from cardholder to previous notifications.",
+      "stepsToPerform": "1. Set up account with history of unresponded collection notifications.\n2. Mark account for collection agency involvement.\n3. Trigger collection agency handover process.\n4. Verify account information is prepared for collection agency.\n5. Check that only last 4 digits of card number are included in handover data.\n6. Confirm full card number is not shared with collection agency.\n7. Verify collection agency receives necessary account details.",
+      "expectedResult": "Collection agency receives account information including last 4 digits of card number (****1234) for identification, overdue balance details, and collection history. Full card number is not disclosed."
+    },
+    {
+      "type": "functional",
+      "title": "Legal Action Documentation Preparation",
+      "description": "Verify legal action documentation includes proper card identification without exposing full card number.",
+      "testId": "TC-006",
+      "testDescription": "Test that legal action documentation is prepared with appropriate card identification when extreme non-payment cases require legal intervention.",
+      "prerequisites": "Credit card account in extreme default status requiring legal action initiation.",
+      "stepsToPerform": "1. Create credit card account marked for legal action due to extreme default.\n2. Generate legal action documentation.\n3. Verify documentation includes last 4 digits of card number.\n4. Check that full card number is not present in any legal documents.\n5. Confirm all necessary account details are included for legal proceedings.\n6. Verify documentation format meets legal requirements.",
+      "expectedResult": "Legal action documentation is prepared containing last 4 digits of card number (****1234) for identification, account details, and default information. Full card number is protected and not included in legal documents."
+    },
+    {
+      "type": "functional",
+      "title": "Card Number Security Validation",
+      "description": "Verify that full credit card numbers are never displayed in any collection lifecycle communications.",
+      "testId": "TC-007",
+      "testDescription": "Test that the system enforces security by only showing last 4 digits of credit card numbers in all collection-related communications.",
+      "prerequisites": "Various collection lifecycle scenarios with different communication types.",
+      "stepsToPerform": "1. Generate all types of collection communications (reminders, alerts, notifications, proposals, agency handovers, legal docs).\n2. Scan all generated communications for full credit card numbers.\n3. Verify only last 4 digits are displayed in format ****XXXX.\n4. Check database logs for any full number exposures.\n5. Verify system configuration prevents full number display.\n6. Test with different card number lengths and formats.",
+      "expectedResult": "All collection lifecycle communications show only last 4 digits in masked format (****1234). No full credit card numbers are exposed in any communication, documentation, or system logs."
+    },
+    {
+      "type": "non-functional",
+      "title": "Collection Notification Performance",
+      "description": "Verify system performance when processing large volumes of collection notifications.",
+      "testId": "TC-008",
+      "testDescription": "Test system performance and response time when generating and sending collection notifications for large numbers of accounts simultaneously.",
+      "prerequisites": "Test environment with capability to simulate large volume of overdue accounts.",
+      "stepsToPerform": "1. Create 10,000 test accounts with various overdue statuses.\n2. Trigger batch collection notification process.\n3. Monitor system performance metrics (CPU, memory, response time).\n4. Measure time taken to generate all notifications.\n5. Verify all notifications are processed successfully.\n6. Check for any system timeouts or failures.",
+      "expectedResult": "System processes 10,000 collection notifications within acceptable time limits (e.g., under 30 minutes) without performance degradation or failures. All notifications are generated successfully."
+    },
+    {
+      "type": "non-functional",
+      "title": "Data Security and Encryption",
+      "description": "Verify that all collection lifecycle data is properly encrypted and secured.",
+      "testId": "TC-009",
+      "testDescription": "Test that sensitive data in collection lifecycle processes is encrypted both in transit and at rest.",
+      "prerequisites": "Collection system with encryption capabilities and security monitoring tools.",
+      "stepsToPerform": "1. Generate collection notifications and capture network traffic.\n2. Verify data transmission is encrypted (TLS/SSL).\n3. Check database storage for encrypted sensitive data.\n4. Attempt to access raw data without proper decryption keys.\n5. Verify audit logs for data access attempts.\n6. Test data masking in user interfaces.",
+      "expectedResult": "All sensitive data is encrypted in transit and at rest. Card numbers are properly masked in interfaces. Unauthorized access attempts are logged and blocked."
+    },
+    {
+      "type": "non-functional",
+      "title": "System Availability and Reliability",
+      "description": "Verify collection system maintains high availability during critical collection processes.",
+      "testId": "TC-010",
+      "testDescription": "Test system availability and reliability during peak collection processing periods.",
+      "prerequisites": "Production-like environment with monitoring tools and failover capabilities.",
+      "stepsToPerform": "1. Schedule collection processes during peak processing times.\n2. Monitor system uptime and availability metrics.\n3. Simulate system component failures.\n4. Verify failover mechanisms work correctly.\n5. Test system recovery procedures.\n6. Monitor for any data loss during failures.",
+      "expectedResult": "System maintains 99.9% availability during collection processes. Failover mechanisms work correctly with no data loss. Recovery procedures restore full functionality within defined RTO/RPO targets."
+    }
+  ]
+}

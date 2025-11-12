@@ -1,0 +1,612 @@
+openapi: 3.0.3
+info:
+  title: Credit Card Collection Lifecycle Management System API
+  description: API for managing credit card collection processes including reminders, alerts, notifications, payment plans, and legal actions
+  version: 1.0.0
+  contact:
+    name: Collection Management Team
+    email: collections@company.com
+
+servers:
+  - url: '{BASE_URL}'
+    description: Environment-specific base URL
+    variables:
+      BASE_URL:
+        default: https://api.collections.company.com
+        description: Base URL from environment variable
+
+security:
+  - BearerAuth: []
+
+paths:
+  /api/collections/due-reminders:
+    get:
+      summary: Retrieve credit card accounts due for reminder notifications
+      description: Get list of accounts that are due for reminder notifications
+      tags:
+        - Due Reminders
+      responses:
+        '200':
+          description: Successfully retrieved due reminder accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DueReminderAccount'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/notifications:
+    post:
+      summary: Create due reminder notification
+      description: Create a new due reminder notification for a credit card account
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNotificationRequest'
+      responses:
+        '201':
+          description: Due reminder notification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/alerts:
+    post:
+      summary: Generate overdue balance alert
+      description: Create an overdue balance alert for accounts past due
+      tags:
+        - Alerts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlertRequest'
+      responses:
+        '201':
+          description: Overdue balance alert created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/formal-notifications:
+    post:
+      summary: Create formal collection notification
+      description: Generate formal collection notification for severely overdue accounts
+      tags:
+        - Formal Collections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFormalNotificationRequest'
+      responses:
+        '201':
+          description: Formal collection notification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormalNotificationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/payment-plans:
+    post:
+      summary: Generate payment plan proposal
+      description: Create a payment plan proposal for overdue accounts
+      tags:
+        - Payment Plans
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentPlanRequest'
+      responses:
+        '201':
+          description: Payment plan proposal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/agency-handover:
+    post:
+      summary: Initiate collection agency handover
+      description: Hand over account to external collection agency
+      tags:
+        - Agency Handover
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAgencyHandoverRequest'
+      responses:
+        '201':
+          description: Collection agency handover initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyHandoverResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/legal-documentation:
+    post:
+      summary: Prepare legal action documentation
+      description: Generate legal documentation for debt recovery actions
+      tags:
+        - Legal Actions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLegalDocumentationRequest'
+      responses:
+        '201':
+          description: Legal documentation prepared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalDocumentationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/collections/communications/security-audit:
+    get:
+      summary: Validate card number security in all collection communications
+      description: Audit security compliance for card number handling across all communications
+      tags:
+        - Security Audit
+      responses:
+        '200':
+          description: Security audit completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityAuditResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    DueReminderAccount:
+      type: object
+      required:
+        - accountId
+        - maskedCardNumber
+        - dueDate
+        - reminderThreshold
+      properties:
+        accountId:
+          type: string
+          example: "ACC123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****9012"
+        dueDate:
+          type: string
+          format: date
+          example: "2024-02-15"
+        reminderThreshold:
+          type: integer
+          example: 5
+
+    CreateNotificationRequest:
+      type: object
+      required:
+        - accountId
+        - cardNumber
+        - dueDate
+        - reminderType
+        - contactMethod
+      properties:
+        accountId:
+          type: string
+          example: "ACC123456"
+        cardNumber:
+          type: string
+          example: "4532123456789012"
+        dueDate:
+          type: string
+          format: date
+          example: "2024-02-15"
+        reminderType:
+          type: string
+          enum: [due_reminder, overdue_reminder]
+          example: "due_reminder"
+        contactMethod:
+          type: string
+          enum: [email, sms, mail]
+          example: "email"
+
+    NotificationResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+          example: "NOTIF123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****9012"
+        status:
+          type: string
+          example: "created"
+
+    CreateAlertRequest:
+      type: object
+      required:
+        - accountId
+        - cardNumber
+        - overdueAmount
+        - daysPastDue
+        - alertType
+      properties:
+        accountId:
+          type: string
+          example: "ACC789012"
+        cardNumber:
+          type: string
+          example: "5555444433332222"
+        overdueAmount:
+          type: number
+          format: double
+          example: 1250.75
+        daysPastDue:
+          type: integer
+          example: 5
+        alertType:
+          type: string
+          enum: [overdue_balance, payment_missed]
+          example: "overdue_balance"
+
+    AlertResponse:
+      type: object
+      properties:
+        alertId:
+          type: string
+          example: "ALERT123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****2222"
+        overdueAmount:
+          type: number
+          format: double
+          example: 1250.75
+        status:
+          type: string
+          example: "created"
+
+    CreateFormalNotificationRequest:
+      type: object
+      required:
+        - accountId
+        - cardNumber
+        - totalAmountOwed
+        - daysPastDue
+        - notificationType
+      properties:
+        accountId:
+          type: string
+          example: "ACC345678"
+        cardNumber:
+          type: string
+          example: "4111111111111111"
+        totalAmountOwed:
+          type: number
+          format: double
+          example: 3500.00
+        daysPastDue:
+          type: integer
+          example: 65
+        additionalCharges:
+          $ref: '#/components/schemas/AdditionalCharges'
+        notificationType:
+          type: string
+          enum: [formal_collection, final_notice]
+          example: "formal_collection"
+
+    AdditionalCharges:
+      type: object
+      properties:
+        lateFees:
+          type: number
+          format: double
+          example: 150.00
+        interestCharges:
+          type: number
+          format: double
+          example: 275.50
+
+    FormalNotificationResponse:
+      type: object
+      properties:
+        formalNotificationId:
+          type: string
+          example: "FORMAL123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****1111"
+        totalAmountOwed:
+          type: number
+          format: double
+          example: 3500.00
+        additionalCharges:
+          $ref: '#/components/schemas/AdditionalCharges'
+        status:
+          type: string
+          example: "created"
+
+    CreatePaymentPlanRequest:
+      type: object
+      required:
+        - accountId
+        - cardNumber
+        - overdueBalance
+        - proposedMonthlyPayment
+        - planDuration
+      properties:
+        accountId:
+          type: string
+          example: "ACC567890"
+        cardNumber:
+          type: string
+          example: "3782822463100005"
+        overdueBalance:
+          type: number
+          format: double
+          example: 2800.00
+        proposedMonthlyPayment:
+          type: number
+          format: double
+          example: 350.00
+        planDuration:
+          type: integer
+          example: 8
+        reducedInterestRate:
+          type: number
+          format: double
+          example: 5.5
+
+    PaymentPlanResponse:
+      type: object
+      properties:
+        paymentPlanId:
+          type: string
+          example: "PLAN123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****0005"
+        proposedMonthlyPayment:
+          type: number
+          format: double
+          example: 350.00
+        planDuration:
+          type: integer
+          example: 8
+        status:
+          type: string
+          example: "created"
+
+    CreateAgencyHandoverRequest:
+      type: object
+      required:
+        - accountId
+        - cardNumber
+        - agencyId
+        - handoverReason
+        - accountBalance
+      properties:
+        accountId:
+          type: string
+          example: "ACC901234"
+        cardNumber:
+          type: string
+          example: "6011111111111117"
+        agencyId:
+          type: string
+          example: "AGENCY001"
+        handoverReason:
+          type: string
+          enum: [no_response_to_notifications, payment_default, customer_unreachable]
+          example: "no_response_to_notifications"
+        accountBalance:
+          type: number
+          format: double
+          example: 4200.00
+
+    AgencyHandoverResponse:
+      type: object
+      properties:
+        handoverId:
+          type: string
+          example: "HANDOVER123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****1117"
+        agencyId:
+          type: string
+          example: "AGENCY001"
+        status:
+          type: string
+          example: "handed_over"
+
+    CreateLegalDocumentationRequest:
+      type: object
+      required:
+        - accountId
+        - cardNumber
+        - legalActionType
+        - totalDebt
+        - defaultPeriod
+      properties:
+        accountId:
+          type: string
+          example: "ACC112233"
+        cardNumber:
+          type: string
+          example: "5105105105105100"
+        legalActionType:
+          type: string
+          enum: [debt_recovery, court_action, asset_seizure]
+          example: "debt_recovery"
+        totalDebt:
+          type: number
+          format: double
+          example: 8500.00
+        defaultPeriod:
+          type: integer
+          example: 120
+
+    LegalDocumentationResponse:
+      type: object
+      properties:
+        legalDocumentId:
+          type: string
+          example: "LEGAL123456"
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****5100"
+        totalDebt:
+          type: number
+          format: double
+          example: 8500.00
+        status:
+          type: string
+          example: "prepared"
+
+    SecurityAuditResponse:
+      type: object
+      properties:
+        auditResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditResult'
+        overallStatus:
+          type: string
+          enum: [SECURE, VULNERABLE]
+          example: "SECURE"
+
+    AuditResult:
+      type: object
+      properties:
+        communicationType:
+          type: string
+          enum: [reminder, alert, formal_notice, payment_plan, agency_handover, legal_document]
+          example: "reminder"
+        securityStatus:
+          type: string
+          enum: [SECURE, VULNERABLE]
+          example: "SECURE"
+        cardNumbersFound:
+          type: integer
+          example: 0
+        maskedCardNumbersFound:
+          type: integer
+          example: 15
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid request parameters"
+        message:
+          type: string
+          example: "The provided account ID and card number are invalid"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+  responses:
+    BadRequestError:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Invalid request parameters"
+            message: "The provided account ID and card number are invalid"
+            timestamp: "2024-01-15T10:30:00Z"
+
+    UnauthorizedError:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Unauthorized access"
+            message: "Valid authentication token required"
+            timestamp: "2024-01-15T10:30:00Z"
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Internal server error"
+            message: "An unexpected error occurred while processing the request"
+            timestamp: "2024-01-15T10:30:00Z"
