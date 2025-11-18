@@ -1,0 +1,25 @@
+{
+  "project": {
+    "name": "ZBIO-7377",
+    "created_at": "2025-11-18T06:51:15.075Z",
+    "updated_at": "2025-11-18T06:51:15.075Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "ZBIO-7377.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-18nov/629d6ff8-2f4b-4fb4-a88b-737110ecc9f1/functional_tests/ZBIO-7377/ZBIO-7377.txt",
+        "fileSha": "1d42f9900e"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": [
+      {
+        "fileName": "ZBIO-5213.yaml",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-18nov/629d6ff8-2f4b-4fb4-a88b-737110ecc9f1/functional_tests/ZBIO-7377/ZBIO-5213.yaml",
+        "fileSha": "afa5d49377"
+      }
+    ]
+  }
+}
