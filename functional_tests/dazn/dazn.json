@@ -1,0 +1,244 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Display promotional ticker with all elements (full flow, 2 loops)",
+      "description": "Verify the ticker renders and animates correctly with text, yellow dot separator, and sponsorship suffix, completing two loops then outro.",
+      "testId": "TC-001",
+      "testDescription": "Moderator publishes a ticker with: text (<=100 chars), host nickname (<=10 chars), host tag, sponsorship suffix, and a generous max display time (e.g., 20s) so two loops can complete before time expires.",
+      "prerequisites": "User is watching video in landscape; app connected; player controls are not visible; push/subscription to moderator messages is active.",
+      "stepsToPerform": "1. Moderator publishes ticker with: text=\"Flash sale today only\", sponsorshipSuffix=\"Sponsored by ACME\", maxDisplayTime=20s, hostNickname=\"Alex\", hostTag present.\n2. Observe ticker intro animation starts.\n3. Verify sequence in each loop: Host nickname + host tag → quoted text (e.g., \"Flash sale today only\") → yellow dot separator → sponsorship suffix.\n4. Confirm elements are visually distinct and readable.\n5. Verify the sequence repeats exactly once more (total 2 loops).\n6. Verify outro animation plays and ticker disappears after the second loop (well before maxDisplayTime).",
+      "expectedResult": "Ticker animates: Intro → [Alex + host tag] → \"Flash sale today only\" → • → Sponsored by ACME → repeats once → Outro. Ticker hides after exactly two loops without errors."
+    },
+    {
+      "type": "functional",
+      "title": "Display without sponsorship suffix (no yellow dot)",
+      "description": "Verify the ticker omits the yellow dot and sponsorship suffix when suffix is not provided.",
+      "testId": "TC-002",
+      "testDescription": "Ticker renders only host nickname + tag and quoted text when no sponsorship suffix is present.",
+      "prerequisites": "User in landscape; connectivity OK.",
+      "stepsToPerform": "1. Moderator publishes: text=\"Welcome to the show\", sponsorshipSuffix=null/empty, maxDisplayTime=20s, hostNickname=\"Sam\", hostTag present.\n2. Observe loop content.\n3. Verify sequence: [Sam + host tag] → \"Welcome to the show\".\n4. Verify no yellow dot or sponsorship suffix is shown.\n5. Confirm two loops then outro.",
+      "expectedResult": "Ticker shows host + tag then the quoted text, no yellow dot and no sponsorship suffix, repeats once, then outro."
+    },
+    {
+      "type": "functional",
+      "title": "End animation early due to max display time",
+      "description": "Verify ticker ends when max display time is reached even if two loops are not completed.",
+      "testId": "TC-003",
+      "testDescription": "Ensure maxDisplayTime acts as an upper bound. If maxDisplayTime would cut a loop mid-way, the ticker ends at the exact time cap.",
+      "prerequisites": "Ability to set a short maxDisplayTime (e.g., 3s).",
+      "stepsToPerform": "1. Moderator publishes: text=\"Limited\",\" maxDisplayTime=3s, sponsorshipSuffix=\"BrandX\", hostNickname=\"Ava\", hostTag present.\n2. Start timer at the moment intro begins.\n3. Observe that ticker displays but ends once 3s elapse, even if loop 1 has not fully completed.\n4. Verify outro occurs promptly at 3s (or the ticker instantly removes if outro is part of the cap behavior per design).",
+      "expectedResult": "Ticker hides at or just after t=3s, whichever is defined by design, without completing two loops if time is insufficient."
+    },
+    {
+      "type": "functional",
+      "title": "Minimum display time threshold skip (<1s remaining)",
+      "description": "Verify ticker is skipped if remaining time is less than 1 second at the moment it would display.",
+      "testId": "TC-004",
+      "testDescription": "When the remaining allowable display time is <1s (due to late arrival or user rotating late), the ticker should not show at all.",
+      "prerequisites": "User initially in portrait; ability to control timing.",
+      "stepsToPerform": "1. Moderator publishes ticker with maxDisplayTime=3s.\n2. Wait 2.2s.\n3. Rotate device to landscape at t≈2.2s (remaining ≈0.8s).\n4. Observe whether ticker tries to appear.",
+      "expectedResult": "Ticker does not appear (skipped) because remaining time <1s."
+    },
+    {
+      "type": "functional",
+      "title": "Host nickname truncation at 10 characters",
+      "description": "Verify host nickname longer than 10 characters is truncated safely to 10 characters without breaking characters.",
+      "testId": "TC-005",
+      "testDescription": "Nickname should show max 10 visible characters. Truncation should not split grapheme clusters (e.g., emojis or combined characters).",
+      "prerequisites": "Landscape mode active.",
+      "stepsToPerform": "1. Moderator publishes with hostNickname=\"Christopher\" (11 chars), hostTag present, maxDisplayTime=20s.\n2. Observe host name rendering during loop.\n3. Verify only first 10 characters are shown (\"Christophe\").\n4. Repeat with nickname containing multibyte emoji: hostNickname=\"Alex😀😀Test\" and verify display does not split emojis and still limits to 10 visible chars.",
+      "expectedResult": "Nickname is rendered at a maximum of 10 characters, with safe truncation and no broken glyphs."
+    },
+    {
+      "type": "functional",
+      "title": "Quoted text rendering with embedded quotes",
+      "description": "Verify text is enclosed in quotes and embedded quotes are safely rendered/escaped.",
+      "testId": "TC-006",
+      "testDescription": "Text field may contain double quotes. UI must still enclose the entire text in quotes without breaking layout.",
+      "prerequisites": "Landscape mode active.",
+      "stepsToPerform": "1. Moderator publishes: text=\"He said, \\\"Go!\\\"\", sponsorshipSuffix absent, maxDisplayTime=20s.\n2. Verify the UI shows the text surrounded by quotes, e.g., \"He said, \\\"Go!\\\"\" (outer quotes from UI; inner quotes preserved/escaped).\n3. Confirm no layout overflow or clipping.",
+      "expectedResult": "Text is correctly enclosed in quotes and any embedded quotes are rendered safely without breaking UI."
+    },
+    {
+      "type": "functional",
+      "title": "CTA tap transitions to portrait with FZ open",
+      "description": "Verify tapping the CTA opens FZ in portrait orientation and hides the ticker.",
+      "testId": "TC-007",
+      "testDescription": "CTA interaction should pivot orientation to portrait and open the FZ view.",
+      "prerequisites": "Ticker is visible with a CTA; device supports rotation.",
+      "stepsToPerform": "1. With ticker visible, tap the CTA once.\n2. Observe orientation change to portrait.\n3. Verify FZ view/sheet/panel opens.\n4. Verify ticker is dismissed and does not remain overlaying FZ.",
+      "expectedResult": "App transitions to portrait, FZ is open, and the ticker is no longer visible."
+    },
+    {
+      "type": "functional",
+      "title": "Dismiss tap hides ticker for current session",
+      "description": "Verify tapping dismiss hides the ticker and it does not reappear even if time remains.",
+      "testId": "TC-008",
+      "testDescription": "Dismiss action should immediately hide the ticker and prevent reappearance during the same publication window.",
+      "prerequisites": "Ticker visible in landscape.",
+      "stepsToPerform": "1. Tap the Dismiss (X) on the ticker.\n2. Wait for more than the remaining maxDisplayTime (e.g., 10s).\n3. Ensure no ticker reappears.\n4. If new ticker is published later, ensure only the new ticker can show.",
+      "expectedResult": "Current ticker hides immediately and does not reappear, while future tickers (new publications) can display normally."
+    },
+    {
+      "type": "functional",
+      "title": "Hide on player controls and reappear after fade (within time)",
+      "description": "Verify ticker hides when player controls are visible and reappears after controls fade if still within timing.",
+      "testId": "TC-009",
+      "testDescription": "When user taps to reveal player controls, ticker hides; after controls auto-hide, ticker reappears if remaining time ≥1s and loops not exhausted.",
+      "prerequisites": "Ticker visible, remaining time ≥5s.",
+      "stepsToPerform": "1. Tap the player area to show controls while ticker is mid-loop.\n2. Verify ticker hides immediately.\n3. Wait for controls to auto-fade (e.g., after 3s).\n4. Verify ticker reappears and continues from next appropriate stage/loop within the remaining time budget.",
+      "expectedResult": "Ticker hides with controls and reappears after controls fade, continuing its sequence if time allows."
+    },
+    {
+      "type": "functional",
+      "title": "No reappearance after controls fade if time expired",
+      "description": "Verify ticker does not reappear after controls fade if max display time is exceeded while controls are visible.",
+      "testId": "TC-010",
+      "testDescription": "Ensures timing cap applies even when ticker is temporarily hidden by controls.",
+      "prerequisites": "Ticker visible with ≤3s remaining; player controls auto-hide duration known (e.g., 3s).",
+      "stepsToPerform": "1. With ~2s remaining, tap to show controls.\n2. Observe ticker hides.\n3. Wait for controls to fade (~3s), exceeding remaining time.\n4. Verify ticker does not reappear.",
+      "expectedResult": "Ticker remains hidden and does not reappear because max display time was exceeded while controls were visible."
+    },
+    {
+      "type": "functional",
+      "title": "Show ticker upon entering landscape within time",
+      "description": "Verify ticker appears when the user rotates from portrait to landscape if remaining time ≥1s.",
+      "testId": "TC-011",
+      "testDescription": "Ticker should be gated by orientation; it appears only in landscape and only if time permits.",
+      "prerequisites": "User in portrait; moderator publishes ticker with maxDisplayTime=10s.",
+      "stepsToPerform": "1. At t=0, moderator publishes the ticker.\n2. At t=3s, rotate to landscape.\n3. Verify ticker intro starts and animation proceeds.\n4. Verify it ends when 2 loops complete or time runs out, whichever is earlier.",
+      "expectedResult": "Ticker appears on entering landscape and behaves according to loop/time rules."
+    },
+    {
+      "type": "functional",
+      "title": "Exactly two loops when time is ample",
+      "description": "Verify ticker does not loop more than twice when max display time is long.",
+      "testId": "TC-012",
+      "testDescription": "With a very long maxDisplayTime, the ticker must still end after exactly two loops.",
+      "prerequisites": "Set maxDisplayTime=60s.",
+      "stepsToPerform": "1. Publish ticker with maxDisplayTime=60s.\n2. Observe the full animation sequence.\n3. Count loops: the sequence should play twice only.\n4. Verify outro occurs immediately after the second loop; ticker hides.",
+      "expectedResult": "Ticker plays exactly two loops and then ends with outro, ignoring additional available time."
+    },
+    {
+      "type": "functional",
+      "title": "Yellow dot separator appears only with sponsorship suffix",
+      "description": "Verify the yellow dot separator is shown only when a sponsorship suffix is present.",
+      "testId": "TC-013",
+      "testDescription": "The separator should not appear if there is no suffix; should appear when suffix exists.",
+      "prerequisites": "Landscape mode active.",
+      "stepsToPerform": "1. Publish ticker with suffix: verify sequence includes yellow dot before the suffix.\n2. Publish ticker without suffix: verify no yellow dot appears.",
+      "expectedResult": "Yellow dot appears only in the presence of a sponsorship suffix."
+    },
+    {
+      "type": "functional",
+      "title": "Text length boundary at 100 characters",
+      "description": "Verify text exactly at 100 characters renders fully and is enclosed in quotes.",
+      "testId": "TC-014",
+      "testDescription": "Boundary test for the text field length at the specified maximum.",
+      "prerequisites": "Landscape mode active; ability to generate 100-character string.",
+      "stepsToPerform": "1. Publish ticker with a 100-character text string (e.g., 100 'A' characters) and no suffix.\n2. Observe the rendered text within quotes.\n3. Verify no truncation or overflow and quotes are present.",
+      "expectedResult": "All 100 characters are visible inside quotes without truncation or UI overflow."
+    },
+    {
+      "type": "functional",
+      "title": "Reject or safely handle text over 100 characters",
+      "description": "Verify that text longer than 100 characters does not render improperly (server validation or client truncation).",
+      "testId": "TC-015",
+      "testDescription": "If server enforces limit, the publish call should fail; if not, client must truncate to 100 chars before display to preserve UX.",
+      "prerequisites": "Ability to publish an overlong text (e.g., 101 characters).",
+      "stepsToPerform": "1. Attempt to publish a ticker with 101-character text.\n2. If server rejects: verify client shows no ticker and logs/handles the error gracefully.\n3. If server allows: verify client displays only first 100 characters within quotes and does not crash or overflow.",
+      "expectedResult": "No visual overflow occurs. Either the ticker is not displayed due to validation failure or it is safely truncated to 100 characters."
+    },
+    {
+      "type": "functional",
+      "title": "Newest ticker replaces currently visible ticker",
+      "description": "Verify that a newly published ticker replaces any currently visible ticker.",
+      "testId": "TC-016",
+      "testDescription": "When a new ticker arrives during an active ticker, the current animation should stop and the new one should start from intro; timers reset to the new ticker's maxDisplayTime.",
+      "prerequisites": "Landscape mode; initial ticker visible with ≥5s remaining.",
+      "stepsToPerform": "1. While ticker A is mid-loop, publish ticker B.\n2. Observe ticker A stops immediately (or transitions out per design) and ticker B starts with intro.\n3. Verify ticker B follows standard loop/time rules independently of ticker A's timer.",
+      "expectedResult": "Ticker B replaces ticker A and plays its sequence according to its own timing."
+    },
+    {
+      "type": "functional",
+      "title": "Behavior across app background/foreground",
+      "description": "Verify ticker behavior when the app is backgrounded and resumed.",
+      "testId": "TC-017",
+      "testDescription": "If the app is backgrounded while ticker is visible, it should not cause errors. Upon resume, ticker reappears only if remaining time ≥1s.",
+      "prerequisites": "Ticker visible with known remaining time (e.g., 5s).",
+      "stepsToPerform": "1. With ticker visible, send app to background for 2s.\n2. Resume app to foreground while still in landscape.\n3. Verify ticker reappears and continues, honoring the reduced remaining time.\n4. Repeat with background duration that exceeds remaining time; verify ticker does not reappear.",
+      "expectedResult": "Ticker resumes only when time remains ≥1s; otherwise, it stays hidden."
+    },
+    {
+      "type": "functional",
+      "title": "Analytics/telemetry events for ticker lifecycle",
+      "description": "Verify that impression, dismiss, and CTA events are logged with required metadata.",
+      "testId": "TC-018",
+      "testDescription": "Ensure analytics fire on first visible frame (impression), on Dismiss click, and on CTA click, including fields like tickerId, timestamps, and reason for end.",
+      "prerequisites": "Access to analytics logs; ticker visible.",
+      "stepsToPerform": "1. Show ticker and verify 'ticker_impression' event with tickerId and timestamp.\n2. Tap Dismiss; verify 'ticker_dismiss' with tickerId and user_action=true.\n3. Show another ticker and tap CTA; verify 'ticker_cta' with tickerId and destination='FZ'.\n4. Allow ticker to end by time; verify 'ticker_end' with reason='time' or 'loops'.",
+      "expectedResult": "All expected analytics events are emitted once per action with correct payload."
+    },
+    {
+      "type": "non-functional",
+      "title": "Animation performance (FPS and smoothness)",
+      "description": "Ensure ticker animations run smoothly without dropped frames on target devices.",
+      "testId": "TC-019",
+      "testDescription": "Measure frames per second and jank during intro, loop transitions, yellow dot, and outro.",
+      "prerequisites": "Performance profiling tools; target devices list.",
+      "stepsToPerform": "1. Enable performance profiler.\n2. Play ticker with all elements (suffix included) in landscape.\n3. Record FPS and jank % during entire 2-loop lifecycle.\n4. Repeat on low-end device.",
+      "expectedResult": "Average FPS ≥55 (target 60) with jank <5%. No noticeable stutter or dropped frames."
+    },
+    {
+      "type": "non-functional",
+      "title": "End-to-end latency from publish to display",
+      "description": "Measure time from moderator publish to ticker visible in landscape.",
+      "testId": "TC-020",
+      "testDescription": "E2E latency should be within acceptable SLA for real-time promotional content.",
+      "prerequisites": "Synchronized clocks; logging of publish timestamp.",
+      "stepsToPerform": "1. Record publish timestamp (server-side) for a ticker.\n2. On client, record first visible frame timestamp.\n3. Compute latency.\n4. Repeat 10 times and compute p95.",
+      "expectedResult": "Median latency ≤1.0s and p95 ≤2.0s under normal network conditions."
+    },
+    {
+      "type": "non-functional",
+      "title": "Resource usage (CPU and memory)",
+      "description": "Verify ticker does not consume excessive CPU or memory.",
+      "testId": "TC-021",
+      "testDescription": "Measure resource use while ticker is animating.",
+      "prerequisites": "Profiling tools.",
+      "stepsToPerform": "1. Start CPU and memory profiling.\n2. Display ticker with full elements for two loops.\n3. Record peak CPU and memory.\n4. Compare against baseline without ticker.",
+      "expectedResult": "Additional CPU usage ≤10% over baseline and memory increase ≤20 MB during ticker lifecycle."
+    },
+    {
+      "type": "non-functional",
+      "title": "Accessibility: focus, labels, and contrast",
+      "description": "Ensure ticker is accessible with screen readers and meets contrast requirements.",
+      "testId": "TC-022",
+      "testDescription": "CTA and Dismiss must be keyboard/focus accessible with descriptive labels; text must meet contrast.",
+      "prerequisites": "Screen reader enabled; accessibility inspector; WCAG contrast tool.",
+      "stepsToPerform": "1. Navigate focus to CTA and Dismiss using keyboard/remote.\n2. Verify accessible names (e.g., CTA: \"Open promotion\", Dismiss: \"Dismiss ticker\").\n3. With screen reader, ensure ticker content is read once and not repeatedly per loop.\n4. Validate color contrast of text and yellow dot against background (WCAG AA).",
+      "expectedResult": "Controls are accessible with proper labels; content is announced appropriately; contrast meets WCAG AA."
+    },
+    {
+      "type": "non-functional",
+      "title": "Internationalization and complex scripts layout",
+      "description": "Verify layout and truncation work with RTL and emoji-rich nicknames/text.",
+      "testId": "TC-023",
+      "testDescription": "Ensure LTR layout is respected for English content and no rendering issues occur with RTL nicknames or combined characters.",
+      "prerequisites": "Ability to publish ticker with different scripts.",
+      "stepsToPerform": "1. Publish with hostNickname in Arabic (e.g., \"المضيفالمحترفطويل\", >10 chars) and English text; verify nickname truncates to 10 visible chars without breaking ligatures and overall layout remains consistent.\n2. Publish text and nickname containing emojis (e.g., \"Deal🔥🔥Today\"), verify no misalignment or clipping.\n3. Verify quotes render correctly regardless of script.",
+      "expectedResult": "No visual breakage; truncation respects grapheme clusters; quotes and separators place correctly."
+    },
+    {
+      "type": "non-functional",
+      "title": "Resilience to network interruptions",
+      "description": "Ensure ticker handles delayed or dropped updates gracefully.",
+      "testId": "TC-024",
+      "testDescription": "If the publish event is delayed or the network drops and reconnects, the ticker should either show if time remains or skip if <1s remains.",
+      "prerequisites": "Network link conditioner to simulate drop/recover.",
+      "stepsToPerform": "1. Simulate network loss right after publish.\n2. Restore network after N seconds.\n3. If remaining time ≥1s upon receipt: verify ticker displays.\n4. If remaining time <1s: verify ticker is skipped without error.",
+      "expectedResult": "Graceful behavior with no crashes; display or skip strictly based on remaining time and min 1s rule."
+    }
+  ]
+}

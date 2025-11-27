@@ -1,0 +1,19 @@
+{
+  "project": {
+    "name": "dazn",
+    "created_at": "2025-11-27T05:59:01.060Z",
+    "updated_at": "2025-11-27T05:59:01.060Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "ui-test-dazn-story1.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/dazn-functional-test/1764222886/functional_tests/dazn/ui-test-dazn-story1.txt",
+        "fileSha": "de5a917d86"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
