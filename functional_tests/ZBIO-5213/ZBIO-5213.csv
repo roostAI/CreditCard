@@ -1,0 +1,31 @@
+Send automated due reminder notification before payment due date
+Send due reminder through multiple communication channels
+Trigger and send overdue balance alert after missed payment due date
+Do not send overdue alert if payment was made
+Send formal collection notification for significantly delinquent account
+Generate and send payment plan proposal for overdue account
+Reject payment plan for ineligible account
+Escalate severely delinquent account to collection agency
+Verify full credit card number is never transmitted to collection agency
+Initiate legal action for extreme default cases
+Verify full credit card number is never displayed across all collection lifecycle stages
+Verify credit card data is encrypted in database storage
+Complete collection lifecycle progression through all stages
+Handle payment made during collection lifecycle
+Deliver notifications through multiple communication channels
+Handle invalid or missing contact information
+Log all collection lifecycle activities in audit trail
+Verify notification delivery within acceptable time frames
+Handle increasing notification volume under load
+Verify credit card data encryption and PCI DSS compliance
+Verify access control and authorization for sensitive data
+Verify system availability and uptime requirements
+Test failover and disaster recovery procedures
+Test horizontal scalability under increasing load
+Verify notification retry mechanism for failed deliveries
+Verify audit log retention and immutability
+Verify accessibility compliance for notification interfaces
+Verify multi-language support for notifications
+Measure notification delivery success rates across channels
+Verify data integrity throughout collection lifecycle
+Verify regulatory compliance for collection practices
