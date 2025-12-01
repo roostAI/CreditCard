@@ -1,0 +1,184 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Credit Card Due Reminder Notification",
+      "description": "Verify that an automated due reminder notification is sent to the cardholder before the payment due date with the last 4 digits of the credit card number.",
+      "testId": "TC-ZBIO-5213-001",
+      "testDescription": "Test the automated notification system to ensure cardholders receive a payment due reminder before the due date with proper card identification and security measures.",
+      "prerequisites": "1. Cardholder account must be active in the system.\n2. Credit card must have an upcoming payment due date.\n3. Cardholder contact information (email/phone) must be valid and updated.\n4. Notification service must be operational.",
+      "stepsToPerform": "1. Set up a credit card account with a payment due date 3-5 days in the future.\n2. Configure the automated reminder system to trigger notifications.\n3. Wait for the scheduled reminder trigger time.\n4. Check the notification delivery channels (email/SMS/app notification).\n5. Verify the notification content includes the last 4 digits of the credit card.\n6. Verify that full credit card number is NOT displayed anywhere.",
+      "expectedResult": "1. Reminder notification is sent successfully to the cardholder.\n2. Notification includes payment due date and amount.\n3. Only the last 4 digits of the credit card number are displayed (e.g., **** 1234).\n4. Full credit card number is not visible in any format.\n5. Notification includes clear instructions for making payment.\n6. Late payment fee information is included."
+    },
+    {
+      "type": "functional",
+      "title": "Overdue Balance Alert Notification",
+      "description": "Verify that an overdue balance alert is triggered and sent when a cardholder misses the payment due date.",
+      "testId": "TC-ZBIO-5213-002",
+      "testDescription": "Test the system's ability to detect missed payment due dates and send appropriate overdue balance alerts with security-compliant card identification.",
+      "prerequisites": "1. Cardholder account must exist with an active credit card.\n2. Payment due date must have passed without payment.\n3. Cardholder contact information must be valid.\n4. System date must be past the due date.",
+      "stepsToPerform": "1. Create a credit card account with a payment due date in the past.\n2. Ensure no payment has been recorded for the due date.\n3. Trigger the overdue balance detection process.\n4. Verify the alert generation.\n5. Check notification delivery to the cardholder.\n6. Review the alert content for accuracy and security compliance.\n7. Verify only last 4 digits of card number are displayed.",
+      "expectedResult": "1. Overdue balance alert is triggered automatically.\n2. Alert is sent to cardholder via configured channels.\n3. Alert includes overdue amount and original due date.\n4. Only last 4 digits of credit card number are shown.\n5. Potential consequences of non-payment are clearly stated.\n6. Payment instructions and contact information are provided.\n7. Late fees and interest charges are mentioned if applicable."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Notification for Significantly Delinquent Account",
+      "description": "Verify that formal collection notifications are sent when an account becomes significantly delinquent.",
+      "testId": "TC-ZBIO-5213-003",
+      "testDescription": "Test the escalation process for significantly delinquent accounts and verify that formal collection notifications are generated and sent with proper details.",
+      "prerequisites": "1. Credit card account must be significantly delinquent (e.g., 60-90 days overdue).\n2. Previous reminder and overdue alerts must have been sent.\n3. Account must be flagged for collection escalation.\n4. Collection notification templates must be configured.",
+      "stepsToPerform": "1. Set up a credit card account with a balance overdue by 60+ days.\n2. Ensure previous notifications have been sent.\n3. Trigger the collection notification process.\n4. Verify the formal collection notification is generated.\n5. Review notification content for completeness.\n6. Verify card number security (only last 4 digits).\n7. Check that additional charges are itemized.\n8. Confirm delivery to cardholder.",
+      "expectedResult": "1. Formal collection notification is generated successfully.\n2. Notification includes total amount owed with detailed breakdown.\n3. Additional charges (late fees, interest) are clearly itemized.\n4. Only last 4 digits of credit card number are displayed.\n5. Formal tone and legal language are used appropriately.\n6. Deadline for response is clearly stated.\n7. Consequences of continued non-payment are outlined.\n8. Contact information for resolution is provided."
+    },
+    {
+      "type": "functional",
+      "title": "Payment Plan Proposal Generation",
+      "description": "Verify that a payment plan proposal is offered to cardholders unable to pay the full overdue balance at once.",
+      "testId": "TC-ZBIO-5213-004",
+      "testDescription": "Test the system's ability to generate and send payment plan proposals with structured repayment schedules for cardholders facing financial difficulties.",
+      "prerequisites": "1. Cardholder account must have an overdue balance.\n2. Cardholder must have contacted support or indicated inability to pay full balance.\n3. Account must qualify for payment plan eligibility.\n4. Payment plan templates and calculation logic must be configured.",
+      "stepsToPerform": "1. Create a credit card account with an overdue balance.\n2. Flag the account as eligible for payment plan.\n3. Generate a payment plan proposal.\n4. Review the proposal content for accuracy.\n5. Verify the repayment schedule structure.\n6. Check interest rate and fee reductions.\n7. Verify only last 4 digits of card number are shown.\n8. Confirm proposal delivery to cardholder.",
+      "expectedResult": "1. Payment plan proposal is generated successfully.\n2. Proposal includes structured repayment schedule with specific amounts and dates.\n3. Reduced interest rates or fees are clearly stated.\n4. Only last 4 digits of credit card number are displayed.\n5. Total amount to be repaid and duration are specified.\n6. Terms and conditions are clearly outlined.\n7. Instructions for accepting the payment plan are provided.\n8. Deadline for accepting the proposal is included."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Agency Involvement Process",
+      "description": "Verify that the collection agency is properly involved and provided with necessary information when a cardholder fails to respond to previous notifications.",
+      "testId": "TC-ZBIO-5213-005",
+      "testDescription": "Test the escalation process to collection agency involvement, ensuring proper data transfer with security compliance.",
+      "prerequisites": "1. Credit card account must be severely delinquent.\n2. Multiple previous notifications must have been sent without response.\n3. Account must meet criteria for collection agency referral.\n4. Collection agency integration must be configured.\n5. Data transfer protocols must be established.",
+      "stepsToPerform": "1. Set up a credit card account with extended delinquency (90+ days).\n2. Ensure previous notifications were sent without response.\n3. Trigger the collection agency referral process.\n4. Verify account data is prepared for transfer.\n5. Check that only last 4 digits of card number are included.\n6. Confirm data transfer to collection agency.\n7. Verify notification is sent to cardholder about agency involvement.\n8. Audit the data shared for security compliance.",
+      "expectedResult": "1. Account is successfully referred to collection agency.\n2. Collection agency receives necessary account information.\n3. Only last 4 digits of credit card number are provided.\n4. Full credit card number is never transmitted.\n5. Cardholder receives notification about collection agency involvement.\n6. Notification includes collection agency contact information.\n7. Increased collection efforts are documented in system.\n8. All data transfers comply with security and privacy regulations."
+    },
+    {
+      "type": "functional",
+      "title": "Legal Action Initiation Documentation",
+      "description": "Verify that legal action can be initiated and documented properly with security-compliant card identification for extreme cases of non-payment.",
+      "testId": "TC-ZBIO-5213-006",
+      "testDescription": "Test the legal action initiation process for extreme default cases, ensuring all documentation includes proper identification while maintaining security standards.",
+      "prerequisites": "1. Credit card account must be in extreme default status.\n2. All previous collection efforts must have failed.\n3. Legal department must approve the case.\n4. Legal documentation templates must be configured.\n5. Account must meet legal action criteria.",
+      "stepsToPerform": "1. Set up a credit card account in extreme default (120+ days or as per policy).\n2. Document all previous collection attempts.\n3. Obtain legal department approval for action.\n4. Generate legal documentation.\n5. Verify all documents include only last 4 digits of card number.\n6. Review documentation for completeness.\n7. Confirm full card number is never displayed in plain text.\n8. Verify legal action is logged in the system.",
+      "expectedResult": "1. Legal action is initiated successfully in the system.\n2. All legal documentation is generated properly.\n3. Documents include only last 4 digits of credit card number.\n4. Full credit card number is never displayed in plain text.\n5. Complete account history and amount owed are documented.\n6. Legal action details are logged with timestamps.\n7. Cardholder receives formal legal notice.\n8. All documentation complies with legal and security requirements."
+    },
+    {
+      "type": "functional",
+      "title": "Credit Card Number Security - Full Number Never Displayed",
+      "description": "Verify that the full credit card number is never displayed in plain text across all collection lifecycle communications.",
+      "testId": "TC-ZBIO-5213-007",
+      "testDescription": "Test security controls to ensure full credit card numbers are never exposed in any collection lifecycle communication or documentation.",
+      "prerequisites": "1. Multiple credit card accounts must exist in various collection stages.\n2. All collection lifecycle processes must be active.\n3. Access to all communication channels and documentation.\n4. Security scanning tools must be available.",
+      "stepsToPerform": "1. Generate notifications for each collection lifecycle stage.\n2. Review all email notifications for card number exposure.\n3. Check SMS/text messages for full card number display.\n4. Examine app notifications and in-app messages.\n5. Review all generated documents and PDFs.\n6. Check database logs and audit trails.\n7. Verify API responses and data transmissions.\n8. Use security scanning tools to detect any plain text card numbers.",
+      "expectedResult": "1. No full credit card numbers are found in any notifications.\n2. Only last 4 digits are displayed in all communications.\n3. Card numbers are properly masked (e.g., **** **** **** 1234).\n4. Database stores card numbers in encrypted format.\n5. Logs do not contain full card numbers.\n6. API responses mask card numbers appropriately.\n7. All documentation complies with PCI DSS standards.\n8. Security scan confirms no plain text card number exposure."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Lifecycle Progression Workflow",
+      "description": "Verify that the collection lifecycle progresses through all stages in proper sequence as the delinquency increases.",
+      "testId": "TC-ZBIO-5213-008",
+      "testDescription": "Test the complete collection lifecycle workflow from due reminder through potential legal action, ensuring proper stage progression and timing.",
+      "prerequisites": "1. Clean test environment with no existing collection activities.\n2. Ability to manipulate system dates for testing.\n3. All collection lifecycle stages must be configured.\n4. Notification systems must be operational.",
+      "stepsToPerform": "1. Create a new credit card account with an upcoming due date.\n2. Verify due reminder is sent before due date.\n3. Advance system date past due date without payment.\n4. Verify overdue alert is triggered.\n5. Advance date to 60 days overdue.\n6. Verify collection notification is sent.\n7. Simulate no response and advance date to 90 days.\n8. Verify payment plan proposal (if applicable).\n9. Continue to simulate no response.\n10. Verify collection agency involvement.\n11. Continue to extreme default.\n12. Verify legal action initiation if criteria met.",
+      "expectedResult": "1. Collection lifecycle progresses through all stages in correct order.\n2. Each stage is triggered at appropriate time intervals.\n3. Previous stage must complete before next stage begins.\n4. All notifications include only last 4 digits of card number.\n5. Each stage is properly logged in the system.\n6. Escalation logic works correctly.\n7. Account status is updated at each stage.\n8. All communications maintain security standards throughout the lifecycle."
+    },
+    {
+      "type": "functional",
+      "title": "Payment Made During Collection Lifecycle",
+      "description": "Verify that when payment is made at any stage of the collection lifecycle, the appropriate actions are taken and notifications cease.",
+      "testId": "TC-ZBIO-5213-009",
+      "testDescription": "Test the system's response when a cardholder makes payment during various stages of the collection lifecycle.",
+      "prerequisites": "1. Credit card accounts in various collection lifecycle stages.\n2. Payment processing system must be operational.\n3. Ability to process different payment amounts.\n4. Notification system must be active.",
+      "stepsToPerform": "1. Set up accounts in different collection stages (overdue, collection, agency involvement).\n2. Process full payment for one account.\n3. Process partial payment for another account.\n4. Verify collection activities are paused or stopped appropriately.\n5. Check that future scheduled notifications are cancelled.\n6. Verify payment confirmation is sent to cardholder.\n7. Check account status updates.\n8. Verify last 4 digits are included in payment confirmations.",
+      "expectedResult": "1. Full payment stops all collection activities immediately.\n2. Partial payment adjusts the collection strategy appropriately.\n3. Scheduled notifications are cancelled or modified.\n4. Payment confirmation is sent to cardholder.\n5. Account status is updated to reflect payment.\n6. Only last 4 digits of card number appear in confirmations.\n7. If under collection agency, agency is notified of payment.\n8. Payment is properly applied to outstanding balance and fees."
+    },
+    {
+      "type": "functional",
+      "title": "Multiple Communication Channels for Collection Notifications",
+      "description": "Verify that collection lifecycle notifications are sent through multiple communication channels (email, SMS, app notifications, postal mail).",
+      "testId": "TC-ZBIO-5213-010",
+      "testDescription": "Test the multi-channel notification delivery system to ensure cardholders receive collection lifecycle communications through all available and configured channels.",
+      "prerequisites": "1. Cardholder accounts with multiple contact methods configured.\n2. All communication channels (email, SMS, app, postal) must be operational.\n3. Channel preferences must be configured in the system.\n4. Templates must exist for each channel type.",
+      "stepsToPerform": "1. Set up a cardholder account with email, phone, and mailing address.\n2. Enable multi-channel notifications in preferences.\n3. Trigger a collection lifecycle notification (e.g., overdue alert).\n4. Verify notification is sent via email.\n5. Verify SMS/text message is sent.\n6. Check for app/push notification.\n7. Verify postal mail is generated if applicable.\n8. Confirm all channels show only last 4 digits of card number.",
+      "expectedResult": "1. Notification is successfully sent through all configured channels.\n2. Email notification is received with proper formatting.\n3. SMS contains concise message with key information.\n4. App notification appears with appropriate urgency level.\n5. Postal mail is generated for formal collection stages.\n6. All channels display only last 4 digits of card number.\n7. Content is appropriate for each channel's limitations.\n8. Delivery is logged for each channel in the system."
+    },
+    {
+      "type": "non-functional",
+      "title": "Collection Notification Performance - Timeliness",
+      "description": "Verify that collection lifecycle notifications are sent within acceptable time frames to ensure timely communication with cardholders.",
+      "testId": "TC-ZBIO-5213-NF-001",
+      "testDescription": "Test the performance of the notification system to ensure collection lifecycle alerts are triggered and delivered within defined SLAs.",
+      "prerequisites": "1. Large volume of credit card accounts in various collection stages.\n2. Performance monitoring tools must be configured.\n3. Baseline performance metrics must be established.\n4. Test environment should simulate production load.",
+      "stepsToPerform": "1. Set up 1000+ credit card accounts reaching due date simultaneously.\n2. Monitor system performance as reminder notifications are triggered.\n3. Measure time from trigger event to notification generation.\n4. Measure time from generation to actual delivery.\n5. Repeat test for overdue alerts with similar volume.\n6. Test collection notification performance with 500+ accounts.\n7. Monitor system resources (CPU, memory, database connections).\n8. Analyze performance metrics against SLAs.",
+      "expectedResult": "1. Due reminders are triggered within 1 hour of scheduled time.\n2. Overdue alerts are sent within 2 hours of due date passing.\n3. Collection notifications are generated within 4 hours of criteria being met.\n4. Email notifications are delivered within 5 minutes of generation.\n5. SMS notifications are delivered within 2 minutes.\n6. System maintains performance under high volume.\n7. No notifications are missed or delayed beyond SLA.\n8. System resources remain within acceptable thresholds."
+    },
+    {
+      "type": "non-functional",
+      "title": "Data Security and Encryption - PCI DSS Compliance",
+      "description": "Verify that all credit card data in the collection lifecycle system is properly encrypted and complies with PCI DSS standards.",
+      "testId": "TC-ZBIO-5213-NF-002",
+      "testDescription": "Test the security controls and encryption mechanisms to ensure PCI DSS compliance for credit card data throughout the collection lifecycle.",
+      "prerequisites": "1. Access to production-equivalent security environment.\n2. Security scanning and penetration testing tools.\n3. PCI DSS compliance checklist.\n4. Access to encryption configuration and key management systems.",
+      "stepsToPerform": "1. Review encryption at rest for credit card data in database.\n2. Test encryption in transit for all API communications.\n3. Verify credit card numbers are tokenized or encrypted in storage.\n4. Attempt to access full card numbers through various system interfaces.\n5. Review access logs for card number access attempts.\n6. Test data masking in all user interfaces.\n7. Verify audit trails for all card data access.\n8. Conduct vulnerability scanning for PCI DSS compliance.\n9. Review key management procedures.",
+      "expectedResult": "1. All credit card data is encrypted at rest using AES-256 or equivalent.\n2. All transmissions use TLS 1.2 or higher.\n3. Full card numbers are tokenized and stored securely.\n4. No full card numbers are accessible through standard interfaces.\n5. Only last 4 digits are displayed in all user-facing systems.\n6. Access to encrypted data is logged and monitored.\n7. Audit trails capture all access attempts with timestamps.\n8. System passes PCI DSS vulnerability scans.\n9. Encryption keys are properly managed and rotated.\n10. Data retention policies comply with PCI DSS requirements."
+    },
+    {
+      "type": "non-functional",
+      "title": "System Availability and Reliability",
+      "description": "Verify that the collection lifecycle system maintains high availability and reliability to ensure critical notifications are never missed.",
+      "testId": "TC-ZBIO-5213-NF-003",
+      "testDescription": "Test the system's uptime, failover capabilities, and reliability to ensure the collection lifecycle processes operate continuously without interruption.",
+      "prerequisites": "1. Production-like environment with redundancy configured.\n2. Monitoring and alerting systems must be active.\n3. Failover mechanisms must be configured.\n4. Load balancing must be in place.",
+      "stepsToPerform": "1. Monitor system uptime over a 30-day period.\n2. Simulate primary server failure and test failover.\n3. Verify notification queue persists during failover.\n4. Test database replication and synchronization.\n5. Simulate network interruptions.\n6. Verify notification retry mechanisms.\n7. Test system recovery after complete shutdown.\n8. Monitor for any missed notifications during incidents.\n9. Review system logs for errors or warnings.",
+      "expectedResult": "1. System maintains 99.9% uptime or higher.\n2. Failover occurs within 30 seconds of primary failure.\n3. No notifications are lost during failover.\n4. Database replication maintains data consistency.\n5. System recovers gracefully from network interruptions.\n6. Failed notifications are automatically retried.\n7. Complete system recovery occurs within 5 minutes.\n8. Zero notifications are permanently lost.\n9. All incidents are logged and monitored.\n10. Alerting system notifies operations team of any issues."
+    },
+    {
+      "type": "non-functional",
+      "title": "Scalability Under Increasing Load",
+      "description": "Verify that the collection lifecycle system can scale to handle increasing volumes of accounts and notifications.",
+      "testId": "TC-ZBIO-5213-NF-004",
+      "testDescription": "Test the system's ability to scale horizontally and vertically to accommodate growing numbers of credit card accounts in collection lifecycle.",
+      "prerequisites": "1. Scalable test environment (cloud or virtualized).\n2. Load testing tools configured.\n3. Ability to increase system resources dynamically.\n4. Performance baseline established.",
+      "stepsToPerform": "1. Establish baseline performance with current account volume.\n2. Gradually increase account volume by 50%.\n3. Monitor system performance and resource utilization.\n4. Increase volume by 100% from baseline.\n5. Test notification processing throughput.\n6. Increase volume by 200% from baseline.\n7. Monitor for any degradation in performance.\n8. Test auto-scaling capabilities if configured.\n9. Verify notification delivery times remain within SLA.\n10. Analyze bottlenecks and resource constraints.",
+      "expectedResult": "1. System handles 50% increase without performance degradation.\n2. Response times remain within acceptable limits at 100% increase.\n3. Notification delivery times stay within SLA at all load levels.\n4. Auto-scaling triggers appropriately when thresholds are reached.\n5. System successfully processes 200% volume increase with added resources.\n6. Database performance scales with query load.\n7. No notification failures occur due to volume.\n8. Resource utilization remains balanced across servers.\n9. System can sustain 3x current volume with proper scaling.\n10. Performance returns to baseline when load decreases."
+    },
+    {
+      "type": "non-functional",
+      "title": "Audit Trail and Compliance Logging",
+      "description": "Verify that comprehensive audit trails are maintained for all collection lifecycle activities to support compliance and dispute resolution.",
+      "testId": "TC-ZBIO-5213-NF-005",
+      "testDescription": "Test the audit logging functionality to ensure all collection lifecycle events are properly logged with sufficient detail for compliance and auditing purposes.",
+      "prerequisites": "1. Audit logging system must be configured and operational.\n2. Log retention policies must be defined.\n3. Access to log analysis tools.\n4. Understanding of regulatory requirements.",
+      "stepsToPerform": "1. Trigger various collection lifecycle events (reminders, alerts, escalations).\n2. Verify each event is logged with timestamp.\n3. Check that user actions are logged (who initiated, when, why).\n4. Verify notification delivery status is logged.\n5. Test logging of payment plan proposals and responses.\n6. Verify collection agency referrals are logged.\n7. Check legal action initiation logs.\n8. Verify logs are tamper-proof and immutable.\n9. Test log retention according to policy.\n10. Verify log search and retrieval functionality.",
+      "expectedResult": "1. All collection lifecycle events are logged automatically.\n2. Logs include timestamp, user ID, action type, and account identifier.\n3. Only last 4 digits of card numbers appear in logs.\n4. Notification delivery status (sent, failed, delivered) is logged.\n5. Payment transactions are logged with complete details.\n6. Collection agency communications are tracked in logs.\n7. Legal actions are fully documented in audit trail.\n8. Logs are stored in immutable format (append-only).\n9. Logs are retained according to regulatory requirements (7+ years).\n10. Log search functionality allows quick retrieval for audits.\n11. Logs support dispute resolution with complete event history."
+    },
+    {
+      "type": "non-functional",
+      "title": "Disaster Recovery and Business Continuity",
+      "description": "Verify that disaster recovery procedures can restore collection lifecycle operations within defined recovery time objectives (RTO) and recovery point objectives (RPO).",
+      "testId": "TC-ZBIO-5213-NF-006",
+      "testDescription": "Test disaster recovery procedures to ensure business continuity for critical collection lifecycle processes.",
+      "prerequisites": "1. Disaster recovery site must be configured.\n2. Backup systems must be operational.\n3. Recovery procedures must be documented.\n4. Test environment isolated from production.",
+      "stepsToPerform": "1. Document current system state and pending notifications.\n2. Simulate complete data center failure.\n3. Initiate disaster recovery procedures.\n4. Restore system from backups at DR site.\n5. Verify data integrity after restoration.\n6. Check that notification queues are restored.\n7. Resume collection lifecycle processing.\n8. Verify no notifications were lost.\n9. Test switchback to primary site.\n10. Measure RTO and RPO achieved.",
+      "expectedResult": "1. Disaster recovery is initiated within 15 minutes of failure detection.\n2. System is restored at DR site within 2 hours (RTO).\n3. Data loss is limited to last 15 minutes or less (RPO).\n4. All account data is restored accurately.\n5. Notification queues are preserved and processing resumes.\n6. No notifications are permanently lost.\n7. Collection lifecycle processes resume automatically.\n8. All integrations (collection agency, payment processors) reconnect.\n9. Switchback to primary site completes without data loss.\n10. Complete recovery is documented in DR logs."
+    },
+    {
+      "type": "non-functional",
+      "title": "Accessibility and Multi-language Support",
+      "description": "Verify that collection lifecycle notifications are accessible to cardholders with disabilities and support multiple languages.",
+      "testId": "TC-ZBIO-5213-NF-007",
+      "testDescription": "Test accessibility features and multi-language support to ensure inclusive communication with diverse cardholder populations.",
+      "prerequisites": "1. Accessibility standards (WCAG 2.1) must be defined.\n2. Multi-language templates must be configured.\n3. Screen reader testing tools must be available.\n4. Cardholder language preferences must be captured.",
+      "stepsToPerform": "1. Test email notifications with screen reader software.\n2. Verify web-based collection portals meet WCAG 2.1 AA standards.\n3. Check color contrast ratios in all notifications.\n4. Test keyboard navigation in web interfaces.\n5. Verify alt text for images in emails.\n6. Test notifications in multiple languages (Spanish, Chinese, etc.).\n7. Verify language-specific formatting (date, currency).\n8. Test right-to-left language support if applicable.\n9. Verify cardholder language preference is honored.\n10. Test accessibility on mobile devices.",
+      "expectedResult": "1. All notifications are compatible with screen readers.\n2. Web portals meet WCAG 2.1 Level AA standards.\n3. Color contrast ratios meet minimum 4.5:1 for text.\n4. All functions are accessible via keyboard navigation.\n5. Images include descriptive alt text.\n6. Notifications are available in at least 3-5 major languages.\n7. Date and currency formats adjust per language/locale.\n8. Right-to-left languages display correctly.\n9. System uses cardholder's preferred language automatically.\n10. Mobile notifications are accessible on iOS and Android.\n11. Font sizes are adjustable for visual impairments."
+    },
+    {
+      "type": "non-functional",
+      "title": "Notification Delivery Rate and Success Metrics",
+      "description": "Verify that collection lifecycle notifications achieve high delivery rates across all communication channels.",
+      "testId": "TC-ZBIO-5213-NF-008",
+      "testDescription": "Test and measure the success rate of notification delivery across various channels to ensure cardholders receive critical collection communications.",
+      "prerequisites": "1. Large sample of active cardholder accounts.\n2. Valid contact information for test accounts.\n3. Monitoring and analytics tools configured.\n4. Baseline delivery rates established.",
+      "stepsToPerform": "1. Send 1000 due reminder notifications via email.\n2. Track delivery, open, and bounce rates.\n3. Send 1000 SMS notifications and track delivery status.\n4. Monitor app push notification delivery rates.\n5. Test with invalid email addresses and phone numbers.\n6. Verify retry mechanisms for failed deliveries.\n7. Track notifications marked as spam.\n8. Measure time from send to delivery.\n9. Analyze failure reasons (invalid contact, network issues, etc.).\n10. Generate delivery success reports.",
+      "expectedResult": "1. Email delivery rate achieves 95% or higher.\n2. SMS delivery rate achieves 98% or higher.\n3. App push notifications achieve 90% or higher delivery.\n4. Failed deliveries trigger automatic retries.\n5. Bounced emails are flagged for contact information update.\n6. Spam rates remain below 1%.\n7. Average delivery time for email is under 5 minutes.\n8. Average delivery time for SMS is under 2 minutes.\n9. Failure reasons are logged and categorized.\n10. Contact information quality issues are reported.\n11. Delivery metrics are available in real-time dashboards."
+    }
+  ]
+}
