@@ -1,0 +1,334 @@
+{
+  "site_url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+  "site_type": "unknown",
+  "site_category": "general",
+  "test_name": "user_administration_validate_duplicate_username_prevention_d",
+  "login_mechanisms": [
+    "content_browsing",
+    "site_navigation"
+  ],
+  "user_journeys": [
+    {
+      "workflow_type": "navigation_flow",
+      "path": [
+        "web"
+      ],
+      "success_rate": "discovered_site_navigation",
+      "scenario_priority": "medium",
+      "description": "General website navigation and content discovery"
+    }
+  ],
+  "proposed_scenarios": [
+    {
+      "scenario_name": "User Administration: Validate Duplicate Username Prevention During User Creation",
+      "description": "Complete end-to-end test of the user creation workflow that validates the system correctly prevents creation of users with duplicate usernames by displaying appropriate error messages. This scenario covers navigation to user management, form population with all required fields, and verification of duplicate username validation behavior.",
+      "test_type": "e2e_business_workflow",
+      "priority": "critical",
+      "business_goal": "Verify that the system maintains data integrity by preventing duplicate usernames and provides clear, actionable error feedback to administrators attempting to create users with existing usernames",
+      "user_story": "As an HR Administrator, I want the system to prevent me from creating duplicate usernames so that each user has a unique identifier and the system maintains data integrity",
+      "detailed_steps": [
+        {
+          "step_number": 1,
+          "action": "Navigate to website homepage",
+          "description": "Load the OrangeHRM dashboard as the starting point for user administration workflow",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+          "verification_point": "Dashboard page loads successfully with authenticated session",
+          "business_impact": "Ensures administrator has proper access to begin user management tasks",
+          "selector": "page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index')",
+          "confidence": 100,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 2,
+          "action": "Navigate to Admin section",
+          "description": "Click the Admin menu link to access system administration and user management features",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers",
+          "verification_point": "System Users page loads showing existing user list",
+          "business_impact": "Provides access to user administration features where admins can view and manage system users",
+          "selector": "page.getByRole(\"link\", { name: \"Admin\" })",
+          "confidence": 90,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 3,
+          "action": "Click Add User button",
+          "description": "Click the Add button to open the new user creation form",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "Add User form page loads with all required fields displayed",
+          "business_impact": "Initiates the user creation workflow allowing administrator to add new system users",
+          "selector": "page.getByRole(\"button\", { name: \"Add\" })",
+          "confidence": 90,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 4,
+          "action": "Open User Role dropdown",
+          "description": "Click the User Role dropdown to display available role options",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Allows administrator to select appropriate role for the new user (Admin or ESS)",
+          "selector": "page.getByText(\"-- Select --\").nth(0)",
+          "confidence": 77,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 5,
+          "action": "Select Admin role",
+          "description": "Select 'Admin' option from the User Role dropdown to assign administrator privileges",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Defines user permissions and access level within the system",
+          "selector": "page.getByRole(\"option\", { name: \"Admin\" })",
+          "confidence": 90,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 6,
+          "action": "Enter employee name in autocomplete field",
+          "description": "Type text into the Employee Name autocomplete field to trigger employee search",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Links the system user account to an existing employee record in the database",
+          "selector": "page.getByRole(\"textbox\", { name: \"Type for hints...\" })",
+          "confidence": 90,
+          "based_on_interaction": true,
+          "input_value": "Test"
+        },
+        {
+          "step_number": 7,
+          "action": "Select employee from autocomplete dropdown",
+          "description": "Select 'Aparna123 4Ys 010Z' from the employee autocomplete suggestions",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Associates the new user account with specific employee details for complete user profile",
+          "selector": "page.getByRole(\"option\", { name: \"Aparna123 4Ys 010Z\" })",
+          "confidence": 90,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 8,
+          "action": "Open Status dropdown",
+          "description": "Click the Status dropdown to display available status options",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Allows administrator to control whether the user account is immediately active",
+          "selector": "page.getByText(\"-- Select --\")",
+          "confidence": 85,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 9,
+          "action": "Select Enabled status",
+          "description": "Select 'Enabled' option from the Status dropdown to activate the user account",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Determines whether the user can immediately log in after account creation",
+          "selector": "page.getByRole(\"option\", { name: \"Enabled\" })",
+          "confidence": 90,
+          "based_on_interaction": true
+        },
+        {
+          "step_number": 10,
+          "action": "Enter duplicate username",
+          "description": "Enter 'Admin' into the Username field - this is an existing username that should trigger duplicate validation error",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Critical test point - entering duplicate username to verify system validation prevents duplicate user creation",
+          "selector": "page.locator(\".oxd-input--active\").nth(1)",
+          "confidence": 70,
+          "based_on_interaction": true,
+          "input_value": "Admin"
+        },
+        {
+          "step_number": 11,
+          "action": "Enter password",
+          "description": "Enter 'Test@123' into the Password field to meet password requirements",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Provides secure credentials for the new user account",
+          "selector": "page.locator(\".oxd-input--active\").nth(1)",
+          "confidence": 70,
+          "based_on_interaction": true,
+          "input_value": "Test@123"
+        },
+        {
+          "step_number": 12,
+          "action": "Enter confirm password",
+          "description": "Enter 'Test@123' into the Confirm Password field to match the password",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "",
+          "business_impact": "Validates password entry by requiring confirmation, reducing password entry errors",
+          "selector": "page.locator(\".oxd-input--active\").nth(2)",
+          "confidence": 70,
+          "based_on_interaction": true,
+          "input_value": "Test@123"
+        },
+        {
+          "step_number": 13,
+          "action": "Click Save button",
+          "description": "Submit the user creation form by clicking the Save button to trigger validation",
+          "expected_page_url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+          "verification_point": "Page remains on Add User form and displays error message 'Already exists' below Username field, preventing duplicate user creation",
+          "business_impact": "Critical validation point - system correctly rejects duplicate username and provides clear error feedback to administrator",
+          "selector": "page.getByRole(\"button\", { name: \"Save\" })",
+          "confidence": 90,
+          "based_on_interaction": true
+        }
+      ],
+      "expected_results": [
+        "Administrator successfully navigates to Add User form through Admin menu",
+        "All required form fields are populated with valid data except duplicate username",
+        "Form submission is attempted by clicking Save button",
+        "System detects duplicate username 'Admin' and prevents user creation",
+        "Error message 'Already exists' is displayed below Username field",
+        "Form remains on Add User page without creating duplicate user account",
+        "Data integrity is maintained - no duplicate usernames exist in system"
+      ],
+      "edge_cases_to_test": [
+        "Username validation with different case variations (Admin vs admin vs ADMIN)",
+        "Username with leading/trailing spaces",
+        "Real-time validation feedback before form submission",
+        "Error message persistence and clearing behavior",
+        "Ability to correct username and successfully submit after error"
+      ],
+      "data_requirements": [
+        "Pre-existing username 'Admin' must exist in the system",
+        "Valid employee record 'Aparna123 4Ys 010Z' must exist for employee selection",
+        "Test credentials for authenticated admin access",
+        "Password that meets system password requirements (Test@123)"
+      ],
+      "prerequisites": [
+        "User must be authenticated as administrator with user management permissions",
+        "OrangeHRM system is accessible and functional",
+        "At least one existing user with username 'Admin' exists in the system",
+        "Employee records are available in the system for association"
+      ],
+      "auth_required": true,
+      "starting_url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"
+    }
+  ],
+  "login_completion_state": "successful",
+  "analysis_timestamp": "2025-12-02T05:27:03.067060",
+  "confidence_score": 0.5,
+  "captured_selectors": [
+    {
+      "selector": "page.getByRole(\"link\", { name: \"Admin\" })",
+      "confidence": 90,
+      "action": "click",
+      "input_value": "Admin",
+      "element": "<a> 'Admin'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+      "timestamp": "2025-12-02T05:13:04.109180"
+    },
+    {
+      "selector": "page.getByRole(\"button\", { name: \"Add\" })",
+      "confidence": 90,
+      "action": "click",
+      "input_value": "Add",
+      "element": "<button> 'Add'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers",
+      "timestamp": "2025-12-02T05:14:08.620854"
+    },
+    {
+      "selector": "page.getByText(\"-- Select --\").nth(0)",
+      "confidence": 77,
+      "action": "click",
+      "input_value": null,
+      "element": "<div> '-- Select --'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:15:02.158139"
+    },
+    {
+      "selector": "page.getByRole(\"option\", { name: \"Admin\" })",
+      "confidence": 90,
+      "action": "click",
+      "input_value": "Admin",
+      "element": "<div> 'Admin'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:15:46.003830"
+    },
+    {
+      "selector": "page.getByRole(\"textbox\", { name: \"Type for hints...\" })",
+      "confidence": 90,
+      "action": "input_text",
+      "input_value": "Test",
+      "element": "<input> ''",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:16:39.892211"
+    },
+    {
+      "selector": "page.getByRole(\"option\", { name: \"Aparna123 4Ys 010Z\" })",
+      "confidence": 90,
+      "action": "click",
+      "input_value": "Aparna123 4Ys 010Z",
+      "element": "<div> 'Aparna123 4Ys 010Z'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:18:11.681013"
+    },
+    {
+      "selector": "page.getByText(\"-- Select --\")",
+      "confidence": 85,
+      "action": "click",
+      "input_value": null,
+      "element": "<div> '-- Select --'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:19:07.453030"
+    },
+    {
+      "selector": "page.getByRole(\"option\", { name: \"Enabled\" })",
+      "confidence": 90,
+      "action": "click",
+      "input_value": "Enabled",
+      "element": "<div> 'Enabled'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:20:00.105083"
+    },
+    {
+      "selector": "page.locator(\".oxd-input--active\").nth(1)",
+      "confidence": 70,
+      "action": "input_text",
+      "input_value": "Admin",
+      "element": "<input> ''",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:21:12.920151"
+    },
+    {
+      "selector": "page.locator(\".oxd-input--active\").nth(2)",
+      "confidence": 70,
+      "action": "input_text",
+      "input_value": "Test@123",
+      "element": "<input> ''",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:23:05.948797"
+    },
+    {
+      "selector": "page.getByRole(\"button\", { name: \"Save\" })",
+      "confidence": 90,
+      "action": "click",
+      "input_value": "Save",
+      "element": "<button> 'Save'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:23:59.849356"
+    },
+    {
+      "selector": "[class*=\"error\"]",
+      "confidence": 85,
+      "action": "verify_message",
+      "input_value": null,
+      "element": "<message> 'Already exists'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:25:01.411190"
+    },
+    {
+      "selector": "[class*=\"message\"]",
+      "confidence": 85,
+      "action": "verify_message",
+      "input_value": null,
+      "element": "<message> 'Already exists'",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/saveSystemUser",
+      "timestamp": "2025-12-02T05:25:01.448387"
+    }
+  ],
+  "auth_required": true,
+  "starting_url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"
+}
