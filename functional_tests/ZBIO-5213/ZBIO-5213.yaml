@@ -1,0 +1,2136 @@
+openapi: 3.0.3
+info:
+  title: Credit Card Collection Lifecycle Notification System API
+  description: |
+    API for automating the credit card collection lifecycle notification process.
+    This system sends timely payment reminders and collection notices to cardholders
+    while maintaining security, compliance, and PCI-DSS standards.
+    
+    **Security Features:**
+    - Credit card numbers are encrypted at rest and in transit
+    - Only last 4 digits are displayed in any communication
+    - PCI-DSS Level 1 compliance maintained
+    - Audit trail for all collection activities
+    
+    **Regulatory Compliance:**
+    - FDCPA (Fair Debt Collection Practices Act)
+    - CFPB (Consumer Financial Protection Bureau)
+    - TCPA (Telephone Consumer Protection Act)
+    - State-specific laws
+  version: 1.0.0
+  contact:
+    name: API Support Team
+    email: api-support@creditcard-issuer.com
+  termsOfService: https://api.creditcard-issuer.com/terms
+
+servers:
+  - url: https://api.creditcard-issuer.com/v1
+    description: Production server
+  - url: https://staging-api.creditcard-issuer.com/v1
+    description: Staging server
+  - url: https://dev-api.creditcard-issuer.com/v1
+    description: Development server
+
+security:
+  - bearerAuth: []
+  - apiKeyAuth: []
+  - oauth2: [read:notifications, write:notifications, admin:notifications]
+
+tags:
+  - name: Payment Reminders
+    description: Automated due date reminder notifications
+  - name: Overdue Alerts
+    description: Overdue balance alert notifications
+  - name: Collection Notices
+    description: Formal collection notifications
+  - name: Payment Plans
+    description: Payment plan proposals and management
+  - name: Collection Agency
+    description: Collection agency involvement and referrals
+  - name: Legal Actions
+    description: Legal action documentation and notices
+  - name: Security & Compliance
+    description: Security validation and compliance operations
+  - name: Notifications
+    description: Multi-channel notification delivery
+  - name: Account Management
+    description: Account status and lifecycle management
+  - name: Audit & Logging
+    description: Audit trail and compliance logging
+
+paths:
+  /accounts/{accountId}:
+    get:
+      tags:
+        - Account Management
+      summary: Get cardholder account details
+      description: Retrieve account information with masked credit card number
+      operationId: getAccount
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Unique account identifier
+          schema:
+            type: string
+            example: "ACC-123456"
+      responses:
+        '200':
+          description: Account details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDetails'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /accounts/{accountId}/status:
+    put:
+      tags:
+        - Account Management
+      summary: Update account status
+      description: Update the collection lifecycle status of an account
+      operationId: updateAccountStatus
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum: [active, good_standing, overdue, past_due, delinquent, significantly_delinquent, severely_delinquent, critically_delinquent, agency_referred, third_party_collection, external_collection, agency_active, legal_proceedings, payment_plan_active, repayment_schedule, plan_in_progress, payment_plan_delinquent, plan_defaulted, collection_resumed, payment_plan_warning]
+                reason:
+                  type: string
+                  description: Reason for status change
+      responses:
+        '200':
+          description: Status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusUpdateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /notifications/payment-reminders:
+    post:
+      tags:
+        - Payment Reminders
+      summary: Send automated due date reminder notification
+      description: |
+        Generate and send payment reminder notification before the payment due date.
+        Reminders are configured to send a specified number of days before the due date.
+      operationId: sendPaymentReminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReminderRequest'
+            examples:
+              emailReminder:
+                summary: Email reminder 5 days before due date
+                value:
+                  accountId: "ACC-123456"
+                  last4Digits: "1234"
+                  dueDate: "2024-02-15"
+                  daysBefore: 5
+                  accountStatus: "active"
+                  deliveryChannel: ["email"]
+                  balanceAmount: 1250.00
+              smsReminder:
+                summary: SMS reminder 7 days before due date
+                value:
+                  accountId: "ACC-789012"
+                  last4Digits: "5678"
+                  dueDate: "2024-02-20"
+                  daysBefore: 7
+                  accountStatus: "active"
+                  deliveryChannel: ["sms"]
+                  balanceAmount: 3450.89
+      responses:
+        '201':
+          description: Payment reminder notification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+    get:
+      tags:
+        - Payment Reminders
+      summary: List payment reminder notifications
+      description: Retrieve a list of payment reminder notifications with filters
+      operationId: listPaymentReminders
+      parameters:
+        - name: accountId
+          in: query
+          schema:
+            type: string
+          description: Filter by account ID
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, sent, delivered, failed]
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: List of payment reminders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationList'
+
+  /notifications/overdue-alerts:
+    post:
+      tags:
+        - Overdue Alerts
+      summary: Send overdue balance alert notification
+      description: |
+        Generate and send overdue alert when payment due date is missed.
+        Alert clearly states overdue balance and potential consequences.
+      operationId: sendOverdueAlert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverdueAlertRequest'
+            examples:
+              emailAlert:
+                summary: Email alert for overdue payment
+                value:
+                  accountId: "ACC-234567"
+                  last4Digits: "5678"
+                  dueDate: "2024-01-15"
+                  detectionDate: "2024-01-16"
+                  accountStatus: "overdue"
+                  overdueAmount: 1250.00
+                  consequences: "late fees, interest charges"
+                  deliveryChannel: ["email"]
+      responses:
+        '201':
+          description: Overdue alert notification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /notifications/collection-notices:
+    post:
+      tags:
+        - Collection Notices
+      summary: Send formal collection notification
+      description: |
+        Generate and send formal collection notice for significantly delinquent accounts.
+        Includes itemized charges, payment deadline, and escalation consequences.
+      operationId: sendCollectionNotice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionNoticeRequest'
+            examples:
+              significantlyDelinquent:
+                summary: Collection notice for 60+ days overdue
+                value:
+                  accountId: "ACC-345678"
+                  last4Digits: "9012"
+                  overdueAmount: 1250.00
+                  daysOverdue: 60
+                  delinquencyStatus: "significantly_delinquent"
+                  thresholdDays: 60
+                  totalAmount: 1375.00
+                  additionalCharges:
+                    - type: "late_fee"
+                      amount: 75.00
+                    - type: "interest"
+                      amount: 50.00
+                  paymentDeadline: "2024-03-30"
+                  escalationConsequences: "collection agency referral"
+                  deliveryChannel: ["email", "postal"]
+      responses:
+        '201':
+          description: Collection notice created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /payment-plans/proposals:
+    post:
+      tags:
+        - Payment Plans
+      summary: Generate and send payment plan proposal
+      description: |
+        Create a payment plan proposal for cardholders unable to pay full amount.
+        Includes structured repayment schedule and reduced interest rates.
+      operationId: createPaymentPlanProposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentPlanProposalRequest'
+            examples:
+              hardshipRequest:
+                summary: 12-month payment plan for hardship
+                value:
+                  accountId: "ACC-456789"
+                  last4Digits: "3456"
+                  overdueAmount: 3000.00
+                  eligibilityCriteria: "hardship_request"
+                  planDuration: 12
+                  installmentAmount: 270.00
+                  reducedInterestRate: 5.0
+                  totalRepayment: 3240.00
+                  deliveryChannel: ["email"]
+      responses:
+        '201':
+          description: Payment plan proposal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanProposalResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '422':
+          description: Account not eligible for payment plan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /payment-plans/{planId}/accept:
+    post:
+      tags:
+        - Payment Plans
+      summary: Accept payment plan proposal
+      description: |
+        Process cardholder's acceptance of payment plan proposal.
+        Creates scheduled payment entries and adjusts collection lifecycle.
+      operationId: acceptPaymentPlan
+      parameters:
+        - name: planId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - acceptanceDate
+                - cardholderSignature
+              properties:
+                acceptanceDate:
+                  type: string
+                  format: date
+                cardholderSignature:
+                  type: string
+                  description: Digital signature or confirmation code
+                agreesToTerms:
+                  type: boolean
+                  default: true
+      responses:
+        '200':
+          description: Payment plan accepted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanAcceptanceResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /payment-plans/{planId}/default:
+    post:
+      tags:
+        - Payment Plans
+      summary: Handle payment plan default
+      description: |
+        Process payment plan default when cardholder misses consecutive payments.
+        Sends warnings and reactivates collection lifecycle if threshold is reached.
+      operationId: handlePaymentPlanDefault
+      parameters:
+        - name: planId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentPlanDefaultRequest'
+      responses:
+        '200':
+          description: Payment plan default handled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanDefaultResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /collection-agency/referrals:
+    post:
+      tags:
+        - Collection Agency
+      summary: Initiate collection agency referral
+      description: |
+        Involve collection agency when cardholder fails to respond to previous notifications.
+        Prepares data package and sends notification about agency involvement.
+      operationId: createAgencyReferral
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyReferralRequest'
+            examples:
+              referral90Days:
+                summary: Collection agency referral at 90 days
+                value:
+                  accountId: "ACC-567890"
+                  last4Digits: "7890"
+                  overdueAmount: 3500.00
+                  daysOverdue: 90
+                  lastNotificationDate: "2024-01-15"
+                  referralThreshold: 90
+                  agencyName: "ABC Collections Inc"
+                  agencyContact: "1-800-555-0123"
+                  newStatus: "agency_referred"
+      responses:
+        '201':
+          description: Collection agency referral created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyReferralResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '422':
+          description: Account does not meet referral criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /collection-agency/data-packages/{referralId}:
+    get:
+      tags:
+        - Collection Agency
+      summary: Retrieve collection agency data package
+      description: |
+        Get the prepared data package for collection agency.
+        Contains account details with last 4 digits only (full card number excluded).
+      operationId: getAgencyDataPackage
+      parameters:
+        - name: referralId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+        - oauth2: [admin:notifications]
+      responses:
+        '200':
+          description: Data package retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyDataPackage'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /legal-actions:
+    post:
+      tags:
+        - Legal Actions
+      summary: Initiate legal action process
+      description: |
+        Start legal action documentation for extreme non-payment cases.
+        Generates legal documents and sends formal notification to cardholder.
+      operationId: initiateLegalAction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalActionRequest'
+            examples:
+              legalAction120Days:
+                summary: Legal action at 120 days overdue
+                value:
+                  accountId: "ACC-678901"
+                  last4Digits: "2468"
+                  delinquentAmount: 10000.00
+                  daysOverdue: 120
+                  legalCriteria: "amount_exceeds_threshold"
+                  legalThreshold: 120
+                  totalOwed: 10500.00
+                  attemptCount: 8
+                  legalDeadline: "2024-05-30"
+                  approvals:
+                    - approver: "John Doe"
+                      role: "Legal Director"
+                      approvalDate: "2024-02-01"
+      responses:
+        '201':
+          description: Legal action initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalActionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          description: Missing required approvals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /legal-actions/{legalActionId}/documents:
+    get:
+      tags:
+        - Legal Actions
+      summary: Retrieve legal action documents
+      description: Get generated legal documents with masked credit card numbers
+      operationId: getLegalDocuments
+      parameters:
+        - name: legalActionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: documentType
+          in: query
+          schema:
+            type: string
+            enum: [complaint, affidavit, judgment, notice]
+      security:
+        - bearerAuth: []
+        - oauth2: [admin:notifications]
+      responses:
+        '200':
+          description: Legal documents retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LegalDocument'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /notifications/{notificationId}:
+    get:
+      tags:
+        - Notifications
+      summary: Get notification details
+      description: Retrieve details of a specific notification
+      operationId: getNotification
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Notification details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationDetails'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /notifications/{notificationId}/delivery-status:
+    get:
+      tags:
+        - Notifications
+      summary: Get notification delivery status
+      description: Check delivery status across all channels
+      operationId: getDeliveryStatus
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Delivery status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryStatus'
+
+  /notifications/{notificationId}/retry:
+    post:
+      tags:
+        - Notifications
+      summary: Retry failed notification delivery
+      description: Manually retry a failed notification with optional channel override
+      operationId: retryNotification
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                channel:
+                  type: string
+                  enum: [email, sms, postal]
+                  description: Override delivery channel
+      responses:
+        '200':
+          description: Notification retry initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /notifications/batch:
+    post:
+      tags:
+        - Notifications
+      summary: Send batch notifications
+      description: |
+        Process batch notification delivery for multiple accounts.
+        Used for high-volume notification processing.
+      operationId: sendBatchNotifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchNotificationRequest'
+      responses:
+        '202':
+          description: Batch processing accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchProcessingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /security/validate-masking:
+    post:
+      tags:
+        - Security & Compliance
+      summary: Validate credit card number masking
+      description: |
+        Verify that credit card numbers are properly masked in notifications.
+        Ensures only last 4 digits are visible across all communications.
+      operationId: validateMasking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - notificationId
+                - lifecycleStage
+              properties:
+                notificationId:
+                  type: string
+                lifecycleStage:
+                  type: string
+                  enum: [due_reminder, overdue, collection, payment_plan, agency_referred, legal_action]
+                notificationType:
+                  type: string
+      responses:
+        '200':
+          description: Masking validation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaskingValidationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /security/encryption-status:
+    get:
+      tags:
+        - Security & Compliance
+      summary: Get encryption status
+      description: Retrieve current encryption configuration and status
+      operationId: getEncryptionStatus
+      security:
+        - bearerAuth: []
+        - oauth2: [admin:notifications]
+      responses:
+        '200':
+          description: Encryption status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptionStatus'
+
+  /audit/logs:
+    get:
+      tags:
+        - Audit & Logging
+      summary: Query audit logs
+      description: |
+        Retrieve audit trail for collection activities.
+        Supports compliance requirements (FDCPA, CFPB, TCPA, State Law).
+      operationId: getAuditLogs
+      parameters:
+        - name: accountId
+          in: query
+          schema:
+            type: string
+        - name: lifecycleStage
+          in: query
+          schema:
+            type: string
+        - name: collectionActivity
+          in: query
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: toDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [INFO, WARNING, CRITICAL]
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+      security:
+        - bearerAuth: []
+        - oauth2: [admin:notifications]
+      responses:
+        '200':
+          description: Audit logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogList'
+
+  /audit/logs/{logId}:
+    get:
+      tags:
+        - Audit & Logging
+      summary: Get specific audit log entry
+      description: Retrieve detailed information for a specific audit log entry
+      operationId: getAuditLog
+      parameters:
+        - name: logId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+        - oauth2: [admin:notifications]
+      responses:
+        '200':
+          description: Audit log entry retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogEntry'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /compliance/regulatory-check:
+    post:
+      tags:
+        - Security & Compliance
+      summary: Perform regulatory compliance check
+      description: |
+        Validate notification for regulatory compliance including:
+        - Required disclosures (FDCPA, CFPB)
+        - Time-of-day restrictions
+        - Frequency limits
+        - Opt-out mechanisms
+      operationId: performComplianceCheck
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplianceCheckRequest'
+      responses:
+        '200':
+          description: Compliance check completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceCheckResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /lifecycle/progression:
+    post:
+      tags:
+        - Account Management
+      summary: Progress collection lifecycle stage
+      description: |
+        Move account through collection lifecycle stages based on configured timelines.
+        Validates progression sequence and triggers appropriate notifications.
+      operationId: progressLifecycleStage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LifecycleProgressionRequest'
+      responses:
+        '200':
+          description: Lifecycle progressed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecycleProgressionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /preferences/{accountId}/notifications:
+    get:
+      tags:
+        - Account Management
+      summary: Get notification preferences
+      description: Retrieve cardholder's notification delivery preferences
+      operationId: getNotificationPreferences
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Preferences retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreferences'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    put:
+      tags:
+        - Account Management
+      summary: Update notification preferences
+      description: Update cardholder's notification delivery preferences
+      operationId: updateNotificationPreferences
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationPreferences'
+      responses:
+        '200':
+          description: Preferences updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreferences'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /health:
+    get:
+      tags:
+        - System
+      summary: Health check endpoint
+      description: Check if notification service is operational
+      operationId: healthCheck
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+  /metrics/performance:
+    get:
+      tags:
+        - System
+      summary: Get performance metrics
+      description: Retrieve system performance metrics for monitoring
+      operationId: getPerformanceMetrics
+      parameters:
+        - name: metricType
+          in: query
+          schema:
+            type: string
+            enum: [throughput, latency, error_rate, cpu, memory]
+        - name: timeRange
+          in: query
+          schema:
+            type: string
+            enum: [1h, 6h, 24h, 7d, 30d]
+      security:
+        - bearerAuth: []
+        - oauth2: [admin:notifications]
+      responses:
+        '200':
+          description: Performance metrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceMetrics'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token authentication
+    
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key authentication
+    
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.creditcard-issuer.com/oauth/token
+          scopes:
+            read:notifications: Read notification data
+            write:notifications: Create and send notifications
+            admin:notifications: Full administrative access
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    
+    LimitParam:
+      name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  responses:
+    UnauthorizedError:
+      description: Authentication credentials are missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "UNAUTHORIZED"
+            message: "Authentication required"
+            timestamp: "2024-02-01T10:00:00Z"
+    
+    ForbiddenError:
+      description: Insufficient permissions to perform this operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "FORBIDDEN"
+            message: "Insufficient permissions"
+            timestamp: "2024-02-01T10:00:00Z"
+    
+    NotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "NOT_FOUND"
+            message: "Resource not found"
+            timestamp: "2024-02-01T10:00:00Z"
+    
+    BadRequestError:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "BAD_REQUEST"
+            message: "Invalid request parameters"
+            timestamp: "2024-02-01T10:00:00Z"
+
+  schemas:
+    AccountDetails:
+      type: object
+      properties:
+        accountId:
+          type: string
+          example: "ACC-123456"
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+          example: "1234"
+          description: Last 4 digits of credit card (full number never exposed)
+        maskedCardNumber:
+          type: string
+          example: "**** **** **** 1234"
+          description: Fully masked credit card number
+        accountStatus:
+          type: string
+          enum: [active, good_standing, overdue, past_due, delinquent, significantly_delinquent, severely_delinquent, critically_delinquent, agency_referred, third_party_collection, external_collection, agency_active, legal_proceedings, payment_plan_active, repayment_schedule, plan_in_progress]
+        balanceAmount:
+          type: number
+          format: double
+          example: 1250.00
+        dueDate:
+          type: string
+          format: date
+          example: "2024-02-15"
+        daysOverdue:
+          type: integer
+          example: 0
+        lifecycleStage:
+          type: string
+          enum: [current, reminder, overdue, collection, agency_referral, legal_action, payment_plan]
+        contactInformation:
+          $ref: '#/components/schemas/ContactInformation'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ContactInformation:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "cardholder@example.com"
+        phone:
+          type: string
+          example: "+1-555-123-4567"
+        smsEnabled:
+          type: boolean
+          default: true
+        mailingAddress:
+          $ref: '#/components/schemas/Address'
+        isValid:
+          type: boolean
+          description: Whether contact information is valid and up-to-date
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+        country:
+          type: string
+
+    PaymentReminderRequest:
+      type: object
+      required:
+        - accountId
+        - last4Digits
+        - dueDate
+        - daysBefore
+        - accountStatus
+        - deliveryChannel
+        - balanceAmount
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+        dueDate:
+          type: string
+          format: date
+        daysBefore:
+          type: integer
+          minimum: 1
+          maximum: 30
+        accountStatus:
+          type: string
+          enum: [active, good_standing]
+        deliveryChannel:
+          type: array
+          items:
+            type: string
+            enum: [email, sms, postal]
+          minItems: 1
+        balanceAmount:
+          type: number
+          format: double
+        paymentInstructions:
+          type: string
+          description: Custom payment instructions
+
+    OverdueAlertRequest:
+      type: object
+      required:
+        - accountId
+        - last4Digits
+        - dueDate
+        - detectionDate
+        - accountStatus
+        - overdueAmount
+        - consequences
+        - deliveryChannel
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+        dueDate:
+          type: string
+          format: date
+        detectionDate:
+          type: string
+          format: date
+        accountStatus:
+          type: string
+          enum: [overdue, past_due]
+        overdueAmount:
+          type: number
+          format: double
+        consequences:
+          type: string
+          example: "late fees, interest charges"
+        deliveryChannel:
+          type: array
+          items:
+            type: string
+            enum: [email, sms, postal]
+
+    CollectionNoticeRequest:
+      type: object
+      required:
+        - accountId
+        - last4Digits
+        - overdueAmount
+        - daysOverdue
+        - delinquencyStatus
+        - thresholdDays
+        - totalAmount
+        - additionalCharges
+        - paymentDeadline
+        - escalationConsequences
+        - deliveryChannel
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+        overdueAmount:
+          type: number
+          format: double
+        daysOverdue:
+          type: integer
+          minimum: 1
+        delinquencyStatus:
+          type: string
+          enum: [significantly_delinquent, severely_delinquent, critically_delinquent]
+        thresholdDays:
+          type: integer
+        totalAmount:
+          type: number
+          format: double
+        additionalCharges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charge'
+        paymentDeadline:
+          type: string
+          format: date
+        escalationConsequences:
+          type: string
+        deliveryChannel:
+          type: array
+          items:
+            type: string
+            enum: [email, sms, postal]
+
+    Charge:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "late_fee"
+        amount:
+          type: number
+          format: double
+        description:
+          type: string
+
+    PaymentPlanProposalRequest:
+      type: object
+      required:
+        - accountId
+        - last4Digits
+        - overdueAmount
+        - eligibilityCriteria
+        - planDuration
+        - installmentAmount
+        - reducedInterestRate
+        - totalRepayment
+        - deliveryChannel
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+        overdueAmount:
+          type: number
+          format: double
+        eligibilityCriteria:
+          type: string
+          enum: [hardship_request, unemployment, medical_emergency, reduced_income]
+        planDuration:
+          type: integer
+          description: Duration in months
+          minimum: 1
+          maximum: 60
+        installmentAmount:
+          type: number
+          format: double
+        reducedInterestRate:
+          type: number
+          format: double
+          description: Interest rate as percentage
+        totalRepayment:
+          type: number
+          format: double
+        termsAndConditions:
+          type: string
+        deliveryChannel:
+          type: array
+          items:
+            type: string
+            enum: [email, postal]
+
+    PaymentPlanProposalResponse:
+      type: object
+      properties:
+        planId:
+          type: string
+          example: "PLAN-123456"
+        accountId:
+          type: string
+        proposalStatus:
+          type: string
+          enum: [pending, accepted, rejected, expired]
+        repaymentSchedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledPayment'
+        createdAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        notificationId:
+          type: string
+
+    ScheduledPayment:
+      type: object
+      properties:
+        paymentNumber:
+          type: integer
+        dueDate:
+          type: string
+          format: date
+        amount:
+          type: number
+          format: double
+        status:
+          type: string
+          enum: [scheduled, completed, missed, pending]
+
+    PaymentPlanAcceptanceResponse:
+      type: object
+      properties:
+        planId:
+          type: string
+        accountId:
+          type: string
+        acceptanceDate:
+          type: string
+          format: date-time
+        firstPaymentDate:
+          type: string
+          format: date
+        scheduledPayments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledPayment'
+        accountStatus:
+          type: string
+        lifecycleAction:
+          type: string
+          enum: [paused, modified, suspended]
+
+    PaymentPlanDefaultRequest:
+      type: object
+      required:
+        - planId
+        - missedPayments
+        - defaultScenario
+      properties:
+        planId:
+          type: string
+        missedPayments:
+          type: integer
+          minimum: 1
+        defaultScenario:
+          type: string
+          enum: [single_missed, double_missed, multiple_missed, first_time_miss]
+        remainingInstallments:
+          type: integer
+
+    PaymentPlanDefaultResponse:
+      type: object
+      properties:
+        planId:
+          type: string
+        planAction:
+          type: string
+          enum: [active, warning, defaulted, terminated]
+        lifecycleAction:
+          type: string
+          enum: [on_hold, monitoring, reactivated, full_resume]
+        newStatus:
+          type: string
+        warningNotificationId:
+          type: string
+        actionTaken:
+          type: string
+          format: date-time
+
+    AgencyReferralRequest:
+      type: object
+      required:
+        - accountId
+        - last4Digits
+        - overdueAmount
+        - daysOverdue
+        - lastNotificationDate
+        - referralThreshold
+        - agencyName
+        - agencyContact
+        - newStatus
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+        overdueAmount:
+          type: number
+          format: double
+        daysOverdue:
+          type: integer
+        lastNotificationDate:
+          type: string
+          format: date
+        referralThreshold:
+          type: integer
+        agencyName:
+          type: string
+        agencyContact:
+          type: string
+        newStatus:
+          type: string
+          enum: [agency_referred, third_party_collection, external_collection, agency_active]
+
+    AgencyReferralResponse:
+      type: object
+      properties:
+        referralId:
+          type: string
+          example: "REF-123456"
+        accountId:
+          type: string
+        agencyName:
+          type: string
+        dataPackageId:
+          type: string
+        referralDate:
+          type: string
+          format: date-time
+        notificationSent:
+          type: boolean
+        notificationId:
+          type: string
+        accountStatusUpdated:
+          type: boolean
+        escalationLogId:
+          type: string
+
+    AgencyDataPackage:
+      type: object
+      properties:
+        dataPackageId:
+          type: string
+        referralId:
+          type: string
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          description: Only last 4 digits included (full card number excluded)
+        overdueAmount:
+          type: number
+          format: double
+        accountHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountHistoryEntry'
+        previousNotifications:
+          type: array
+          items:
+            type: object
+            properties:
+              notificationType:
+                type: string
+              sentDate:
+                type: string
+                format: date-time
+              deliveryStatus:
+                type: string
+        cardholderContact:
+          $ref: '#/components/schemas/ContactInformation'
+        generatedAt:
+          type: string
+          format: date-time
+
+    AccountHistoryEntry:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        event:
+          type: string
+        amount:
+          type: number
+          format: double
+        notes:
+          type: string
+
+    LegalActionRequest:
+      type: object
+      required:
+        - accountId
+        - last4Digits
+        - delinquentAmount
+        - daysOverdue
+        - legalCriteria
+        - legalThreshold
+        - totalOwed
+        - attemptCount
+        - legalDeadline
+        - approvals
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          pattern: '^\d{4}$'
+        delinquentAmount:
+          type: number
+          format: double
+        daysOverdue:
+          type: integer
+        legalCriteria:
+          type: string
+          enum: [amount_exceeds_threshold, no_response_to_agency, fraudulent_intent_suspected, repeated_payment_defaults]
+        legalThreshold:
+          type: integer
+        totalOwed:
+          type: number
+          format: double
+        attemptCount:
+          type: integer
+        legalDeadline:
+          type: string
+          format: date
+        approvals:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalApproval'
+
+    LegalApproval:
+      type: object
+      properties:
+        approver:
+          type: string
+        role:
+          type: string
+        approvalDate:
+          type: string
+          format: date-time
+        comments:
+          type: string
+
+    LegalActionResponse:
+      type: object
+      properties:
+        legalActionId:
+          type: string
+          example: "LEGAL-123456"
+        accountId:
+          type: string
+        initiatedDate:
+          type: string
+          format: date-time
+        documentsGenerated:
+          type: array
+          items:
+            type: string
+        notificationSent:
+          type: boolean
+        notificationId:
+          type: string
+        auditTrailId:
+          type: string
+        status:
+          type: string
+          enum: [initiated, pending_response, escalated, resolved]
+
+    LegalDocument:
+      type: object
+      properties:
+        documentId:
+          type: string
+        documentType:
+          type: string
+          enum: [complaint, affidavit, judgment, notice]
+        generatedDate:
+          type: string
+          format: date-time
+        last4Digits:
+          type: string
+          description: Document shows only last 4 digits
+        documentUrl:
+          type: string
+          format: uri
+        metadata:
+          type: object
+
+    NotificationResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+          example: "NOTIF-123456"
+        accountId:
+          type: string
+        notificationType:
+          type: string
+        status:
+          type: string
+          enum: [created, queued, sending, sent, delivered, failed]
+        deliveryChannels:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        scheduledFor:
+          type: string
+          format: date-time
+        securityValidation:
+          type: object
+          properties:
+            maskingVerified:
+              type: boolean
+            fullNumberExposed:
+              type: boolean
+            complianceChecked:
+              type: boolean
+
+    NotificationDetails:
+      allOf:
+        - $ref: '#/components/schemas/NotificationResponse'
+        - type: object
+          properties:
+            content:
+              type: object
+              properties:
+                subject:
+                  type: string
+                body:
+                  type: string
+                attachments:
+                  type: array
+                  items:
+                    type: string
+            deliveryAttempts:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeliveryAttempt'
+            complianceInfo:
+              $ref: '#/components/schemas/ComplianceInfo'
+
+    DeliveryAttempt:
+      type: object
+      properties:
+        attemptNumber:
+          type: integer
+        channel:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [success, failed, pending]
+        failureReason:
+          type: string
+
+    DeliveryStatus:
+      type: object
+      properties:
+        notificationId:
+          type: string
+        overallStatus:
+          type: string
+          enum: [pending, partially_delivered, fully_delivered, failed]
+        channelStatuses:
+          type: array
+          items:
+            type: object
+            properties:
+              channel:
+                type: string
+              status:
+                type: string
+              deliveredAt:
+                type: string
+                format: date-time
+              failureReason:
+                type: string
+        lastUpdated:
+          type: string
+          format: date-time
+
+    NotificationList:
+      type: object
+      properties:
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+        totalItems:
+          type: integer
+
+    BatchNotificationRequest:
+      type: object
+      required:
+        - accountIds
+        - notificationType
+      properties:
+        accountIds:
+          type: array
+          items:
+            type: string
+          maxItems: 100000
+        notificationType:
+          type: string
+          enum: [payment_reminder, overdue_alert, collection_notice, mixed_notifications]
+        scheduledTime:
+          type: string
+          format: date-time
+          description: Optional scheduled processing time
+        priority:
+          type: string
+          enum: [low, normal, high]
+          default: normal
+
+    BatchProcessingResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+          example: "BATCH-123456"
+        status:
+          type: string
+          enum: [accepted, processing, completed, failed]
+        totalAccounts:
+          type: integer
+        estimatedCompletionTime:
+          type: string
+          format: date-time
+        statusUrl:
+          type: string
+          format: uri
+          description: URL to check batch processing status
+
+    MaskingValidationResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+        validationPassed:
+          type: boolean
+        last4DigitsOnly:
+          type: boolean
+          description: Confirms only last 4 digits visible
+        fullNumberExposed:
+          type: boolean
+          description: Should always be false
+        validationDetails:
+          type: object
+          properties:
+            maskingFormat:
+              type: string
+            presentationLayer:
+              type: string
+            databaseEncryption:
+              type: string
+            logSecurity:
+              type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    EncryptionStatus:
+      type: object
+      properties:
+        algorithm:
+          type: string
+          example: "AES-256-GCM"
+        tlsVersion:
+          type: string
+          example: "TLS 1.3"
+        keyRotationPolicy:
+          type: string
+        lastKeyRotation:
+          type: string
+          format: date-time
+        nextKeyRotation:
+          type: string
+          format: date-time
+        pciDssCompliance:
+          type: string
+          enum: [Level 1, Level 2, Level 3, Level 4]
+        encryptionAtRest:
+          type: boolean
+        encryptionInTransit:
+          type: boolean
+
+    AuditLogList:
+      type: object
+      properties:
+        logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogEntry'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    AuditLogEntry:
+      type: object
+      properties:
+        logId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+          description: Only last 4 digits in logs
+        lifecycleStage:
+          type: string
+        collectionActivity:
+          type: string
+        actor:
+          type: string
+          description: User or system that performed action
+        action:
+          type: string
+        outcome:
+          type: string
+        severity:
+          type: string
+          enum: [INFO, WARNING, CRITICAL]
+        regulatoryRequirement:
+          type: string
+          enum: [FDCPA, CFPB, TCPA, State_Law]
+        retentionPeriod:
+          type: integer
+          description: Years to retain log
+        tamperProof:
+          type: boolean
+        details:
+          type: object
+
+    ComplianceCheckRequest:
+      type: object
+      required:
+        - notificationType
+        - timeZone
+        - currentTime
+      properties:
+        notificationId:
+          type: string
+        notificationType:
+          type: string
+        requiredDisclosure:
+          type: string
+        timeZone:
+          type: string
+        currentTime:
+          type: string
+          format: time
+        maxFrequency:
+          type: integer
+        frequencyPeriod:
+          type: string
+          enum: [day, week, month]
+
+    ComplianceCheckResponse:
+      type: object
+      properties:
+        compliant:
+          type: boolean
+        disclosureIncluded:
+          type: boolean
+        timeRestrictionsMet:
+          type: boolean
+        frequencyLimitsRespected:
+          type: boolean
+        allowedTimeRange:
+          type: string
+        action:
+          type: string
+          enum: [send, postpone, block]
+        postponeUntil:
+          type: string
+          format: date-time
+        violations:
+          type: array
+          items:
+            type: string
+        complianceHours:
+          type: integer
+          description: Hours to comply with cease communication
+
+    ComplianceInfo:
+      type: object
+      properties:
+        requiredDisclosures:
+          type: array
+          items:
+            type: string
+        optOutMechanism:
+          type: boolean
+        miniMirandaWarning:
+          type: boolean
+        disputeRights:
+          type: boolean
+        regulatoryCompliance:
+          type: array
+          items:
+            type: string
+
+    LifecycleProgressionRequest:
+      type: object
+      required:
+        - accountId
+        - dueDate
+        - currentDate
+      properties:
+        accountId:
+          type: string
+        last4Digits:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        currentDate:
+          type: string
+          format: date
+        reminderDays:
+          type: integer
+        overdueDays:
+          type: integer
+        collectionDays:
+          type: integer
+
+    LifecycleProgressionResponse:
+      type: object
+      properties:
+        accountId:
+          type: string
+        previousStage:
+          type: string
+        currentStage:
+          type: string
+          enum: [reminder, overdue, collection, agency_referral, legal_action, payment_plan]
+        expectedNotification:
+          type: string
+        notificationId:
+          type: string
+        accountStatus:
+          type: string
+        transitionTimestamp:
+          type: string
+          format: date-time
+        transitionLogged:
+          type: boolean
+
+    NotificationPreferences:
+      type: object
+      properties:
+        accountId:
+          type: string
+        preferences:
+          type: string
+          enum: [email_only, sms_only, postal_only, email_and_sms, all_channels]
+        availableChannels:
+          type: array
+          items:
+            type: string
+            enum: [email, sms, postal]
+        primaryChannel:
+          type: string
+        fallbackChannel:
+          type: string
+        accessibilityPreference:
+          type: string
+          enum: [standard, screen_reader, large_print, high_contrast, braille]
+        optedOut:
+          type: boolean
+        optOutDate:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    StatusUpdateResponse:
+      type: object
+      properties:
+        accountId:
+          type: string
+        previousStatus:
+          type: string
+        newStatus:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        reason:
+          type: string
+
+    PerformanceMetrics:
+      type: object
+      properties:
+        metricType:
+          type: string
+        timeRange:
+          type: string
+        measurements:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              value:
+                type: number
+              unit:
+                type: string
+        summary:
+          type: object
+          properties:
+            average:
+              type: number
+            minimum:
+              type: number
+            maximum:
+              type: number
+            throughput:
+              type: number
+              description: Notifications per minute
+            errorRate:
+              type: number
+              description: Percentage
+            cpuUtilization:
+              type: number
+              description: Percentage
+            memoryUsage:
+              type: number
+              description: Percentage
+
+    ValidationError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "VALIDATION_ERROR"
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+              value:
+                type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        traceId:
+          type: string
