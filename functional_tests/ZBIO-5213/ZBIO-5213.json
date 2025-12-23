@@ -42,6 +42,36 @@
     },
     {
       "type": "functional",
+      "title": "[State Transition] 'In Collections' Account Receives 'Payment Plan Proposal'",
+      "description": "Verify that a delinquent account is correctly offered a payment plan and the corresponding notification is sent.",
+      "testId": "TC-ST-005",
+      "testDescription": "This test validates the system's ability to identify eligible candidates for a payment plan, generate a proposal, and communicate it to the customer. This is a de-escalation path within the collections process.",
+      "prerequisites": "1. An account is in the 'In Collections' state.\n2. The account meets internal criteria for a payment plan offer (e.g., delinquency age between 30-60 days, no prior broken plans).\n3. The customer is opted-in for notifications.",
+      "stepsToPerform": "1. Set up an account with PAN '...5551' that is 45 days past due and has a status of 'In Collections'.\n2. Ensure the account balance is $1800.\n3. Execute the daily collections strategy job.\n4. Verify the system logic identifies the account as eligible for a payment plan.\n5. Query the notification service logs for a 'Payment Plan Proposal' sent to the customer.\n6. Retrieve the sent email.\n7. Verify the email subject line clearly states it's a payment plan offer and includes the masked PAN '...5551'.\n8. Verify the email body details the total amount owed ($1800) and presents a clear repayment schedule (e.g., 6 monthly payments of $310).\n9. Verify the email includes instructions on how to accept the plan.\n10. Query the account's sub-status in the core system and confirm it has been updated to 'In Collections - Plan Offered'.",
+      "expectedResult": "A 'Payment Plan Proposal' notification is sent with accurate financial details and a clear call to action. The account's status is updated to reflect that a plan has been offered."
+    },
+    {
+      "type": "functional",
+      "title": "[State Transition] 'In Collections' Account Escalated to 'Collection Agency'",
+      "description": "Verify that an account that remains unpaid after a certain period is correctly assigned to an external collection agency.",
+      "testId": "TC-ST-006",
+      "testDescription": "This test validates the final internal escalation step before potential legal action. It ensures the account status is updated and a notification of agency involvement is sent to the customer.",
+      "prerequisites": "1. An account is in the 'In Collections' state.\n2. The account has been delinquent for a specified period (e.g., 90 days).\n3. The customer has not accepted any payment plans or made significant payments.",
+      "stepsToPerform": "1. Set up an account with PAN '...5552' that is 90 days past due and has a status of 'In Collections'.\n2. Execute the daily collections strategy job.\n3. Verify the system logic flags the account for transfer to a collection agency.\n4. Query the notification service logs for a 'Notice of Collection Agency Assignment' sent to the customer.\n5. Retrieve the sent email.\n6. Verify the email informs the customer that their debt has been assigned to a specific agency and provides the agency's contact information.\n7. Verify the email includes the masked PAN '...5552' for reference.\n8. Query the account's status in the core system and confirm it has transitioned to 'Assigned to Collection Agency'.\n9. Verify that an outbound data file/API call is generated for the collection agency containing the necessary (and securely handled) account details, including the masked PAN.",
+      "expectedResult": "The account status is updated to 'Assigned to Collection Agency', a compliant notification is sent to the customer, and the necessary data is prepared for the external agency."
+    },
+    {
+      "type": "functional",
+      "title": "[State Transition] Account Escalated to 'Legal Action'",
+      "description": "Verify that in extreme cases, an account is correctly flagged for legal action and the appropriate formal notification is generated.",
+      "testId": "TC-ST-007",
+      "testDescription": "This test validates the system's capability to handle the most severe delinquency cases, ensuring the account is correctly flagged and documented for legal proceedings.",
+      "prerequisites": "1. An account is with a collection agency.\n2. The delinquency has aged beyond a certain threshold (e.g., 180 days) with no resolution.\n3. The balance exceeds a minimum amount required for legal action.",
+      "stepsToPerform": "1. Set up an account with PAN '...5553' that is 180 days past due and has a status of 'Assigned to Collection Agency'.\n2. Ensure the balance is significant (e.g., > $5000).\n3. Execute the monthly/quarterly legal review batch job.\n4. Verify the system logic identifies the account as a candidate for legal action.\n5. Query the notification service logs for a 'Notice of Intent for Legal Action' sent to the customer (if required by policy).\n6. Retrieve the sent formal letter/email.\n7. Verify the communication uses formal legal language, details the outstanding debt, and mentions the last 4 digits of the card '...5553'.\n8. Query the account's status in the core system and confirm it has transitioned to 'Legal Action Pending' or a similar state.\n9. Verify that the account is added to a report or queue for the bank's legal department.",
+      "expectedResult": "The account status is updated to 'Legal Action Pending', a formal notification is sent (if applicable), and the account is flagged for review by the legal team."
+    },
+    {
+      "type": "functional",
       "title": "[Decision Table] Notification Suppression for Customer Opt-Out",
       "description": "Verify that no notifications are sent for an account that meets all delinquency criteria but the customer has opted out of communications.",
       "testId": "TC-DT-001",
