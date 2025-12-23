@@ -1,0 +1,14 @@
+Account correctly transitions through delinquency states and triggers notifications
+System prevents invalid direct state transition from 'Current' to 'In Collections'
+Notifications are suppressed based on specific account conditions
+'Due Reminder' is sent on the first day of the window but not before
+'Overdue Alert' is triggered immediately after the due date passes midnight
+'Collection Notification' is triggered on the exact 30th day of delinquency
+PII (PAN) is correctly masked in all notifications and channels
+Financial data in 'Collection Notification' matches the core banking ledger
+'Overdue Balance Alert' is suppressed if a full payment is posted moments before the job runs
+System gracefully handles notification service API unavailability
+System handles invalid customer contact information without halting the batch
+A single account progresses through the full delinquency lifecycle
+Collection lifecycle is interrupted and halted by a full payment
+Collection lifecycle is suppressed by an active dispute flag

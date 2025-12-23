@@ -1,0 +1,214 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "[State Transition] Valid Transition from 'Current' to 'Payment Due Soon'",
+      "description": "Verify that an account with an upcoming due date correctly transitions to the 'Payment Due Soon' state and triggers the 'Credit Card Due Reminder' notification.",
+      "testId": "TC-ST-001",
+      "testDescription": "This test validates the initial state transition in the collection lifecycle. When the system date enters the predefined reminder window (e.g., 3 days before the due date), the account status should change, and a compliant reminder notification should be dispatched.",
+      "prerequisites": "1. A credit card account exists in the mock core banking system with a positive balance.\n2. The account status is 'Current'.\n3. The payment due date is set to a future date (e.g., 3 days from the current system date).\n4. The customer has opted-in for all notification types (Email, SMS).\n5. The notification service API is available and responsive.",
+      "stepsToPerform": "1. Set up a customer account in the mock core banking system with PAN '...1234', a balance of $500.00, and a payment due date of 'YYYY-MM-DD+3'.\n2. Confirm the initial account status is 'Current' via API or database query.\n3. Advance the system's internal clock by 1 day, so the current date is 2 days before the due date.\n4. Execute the daily notification batch job.\n5. Query the notification service logs for a 'Credit Card Due Reminder' sent to the customer.\n6. Intercept or retrieve the sent email notification.\n7. Verify the email subject line contains a reminder message and the masked card number '...1234'.\n8. Verify the email body includes the correct due date, the minimum amount due, and the masked card number '...1234'.\n9. Verify the full PAN is not present anywhere in the email's raw source or headers.\n10. Intercept or retrieve the sent SMS notification.\n11. Verify the SMS text contains a concise reminder and the masked card number '...1234'.\n12. Query the account's status in the core banking system and confirm it has transitioned to 'Payment Due Soon'.",
+      "expectedResult": "A 'Credit Card Due Reminder' is successfully sent via both email and SMS. The notification content is accurate and contains only the last 4 digits of the card number. The account status in the core system is updated to 'Payment Due Soon'."
+    },
+    {
+      "type": "functional",
+      "title": "[State Transition] Valid Transition from 'Payment Due Soon' to 'Overdue'",
+      "description": "Verify that an account in the 'Payment Due Soon' state, for which no payment is received by the due date, correctly transitions to 'Overdue' and triggers the 'Overdue Balance Alert'.",
+      "testId": "TC-ST-002",
+      "testDescription": "This test ensures the system correctly identifies a missed payment, updates the account status, and sends the initial overdue notification immediately after the due date passes.",
+      "prerequisites": "1. An account is in the 'Payment Due Soon' state with a positive balance.\n2. The payment due date is set to the current system date.\n3. No payment has been posted to the account.\n4. The customer is opted-in for notifications.",
+      "stepsToPerform": "1. Set up an account in the mock core banking system with PAN '...5678', a balance of $350.00, and a payment due date of 'YYYY-MM-DD'.\n2. Ensure the account status is 'Payment Due Soon'.\n3. Advance the system's internal clock by 1 day, making the current date the day after the due date.\n4. Execute the daily notification and account status update batch job.\n5. Query the notification service logs for an 'Overdue Balance Alert' sent to the customer.\n6. Retrieve the sent email alert.\n7. Verify the email subject line clearly indicates an overdue payment and includes the masked card number '...5678'.\n8. Verify the email body states the balance is overdue, specifies the overdue amount, mentions potential consequences (e.g., late fees), and includes the masked card number '...5678'.\n9. Verify the full PAN is not present in the email payload.\n10. Retrieve the sent SMS alert and verify its content for accuracy and PII masking.\n11. Query the account's status in the core banking system and confirm it has transitioned to 'Overdue'.\n12. Verify that a late fee has been correctly assessed and added to the account balance, if applicable by business rules.",
+      "expectedResult": "An 'Overdue Balance Alert' is sent with accurate, compliant content. The account status is updated to 'Overdue', and any applicable late fees are posted to the account."
+    },
+    {
+      "type": "functional",
+      "title": "[State Transition] Valid Transition from 'Overdue' to 'Significantly Delinquent/In Collections'",
+      "description": "Verify that an 'Overdue' account correctly transitions to 'In Collections' after a specified period of delinquency (e.g., 30 days) and triggers the formal 'Collection Notification'.",
+      "testId": "TC-ST-003",
+      "testDescription": "This test validates the escalation step in the lifecycle. The system must correctly track the age of the debt, change the status at the correct threshold, and send a formal, legally compliant collection notice.",
+      "prerequisites": "1. An account is in the 'Overdue' state.\n2. The account has remained unpaid for the duration defined as 'significantly delinquent' (e.g., 30 days past due).\n3. The customer is opted-in for notifications.",
+      "stepsToPerform": "1. Set up an account in the mock core banking system with PAN '...9012', a balance of $1200.00, and a payment due date of 'YYYY-MM-DD-30'.\n2. Ensure the account status is 'Overdue'.\n3. Ensure additional charges (late fees, interest) have been posted over the last 30 days, bringing the total balance to $1255.50.\n4. Set the system's internal clock to the current date, which is 30 days past the due date.\n5. Execute the daily notification and account status update batch job.\n6. Query the notification service logs for a 'Collection Notification' sent to the customer.\n7. Retrieve the sent email notification.\n8. Verify the email has a formal tone and subject line appropriate for a collection notice, including the masked card number '...9012'.\n9. Verify the email body explicitly details the total amount owed ($1255.50).\n10. Verify the email body provides an itemized breakdown of the original balance, accrued interest, and late fees.\n11. Verify the email contains legally required disclosures for debt collection (e.g., FDCPA mini-Miranda warning).\n12. Query the account's status in the core banking system and confirm it has transitioned to 'Significantly Delinquent' or 'In Collections'.",
+      "expectedResult": "A formal 'Collection Notification' is sent. The notification accurately details the total amount owed, including an itemization of all charges. The account status is correctly updated to 'In Collections'."
+    },
+    {
+      "type": "functional",
+      "title": "[State Transition] Invalid Transition from 'Current' to 'In Collections'",
+      "description": "Verify that the system prevents an account from transitioning directly from 'Current' to 'In Collections', and that no collection notification is sent.",
+      "testId": "TC-ST-004",
+      "testDescription": "This negative test ensures the integrity of the state machine. An account must follow the prescribed path of delinquency and cannot skip intermediate states. This prevents erroneous and non-compliant collection activities.",
+      "prerequisites": "1. An account exists in the 'Current' state with a positive balance.\n2. The payment due date is in the future.",
+      "stepsToPerform": "1. Set up a customer account in the mock core banking system with PAN '...1122', a balance of $200.00, and a payment due date of 'YYYY-MM-DD+15'.\n2. Confirm the initial account status is 'Current'.\n3. Attempt to manually trigger the 'In Collections' status update for this account via an internal API or a direct database update (simulating a system bug).\n4. Observe the system's response. The API call should be rejected with an error message like 'Invalid state transition'.\n5. If a direct database update is performed, run the notification batch job.\n6. Query the notification service logs for the account associated with PAN '...1122'.\n7. Verify that no 'Collection Notification' was sent.\n8. Verify that no 'Overdue Balance Alert' was sent.\n9. Query the account's status in the core banking system.\n10. Confirm the status has either remained 'Current' or has been reverted by a system integrity check.",
+      "expectedResult": "The system rejects the invalid state transition. No collection-related notifications are sent for the account. The account's status remains 'Current'."
+    },
+    {
+      "type": "functional",
+      "title": "[Decision Table] Notification Suppression for Customer Opt-Out",
+      "description": "Verify that no notifications are sent for an account that meets all delinquency criteria but the customer has opted out of communications.",
+      "testId": "TC-DT-001",
+      "testDescription": "This test validates the 'Customer Notification Preferences' condition in the decision logic. It ensures the system respects customer choices and avoids sending unwanted communications, which is a key compliance requirement.",
+      "prerequisites": "1. An account exists that is 1 day past its due date (qualifies for 'Overdue Balance Alert').\n2. The customer's notification preference in the CRM/core system is set to 'Opt-Out' for all channels.",
+      "stepsToPerform": "1. Set up an account in the mock core banking system with PAN '...3344', a balance of $400.00, and a payment due date of 'YYYY-MM-DD-1'.\n2. In the customer profile, set the notification preference flags 'emailOptIn' and 'smsOptIn' to 'false'.\n3. Advance the system clock to be 1 day past the due date.\n4. Execute the daily notification and account status update batch job.\n5. Query the account's status in the core banking system.\n6. Verify the status has correctly transitioned to 'Overdue'.\n7. Query the notification service logs for any communication sent to the customer associated with PAN '...3344'.\n8. Confirm that no 'Overdue Balance Alert' email was sent.\n9. Confirm that no 'Overdue Balance Alert' SMS was sent.\n10. Check the application logs for an entry indicating that a notification was suppressed due to customer opt-out preference.",
+      "expectedResult": "The account status correctly updates to 'Overdue', but no notifications are sent to the customer. The system logs the suppression event internally."
+    },
+    {
+      "type": "functional",
+      "title": "[Decision Table] Notification Suppression for 'Bankrupt' Account Flag",
+      "description": "Verify that all collection-related notifications are suppressed for an account that is flagged as being in bankruptcy, regardless of its delinquency status.",
+      "testId": "TC-DT-002",
+      "testDescription": "This is a critical regulatory test case. Communicating with a debtor after a bankruptcy filing can violate federal law (the automatic stay). This test ensures the system's logic correctly prioritizes the 'Bankrupt' flag over all other conditions.",
+      "prerequisites": "1. An account is 30 days past its due date, qualifying for a 'Collection Notification'.\n2. The account has a 'Bankrupt' flag/status set in the core banking system.",
+      "stepsToPerform": "1. Set up an account in the mock core banking system with PAN '...5566', a balance of $2500.00, and a payment due date of 'YYYY-MM-DD-30'.\n2. Set a special account flag 'accountStatus' to 'BANKRUPTCY_FILED'.\n3. The customer's notification preference is 'Opt-In'.\n4. Set the system's internal clock to be 30 days past the due date.\n5. Execute the daily notification and account status update batch job.\n6. Query the account's status in the core banking system and verify it is now 'In Collections' (or a specific bankruptcy status).\n7. Query the notification service logs for the customer associated with PAN '...5566'.\n8. Verify that no 'Collection Notification' was sent.\n9. Verify that no other collection-related communications were sent.\n10. Check the application logs for an entry indicating that a notification was suppressed due to the account's bankruptcy status.",
+      "expectedResult": "No collection notifications of any kind are sent to the customer. The system correctly suppresses communication based on the 'Bankrupt' flag."
+    },
+    {
+      "type": "functional",
+      "title": "[Decision Table] Notification Suppression for Zero Balance Account",
+      "description": "Verify that no 'Overdue Balance Alert' is sent if an account is past its due date but has a zero balance.",
+      "testId": "TC-DT-003",
+      "testDescription": "This test validates that the 'Current Balance' is a key condition for sending notifications. Sending an overdue alert for a zero-balance account would be confusing and reflect poorly on the system's accuracy.",
+      "prerequisites": "1. An account exists with a payment due date in the past.\n2. The account's current balance is exactly $0.00.",
+      "stepsToPerform": "1. Set up an account in the mock core banking system with PAN '...7788' and a payment due date of 'YYYY-MM-DD-5'.\n2. Post transactions and payments such that the final, current balance is $0.00.\n3. The customer's notification preference is 'Opt-In'.\n4. The account has no special suppression flags.\n5. Set the system clock to be 5 days past the due date.\n6. Execute the daily notification batch job.\n7. Query the notification service logs for the customer associated with PAN '...7788'.\n8. Verify that no 'Overdue Balance Alert' was sent.\n9. Verify that no 'Collection Notification' was sent.\n10. Query the account status in the core system and confirm it is 'Current' or 'Paid', not 'Overdue'.",
+      "expectedResult": "No notifications are sent for the account. The system correctly identifies that there is no overdue balance to collect, despite the due date having passed."
+    },
+    {
+      "type": "functional",
+      "title": "[Boundary Value] 'Due Reminder' Trigger on First Day of Window",
+      "description": "Verify that the 'Credit Card Due Reminder' is sent exactly on the first day of the notification window (e.g., T-minus 3 days to due date).",
+      "testId": "TC-BVA-001",
+      "testDescription": "This test targets the precise time-based boundary for the reminder notification. It ensures the job triggers on the correct day and not a day earlier or later.",
+      "prerequisites": "1. An account exists with a positive balance and a due date set for 3 days in the future.\n2. Customer is opted-in for notifications.",
+      "stepsToPerform": "1. Set up an account with PAN '...1010' and a due date of 'YYYY-MM-DD+3'.\n2. Set the system's internal clock to 'YYYY-MM-DD' (exactly 3 days before the due date).\n3. Execute the notification batch job.\n4. Verify that a 'Credit Card Due Reminder' is successfully sent to the customer.\n5. Now, set up a second account with PAN '...2020' and a due date of 'YYYY-MM-DD+4'.\n6. Set the system's internal clock to 'YYYY-MM-DD' (4 days before the due date).\n7. Execute the notification batch job again.\n8. Query the notification logs for the customer associated with PAN '...2020'.\n9. Verify that NO 'Credit Card Due Reminder' was sent for this second account.\n10. This confirms the job only triggers for accounts exactly at the 3-day boundary.",
+      "expectedResult": "The reminder notification is sent only for the account that is exactly 3 days away from its due date. The account that is 4 days away does not receive a notification."
+    },
+    {
+      "type": "functional",
+      "title": "[Boundary Value] 'Overdue Alert' Trigger Immediately After Midnight",
+      "description": "Verify that the 'Overdue Balance Alert' is triggered when the system clock ticks over to midnight, making the account exactly 1 day overdue.",
+      "testId": "TC-BVA-002",
+      "testDescription": "This test targets the critical boundary between 'Due' and 'Overdue'. The test simulates the transition from the due date to the first day of being overdue to ensure the alert is timely.",
+      "prerequisites": "1. An account has a positive balance with a due date of 'today'.\n2. No payment has been received.",
+      "stepsToPerform": "1. Set up an account with PAN '...3030', a balance of $150, and a due date of 'YYYY-MM-DD'.\n2. Set the system's internal clock to 'YYYY-MM-DD' at 23:59:55.\n3. Execute the notification batch job. No 'Overdue' alert should be sent.\n4. Verify in the logs that no 'Overdue Balance Alert' was sent for this account.\n5. Advance the system's internal clock by 10 seconds to 'YYYY-MM-DD+1' at 00:00:05.\n6. Execute the notification batch job again.\n7. Query the notification service logs for the customer associated with PAN '...3030'.\n8. Verify that an 'Overdue Balance Alert' was successfully sent.\n9. Verify the content of the alert is accurate.\n10. Query the account status and confirm it has been updated to 'Overdue'.",
+      "expectedResult": "The 'Overdue Balance Alert' is not sent on the due date itself but is sent immediately after the date changes to the next day (1 day overdue)."
+    },
+    {
+      "type": "functional",
+      "title": "[Boundary Value] 'Collection Notification' Trigger on Exact Delinquency Day",
+      "description": "Verify the 'Collection Notification' is sent on the exact day the account meets the 'significantly delinquent' threshold (e.g., 30 days past due) and not the day before.",
+      "testId": "TC-BVA-003",
+      "testDescription": "This test validates the precise timing for escalating an account to collections, a legally sensitive action. The notification must not be sent prematurely.",
+      "prerequisites": "1. An account is in an 'Overdue' state.\n2. The due date was 29 days ago.",
+      "stepsToPerform": "1. Set up an account with PAN '...4040', a balance of $1800, and a due date of 'YYYY-MM-DD-29'.\n2. Ensure the account status is 'Overdue'.\n3. Set the system's internal clock to the current date, which is 29 days past the due date.\n4. Execute the notification batch job.\n5. Query the notification logs for the customer associated with PAN '...4040'.\n6. Verify that NO 'Collection Notification' was sent.\n7. Verify the account status is still 'Overdue' and not 'In Collections'.\n8. Now, advance the system's internal clock by 1 day, making it exactly 30 days past the due date.\n9. Execute the notification batch job again.\n10. Query the notification logs for the customer associated with PAN '...4040'.\n11. Verify that a formal 'Collection Notification' was successfully sent.\n12. Query the account status and confirm it has been updated to 'In Collections'.",
+      "expectedResult": "The 'Collection Notification' is suppressed on day 29 but is successfully triggered and sent on day 30, the exact boundary for significant delinquency."
+    },
+    {
+      "type": "functional",
+      "title": "[Security] PII Masking Verification in 'Due Reminder' Email",
+      "description": "Rigorously verify that only the last 4 digits of the PAN are present in the 'Credit Card Due Reminder' email and the full PAN is never exposed.",
+      "testId": "TC-SEC-001",
+      "testDescription": "This is a critical security test to ensure compliance with PCI-DSS and data privacy regulations. It inspects the final notification output and the underlying data payload for any leakage of the full Primary Account Number (PAN).",
+      "prerequisites": "1. An account is configured to receive a 'Due Reminder'.\n2. The full PAN of the card is known for verification (e.g., 4242-4242-4242-1234).",
+      "stepsToPerform": "1. Set up an account with the full PAN '4242424242421234' and a due date that will trigger a reminder.\n2. Mock the notification service API to capture the exact payload sent by the application.\n3. Execute the notification batch job.\n4. Inspect the captured JSON payload sent to the notification service.\n5. Verify that there is no field containing the full PAN '4242424242421234'.\n6. Verify there is a field, e.g., 'maskedAccountNumber', with the value '...1234' or '************1234'.\n7. Retrieve the generated email from the mock service.\n8. Inspect the email's subject line. Verify it contains '...1234' and not the full PAN.\n9. Inspect the email's body content. Verify it contains '...1234' and not the full PAN.\n10. Inspect the raw source of the email (including headers and HTML comments) to ensure the full PAN is not hidden anywhere.\n11. Verify no other sensitive PII (e.g., SSN, DOB) is present in the notification.",
+      "expectedResult": "The full PAN is absent from the API payload and all parts of the final email notification. Only the correctly masked last 4 digits are displayed."
+    },
+    {
+      "type": "functional",
+      "title": "[Security] PII Masking Verification in 'Overdue Alert' SMS",
+      "description": "Verify that only the last 4 digits of the PAN are present in the 'Overdue Balance Alert' SMS message.",
+      "testId": "TC-SEC-002",
+      "testDescription": "This test extends PII validation to the SMS channel, which often has different formatting and templating engines. It ensures security controls are consistently applied across all communication methods.",
+      "prerequisites": "1. An account is configured to receive an 'Overdue Alert' via SMS.\n2. The full PAN is known (e.g., 5555-5555-5555-5678).",
+      "stepsToPerform": "1. Set up an account with the full PAN '5555555555555678' and a past due date.\n2. Ensure the customer profile has a valid mobile number and is opted-in for SMS alerts.\n3. Mock the SMS gateway API to capture the outgoing message content.\n4. Execute the notification batch job.\n5. Inspect the captured API call to the SMS gateway.\n6. Verify the message body/content parameter contains text like '...account ending in 5678...' or similar.\n7. Verify the message body does not contain the full PAN '5555555555555678'.\n8. Verify no other sensitive PII is included in the SMS message.",
+      "expectedResult": "The SMS message content correctly includes the masked last 4 digits of the PAN and does not contain the full PAN."
+    },
+    {
+      "type": "functional",
+      "title": "[Security] PII Masking Verification in 'Collection Notification' Multi-Channel",
+      "description": "Verify PII masking in the formal 'Collection Notification' across all potential channels (Email, SMS, Push Notification).",
+      "testId": "TC-SEC-003",
+      "testDescription": "This test confirms that the most sensitive notification in the lifecycle maintains strict PII controls across every possible communication channel the system might use.",
+      "prerequisites": "1. A significantly delinquent account is configured to receive notifications on all channels.\n2. The full PAN is known (e.g., 3737-373737-34567).",
+      "stepsToPerform": "1. Set up an account with the full PAN '373737373734567' that is 30+ days past due.\n2. Ensure the customer profile is enabled for Email, SMS, and Push notifications.\n3. Mock the APIs for the Email service, SMS gateway, and Push Notification service.\n4. Execute the notification batch job.\n5. Capture and inspect the payload for the Email service. Verify only '...4567' is present.\n6. Capture and inspect the payload for the SMS gateway. Verify only '...4567' is present.\n7. Capture and inspect the payload for the Push Notification service. Verify only '...4567' is present.\n8. Verify the final rendered content for each channel (email body, SMS text, push message) displays only the masked number.\n9. Confirm no other sensitive PII is present in any of the notifications.",
+      "expectedResult": "The PAN is correctly masked to the last 4 digits in the API payloads and final content for all three communication channels (Email, SMS, Push)."
+    },
+    {
+      "type": "functional",
+      "title": "[Integration] Data Integrity of Financials in 'Collection Notification'",
+      "description": "Verify that the 'amount owed' and 'additional charges' in the 'Collection Notification' perfectly match the data in the core banking ledger at the moment of generation.",
+      "testId": "TC-INT-001",
+      "testDescription": "This test ensures the accuracy of financial data presented to the customer, which is critical for legal compliance and customer trust. It validates the system's ability to correctly fetch and calculate the total debt.",
+      "prerequisites": "1. A mock core banking system API is available.\n2. An account is 30 days past due.",
+      "stepsToPerform": "1. In the mock core banking system, set up an account with PAN '...8888'.\n2. Set the principal balance to $1500.00.\n3. Post a late fee charge of $35.00.\n4. Post an interest charge of $22.50.\n5. The total balance in the ledger is now $1557.50.\n6. Set the due date to be 30 days in the past.\n7. Execute the notification batch job.\n8. Retrieve the 'Collection Notification' email sent for account '...8888'.\n9. Verify the 'Total Amount Owed' displayed in the email is exactly '$1,557.50'.\n10. Verify the email contains an itemized list showing: Principal Balance: $1500.00, Late Fees: $35.00, Interest Charges: $22.50.\n11. The sum of the itemized amounts must equal the displayed total.",
+      "expectedResult": "The financial figures in the 'Collection Notification' (total, principal, fees, interest) are 100% accurate and match the state of the core banking ledger."
+    },
+    {
+      "type": "functional",
+      "title": "[Integration] Race Condition - Payment Posted Moments Before Overdue Alert Generation",
+      "description": "Verify that if a full payment is posted moments before the overdue notification job runs, the 'Overdue Balance Alert' is correctly suppressed.",
+      "testId": "TC-INT-002",
+      "testDescription": "This critical test simulates a race condition to ensure the system uses the absolute latest account information, preventing the erroneous sending of an overdue notice to a customer who has just paid.",
+      "prerequisites": "1. An account is 1 day past its due date with a positive balance.\n2. The notification batch job is scheduled to run at a specific time (e.g., 01:00:00 AM).",
+      "stepsToPerform": "1. In the mock core banking system, set up an account with PAN '...9999', a balance of $250.00, and a due date of 'yesterday'. The status is 'Overdue'.\n2. Schedule the notification batch job to run at 01:00:00 AM.\n3. Create a script or manual process to simulate a payment.\n4. At 00:59:59 AM, execute the script to post a payment of $250.00 to the account.\n5. The payment posting process should update the account balance to $0.00 and the status to 'Paid' or 'Current'.\n6. Allow the notification batch job to execute at 01:00:00 AM.\n7. The job's first step should be to query the core banking system for all overdue accounts.\n8. Verify that the query result does NOT include the account for PAN '...9999' because its status is no longer 'Overdue'.\n9. Query the notification service logs.\n10. Confirm that no 'Overdue Balance Alert' was sent for account '...9999'.",
+      "expectedResult": "The system correctly identifies the last-second payment, updates the account's status, and suppresses the 'Overdue Balance Alert'. No notification is sent."
+    },
+    {
+      "type": "functional",
+      "title": "[Exception] Notification Service API Unavailable",
+      "description": "Verify the system's behavior when the external notification service API is down or returns a server error (e.g., 503 Service Unavailable).",
+      "testId": "TC-EX-001",
+      "testDescription": "This test ensures the system is resilient to external service failures. It should handle the error gracefully, log it, and ideally, have a mechanism to retry sending the notification later.",
+      "prerequisites": "1. An account is eligible for any notification (e.g., 'Due Reminder').\n2. The notification service endpoint is mocked to return a 503 error.",
+      "stepsToPerform": "1. Set up an account with PAN '...6543' that is 3 days away from its due date.\n2. Configure the mock notification service to respond to all API calls with an HTTP 503 status code and an error message.\n3. Execute the notification batch job.\n4. The job should attempt to send a 'Due Reminder' for the account.\n5. Observe the application logs for the batch job.\n6. Verify that an error is logged, clearly stating that the notification service was unavailable and which notification failed (e.g., 'Failed to send Due Reminder for account ...6543, service returned 503').\n7. Query the application's internal notification queue or database table.\n8. Verify that the status of this specific notification is marked as 'FAILED' or 'PENDING_RETRY'.\n9. Verify that the batch job completes without crashing.\n10. Configure the mock service to return a 200 OK.\n11. If a retry mechanism exists, run the retry job and verify the notification is now sent successfully.",
+      "expectedResult": "The system logs the failure, marks the notification for retry without crashing the batch job, and does not lose the notification request."
+    },
+    {
+      "type": "functional",
+      "title": "[Exception] Invalid Customer Contact Information (Email)",
+      "description": "Verify the system's handling of a customer with an invalidly formatted email address.",
+      "testId": "TC-EX-002",
+      "testDescription": "This test checks how the system handles data quality issues. It should log the failure without preventing other, valid notifications from being processed.",
+      "prerequisites": "1. An account is eligible for an 'Overdue Balance Alert'.\n2. The customer's email address in the profile is invalid (e.g., 'johndoe@invalid-domain').",
+      "stepsToPerform": "1. Set up an account with PAN '...3210' that is 1 day past its due date.\n2. In the customer profile, set the email address to 'johndoe@invalid-domain'.\n3. Set up a second, valid account (PAN '...3211') that is also eligible for an overdue alert.\n4. Execute the notification batch job.\n5. The job will attempt to send an email to 'johndoe@invalid-domain'. The email service will likely reject this.\n6. Check the application logs.\n7. Verify an error is logged for account '...3210', indicating a delivery failure due to an invalid address.\n8. Query the notification status for account '...3210' and confirm it is marked as 'FAILED_DELIVERY'.\n9. Query the notification logs for the valid account '...3211'.\n10. Verify that the notification for the valid account was sent successfully, proving that the failure of one did not halt the entire batch.",
+      "expectedResult": "The system logs the delivery failure for the invalid email address, marks the notification appropriately, and continues processing the rest of the batch successfully."
+    },
+    {
+      "type": "functional",
+      "title": "[Exception] Account with a Credit (Negative) Balance",
+      "description": "Verify that no collection lifecycle notifications are sent for an account that has a credit balance, even if a 'due date' is present.",
+      "testId": "TC-EX-003",
+      "testDescription": "This negative test ensures the logic correctly checks for a positive, collectible balance before initiating any part of the collection workflow. Sending a reminder for a credit balance would be a significant logical error.",
+      "prerequisites": "1. An account has a credit balance (e.g., due to a refund or overpayment).\n2. A due date from a previous cycle exists in the system.",
+      "stepsToPerform": "1. Set up an account with PAN '...1111' and a due date of 'YYYY-MM-DD-1' (1 day past due).\n2. Post transactions that result in a final balance of -$50.00 (a credit balance).\n3. The customer is opted-in for all notifications.\n4. The account has no special suppression flags.\n5. Execute the daily notification batch job.\n6. Query the notification service logs for any communications sent to the customer of account '...1111'.\n7. Verify that no 'Overdue Balance Alert' was sent.\n8. Advance the system clock by 29 days.\n9. Execute the batch job again.\n10. Verify that no 'Collection Notification' was sent.\n11. The account status should remain 'Current' or a similar non-delinquent state.",
+      "expectedResult": "The system correctly identifies the credit balance and suppresses all reminder, overdue, and collection notifications for the account."
+    },
+    {
+      "type": "functional",
+      "title": "[End-to-End] Happy Path Full Delinquency Lifecycle",
+      "description": "Trace a single account through the entire lifecycle: from 'Due Reminder' to 'Overdue Alert' to 'Collection Notification' without any payments.",
+      "testId": "TC-E2E-001",
+      "testDescription": "This end-to-end scenario validates the complete, uninterrupted workflow, ensuring that state transitions and notifications are triggered correctly at each stage over an extended period.",
+      "prerequisites": "1. A new credit card account with a positive balance.\n2. Mock core banking system and notification services are fully available.",
+      "stepsToPerform": "1. Create a new account with PAN '...2222', a balance of $1000, and a payment due date 30 days from now ('YYYY-MM-DD+30').\n2. **Stage 1: Reminder.** Advance the system clock by 27 days. Execute the notification job. Verify the 'Credit Card Due Reminder' is sent with correct content and PII masking.\n3. Query the account status and verify it is 'Payment Due Soon'.\n4. **Stage 2: Overdue.** Advance the system clock by 4 more days (now 31 days from start). Do not post any payment. Execute the notification job.\n5. Verify the 'Overdue Balance Alert' is sent with correct content.\n6. Query the account status and verify it is 'Overdue'.\n7. Verify a late fee has been added to the balance in the core system.\n8. **Stage 3: Collections.** Advance the system clock by another 29 days (now 60 days from start). Do not post any payment.\n9. Verify additional interest charges have been added to the balance.\n10. Execute the notification job.\n11. Verify the formal 'Collection Notification' is sent, containing the fully updated balance and an itemized list of charges.\n12. Query the account status and verify it is 'In Collections'.",
+      "expectedResult": "The account correctly progresses through each state of the collection lifecycle, with the appropriate, accurate, and secure notification being sent at each defined time-based trigger."
+    },
+    {
+      "type": "functional",
+      "title": "[End-to-End] Lifecycle Interrupted by Full Payment",
+      "description": "Trace an account that becomes overdue but is then paid in full, verifying that the lifecycle is halted and no further collection notices are sent.",
+      "testId": "TC-E2E-002",
+      "testDescription": "This scenario validates the system's ability to correctly exit the collection workflow upon payment, preventing harassment of customers who have settled their debt.",
+      "prerequisites": "1. A new credit card account with a positive balance.",
+      "stepsToPerform": "1. Create a new account with PAN '...3333', a balance of $500, and a payment due date 30 days from now ('YYYY-MM-DD+30').\n2. **Stage 1: Overdue.** Advance the system clock by 31 days. Execute the notification job. Verify the 'Overdue Balance Alert' is sent and a late fee of $35 is added. The new balance is $535.\n3. Query the account status and verify it is 'Overdue'.\n4. **Stage 2: Payment.** Advance the system clock by 5 more days (now 36 days from start). Simulate a full payment of $535 being posted to the account.\n5. Query the core banking system. Verify the account balance is $0.00 and the status is updated to 'Paid' or 'Current'.\n6. **Stage 3: Verification of Suppression.** Advance the system clock by 24 more days (now 60 days from start, which would have been the collection threshold).\n7. Execute the notification job.\n8. Query the notification service logs for account '...3333'.\n9. Verify that NO 'Collection Notification' was sent.\n10. Verify no other collection-related communications were sent after the payment was posted.",
+      "expectedResult": "The collection lifecycle is successfully terminated upon receipt of full payment. The system does not send the 'Collection Notification' after the account balance becomes zero."
+    },
+    {
+      "type": "functional",
+      "title": "[End-to-End] Lifecycle Halted by 'Disputed' Account Flag",
+      "description": "Trace an account that becomes overdue, then has a dispute flag applied, verifying that the escalation to collections is suppressed while the dispute is active.",
+      "testId": "TC-E2E-003",
+      "testDescription": "This scenario validates compliance with regulations like the Fair Credit Billing Act (FCBA), which prohibits collection activities on disputed amounts. The test ensures account flags correctly interrupt the automated lifecycle.",
+      "prerequisites": "1. A new credit card account with a positive balance.",
+      "stepsToPerform": "1. Create a new account with PAN '...4444', a balance of $800, and a payment due date 30 days from now ('YYYY-MM-DD+30').\n2. **Stage 1: Overdue.** Advance the system clock by 31 days. Execute the notification job. Verify the 'Overdue Balance Alert' is sent.\n3. Query the account status and verify it is 'Overdue'.\n4. **Stage 2: Dispute.** Advance the system clock by 10 more days (now 41 days from start). Simulate a customer service agent applying a 'DISPUTE_ACTIVE' flag to the account in the core banking system.\n5. **Stage 3: Verification of Suppression.** Advance the system clock by 19 more days (now 60 days from start, the collection threshold).\n6. Execute the notification job.\n7. Query the notification service logs for account '...4444'.\n8. Verify that NO 'Collection Notification' was sent.\n9. Query the account status. It should remain 'Overdue' or move to a special 'Overdue - In Dispute' status, but NOT 'In Collections'.\n10. **Stage 4: (Optional) Resolution.** Remove the 'DISPUTE_ACTIVE' flag. Advance the clock one day. Rerun the job. Verify the 'Collection Notification' is now sent.",
+      "expectedResult": "The 'DISPUTE_ACTIVE' flag successfully suppresses the transition to 'In Collections' and prevents the 'Collection Notification' from being sent, in compliance with regulations."
+    }
+  ]
+}

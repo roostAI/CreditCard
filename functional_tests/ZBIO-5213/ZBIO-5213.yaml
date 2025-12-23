@@ -1,0 +1,297 @@
+openapi: 3.0.0
+info:
+  title: Credit Card Collection & Notification API
+  description: |
+    This API specification covers the services involved in the credit card collection lifecycle.
+    It includes a Core Banking API for managing account states and a Notification Service API for sending customer alerts.
+    This specification is derived from Gherkin scenarios detailing the business logic for state transitions, notifications, and exception handling.
+  version: 1.0.0
+
+servers:
+  - url: https://mock.banking.api/v1
+    description: Core Banking API
+  - url: https://mock.notification.api/v1
+    description: Notification Service API
+
+tags:
+  - name: Core Banking
+    description: Operations related to credit card accounts, including status updates and payments.
+  - name: Notifications
+    description: Operations for sending notifications to customers.
+
+paths:
+  /accounts/{accountId}:
+    summary: Path for a specific credit card account.
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: The unique identifier of the credit card account.
+        schema:
+          type: string
+          example: "acc-f4b3c2d1"
+    get:
+      tags:
+        - Core Banking
+      summary: Get Account Details
+      description: Retrieves the full details of a specific credit card account.
+      operationId: getAccountById
+      responses:
+        '200':
+          description: Successful retrieval of account details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: The specified account was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - Core Banking
+      summary: Update Account Status
+      description: |
+        Partially updates an account's properties. This is primarily used by internal systems
+        to transition an account through delinquency states (e.g., 'Current' to 'Overdue').
+        Direct state transitions that violate the business lifecycle rules will be rejected.
+      operationId: updateAccountStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/AccountStatus'
+                flags:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AccountFlags'
+              example:
+                status: "In Collections"
+      responses:
+        '200':
+          description: Account updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          description: Bad Request. The requested state transition is not allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "INVALID_STATE_TRANSITION"
+                message: "Invalid state transition from 'Current' to 'In Collections' is not allowed."
+        '404':
+          description: The specified account was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /accounts/{accountId}/payments:
+    summary: Path for account payments.
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: The unique identifier of the credit card account.
+        schema:
+          type: string
+          example: "acc-f4b3c2d1"
+    post:
+      tags:
+        - Core Banking
+      summary: Post a Payment
+      description: Posts a payment to a credit card account, which can affect its balance and status.
+      operationId: postPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+              properties:
+                amount:
+                  type: number
+                  format: double
+                  description: The payment amount.
+                  example: 535.00
+      responses:
+        '201':
+          description: Payment successfully posted.
+        '400':
+          description: Invalid payment details provided.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified account was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /notifications:
+    post:
+      tags:
+        - Notifications
+      summary: Send a Notification
+      description: |
+        Sends a notification to a customer via a specified channel (Email, SMS, etc.).
+        The payload must contain a masked PAN for security and all necessary data to render the message template.
+      operationId: sendNotification
+      requestBody:
+        required: true
+        description: Notification request payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      responses:
+        '202':
+          description: Notification request accepted for processing.
+        '400':
+          description: Bad Request. The payload is invalid or contains invalid contact information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "INVALID_RECIPIENT_ADDRESS"
+                message: "Email 'johndoe@invalid-domain' is not a valid email address."
+        '503':
+          description: Service Unavailable. The notification service is temporarily down.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: "SERVICE_UNAVAILABLE"
+                message: "The notification service is currently unavailable. Please try again later."
+
+components:
+  schemas:
+    AccountStatus:
+      type: string
+      description: The current status of the credit card account.
+      enum:
+        - Current
+        - Payment Due Soon
+        - Overdue
+        - In Collections
+        - Paid
+    AccountFlags:
+      type: string
+      description: Special flags applied to an account that may alter processing logic.
+      enum:
+        - BANKRUPTCY_FILED
+        - DISPUTE_ACTIVE
+        - OPT_OUT_ALL
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Unique identifier for the account.
+          example: "acc-f4b3c2d1"
+        maskedPan:
+          type: string
+          description: The masked Primary Account Number (PAN).
+          example: "************1234"
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+        balance:
+          type: number
+          format: double
+          description: The current account balance. Can be negative for a credit balance.
+          example: 1255.50
+        dueDate:
+          type: string
+          format: date
+          description: The next payment due date.
+          example: "2023-10-27"
+        flags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountFlags'
+          example: ["DISPUTE_ACTIVE"]
+    NotificationRequest:
+      type: object
+      required:
+        - customerId
+        - channel
+        - notificationType
+        - data
+      properties:
+        customerId:
+          type: string
+          description: The unique identifier for the customer.
+          example: "cust-a1b2c3d4"
+        channel:
+          type: string
+          enum: [Email, SMS, Push Notification]
+          example: "Email"
+        notificationType:
+          type: string
+          enum:
+            - Credit Card Due Reminder
+            - Overdue Balance Alert
+            - Collection Notification
+          example: "Collection Notification"
+        data:
+          type: object
+          description: A key-value map of data to be used in the notification template.
+          properties:
+            maskedPan:
+              type: string
+              description: The masked PAN. Full PAN should never be sent.
+              example: "************8888"
+            totalAmountOwed:
+              type: number
+              format: double
+              example: 1557.50
+            itemizedBreakdown:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemizedEntry'
+    ItemizedEntry:
+      type: object
+      properties:
+        entryType:
+          type: string
+          example: "Late Fees"
+        amount:
+          type: number
+          format: double
+          example: 35.00
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: An application-specific error code.
+        message:
+          type: string
+          description: A human-readable description of the error.
+  securitySchemes:
+    ApiToken:
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+
+security:
+  - ApiToken: []
