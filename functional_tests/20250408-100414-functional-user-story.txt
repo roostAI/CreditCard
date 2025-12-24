@@ -1,0 +1,58 @@
+Functional Test Cases:
+
+1. Credit Card Due Reminder:
+   - Input: Due date, last 4 digits of credit card number
+   - Expected Output: Automated notification sent to the cardholder with the due date and last 4 digits of the credit card number
+   - Edge Case: Test with due date being the current date
+
+2. Overdue Balance Alert:
+   - Input: Missed due date, overdue balance, last 4 digits of credit card number
+   - Expected Output: Alert sent to the cardholder with overdue balance, potential consequences, and last 4 digits of the credit card number
+   - Edge Case: Test with overdue balance being zero
+
+3. Collection Notification:
+   - Input: Delinquent account status, amount owed, additional charges, last 4 digits of credit card number
+   - Expected Output: Collection notification sent to the cardholder with amount owed, additional charges, and last 4 digits of the credit card number
+   - Edge Case: Test with amount owed being zero
+
+4. Payment Plan Proposal:
+   - Input: Inability to pay full overdue balance, last 4 digits of credit card number
+   - Expected Output: Payment plan proposal sent to the cardholder with repayment schedule, reduced interest rates or fees, and last 4 digits of the credit card number
+   - Edge Case: Test with full overdue balance being payable at once
+
+5. Collection Agency Involvement:
+   - Input: Failure to respond to notifications and reminders, last 4 digits of credit card number
+   - Expected Output: Collection agency involved with last 4 digits of the credit card number
+   - Edge Case: Test with cardholder responding to notifications and reminders
+
+6. Legal Action Initiation:
+   - Input: Extreme cases of non-payment or default, last 4 digits of credit card number
+   - Expected Output: Legal action initiated with legal documentation including last 4 digits of the credit card number
+   - Edge Case: Test with minor cases of non-payment or default
+
+Non-Functional Test Cases:
+
+1. Security:
+   - Input: Full credit card number
+   - Expected Output: Only the last 4 digits of the credit card number should be displayed
+   - Edge Case: Test with the first 4 digits of the credit card number
+
+2. Performance:
+   - Input: Large number of cardholders
+   - Expected Output: System should be able to handle and send notifications to a large number of cardholders without performance degradation
+   - Edge Case: Test with a single cardholder
+
+3. Usability:
+   - Input: Notification content
+   - Expected Output: Content of the notifications should be clear, concise, and easy to understand
+   - Edge Case: Test with complex and technical notification content
+
+4. Reliability:
+   - Input: Continuous operation
+   - Expected Output: System should be able to operate continuously without failure
+   - Edge Case: Test with intermittent operation
+
+5. Scalability:
+   - Input: Increasing number of cardholders
+   - Expected Output: System should be able to scale and handle an increasing number of cardholders
+   - Edge Case: Test with decreasing number of cardholders
