@@ -1,0 +1,17 @@
+TC-001 E2E Happy Path - Full Lifecycle with On-Time Payment
+TC-002 E2E Delinquency Path - Transition to Collections
+TC-003 E2E Recovery Path - Payment Made While Overdue
+TC-012, TC-013, TC-036 Verify account state based on payment amount relative to minimum due
+TC-005 Attempt an invalid state transition from 'Current' to 'In Collections'
+TC-006, TC-007, TC-026, TC-034 Verify full PAN is not exposed in system outputs
+TC-008, TC-010 Verify notifications are triggered on the precise boundary day
+TC-009 Verify payment processing at the midnight boundary
+TC-011, TC-041 Verify notification suppression by a last-minute payment
+TC-014 Bounced payment correctly reverts account to Overdue
+TC-016 Verify time zone differences are handled correctly
+TC-022, TC-023 Verify notification content for accuracy and completeness
+TC-028, TC-029, TC-035 Verify notifications respect customer communication preferences
+TC-030 Verify duplicate notification prevention
+TC-032 Verify no collection notifications for a zero balance account
+TC-037 Verify graceful failure for an account with no contact information
+TC-038 Verify account closure ceases the collection notification lifecycle
