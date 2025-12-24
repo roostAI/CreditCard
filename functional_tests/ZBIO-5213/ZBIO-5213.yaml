@@ -1,0 +1,460 @@
+openapi: 3.0.0
+info:
+  title: Credit Card Account Management API
+  description: API for managing the lifecycle of credit card accounts, including state transitions, payments, and notifications. Based on Gherkin scenarios for a banking system.
+  version: "1.0"
+servers:
+  - url: https://api.bank.com/v1
+    description: Production Server
+
+security:
+  - bearerAuth: []
+
+paths:
+  /accounts/{accountId}:
+    get:
+      tags:
+        - Accounts
+      summary: Get Account Details
+      description: Retrieves the current state and details of a specific credit card account.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique identifier of the credit card account.
+          schema:
+            type: string
+            example: "acc-happy-path"
+      responses:
+        '200':
+          description: Successful retrieval of account details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /accounts/{accountId}/state:
+    put:
+      tags:
+        - Accounts
+      summary: Update Account State
+      description: Manually updates the lifecycle state of a credit card account. This is a privileged operation and is subject to strict business logic rules.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique identifier of the credit card account.
+          schema:
+            type: string
+            example: "acc-invalid-trans"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStateUpdate'
+            examples:
+              invalid_transition:
+                summary: Attempting an invalid state transition
+                value:
+                  state: "In Collections"
+      responses:
+        '200':
+          description: Account state updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          description: Invalid state transition attempted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                error: "Invalid state transition"
+                details: "Cannot transition from 'Current' to 'In Collections'."
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /accounts/{accountId}/status:
+    put:
+      tags:
+        - Accounts
+      summary: Update Account Status
+      description: Updates the operational status of an account, for example, to close it.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique identifier of the credit card account.
+          schema:
+            type: string
+            example: "acc-closed"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatusUpdate'
+      responses:
+        '200':
+          description: Account status updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Account not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /accounts/{accountId}/payments:
+    post:
+      tags:
+        - Payments
+      summary: Simulate a Payment
+      description: Posts a payment against a credit card account.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique identifier of the credit card account.
+          schema:
+            type: string
+            example: "acc-recovery"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+            examples:
+              full_payment:
+                summary: Full balance payment
+                value:
+                  amount: 535.00
+                  currency: "USD"
+              partial_payment:
+                summary: Partial payment below minimum due
+                value:
+                  amount: 49.99
+                  currency: "USD"
+      responses:
+        '201':
+          description: Payment successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Invalid payment details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /accounts/{accountId}/payments/reversals:
+    post:
+      tags:
+        - Payments
+      summary: Simulate a Payment Reversal
+      description: Reverses a previously posted payment, which may impact the account's delinquency state.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique identifier of the credit card account.
+          schema:
+            type: string
+            example: "acc-reversal"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReversalRequest'
+      responses:
+        '200':
+          description: Payment reversal processed successfully, returning the updated account state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Original payment or account not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /accounts/{accountId}/statements:
+    post:
+      tags:
+        - Accounts
+      summary: Generate a New Statement
+      description: Generates a new billing statement for an account.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique identifier of the credit card account.
+          schema:
+            type: string
+            example: "acc-happy-path"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatementRequest'
+      responses:
+        '201':
+          description: Statement generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
+
+  /system/batch-jobs:
+    post:
+      tags:
+        - System
+      summary: Trigger a System Batch Job
+      description: Manually triggers a system-wide batch job, such as the notification or delinquency job. This is a testing/simulation endpoint.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchJobRequest'
+      responses:
+        '202':
+          description: Batch job accepted and is running in the background.
+
+  /system/clock:
+    put:
+      tags:
+        - System
+      summary: Control System Clock
+      description: Advances or sets the system clock to a specific time for testing time-sensitive scenarios.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemClockUpdate'
+      responses:
+        '200':
+          description: System clock updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  newDateTime:
+                    type: string
+                    format: date-time
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "A valid authentication token for privileged operations."
+
+  schemas:
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Unique identifier for the account.
+        state:
+          type: string
+          description: The current lifecycle state of the account.
+          enum: [Current, Payment Due, Overdue, In Collections, Closed]
+        status:
+          type: string
+          description: The operational status of the account.
+          enum: [Active, Closed]
+        balance:
+          $ref: '#/components/schemas/Money'
+        maskedPAN:
+          type: string
+          description: The masked Primary Account Number.
+          example: "************1234"
+        customerPreferences:
+          type: object
+          properties:
+            communicationChannel:
+              type: string
+              enum: [Email Only, SMS Only, Push Only, Do Not Contact]
+
+    Money:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 500.00
+        currency:
+          type: string
+          example: "USD"
+
+    AccountStateUpdate:
+      type: object
+      required:
+        - state
+      properties:
+        state:
+          type: string
+          enum: [Current, Payment Due, Overdue, In Collections, Closed]
+          example: "In Collections"
+
+    AccountStatusUpdate:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [Active, Closed]
+          example: "Closed"
+
+    PaymentRequest:
+      type: object
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          type: number
+          format: double
+          description: The amount of the payment.
+        currency:
+          type: string
+          description: The currency of the payment.
+          example: "USD"
+
+    Payment:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Money'
+        transactionTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [Completed, Reversed]
+
+    PaymentReversalRequest:
+      type: object
+      required:
+        - paymentId
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+          description: The ID of the payment to be reversed.
+        reason:
+          type: string
+          description: Reason for the reversal (e.g., bounced check).
+          example: "Insufficient Funds"
+
+    StatementRequest:
+      type: object
+      required:
+        - balance
+        - dueDate
+      properties:
+        balance:
+          type: number
+          format: double
+          example: 500.00
+        dueDate:
+          type: string
+          format: date
+          example: "2024-12-25"
+
+    Statement:
+      type: object
+      properties:
+        statementId:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+        balance:
+          $ref: '#/components/schemas/Money'
+        minimumDue:
+          $ref: '#/components/schemas/Money'
+        dueDate:
+          type: string
+          format: date
+        statementDate:
+          type: string
+          format: date
+
+    BatchJobRequest:
+      type: object
+      required:
+        - jobType
+      properties:
+        jobType:
+          type: string
+          enum: [notification, delinquency]
+          example: "notification"
+
+    SystemClockUpdate:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum: [advance, set]
+          description: Whether to advance the clock or set it to a specific time.
+        dateTime:
+          type: string
+          format: date-time
+          description: The specific date and time to set the clock to (used with action 'set').
+          example: "2024-11-25T23:59:00Z"
+        advanceValue:
+          type: integer
+          description: The number of units to advance the clock by (used with action 'advance').
+          example: 5
+        advanceUnit:
+          type: string
+          enum: [days, minutes]
+          description: The unit of time for the advance action.
+          example: "days"
+
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A high-level error message.
+        details:
+          type: string
+          description: More detailed information about the error.
