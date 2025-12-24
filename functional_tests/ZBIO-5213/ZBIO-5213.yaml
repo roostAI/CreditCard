@@ -1,0 +1,838 @@
+openapi: 3.0.3
+info:
+  title: Credit Card Collection Lifecycle Notification API
+  description: API for managing credit card collection lifecycle notifications with secure, compliant, and effective communication capabilities
+  version: 1.0.0
+  contact:
+    name: Financial Institution API Team
+    email: api-support@financialinstitution.com
+  license:
+    name: Proprietary
+    
+servers:
+  - url: https://api.financialinstitution.com/v1
+    description: Production server
+  - url: https://staging-api.financialinstitution.com/v1
+    description: Staging server
+
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+paths:
+  /collection/notifications/payment-reminders:
+    post:
+      tags:
+        - Payment Reminders
+      summary: Send payment due reminder notifications
+      description: Trigger automated payment reminder notifications for cardholders with upcoming due dates
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReminderRequest'
+            examples:
+              email_reminder:
+                summary: Email payment reminder
+                value:
+                  cardLastFour: "1234"
+                  daysBefore: 3
+                  contactPreference: "email"
+                  paymentAmount: 125.00
+                  dueDate: "2024-01-15"
+              sms_reminder:
+                summary: SMS payment reminder
+                value:
+                  cardLastFour: "5678"
+                  daysBefore: 5
+                  contactPreference: "SMS"
+                  paymentAmount: 75.50
+                  dueDate: "2024-01-17"
+      responses:
+        '200':
+          description: Payment reminder sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized access
+        '403':
+          description: Insufficient permissions
+        '429':
+          description: Rate limit exceeded
+        '500':
+          description: Internal server error
+
+  /collection/notifications/overdue-alerts:
+    post:
+      tags:
+        - Overdue Alerts
+      summary: Send overdue balance alert notifications
+      description: Send alerts for missed payments and overdue balances
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverdueAlertRequest'
+            examples:
+              overdue_alert:
+                summary: Standard overdue alert
+                value:
+                  cardLastFour: "1234"
+                  daysOverdue: 1
+                  balanceAmount: 325.75
+                  includeLateFeeInfo: true
+      responses:
+        '200':
+          description: Overdue alert sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /collection/notifications/formal-collection:
+    post:
+      tags:
+        - Collection Notices
+      summary: Generate formal collection notifications
+      description: Create formal collection notices for significantly delinquent accounts
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormalCollectionRequest'
+            examples:
+              formal_notice:
+                summary: Formal collection notice
+                value:
+                  cardLastFour: "1234"
+                  daysPastDue: 60
+                  totalAmount: 1250.00
+                  principal: 1000.00
+                  fees: 250.00
+                  region: "US"
+      responses:
+        '201':
+          description: Formal collection notice generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormalCollectionResponse'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /collection/notifications/batch:
+    post:
+      tags:
+        - Batch Processing
+      summary: Process batch collection notifications
+      description: Process multiple collection notifications in batch for high-load scenarios
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchNotificationRequest'
+      responses:
+        '202':
+          description: Batch processing accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchProcessingResponse'
+        '400':
+          description: Invalid batch request
+        '413':
+          description: Batch size too large
+        '500':
+          description: Internal server error
+
+  /collection/accounts/{accountId}/status:
+    get:
+      tags:
+        - Account Management
+      summary: Get account collection status
+      description: Retrieve current collection status and notification history for an account
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Account identifier
+        - name: includeHistory
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Include notification history in response
+      responses:
+        '200':
+          description: Account status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStatusResponse'
+        '404':
+          description: Account not found
+        '401':
+          description: Unauthorized access
+
+    put:
+      tags:
+        - Account Management
+      summary: Update account collection status
+      description: Update collection status based on customer actions like payments or payment plans
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatusUpdateRequest'
+      responses:
+        '200':
+          description: Account status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStatusResponse'
+        '400':
+          description: Invalid status update request
+        '404':
+          description: Account not found
+
+  /collection/notifications/{notificationId}/status:
+    get:
+      tags:
+        - Notification Tracking
+      summary: Get notification delivery status
+      description: Check the delivery status of a specific notification
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Notification status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationStatusResponse'
+        '404':
+          description: Notification not found
+
+  /collection/notifications/validate:
+    post:
+      tags:
+        - Validation
+      summary: Validate notification data
+      description: Validate contact information and account data before sending notifications
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        '200':
+          description: Validation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+        '400':
+          description: Invalid validation request
+
+  /collection/system/health:
+    get:
+      tags:
+        - System Health
+      summary: Get system health status
+      description: Check system health, performance metrics, and failover status
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: System health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealthResponse'
+        '503':
+          description: System unhealthy
+
+  /collection/compliance/audit:
+    get:
+      tags:
+        - Compliance
+      summary: Get compliance audit logs
+      description: Retrieve audit logs for regulatory compliance validation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: region
+          in: query
+          schema:
+            type: string
+            enum: [US, CA]
+      responses:
+        '200':
+          description: Audit logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogResponse'
+        '400':
+          description: Invalid date range or parameters
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    PaymentReminderRequest:
+      type: object
+      required:
+        - cardLastFour
+        - daysBefore
+        - contactPreference
+        - paymentAmount
+        - dueDate
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
+          example: "1234"
+        daysBefore:
+          type: integer
+          minimum: 1
+          maximum: 30
+          description: Days before due date
+          example: 3
+        contactPreference:
+          type: string
+          enum: [email, SMS, push_notification, postal_mail]
+          description: Preferred contact method
+        paymentAmount:
+          type: number
+          format: decimal
+          minimum: 0
+          description: Minimum payment amount
+          example: 125.00
+        dueDate:
+          type: string
+          format: date
+          description: Payment due date
+        language:
+          type: string
+          enum: [English, Spanish, French]
+          default: English
+          description: Notification language preference
+        region:
+          type: string
+          enum: [US, CA]
+          default: US
+          description: Regulatory region
+
+    OverdueAlertRequest:
+      type: object
+      required:
+        - cardLastFour
+        - daysOverdue
+        - balanceAmount
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+          example: "1234"
+        daysOverdue:
+          type: integer
+          minimum: 1
+          example: 1
+        balanceAmount:
+          type: number
+          format: decimal
+          minimum: 0
+          example: 325.75
+        includeLateFeeInfo:
+          type: boolean
+          default: true
+        includeConsequences:
+          type: boolean
+          default: true
+        contactChannels:
+          type: array
+          items:
+            type: string
+            enum: [email, SMS, push_notification, postal_mail]
+
+    FormalCollectionRequest:
+      type: object
+      required:
+        - cardLastFour
+        - daysPastDue
+        - totalAmount
+        - principal
+        - fees
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+        daysPastDue:
+          type: integer
+          minimum: 30
+        totalAmount:
+          type: number
+          format: decimal
+          minimum: 0
+        principal:
+          type: number
+          format: decimal
+          minimum: 0
+        fees:
+          type: number
+          format: decimal
+          minimum: 0
+        region:
+          type: string
+          enum: [US, CA]
+          default: US
+        language:
+          type: string
+          enum: [English, Spanish, French]
+          default: English
+
+    BatchNotificationRequest:
+      type: object
+      required:
+        - notifications
+      properties:
+        notifications:
+          type: array
+          maxItems: 10000
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/PaymentReminderRequest'
+              - $ref: '#/components/schemas/OverdueAlertRequest'
+              - $ref: '#/components/schemas/FormalCollectionRequest'
+        processingMode:
+          type: string
+          enum: [synchronous, asynchronous]
+          default: asynchronous
+
+    AccountStatusUpdateRequest:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum: [payment_made, payment_plan_arranged, customer_contact, dispute_filed]
+        amount:
+          type: number
+          format: decimal
+          minimum: 0
+        notes:
+          type: string
+          maxLength: 1000
+
+    ValidationRequest:
+      type: object
+      required:
+        - cardLastFour
+        - contactInfo
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+        contactInfo:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+              pattern: '^[\+]?[1-9][\d]{0,15}$'
+            address:
+              type: object
+              properties:
+                street:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zipCode:
+                  type: string
+                country:
+                  type: string
+
+    NotificationResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [sent, queued, failed]
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+          example: "****1234"
+        deliveryChannel:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        estimatedDelivery:
+          type: string
+          format: date-time
+
+    FormalCollectionResponse:
+      allOf:
+        - $ref: '#/components/schemas/NotificationResponse'
+        - type: object
+          properties:
+            noticeId:
+              type: string
+              description: Formal collection notice identifier
+            legalDisclosures:
+              type: array
+              items:
+                type: string
+            disputeRights:
+              type: object
+              properties:
+                disputePeriod:
+                  type: integer
+                  description: Days to dispute
+                contactInfo:
+                  type: string
+
+    BatchProcessingResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [accepted, processing, completed, failed]
+        totalNotifications:
+          type: integer
+        processedCount:
+          type: integer
+        failedCount:
+          type: integer
+        estimatedCompletion:
+          type: string
+          format: date-time
+
+    AccountStatusResponse:
+      type: object
+      properties:
+        accountId:
+          type: string
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+        currentStatus:
+          type: string
+          enum: [current, early_delinquent, late_delinquent, collection_ready, payment_plan]
+        daysPastDue:
+          type: integer
+        currentBalance:
+          type: number
+          format: decimal
+        lastPaymentDate:
+          type: string
+          format: date
+        notificationHistory:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              sentDate:
+                type: string
+                format: date-time
+              channel:
+                type: string
+              status:
+                type: string
+
+    NotificationStatusResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+          format: uuid
+        type:
+          type: string
+        status:
+          type: string
+          enum: [pending, sent, delivered, failed, bounced]
+        maskedCardNumber:
+          type: string
+          pattern: '^\*{4}[0-9]{4}$'
+        channel:
+          type: string
+        sentTimestamp:
+          type: string
+          format: date-time
+        deliveredTimestamp:
+          type: string
+          format: date-time
+        errorDetails:
+          type: string
+
+    ValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+        warnings:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+        backupChannels:
+          type: array
+          items:
+            type: string
+
+    SystemHealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          properties:
+            notificationService:
+              type: string
+              enum: [up, down, degraded]
+            databaseService:
+              type: string
+              enum: [up, down, degraded]
+            emailService:
+              type: string
+              enum: [up, down, degraded]
+            smsService:
+              type: string
+              enum: [up, down, degraded]
+        performance:
+          type: object
+          properties:
+            averageResponseTime:
+              type: number
+              format: decimal
+            throughputPerMinute:
+              type: integer
+            queueDepth:
+              type: integer
+        failoverStatus:
+          type: object
+          properties:
+            primaryActive:
+              type: boolean
+            backupActive:
+              type: boolean
+            lastFailoverTime:
+              type: string
+              format: date-time
+
+    AuditLogResponse:
+      type: object
+      properties:
+        logs:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              action:
+                type: string
+              userId:
+                type: string
+              maskedCardNumber:
+                type: string
+                pattern: '^\*{4}[0-9]{4}$'
+              details:
+                type: object
+              complianceFlags:
+                type: array
+                items:
+                  type: string
+        pagination:
+          type: object
+          properties:
+            currentPage:
+              type: integer
+            totalPages:
+              type: integer
+            totalRecords:
+              type: integer
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: string
+            timestamp:
+              type: string
+              format: date-time
+            traceId:
+              type: string
+              format: uuid
+
+  headers:
+    X-Request-ID:
+      description: Unique request identifier for tracking
+      schema:
+        type: string
+        format: uuid
+    X-Rate-Limit-Remaining:
+      description: Number of requests remaining in current window
+      schema:
+        type: integer
+    X-Rate-Limit-Reset:
+      description: Time when rate limit resets
+      schema:
+        type: integer
+
+  parameters:
+    LanguageHeader:
+      name: Accept-Language
+      in: header
+      description: Preferred language for response
+      schema:
+        type: string
+        enum: [en-US, es-US, fr-CA]
+        default: en-US
+    RegionHeader:
+      name: X-Region
+      in: header
+      description: Regulatory region
+      schema:
+        type: string
+        enum: [US, CA]
+        default: US
+
+tags:
+  - name: Payment Reminders
+    description: Operations for payment due reminders
+  - name: Overdue Alerts
+    description: Operations for overdue balance alerts
+  - name: Collection Notices
+    description: Operations for formal collection notices
+  - name: Batch Processing
+    description: Batch processing capabilities for high-load scenarios
+  - name: Account Management
+    description: Account status and collection workflow management
+  - name: Notification Tracking
+    description: Tracking and status of sent notifications
+  - name: Validation
+    description: Data validation operations
+  - name: System Health
+    description: System health and performance monitoring
+  - name: Compliance
+    description: Regulatory compliance and audit operations
