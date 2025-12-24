@@ -101,6 +101,36 @@
       "expectedResult": "All communication channels display identical core information: same overdue amount, same due dates, same masked card number (****XXXX), same payment instructions, with only formatting differences appropriate to each channel's constraints."
     },
     {
+      "type": "functional",
+      "title": "Payment Plan Proposal - Customer Unable to Pay Full Balance",
+      "description": "Verify that payment plan proposals are generated and sent to cardholders unable to pay full overdue balance with proper card identification.",
+      "testId": "TC-021",
+      "testDescription": "As a card issuer, I want to offer structured payment plans to cardholders who cannot pay their full overdue balance, providing them with manageable repayment options while maintaining proper account identification.",
+      "prerequisites": "Credit card account with significant overdue balance, payment plan configuration system, reduced interest rate capabilities, cardholder communication system.",
+      "stepsToPerform": "1. Set up credit card account with high overdue balance ($5000+)\n2. Configure payment plan parameters (reduced interest rates, extended terms)\n3. Generate payment plan proposal for cardholder\n4. Verify proposal includes structured repayment schedule\n5. Check that last 4 digits of card number are included for identification\n6. Confirm reduced interest rates and fees are properly calculated\n7. Verify payment plan acceptance workflow",
+      "expectedResult": "Payment plan proposal is sent containing: structured repayment schedule, reduced interest rates or waived fees, last 4 digits of card number for identification (****XXXX), clear terms and conditions, acceptance instructions, and customer service contact information for questions."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Agency Involvement - Account Escalation",
+      "description": "Verify that collection agency involvement is properly initiated with secure card identification when cardholders fail to respond to previous notifications.",
+      "testId": "TC-022",
+      "testDescription": "As a card issuer, I want to escalate severely delinquent accounts to collection agencies while ensuring only masked card information is shared for identification purposes.",
+      "prerequisites": "Credit card account with 90+ days delinquency, previous collection notifications sent with no response, collection agency partnership configured, data transfer security protocols.",
+      "stepsToPerform": "1. Set up credit card account with 90+ days past due and no cardholder response\n2. Verify all previous collection notifications were sent and ignored\n3. Initiate collection agency transfer process\n4. Verify account data package includes only last 4 digits of card number\n5. Check that full card number is never transmitted to collection agency\n6. Confirm collection agency receives proper account identification data\n7. Verify cardholder is notified of collection agency involvement",
+      "expectedResult": "Collection agency receives account information containing: total amount owed, payment history, contact information, last 4 digits of card number for identification (****XXXX), but never the full card number. Cardholder is notified of escalation with proper disclosure statements."
+    },
+    {
+      "type": "functional",
+      "title": "Legal Action Initiation - Extreme Delinquency Cases",
+      "description": "Verify that legal action documentation includes proper card identification while maintaining security standards in extreme cases of non-payment.",
+      "testId": "TC-023",
+      "testDescription": "As a card issuer, I want to initiate legal action against severely delinquent cardholders while ensuring all legal documentation properly identifies the account using only masked card information.",
+      "prerequisites": "Credit card account with 120+ days delinquency, failed collection efforts, legal department involvement, court document preparation system.",
+      "stepsToPerform": "1. Set up credit card account with 120+ days past due and failed collection attempts\n2. Initiate legal action preparation process\n3. Generate legal documentation and court filings\n4. Verify all legal documents include last 4 digits of card number for identification\n5. Confirm full card number is never included in legal documentation\n6. Check that court filings properly identify the account\n7. Verify cardholder notification of legal action includes masked card number",
+      "expectedResult": "Legal documentation includes: account identification using last 4 digits of card number (****XXXX), total amount owed, payment history, collection efforts timeline, but never displays full card number. All court filings and legal notices maintain card data security standards."
+    },
+    {
       "type": "negative",
       "title": "System Failure During Critical Collection Period",
       "description": "Verify system behavior when notification services fail during critical collection periods.",
