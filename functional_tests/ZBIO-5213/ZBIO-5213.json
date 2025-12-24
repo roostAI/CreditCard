@@ -1,0 +1,204 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Credit Card Payment Reminder Notification - Happy Path",
+      "description": "Verify that cardholders receive automated payment due reminders before their payment due date with masked card details.",
+      "testId": "TC-001",
+      "testDescription": "As a cardholder with an active credit card account, I want to receive automated payment due reminders so that I can make timely payments and avoid late fees.",
+      "prerequisites": "Active credit card account with upcoming payment due date (3-5 days before due date), valid contact information on file, notification system enabled.",
+      "stepsToPerform": "1. Set up credit card account with payment due date 3 days from current date\n2. Configure cardholder contact preferences (email, SMS, push notification)\n3. Wait for automated reminder notification trigger\n4. Verify notification is sent to cardholder\n5. Check notification content for required information",
+      "expectedResult": "Cardholder receives payment reminder notification containing: due date, minimum payment amount, last 4 digits of card number (e.g., ****1234), payment options, and clear call-to-action. Full card number is never displayed."
+    },
+    {
+      "type": "functional",
+      "title": "Overdue Balance Alert - First Alert",
+      "description": "Verify that cardholders receive immediate overdue balance alerts when payment due date is missed.",
+      "testId": "TC-002",
+      "testDescription": "As a cardholder who has missed the payment due date, I want to receive an immediate overdue alert so that I can quickly resolve the delinquent balance and understand potential consequences.",
+      "prerequisites": "Credit card account with missed payment due date (1 day overdue), outstanding balance greater than minimum payment, active notification settings.",
+      "stepsToPerform": "1. Create credit card account with payment due date yesterday\n2. Ensure no payment was made by due date\n3. Trigger overdue balance alert system\n4. Verify alert is sent to cardholder immediately after due date passes\n5. Review alert content and formatting",
+      "expectedResult": "Cardholder receives overdue balance alert within 24 hours of missed due date containing: overdue amount, late fee information, last 4 digits of card number, consequences of continued non-payment, payment instructions, and customer service contact information."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Notification - Escalated Delinquency",
+      "description": "Verify that formal collection notifications are sent when accounts become significantly delinquent.",
+      "testId": "TC-003",
+      "testDescription": "As a card issuer, I want to send formal collection notifications to significantly delinquent cardholders so that I can recover outstanding balances and comply with regulatory requirements.",
+      "prerequisites": "Credit card account with 60+ days past due, multiple missed payments, previous overdue alerts sent, account flagged for collection.",
+      "stepsToPerform": "1. Set up credit card account with 60 days past due status\n2. Configure collection notification triggers and thresholds\n3. Initiate collection notification process\n4. Verify formal collection notice generation\n5. Review notification delivery and content\n6. Confirm compliance with collection regulations",
+      "expectedResult": "Formal collection notification is sent containing: total amount owed, breakdown of principal and fees, last 4 digits of card number, legal consequences of non-payment, payment deadline, dispute rights, collection agency contact information, and regulatory compliance statements."
+    },
+    {
+      "type": "functional",
+      "title": "Multiple Card Numbers - Correct Masking",
+      "description": "Verify that cardholders with multiple credit cards receive notifications with correctly masked card numbers for the specific delinquent account.",
+      "testId": "TC-004",
+      "testDescription": "As a cardholder with multiple credit cards, I want to receive collection notifications that clearly identify which specific card account is delinquent using masked card numbers.",
+      "prerequisites": "Cardholder profile with 2+ active credit cards, one account with overdue balance, different card numbers ending in different digits.",
+      "stepsToPerform": "1. Create cardholder profile with multiple credit cards (e.g., ****1234, ****5678)\n2. Make one card account overdue (****1234)\n3. Keep other accounts current\n4. Trigger overdue balance alert\n5. Verify notification specifies correct card\n6. Confirm no confusion between card accounts",
+      "expectedResult": "Notification correctly identifies the delinquent card account using only the last 4 digits of the specific overdue card, preventing confusion with other active cards on the same customer profile."
+    },
+    {
+      "type": "functional",
+      "title": "Card Number Security - No Full Number Exposure",
+      "description": "Verify that full credit card numbers are never displayed in any collection lifecycle communications.",
+      "testId": "TC-005",
+      "testDescription": "As a security-conscious organization, I want to ensure that full credit card numbers are never exposed in any collection-related communications to maintain PCI DSS compliance.",
+      "prerequisites": "Active credit card accounts with various payment statuses, collection notification system configured, security scanning tools available.",
+      "stepsToPerform": "1. Generate all types of collection notifications (reminders, overdue alerts, collection notices)\n2. Scan all notification templates and content\n3. Review email, SMS, and push notification formats\n4. Check database logs and system outputs\n5. Verify encryption of stored card data\n6. Confirm masking algorithms are working correctly",
+      "expectedResult": "All collection communications show only masked card numbers (****XXXX format), full 16-digit card numbers are never visible in plain text, system logs show encrypted card data only, and PCI DSS compliance is maintained."
+    },
+    {
+      "type": "functional",
+      "title": "Progressive Collection Escalation Workflow",
+      "description": "Verify that the collection lifecycle progresses through all stages with appropriate timing and escalation.",
+      "testId": "TC-006",
+      "testDescription": "As a card issuer, I want to implement a progressive collection workflow that escalates appropriately based on delinquency duration and customer response.",
+      "prerequisites": "Credit card account with configurable collection workflow, ability to simulate time progression, notification tracking system.",
+      "stepsToPerform": "1. Create new credit card account with payment due date\n2. Allow payment due date to pass without payment\n3. Verify Day 1: Overdue balance alert sent\n4. Simulate 30 days with no payment\n5. Verify Day 30: Second overdue alert with stronger language\n6. Simulate 60 days with no payment\n7. Verify Day 60: Formal collection notification sent\n8. Track all communications and timing",
+      "expectedResult": "Collection workflow executes in proper sequence: payment reminder (before due date) → overdue alert (day 1) → escalated alert (day 30) → formal collection notice (day 60), with each communication appropriately escalating in tone and consequences while maintaining card number masking."
+    },
+    {
+      "type": "functional",
+      "title": "Customer Response to Collection Notifications",
+      "description": "Verify that collection workflow appropriately responds when customers make payments or contact customer service.",
+      "testId": "TC-007",
+      "testDescription": "As a cardholder who receives collection notifications, I want the collection process to stop or modify when I make payments or contact customer service to resolve my account.",
+      "prerequisites": "Credit card account in collection status, payment processing system, customer service interaction tracking, workflow modification capabilities.",
+      "stepsToPerform": "1. Set up overdue credit card account receiving collection notifications\n2. Process partial payment from cardholder\n3. Verify collection notifications are modified or paused\n4. Simulate customer service contact with payment arrangement\n5. Verify workflow adapts to payment plan\n6. Test full payment scenario\n7. Confirm collection process stops completely",
+      "expectedResult": "Collection workflow dynamically adjusts: partial payments trigger modified collection notices with updated balances, payment arrangements pause automatic collections, customer service interactions are logged and affect workflow, full payments immediately stop all collection activities."
+    },
+    {
+      "type": "functional",
+      "title": "Invalid or Missing Contact Information",
+      "description": "Verify system behavior when cardholders have invalid or missing contact information during collection lifecycle.",
+      "testId": "TC-008",
+      "testDescription": "As a card issuer, I want to handle cases where cardholders have invalid contact information so that I can still attempt collection communications through alternative channels.",
+      "prerequisites": "Credit card accounts with various contact information scenarios (invalid email, disconnected phone, old address), alternative communication channels configured.",
+      "stepsToPerform": "1. Create overdue account with invalid email address\n2. Attempt to send overdue alert via email\n3. Verify bounce-back handling and alternative channel usage\n4. Test with disconnected phone number for SMS alerts\n5. Verify postal mail backup for unreachable electronic channels\n6. Check system logging of failed delivery attempts\n7. Confirm escalation to physical mail when electronic channels fail",
+      "expectedResult": "System gracefully handles communication failures: bounced emails trigger SMS or postal mail, disconnected SMS triggers email or postal mail, failed electronic communications escalate to physical mail with last 4 digits of card number, all failed attempts are logged for compliance."
+    },
+    {
+      "type": "functional",
+      "title": "Regulatory Compliance in Collection Notices",
+      "description": "Verify that all collection communications comply with relevant consumer protection and debt collection regulations.",
+      "testId": "TC-009",
+      "testDescription": "As a regulated financial institution, I want to ensure all collection communications comply with FDCPA, TCPA, and other relevant regulations to avoid legal penalties.",
+      "prerequisites": "Collection notification templates, regulatory compliance checklist, legal review requirements, opt-out mechanisms configured.",
+      "stepsToPerform": "1. Generate all types of collection notifications\n2. Verify required legal disclosures are present\n3. Check opt-out language and mechanisms\n4. Confirm dispute rights information is included\n5. Verify contact information for customer service and legal inquiries\n6. Check timing restrictions for communications\n7. Confirm no prohibited language or threats are used",
+      "expectedResult": "All collection communications include: required legal disclosures, dispute rights information, opt-out instructions, appropriate contact information, last 4 digits of card number for identification, compliant language and tone, and adherence to timing restrictions for consumer contact."
+    },
+    {
+      "type": "functional",
+      "title": "Cross-Channel Notification Consistency",
+      "description": "Verify that collection notifications maintain consistent information across all communication channels.",
+      "testId": "TC-010",
+      "testDescription": "As a cardholder receiving collection notifications, I want consistent information across all channels (email, SMS, mail, app) so there's no confusion about my account status.",
+      "prerequisites": "Multi-channel notification system (email, SMS, push notifications, postal mail), overdue credit card account, template management system.",
+      "stepsToPerform": "1. Configure overdue account to receive notifications via all channels\n2. Trigger collection notification across all channels simultaneously\n3. Compare content across email, SMS, push notification, and postal mail\n4. Verify amounts, dates, and card masking are identical\n5. Check that channel-specific formatting doesn't alter core information\n6. Confirm last 4 digits of card number are consistent across all channels",
+      "expectedResult": "All communication channels display identical core information: same overdue amount, same due dates, same masked card number (****XXXX), same payment instructions, with only formatting differences appropriate to each channel's constraints."
+    },
+    {
+      "type": "negative",
+      "title": "System Failure During Critical Collection Period",
+      "description": "Verify system behavior when notification services fail during critical collection periods.",
+      "testId": "TC-011",
+      "testDescription": "Test system resilience when notification services are unavailable during critical collection lifecycle events.",
+      "prerequisites": "Credit card accounts approaching various collection milestones, ability to simulate system failures, backup notification systems configured.",
+      "stepsToPerform": "1. Set up accounts approaching due date reminders and overdue alerts\n2. Simulate email service failure\n3. Verify backup SMS notifications are triggered\n4. Simulate complete electronic communication failure\n5. Verify postal mail backup is activated\n6. Check notification queue and retry mechanisms\n7. Verify no notifications are lost when systems recover",
+      "expectedResult": "System maintains collection workflow continuity: failed email notifications trigger SMS backup, complete electronic failure triggers postal mail, notification queue preserves pending messages, system recovery resends failed notifications, audit trail tracks all failures and recoveries."
+    },
+    {
+      "type": "negative",
+      "title": "Invalid Card Data in Collection System",
+      "description": "Verify system behavior when card data becomes corrupted or invalid during collection lifecycle.",
+      "testId": "TC-012",
+      "testDescription": "Test system handling of corrupted or invalid card data during collection notification generation.",
+      "prerequisites": "Credit card accounts with various data corruption scenarios, data validation rules, error handling procedures.",
+      "stepsToPerform": "1. Create overdue account with corrupted card number in database\n2. Attempt to generate collection notification\n3. Verify system handles missing last 4 digits gracefully\n4. Test with completely invalid card number format\n5. Simulate database corruption during notification generation\n6. Check error logging and alerting mechanisms\n7. Verify customer service is notified of data issues",
+      "expectedResult": "System gracefully handles invalid card data: missing last 4 digits trigger account lookup by other identifiers, corrupted data generates error alerts to operations team, notifications include generic account identifiers when card masking fails, system never displays corrupted card data to customers."
+    },
+    {
+      "type": "negative",
+      "title": "Duplicate Collection Notifications",
+      "description": "Verify system prevents sending duplicate collection notifications to cardholders.",
+      "testId": "TC-013",
+      "testDescription": "Test system safeguards against sending multiple duplicate collection notifications within short time periods.",
+      "prerequisites": "Overdue credit card account, notification deduplication system, timing controls for collection communications.",
+      "stepsToPerform": "1. Set up overdue account eligible for collection notification\n2. Trigger collection notification process multiple times rapidly\n3. Verify only one notification is sent within defined time window\n4. Test with system restarts and process interruptions\n5. Simulate concurrent notification triggers\n6. Check deduplication logic for different notification types\n7. Verify customer doesn't receive harassment-level communications",
+      "expectedResult": "System prevents duplicate notifications: only one notification per type per day, concurrent triggers are deduplicated, system restart doesn't cause resending, different notification types (reminder vs overdue) can be sent same day, audit log shows all trigger attempts but only successful sends."
+    },
+    {
+      "type": "negative",
+      "title": "Collection Notification with Zero Balance",
+      "description": "Verify system behavior when attempting to send collection notifications for accounts with zero or negative balances.",
+      "testId": "TC-014",
+      "testDescription": "Test system handling of collection workflow when account balance becomes zero or negative due to payments or credits.",
+      "prerequisites": "Credit card account initially overdue, payment processing capability, balance calculation system, collection workflow controls.",
+      "stepsToPerform": "1. Set up overdue account scheduled for collection notification\n2. Process payment that brings balance to zero before notification sends\n3. Verify collection notification is cancelled\n4. Test scenario where account has credit balance\n5. Ensure no collection communications are sent for non-delinquent accounts\n6. Check workflow termination when balance is resolved\n7. Verify proper status updates in collection system",
+      "expectedResult": "System prevents inappropriate collection communications: zero balance accounts don't receive collection notices, credit balance accounts are excluded from collection workflow, payment processing immediately updates collection eligibility, scheduled notifications are cancelled when balance is resolved."
+    },
+    {
+      "type": "negative",
+      "title": "Malformed Contact Information in Collection Database",
+      "description": "Verify system handling of malformed or invalid contact information during collection notification attempts.",
+      "testId": "TC-015",
+      "testDescription": "Test system resilience when cardholder contact information contains invalid formats or characters.",
+      "prerequisites": "Credit card accounts with various malformed contact data, input validation systems, error handling procedures.",
+      "stepsToPerform": "1. Create overdue accounts with invalid email formats (missing @, special characters)\n2. Set up accounts with invalid phone numbers (too short, letters, special characters)\n3. Attempt to send collection notifications to these accounts\n4. Verify system validates contact information before sending\n5. Check error logging for invalid contact attempts\n6. Confirm backup communication methods are used\n7. Ensure customer service is alerted to contact data issues",
+      "expectedResult": "System handles malformed contact data gracefully: invalid emails are rejected and backup SMS is attempted, malformed phone numbers trigger email backup, completely invalid contact data escalates to postal mail, error logs capture all validation failures, customer service receives alerts for contact data correction."
+    },
+    {
+      "type": "non-functional",
+      "title": "Collection Notification Performance Under High Load",
+      "description": "Verify system performance when processing large volumes of collection notifications simultaneously.",
+      "testId": "TC-016",
+      "testDescription": "Test system performance and response times when processing thousands of collection notifications during peak processing periods.",
+      "prerequisites": "Large dataset of overdue credit card accounts (10,000+), load testing tools, performance monitoring systems, baseline performance metrics.",
+      "stepsToPerform": "1. Set up 10,000 overdue accounts eligible for collection notifications\n2. Trigger batch collection notification processing\n3. Monitor system response times and resource utilization\n4. Measure notification processing throughput (notifications per minute)\n5. Check database performance during bulk operations\n6. Verify notification delivery times remain acceptable\n7. Monitor for system degradation or failures",
+      "expectedResult": "System maintains performance under load: processes minimum 100 notifications per minute, database response times remain under 2 seconds, notification delivery completes within 4 hours for large batches, system resource utilization stays below 80%, no notification failures due to load, proper masking of card numbers maintained at scale."
+    },
+    {
+      "type": "non-functional",
+      "title": "Collection System Security and Data Protection",
+      "description": "Verify security measures and data protection in collection notification system.",
+      "testId": "TC-017",
+      "testDescription": "Test comprehensive security measures for protecting sensitive card data during collection lifecycle processes.",
+      "prerequisites": "Security testing tools, PCI DSS compliance checklist, encryption validation tools, access control systems configured.",
+      "stepsToPerform": "1. Verify encryption of card data at rest in collection database\n2. Test encryption of card data in transit during notification delivery\n3. Validate access controls for collection system users\n4. Confirm audit logging of all card data access\n5. Test card number masking in all output channels\n6. Verify secure deletion of temporary notification files\n7. Check for any potential card data leakage in logs or error messages",
+      "expectedResult": "System maintains high security standards: all card data encrypted with AES-256, TLS 1.3 for data in transit, role-based access controls enforced, comprehensive audit logging active, full card numbers never appear in plain text, secure deletion procedures followed, PCI DSS compliance maintained."
+    },
+    {
+      "type": "non-functional",
+      "title": "Collection Notification System Reliability",
+      "description": "Verify system reliability and uptime for collection notification services.",
+      "testId": "TC-018",
+      "testDescription": "Test system reliability, failover capabilities, and data consistency during collection notification processing.",
+      "prerequisites": "High availability system configuration, failover testing environment, monitoring and alerting systems, backup systems configured.",
+      "stepsToPerform": "1. Monitor system uptime during normal collection processing\n2. Simulate primary server failure during notification batch\n3. Verify automatic failover to backup systems\n4. Test data consistency after failover recovery\n5. Simulate network failures during notification delivery\n6. Check notification queue persistence and recovery\n7. Verify no duplicate or lost notifications after system recovery",
+      "expectedResult": "System demonstrates high reliability: 99.9% uptime maintained, automatic failover completes within 30 seconds, no data loss during failover events, notification queues preserved during outages, system recovery doesn't cause duplicate notifications, consistent card number masking maintained through all failure scenarios."
+    },
+    {
+      "type": "non-functional",
+      "title": "Collection Notification Accessibility Compliance",
+      "description": "Verify that collection notifications are accessible to cardholders with disabilities.",
+      "testId": "TC-019",
+      "testDescription": "Test collection notification accessibility compliance with WCAG 2.1 guidelines for cardholders using assistive technologies.",
+      "prerequisites": "Screen reader software, accessibility testing tools, various notification formats (email, web portal, mobile app), WCAG 2.1 compliance checklist.",
+      "stepsToPerform": "1. Test email collection notifications with screen reader software\n2. Verify proper heading structure and semantic markup in HTML emails\n3. Check color contrast ratios for text and background\n4. Test keyboard navigation in web-based collection notices\n5. Verify alternative text for any images in notifications\n6. Check font sizes and readability standards\n7. Test with various assistive technologies",
+      "expectedResult": "Collection notifications meet accessibility standards: screen readers properly announce card masking (****1234), proper heading hierarchy used, minimum 4.5:1 color contrast ratio maintained, keyboard navigation fully functional, alternative text provided for images, font sizes minimum 14pt, WCAG 2.1 AA compliance achieved."
+    },
+    {
+      "type": "non-functional",
+      "title": "Multi-Language Collection Notification Support",
+      "description": "Verify that collection notifications support multiple languages while maintaining card number security.",
+      "testId": "TC-020",
+      "testDescription": "Test collection notification system's ability to deliver notifications in multiple languages while preserving card data security and regulatory compliance.",
+      "prerequisites": "Multi-language notification templates, cardholder language preferences, translation management system, regulatory compliance for different regions.",
+      "stepsToPerform": "1. Set up cardholder profiles with different language preferences (English, Spanish, French)\n2. Generate collection notifications in each language\n3. Verify card number masking format is consistent across languages\n4. Check that regulatory disclosures are properly translated\n5. Test currency formatting for different locales\n6. Verify date and time formatting for each region\n7. Confirm contact information is localized appropriately",
+      "expectedResult": "Multi-language support maintains security and compliance: card masking format (****XXXX) consistent across all languages, regulatory disclosures accurately translated, currency and date formats localized correctly, contact information provided in appropriate language, legal compliance maintained for each jurisdiction, character encoding supports all languages properly."
+    }
+  ]
+}
