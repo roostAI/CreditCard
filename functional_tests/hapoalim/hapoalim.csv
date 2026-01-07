@@ -1,0 +1,29 @@
+API E2E success flow for <brandName> with OTP, processor fetch, and finalize
+OTP business errors and resend pathways
+Contract enforcement and security headers
+Processor 401, invalid payload, and finalize idempotency
+E2E success from main menu - non-AmEx (Visa) with OTP verify, front/back CVV, manual Finish
+E2E AmEx flow from post-order lobby with auto-finish on timer expiry
+Zero-state gating from different entry sources
+OTP input validation, throttling, and recovery
+Processor and decrypt error handling, placeholders, multi-tab, and finalize idempotency
+Card selection cache and switch-after-generate invalidates previous order
+Timer robustness with backgrounding, clock skew, and finalize retry on network failure
+Data provenance and brand/PAN/CVV length enforcement
+Service error robustness and contract failures across stages
+OTP concurrency across tabs shares attempts and gates after verify
+Session expiry during sensitive view hides data and attempts finalize once
+RTL localization and accessibility hardening without exposing digits
+Unknown brandCode uses placeholder and default non-AmEx rules
+Duplicate last-4 across cards does not cause cross-card leakage
+Account header switch mid-flow enforces strict scoping
+Debounce and throttling on initial OTP generation with lockout popup
+Offline resilience before verify and during processor fetch with safe recovery
+No-store and browser history protections including print attempts
+Clipboard permission denied and sanitized copy behavior
+Mobile rotation preserves OTP and timer continuity
+Route and deep-link hardening blocks direct access to sensitive screens
+International phone handling and mid-flow phone update with resend
+OTP input robustness with non-ASCII numerals, separators, auto-fill, and paste sanitization
+Large portfolio performance and selection gating on Sc0003
+Processor payload completeness checks block rendering on missing fields
