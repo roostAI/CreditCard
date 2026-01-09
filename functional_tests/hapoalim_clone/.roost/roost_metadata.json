@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "hapoalim_clone",
+    "created_at": "2026-01-09T12:19:36.623Z",
+    "updated_at": "2026-01-09T12:19:36.623Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "hapoalim_clone.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/hapoalim_clone/5ecaca5e-6f32-431c-96ba-24ce440154e1/functional_tests/hapoalim_clone/hapoalim_clone.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "hapo1.xlsx",
+        "fileURI": "/var/tmp/Roost/RoostGPT/hapoalim_clone/5ecaca5e-6f32-431c-96ba-24ce440154e1/functional_tests/hapoalim_clone/hapo1.xlsx",
+        "fileSha": "1921256bc5"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
