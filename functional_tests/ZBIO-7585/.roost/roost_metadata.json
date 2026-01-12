@@ -1,0 +1,19 @@
+{
+  "project": {
+    "name": "ZBIO-7585",
+    "created_at": "2026-01-12T04:32:53.539Z",
+    "updated_at": "2026-01-12T04:32:53.539Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "ZBIO-7585.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional_test/147f4ddb-9d12-4346-bb9e-11420a01ac61/functional_tests/ZBIO-7585/ZBIO-7585.txt",
+        "fileSha": "4aadbcc786"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
