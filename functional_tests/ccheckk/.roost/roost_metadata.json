@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "ccheckk",
+    "created_at": "2026-01-15T04:30:46.007Z",
+    "updated_at": "2026-01-15T04:30:46.007Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "ccheckk.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/ccheckk/1096e664-d90a-40ec-bb08-d57d3d81d87a/functional_tests/ccheckk/ccheckk.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "roost_user_input.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/ccheckk/1096e664-d90a-40ec-bb08-d57d3d81d87a/functional_tests/ccheckk/roost_user_input.txt",
+        "fileSha": "8e407681e4"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
