@@ -1,0 +1,167 @@
+[
+  {
+    "type": "functional",
+    "title": "User Registration and Profile Management",
+    "description": "Verify user registration and profile update functionalities.",
+    "testId": "TC-101",
+    "testDescription": "A new user registers and updates their profile information.",
+    "prerequisites": "No existing account with the same email.",
+    "stepsToPerform": "1. Navigate to registration page.\n2. Enter valid registration details.\n3. Submit the registration form.\n4. Log in with new credentials.\n5. Navigate to profile page.\n6. Update profile information.\n7. Save changes.",
+    "expectedResult": "User is registered successfully, can log in, and profile updates are saved.",
+    "additionalFields": "Boundary Value Analysis for age and email format validation"
+  },
+  {
+    "type": "functional",
+    "title": "Course Enrollment and Management",
+    "description": "Verify course enrollment and management by users.",
+    "testId": "TC-102",
+    "testDescription": "A user enrolls in a course and manages their course list.",
+    "prerequisites": "User must be logged in and courses must be available.",
+    "stepsToPerform": "1. Navigate to course catalog.\n2. Select a course.\n3. Click 'Enroll'.\n4. Navigate to 'My Courses'.\n5. Verify the enrolled course is listed.\n6. Unenroll from the course.",
+    "expectedResult": "User can enroll and unenroll from courses, and changes reflect in 'My Courses'.",
+    "additionalFields": "State Transition testing for enrollment status"
+  },
+  {
+    "type": "functional",
+    "title": "Assignment Submission and Grading",
+    "description": "Verify assignment submission and grading process.",
+    "testId": "TC-103",
+    "testDescription": "A user submits an assignment and receives a grade.",
+    "prerequisites": "User must be enrolled in a course with assignments.",
+    "stepsToPerform": "1. Navigate to course assignments.\n2. Select an assignment.\n3. Upload the assignment file.\n4. Submit the assignment.\n5. Instructor logs in and grades the assignment.\n6. User checks the grade.",
+    "expectedResult": "Assignment is submitted successfully and graded correctly.",
+    "additionalFields": "Boundary Value Analysis for grade input"
+  },
+  {
+    "type": "functional",
+    "title": "User Role and Permission Management",
+    "description": "Verify role-based access and permissions.",
+    "testId": "TC-104",
+    "testDescription": "Different user roles access specific features based on permissions.",
+    "prerequisites": "Users with different roles must exist.",
+    "stepsToPerform": "1. Log in as an admin.\n2. Assign roles to users.\n3. Log in as each role.\n4. Attempt to access restricted features.\n5. Verify access permissions.",
+    "expectedResult": "Users can only access features permitted by their role.",
+    "additionalFields": "Decision Table testing for role-based access"
+  },
+  {
+    "type": "functional",
+    "title": "Reporting and Analytics Dashboard",
+    "description": "Verify the functionality of the reporting and analytics dashboard.",
+    "testId": "TC-105",
+    "testDescription": "A user accesses and interacts with the analytics dashboard.",
+    "prerequisites": "User must have data available for reporting.",
+    "stepsToPerform": "1. Log in as a user with reporting access.\n2. Navigate to the analytics dashboard.\n3. Select different report types.\n4. Apply filters and generate reports.\n5. Export report data.",
+    "expectedResult": "Reports are generated accurately, and data can be exported.",
+    "additionalFields": "Data integrity checks for report accuracy"
+  },
+  {
+    "type": "functional",
+    "title": "Notification and Alert System",
+    "description": "Verify the notification and alert system functionality.",
+    "testId": "TC-106",
+    "testDescription": "A user receives notifications and alerts based on specific triggers.",
+    "prerequisites": "User must be enrolled in a course with active notifications.",
+    "stepsToPerform": "1. Log in as a user.\n2. Navigate to notification settings.\n3. Enable notifications for assignment deadlines.\n4. Submit an assignment close to the deadline.\n5. Verify notification receipt.",
+    "expectedResult": "User receives timely notifications and alerts as configured.",
+    "additionalFields": "Validation of alert classifications and override mechanisms"
+  },
+  {
+    "type": "functional",
+    "title": "Integration with External LMS",
+    "description": "Verify integration with external Learning Management Systems (LMS).",
+    "testId": "TC-107",
+    "testDescription": "Data synchronization between the educational software and an external LMS.",
+    "prerequisites": "External LMS account must be linked.",
+    "stepsToPerform": "1. Log in to the educational software.\n2. Navigate to LMS integration settings.\n3. Link an external LMS account.\n4. Sync course data.\n5. Verify data consistency in both systems.",
+    "expectedResult": "Data is accurately synchronized between the educational software and the external LMS.",
+    "additionalFields": "Data integrity checks for synchronized data"
+  },
+  {
+    "type": "functional",
+    "title": "Data Import/Export Functionality",
+    "description": "Verify data import and export functionalities.",
+    "testId": "TC-108",
+    "testDescription": "A user imports and exports data related to courses and students.",
+    "prerequisites": "User must have data import/export permissions.",
+    "stepsToPerform": "1. Log in as a user with data management access.\n2. Navigate to data management section.\n3. Import student data file.\n4. Export course data.\n5. Verify data integrity post-import/export.",
+    "expectedResult": "Data is imported and exported successfully with maintained integrity.",
+    "additionalFields": "Boundary Value Analysis for file size and format"
+  },
+  {
+    "type": "functional",
+    "title": "UI Interactions Across All Screens and Forms",
+    "description": "Verify UI interactions across various screens and forms.",
+    "testId": "TC-109",
+    "testDescription": "A user interacts with different UI elements across the application.",
+    "prerequisites": "User must be logged in.",
+    "stepsToPerform": "1. Navigate through different sections of the application.\n2. Interact with buttons, forms, and links.\n3. Submit forms with valid and invalid data.\n4. Verify UI responsiveness and error handling.",
+    "expectedResult": "UI elements function correctly, and error messages are displayed for invalid inputs.",
+    "additionalFields": "Proper handling of invalid data inputs in forms"
+  },
+  {
+    "type": "functional",
+    "title": "Concurrent User Operations",
+    "description": "Verify data consistency during concurrent user operations.",
+    "testId": "TC-110",
+    "testDescription": "Multiple users perform operations simultaneously to test data consistency.",
+    "prerequisites": "Multiple user accounts must be available.",
+    "stepsToPerform": "1. Log in as multiple users on different devices.\n2. Perform operations such as course enrollment and profile updates concurrently.\n3. Verify data consistency across all user sessions.",
+    "expectedResult": "Data remains consistent and accurate across concurrent operations.",
+    "additionalFields": "Data consistency during concurrent user operations"
+  },
+  {
+    "type": "functional",
+    "title": "Grade Calculation Accuracy",
+    "description": "Verify the accuracy of grade calculations for courses.",
+    "testId": "TC-111",
+    "testDescription": "Ensure that the system calculates grades accurately based on assignment scores and weights.",
+    "prerequisites": "User must be enrolled in a course with multiple graded assignments.",
+    "stepsToPerform": "1. Log in as a student.\n2. Navigate to the course gradebook.\n3. Review assignment scores and weights.\n4. Calculate expected grade manually.\n5. Compare with the system-calculated grade.",
+    "expectedResult": "The system-calculated grade matches the manually calculated grade.",
+    "additionalFields": "Accurate calculation of grades and course credits"
+  },
+  {
+    "type": "functional",
+    "title": "User Status Transition",
+    "description": "Verify state transitions for user status changes.",
+    "testId": "TC-112",
+    "testDescription": "Test the transition of user status from active to inactive and vice versa.",
+    "prerequisites": "User account must exist with active status.",
+    "stepsToPerform": "1. Log in as an admin.\n2. Navigate to user management.\n3. Change user status to inactive.\n4. Attempt to log in as the user.\n5. Change status back to active.\n6. Attempt to log in again.",
+    "expectedResult": "User cannot log in when inactive and can log in when active.",
+    "additionalFields": "State Transition testing for user status changes"
+  },
+  {
+    "type": "functional",
+    "title": "Alert Override Mechanism",
+    "description": "Verify the alert override mechanism for critical notifications.",
+    "testId": "TC-113",
+    "testDescription": "Ensure that users can override alerts for critical notifications.",
+    "prerequisites": "User must have critical alerts enabled.",
+    "stepsToPerform": "1. Log in as a user.\n2. Navigate to alert settings.\n3. Enable override for critical alerts.\n4. Trigger a critical alert.\n5. Verify the ability to override the alert.",
+    "expectedResult": "User can override critical alerts as configured.",
+    "additionalFields": "Validation of alert classifications and override mechanisms"
+  },
+  {
+    "type": "functional",
+    "title": "External LMS Data Consistency",
+    "description": "Verify data consistency after integration with an external LMS.",
+    "testId": "TC-114",
+    "testDescription": "Ensure data remains consistent after syncing with an external LMS.",
+    "prerequisites": "External LMS integration must be configured.",
+    "stepsToPerform": "1. Log in to the educational software.\n2. Sync data with the external LMS.\n3. Verify data consistency in both systems.\n4. Make changes in the external LMS.\n5. Sync again and verify consistency.",
+    "expectedResult": "Data remains consistent across both systems after syncing.",
+    "additionalFields": "Data integrity checks for synchronized data"
+  },
+  {
+    "type": "functional",
+    "title": "Concurrent Enrollment Operations",
+    "description": "Verify data consistency during concurrent course enrollment operations.",
+    "testId": "TC-115",
+    "testDescription": "Multiple users enroll in courses simultaneously to test data consistency.",
+    "prerequisites": "Multiple user accounts and available courses.",
+    "stepsToPerform": "1. Log in as multiple users on different devices.\n2. Enroll in the same course simultaneously.\n3. Verify enrollment status for all users.\n4. Check for any data inconsistencies.",
+    "expectedResult": "All users are enrolled successfully without data inconsistencies.",
+    "additionalFields": "Data consistency during concurrent user operations"
+  }
+]
