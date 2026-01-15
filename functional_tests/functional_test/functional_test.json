@@ -1,0 +1,167 @@
+[
+  {
+    "type": "functional",
+    "title": "User Registration and Profile Management",
+    "description": "Verify successful user registration and profile management with valid data.",
+    "testId": "TC-001",
+    "testDescription": "A new user registers with valid details and manages their profile.",
+    "prerequisites": "No existing account with the same email.",
+    "stepsToPerform": "1. Navigate to registration page.\n2. Enter valid user details.\n3. Submit the registration form.\n4. Log in with new credentials.\n5. Update profile information.",
+    "expectedResult": "User account is created, a confirmation email is sent, and profile updates are saved.",
+    "additionalFields": "Boundary Value Analysis for age and contact number fields"
+  },
+  {
+    "type": "functional",
+    "title": "Course Enrollment and Management",
+    "description": "Ensure users can enroll in courses and manage their enrollments.",
+    "testId": "TC-002",
+    "testDescription": "A user enrolls in a course and manages their enrollment status.",
+    "prerequisites": "User is logged in and has a valid profile.",
+    "stepsToPerform": "1. Navigate to course catalog.\n2. Select a course.\n3. Enroll in the course.\n4. View enrolled courses.\n5. Withdraw from the course.",
+    "expectedResult": "User successfully enrolls and withdraws from courses, with status updates reflected accurately.",
+    "additionalFields": "State Transition testing for enrollment status"
+  },
+  {
+    "type": "functional",
+    "title": "Assignment Submission and Grading",
+    "description": "Validate the process of assignment submission and grading.",
+    "testId": "TC-003",
+    "testDescription": "A student submits an assignment and receives a grade.",
+    "prerequisites": "Student is enrolled in a course with assignments.",
+    "stepsToPerform": "1. Navigate to course assignments.\n2. Select an assignment.\n3. Submit the assignment.\n4. Instructor grades the assignment.\n5. Student views the grade.",
+    "expectedResult": "Assignment is submitted successfully, graded by the instructor, and grade is visible to the student.",
+    "additionalFields": "Boundary Value Analysis for grade input"
+  },
+  {
+    "type": "functional",
+    "title": "User Role and Permission Management",
+    "description": "Test role-based access and permissions for different user roles.",
+    "testId": "TC-004",
+    "testDescription": "Verify access control for different user roles.",
+    "prerequisites": "Multiple user roles exist with defined permissions.",
+    "stepsToPerform": "1. Log in as an admin.\n2. Assign roles to users.\n3. Log in as a student.\n4. Attempt to access admin features.\n5. Log in as an instructor and access grading features.",
+    "expectedResult": "Users can only access features permitted by their roles.",
+    "additionalFields": "Decision Table testing for role-based access"
+  },
+  {
+    "type": "functional",
+    "title": "Reporting and Analytics Dashboard",
+    "description": "Verify the functionality of the reporting and analytics dashboard.",
+    "testId": "TC-005",
+    "testDescription": "Generate and view reports on user activity and course performance.",
+    "prerequisites": "User has access to the analytics dashboard.",
+    "stepsToPerform": "1. Log in as an admin.\n2. Navigate to the analytics dashboard.\n3. Generate a report on course enrollments.\n4. View detailed analytics on user activity.",
+    "expectedResult": "Reports are generated accurately and display comprehensive analytics.",
+    "additionalFields": "Data validation for report accuracy"
+  },
+  {
+    "type": "functional",
+    "title": "Notification and Alert System",
+    "description": "Verify the notification and alert system for course updates and deadlines.",
+    "testId": "TC-006",
+    "testDescription": "Ensure users receive timely notifications and alerts for course updates and assignment deadlines.",
+    "prerequisites": "User is enrolled in a course with upcoming deadlines.",
+    "stepsToPerform": "1. Log in as a student.\n2. Navigate to the course dashboard.\n3. Check for notifications related to upcoming assignments.\n4. Verify alert settings for deadlines.\n5. Simulate a course update and check for notifications.",
+    "expectedResult": "Users receive notifications and alerts for course updates and deadlines as per their settings.",
+    "additionalFields": "Proper handling of notifications and alerts"
+  },
+  {
+    "type": "functional",
+    "title": "UI Interactions Across All Screens",
+    "description": "Test the user interface interactions across all screens and forms.",
+    "testId": "TC-007",
+    "testDescription": "Ensure all UI elements are functional and accessible across different screens.",
+    "prerequisites": "User is logged in and has access to all relevant screens.",
+    "stepsToPerform": "1. Navigate through all available screens and forms.\n2. Interact with UI elements like buttons, dropdowns, and text fields.\n3. Verify responsiveness and accessibility.\n4. Check for consistent UI design and layout.",
+    "expectedResult": "All UI elements are functional, accessible, and consistent across screens.",
+    "additionalFields": "UI consistency and accessibility checks"
+  },
+  {
+    "type": "functional",
+    "title": "Data Validation for Student Information",
+    "description": "Validate the integrity and accuracy of student information data.",
+    "testId": "TC-008",
+    "testDescription": "Ensure student information is correctly validated and stored.",
+    "prerequisites": "Student profile exists with editable fields.",
+    "stepsToPerform": "1. Log in as a student.\n2. Navigate to the profile management page.\n3. Edit student information fields.\n4. Submit changes and verify data integrity.\n5. Attempt to input invalid data and check validation messages.",
+    "expectedResult": "Student information is validated and stored accurately, with appropriate error messages for invalid data.",
+    "additionalFields": "Data validation for student information fields"
+  },
+  {
+    "type": "functional",
+    "title": "Integration with External Payment Gateway",
+    "description": "Test the integration with external payment gateways for course payments.",
+    "testId": "TC-009",
+    "testDescription": "Ensure seamless integration and transaction processing with payment gateways.",
+    "prerequisites": "User is enrolled in a paid course.",
+    "stepsToPerform": "1. Navigate to the payment page.\n2. Select a payment method.\n3. Complete the payment process through the external gateway.\n4. Verify transaction success and course enrollment status.",
+    "expectedResult": "Payments are processed successfully, and course enrollment status is updated accordingly.",
+    "additionalFields": "Integration testing with payment gateways"
+  },
+  {
+    "type": "functional",
+    "title": "State Transition for Course Enrollment",
+    "description": "Validate state transitions during the course enrollment process.",
+    "testId": "TC-010",
+    "testDescription": "Ensure correct state transitions from enrollment to completion.",
+    "prerequisites": "User is logged in and has access to course enrollment.",
+    "stepsToPerform": "1. Enroll in a course.\n2. Complete course requirements.\n3. Verify state transition from 'Enrolled' to 'Completed'.\n4. Check for accurate updates in user profile and course status.",
+    "expectedResult": "State transitions occur correctly, reflecting accurate course status updates.",
+    "additionalFields": "State Transition testing for enrollment status"
+  },
+  {
+    "type": "functional",
+    "title": "Multi-Role User Notification Preferences",
+    "description": "Verify that users with multiple roles can set and receive notifications according to each role.",
+    "testId": "TC-011",
+    "testDescription": "A user with both student and instructor roles sets different notification preferences for each role.",
+    "prerequisites": "User has both student and instructor roles assigned.",
+    "stepsToPerform": "1. Log in as a user with multiple roles.\n2. Navigate to notification settings.\n3. Set preferences for student role.\n4. Set different preferences for instructor role.\n5. Trigger notifications for both roles.",
+    "expectedResult": "User receives notifications according to the preferences set for each role.",
+    "additionalFields": "Decision Table testing for role-based notification settings"
+  },
+  {
+    "type": "functional",
+    "title": "Cross-Platform UI Consistency",
+    "description": "Ensure UI consistency and functionality across different devices and screen sizes.",
+    "testId": "TC-012",
+    "testDescription": "Verify that the application UI is consistent and functional on desktop, tablet, and mobile devices.",
+    "prerequisites": "Access to devices with different screen sizes.",
+    "stepsToPerform": "1. Access the application on a desktop.\n2. Navigate through various screens.\n3. Repeat steps on a tablet.\n4. Repeat steps on a mobile device.\n5. Compare UI elements and functionality across devices.",
+    "expectedResult": "UI elements are consistent and functional across all devices.",
+    "additionalFields": "UI consistency checks across devices"
+  },
+  {
+    "type": "functional",
+    "title": "Data Integrity During Course Withdrawal",
+    "description": "Validate data integrity when a user withdraws from a course.",
+    "testId": "TC-013",
+    "testDescription": "Ensure that all related data is correctly updated when a user withdraws from a course.",
+    "prerequisites": "User is enrolled in a course.",
+    "stepsToPerform": "1. Log in as the enrolled user.\n2. Navigate to the enrolled courses section.\n3. Withdraw from a course.\n4. Verify updates in user profile, course status, and analytics.",
+    "expectedResult": "All related data is updated correctly upon course withdrawal.",
+    "additionalFields": "Data validation for course withdrawal process"
+  },
+  {
+    "type": "functional",
+    "title": "Grade Calculation Accuracy",
+    "description": "Ensure accurate calculation of grades based on assignment scores and weightage.",
+    "testId": "TC-014",
+    "testDescription": "Verify that grades are calculated accurately according to the defined grading scheme.",
+    "prerequisites": "Course with defined grading scheme and assignments.",
+    "stepsToPerform": "1. Log in as an instructor.\n2. Enter scores for assignments.\n3. Verify calculated grades for students.\n4. Compare with manual calculations.",
+    "expectedResult": "Grades are calculated accurately as per the grading scheme.",
+    "additionalFields": "Boundary Value Analysis for grade calculation"
+  },
+  {
+    "type": "functional",
+    "title": "External System Integration for Learning Management",
+    "description": "Test integration with external learning management systems for course content synchronization.",
+    "testId": "TC-015",
+    "testDescription": "Ensure seamless synchronization of course content with external learning management systems.",
+    "prerequisites": "Access to an external learning management system.",
+    "stepsToPerform": "1. Log in as an admin.\n2. Set up integration with an external LMS.\n3. Synchronize course content.\n4. Verify content accuracy and completeness.",
+    "expectedResult": "Course content is synchronized accurately with the external LMS.",
+    "additionalFields": "Integration testing with external LMS"
+  }
+]
