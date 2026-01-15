@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "functional_test",
+    "created_at": "2026-01-15T04:25:19.645Z",
+    "updated_at": "2026-01-15T04:25:19.645Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "functional_test.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional_test/4cc5e8cc-8118-44dd-8f33-fa26180a77ad/functional_tests/functional_test/functional_test.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "roost_user_input.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional_test/4cc5e8cc-8118-44dd-8f33-fa26180a77ad/functional_tests/functional_test/roost_user_input.txt",
+        "fileSha": "9353af37ee"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
