@@ -1,0 +1,144 @@
+{
+  "scenarios": [
+    {
+      "type": "functional",
+      "title": "Valid Credit Card Application Submission",
+      "description": "Verify that a customer can successfully submit a credit card application with valid information.",
+      "testId": "TC-001",
+      "testDescription": "Test the successful submission of a credit card application when all required fields are filled with valid data including identification, income details, and contact information.",
+      "prerequisites": "Credit card application portal is accessible and functional.",
+      "stepsToPerform": "1. Navigate to the credit card application page.\n2. Enter valid identification number (e.g., SSN: 123-45-6789).\n3. Enter valid income details (e.g., Annual Income: $50,000).\n4. Enter valid contact information (e.g., Email: test@email.com, Phone: 555-1234).\n5. Fill all other required fields with valid data.\n6. Click 'Submit Application' button.",
+      "expectedResult": "Application is submitted successfully and confirmation message is displayed with application reference number."
+    },
+    {
+      "type": "functional",
+      "title": "Invalid Credit Card Application Submission",
+      "description": "Verify that appropriate error messages are displayed when invalid or incomplete information is provided.",
+      "testId": "TC-002",
+      "testDescription": "Test the system's validation when a credit card application is submitted with missing or invalid required fields.",
+      "prerequisites": "Credit card application portal is accessible and functional.",
+      "stepsToPerform": "1. Navigate to the credit card application page.\n2. Leave identification field empty.\n3. Enter invalid income (e.g., negative value: -1000).\n4. Enter invalid email format (e.g., invalid-email).\n5. Click 'Submit Application' button.",
+      "expectedResult": "Error messages are displayed for each invalid field and application submission is prevented until all fields are valid."
+    },
+    {
+      "type": "functional",
+      "title": "Successful Charge Waiver Request",
+      "description": "Verify that eligible charges can be waived off based on customer history review.",
+      "testId": "TC-003",
+      "testDescription": "Test the process of waiving off unexpected fees for customers with good payment history.",
+      "prerequisites": "Customer account exists with good payment history and an unexpected fee has been charged.",
+      "stepsToPerform": "1. Customer reports unexpected fee (e.g., $25 late payment fee).\n2. Bank representative accesses customer's payment history.\n3. Review shows customer has good payment record.\n4. Bank representative approves fee waiver.\n5. Process the waiver in the system.",
+      "expectedResult": "Fee is successfully waived, account balance is updated to reflect the waiver, and customer receives confirmation notification."
+    },
+    {
+      "type": "functional",
+      "title": "Successful Points Redemption",
+      "description": "Verify that customers can successfully redeem reward points for available benefits.",
+      "testId": "TC-004",
+      "testDescription": "Test the redemption of accumulated reward points for various benefits when customer has sufficient points.",
+      "prerequisites": "Customer account has accumulated reward points (e.g., 5000 points) and redemption catalog is available.",
+      "stepsToPerform": "1. Customer logs into their account.\n2. Navigate to rewards/points section.\n3. View available points balance (5000 points).\n4. Select reward item requiring 2000 points (e.g., $20 gift card).\n5. Confirm redemption request.\n6. Complete redemption process.",
+      "expectedResult": "Points are deducted from account (3000 points remaining), reward is processed, and customer receives confirmation with delivery details."
+    },
+    {
+      "type": "functional",
+      "title": "Insufficient Points Redemption Attempt",
+      "description": "Verify that appropriate error message is displayed when customer attempts to redeem more points than available.",
+      "testId": "TC-005",
+      "testDescription": "Test the system behavior when a customer tries to redeem points exceeding their available balance.",
+      "prerequisites": "Customer account has limited reward points (e.g., 1000 points).",
+      "stepsToPerform": "1. Customer logs into their account.\n2. Navigate to rewards/points section.\n3. View available points balance (1000 points).\n4. Select reward item requiring 2000 points.\n5. Attempt to confirm redemption request.",
+      "expectedResult": "Error message is displayed indicating insufficient points and redemption is prevented. Current balance and required points are clearly shown."
+    },
+    {
+      "type": "functional",
+      "title": "Credit Limit Extension Notification",
+      "description": "Verify that customers receive proper notification when their credit limit is increased.",
+      "testId": "TC-006",
+      "testDescription": "Test the notification process when bank decides to increase a customer's credit limit based on their creditworthiness.",
+      "prerequisites": "Customer account exists with good payment history and current credit limit of $5000.",
+      "stepsToPerform": "1. Bank system evaluates customer's creditworthiness.\n2. System determines customer qualifies for limit increase.\n3. Bank approves credit limit increase from $5000 to $7500.\n4. System updates customer's credit limit.\n5. Notification is sent to customer via email and SMS.",
+      "expectedResult": "Credit limit is successfully updated to $7500, customer receives notification with new limit details, and updated limit is reflected in customer's account."
+    },
+    {
+      "type": "functional",
+      "title": "Credit Limit Reduction Notification",
+      "description": "Verify that customers receive proper notification when their credit limit is reduced.",
+      "testId": "TC-007",
+      "testDescription": "Test the notification process when bank decides to reduce a customer's credit limit due to risk assessment.",
+      "prerequisites": "Customer account exists with current credit limit of $5000 and current balance of $2000.",
+      "stepsToPerform": "1. Bank system evaluates customer's risk profile.\n2. System determines credit limit should be reduced.\n3. Bank approves credit limit reduction from $5000 to $3000.\n4. System validates new limit is above current balance.\n5. System updates customer's credit limit.\n6. Notification is sent to customer.",
+      "expectedResult": "Credit limit is successfully updated to $3000, customer receives notification explaining the change, and updated limit is reflected in customer's account."
+    },
+    {
+      "type": "functional",
+      "title": "Successful Promotional Balance Transfer",
+      "description": "Verify that customers can successfully transfer balances under promotional offers.",
+      "testId": "TC-008",
+      "testDescription": "Test the balance transfer process when customer utilizes a promotional offer to transfer high-interest debt.",
+      "prerequisites": "Customer has eligible credit card with available credit limit and promotional balance transfer offer is active.",
+      "stepsToPerform": "1. Customer accesses balance transfer section.\n2. Enter details of external card to transfer from (last 4 digits: 1234, amount: $2000).\n3. Select promotional offer (0% APR for 12 months).\n4. Review transfer terms and fees.\n5. Confirm balance transfer request.\n6. Submit transfer application.",
+      "expectedResult": "Balance transfer is approved, $2000 is transferred with promotional terms applied, customer receives confirmation, and both account balances are updated accordingly."
+    },
+    {
+      "type": "non-functional",
+      "title": "Credit Card Application Response Time",
+      "description": "Verify that the system responds within acceptable time limits during credit card application submission.",
+      "testId": "TC-009",
+      "testDescription": "Test the system's performance by measuring response time when processing credit card applications.",
+      "prerequisites": "Credit card application system is running under normal load conditions.",
+      "stepsToPerform": "1. Start timer when clicking 'Submit Application' button.\n2. Fill out complete credit card application with valid data.\n3. Submit the application.\n4. Measure time until confirmation page loads.\n5. Record response time.\n6. Repeat test 10 times and calculate average response time.",
+      "expectedResult": "Average response time should be less than 3 seconds for application submission and confirmation page should load within 5 seconds."
+    },
+    {
+      "type": "non-functional",
+      "title": "Concurrent Credit Card Applications Load Test",
+      "description": "Verify that the system can handle multiple simultaneous credit card applications without performance degradation.",
+      "testId": "TC-010",
+      "testDescription": "Test the system's ability to process multiple credit card applications concurrently under high load conditions.",
+      "prerequisites": "Load testing environment is set up with multiple virtual users configured.",
+      "stepsToPerform": "1. Configure 100 virtual users to submit applications simultaneously.\n2. Each user fills out complete application with unique valid data.\n3. All users submit applications within 1-minute window.\n4. Monitor system response times and error rates.\n5. Check database for all submitted applications.\n6. Verify system stability throughout the test.",
+      "expectedResult": "System successfully processes all 100 applications without errors, response times remain within acceptable limits (under 5 seconds), and no data corruption occurs."
+    },
+    {
+      "type": "non-functional",
+      "title": "Data Security and Encryption Validation",
+      "description": "Verify that sensitive customer data is properly encrypted and secured during transmission and storage.",
+      "testId": "TC-011",
+      "testDescription": "Test the security measures implemented for protecting personal and financial data during credit card application process.",
+      "prerequisites": "Security testing tools are available and system is configured with SSL/TLS certificates.",
+      "stepsToPerform": "1. Monitor network traffic during application submission.\n2. Verify HTTPS protocol is used for all data transmission.\n3. Check that sensitive data (SSN, income) is encrypted in transit.\n4. Verify data encryption in database storage.\n5. Test for SQL injection vulnerabilities in input fields.\n6. Validate session management and timeout mechanisms.",
+      "expectedResult": "All data transmission uses HTTPS encryption, sensitive data is encrypted in database, no vulnerabilities are found, and session management follows security best practices."
+    },
+    {
+      "type": "non-functional",
+      "title": "System Recovery After Connection Loss",
+      "description": "Verify that the system handles connection interruptions gracefully during credit card application process.",
+      "testId": "TC-012",
+      "testDescription": "Test the system's behavior and recovery mechanisms when network connection is lost during application submission.",
+      "prerequisites": "Network simulation tools are available to simulate connection loss scenarios.",
+      "stepsToPerform": "1. Start filling out credit card application form.\n2. Fill 80% of required fields with valid data.\n3. Simulate network connection loss.\n4. Wait for 30 seconds.\n5. Restore network connection.\n6. Attempt to continue or resubmit application.\n7. Verify data preservation and user guidance.",
+      "expectedResult": "System displays appropriate error message about connection loss, preserves entered data when possible, provides clear guidance for recovery, and allows user to complete application without data loss."
+    },
+    {
+      "type": "non-functional",
+      "title": "Cross-Browser Compatibility Testing",
+      "description": "Verify that the credit card application system works consistently across different web browsers.",
+      "testId": "TC-013",
+      "testDescription": "Test the credit card application functionality across multiple browsers to ensure consistent user experience.",
+      "prerequisites": "Multiple browsers are installed (Chrome, Firefox, Safari, Edge) and credit card application is accessible.",
+      "stepsToPerform": "1. Open credit card application in Chrome browser.\n2. Complete full application process and verify functionality.\n3. Repeat same process in Firefox browser.\n4. Repeat same process in Safari browser.\n5. Repeat same process in Edge browser.\n6. Compare functionality, layout, and performance across browsers.\n7. Test responsive design on different screen sizes.",
+      "expectedResult": "Credit card application functions identically across all browsers, layout remains consistent, all features work properly, and responsive design adapts correctly to different screen sizes."
+    },
+    {
+      "type": "non-functional",
+      "title": "Email and SMS Notification Delivery",
+      "description": "Verify that notification systems reliably deliver messages for credit card lifecycle events.",
+      "testId": "TC-014",
+      "testDescription": "Test the reliability and timeliness of email and SMS notifications for various credit card operations.",
+      "prerequisites": "Email and SMS services are configured and test accounts with valid contact information are available.",
+      "stepsToPerform": "1. Complete a credit card application submission.\n2. Record timestamp of submission.\n3. Check email inbox for confirmation notification.\n4. Check SMS for confirmation message.\n5. Perform fee waiver operation and monitor notifications.\n6. Execute points redemption and verify notifications.\n7. Test credit limit change notifications.\n8. Measure delivery times for each notification type.",
+      "expectedResult": "All notifications are delivered successfully within 2 minutes of the triggering event, email and SMS content is accurate and properly formatted, and delivery confirmation is logged in the system."
+    }
+  ]
+}
