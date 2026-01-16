@@ -1,0 +1,837 @@
+openapi: 3.0.3
+info:
+  title: מערכת גבייה לכרטיסי אשראי
+  description: API למערכת גבייה מקיפה לכרטיסי אשראי הכוללת תזכורות, התראות, הודעות רשמיות ותוכניות תשלומים
+  version: 1.0.0
+  contact:
+    name: צוות פיתוח מערכת גבייה
+    email: collection-api@company.com
+
+servers:
+  - url: ${COLLECTION_API_BASE_URL}
+    description: שרת ייצור
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: טוקן הרשאה מ-Environment Variable 'AUTHORIZATION_TOKEN'
+
+  schemas:
+    PaymentReminderRequest:
+      type: object
+      required:
+        - cardNumber
+        - dueDate
+        - amount
+      properties:
+        cardNumber:
+          type: string
+          pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי (16 ספרות)
+          example: "1234567890123456"
+        dueDate:
+          type: string
+          format: date
+          description: תאריך פירעון
+          example: "2024-01-15"
+        amount:
+          type: number
+          format: double
+          minimum: 0
+          description: סכום לתשלום
+          example: 1500.00
+
+    PaymentReminderResponse:
+      type: object
+      properties:
+        reminderSent:
+          type: boolean
+          description: האם התזכורת נשלחה בהצלחה
+          example: true
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות של הכרטיס
+          example: "3456"
+        timestamp:
+          type: string
+          format: date-time
+          description: זמן שליחת התזכורת
+
+    OverdueAlertRequest:
+      type: object
+      required:
+        - cardNumber
+        - overdueAmount
+        - daysPastDue
+      properties:
+        cardNumber:
+          type: string
+          pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי
+          example: "9876543210987654"
+        overdueAmount:
+          type: number
+          format: double
+          minimum: 0
+          description: סכום באיחור
+          example: 2500.00
+        daysPastDue:
+          type: integer
+          minimum: 1
+          description: מספר ימים באיחור
+          example: 5
+
+    OverdueAlertResponse:
+      type: object
+      properties:
+        alertSent:
+          type: boolean
+          description: האם ההתראה נשלחה
+          example: true
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות
+          example: "7654"
+        overdueAmount:
+          type: number
+          format: double
+          description: סכום באיחור
+          example: 2500.00
+
+    FormalNoticeRequest:
+      type: object
+      required:
+        - cardNumber
+        - outstandingAmount
+        - daysPastDue
+        - additionalFees
+      properties:
+        cardNumber:
+          type: string
+          pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי
+          example: "1111222233334444"
+        outstandingAmount:
+          type: number
+          format: double
+          minimum: 0
+          description: יתרה חייבת
+          example: 5000.00
+        daysPastDue:
+          type: integer
+          minimum: 1
+          description: ימים באיחור
+          example: 35
+        additionalFees:
+          type: number
+          format: double
+          minimum: 0
+          description: עמלות נוספות
+          example: 250.00
+
+    FormalNoticeResponse:
+      type: object
+      properties:
+        formalNoticeSent:
+          type: boolean
+          description: האם ההודעה הרשמית נשלחה
+          example: true
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות
+          example: "4444"
+        totalAmount:
+          type: number
+          format: double
+          description: סכום כולל
+          example: 5250.00
+        additionalFees:
+          type: number
+          format: double
+          description: עמלות נוספות
+          example: 250.00
+
+    PaymentPlanRequest:
+      type: object
+      required:
+        - cardNumber
+        - totalDebt
+        - requestedMonths
+        - monthlyPaymentCapacity
+      properties:
+        cardNumber:
+          type: string
+          pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי
+          example: "5555666677778888"
+        totalDebt:
+          type: number
+          format: double
+          minimum: 0
+          description: חוב כולל
+          example: 8000.00
+        requestedMonths:
+          type: integer
+          minimum: 1
+          maximum: 60
+          description: מספר חודשים מבוקש
+          example: 12
+        monthlyPaymentCapacity:
+          type: number
+          format: double
+          minimum: 0
+          description: יכולת תשלום חודשית
+          example: 700.00
+
+    PaymentPlanResponse:
+      type: object
+      properties:
+        paymentPlanCreated:
+          type: boolean
+          description: האם תוכנית התשלומים נוצרה
+          example: true
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות
+          example: "8888"
+        monthlyPayment:
+          type: number
+          format: double
+          description: תשלום חודשי
+        interestRate:
+          type: number
+          format: double
+          description: שיעור ריבית
+        paymentSchedule:
+          type: array
+          items:
+            type: object
+            properties:
+              month:
+                type: integer
+              amount:
+                type: number
+                format: double
+              dueDate:
+                type: string
+                format: date
+
+    ExternalTransferRequest:
+      type: object
+      required:
+        - cardNumber
+        - outstandingAmount
+        - daysUnresponsive
+        - collectionAgencyId
+      properties:
+        cardNumber:
+          type: string
+          pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי
+          example: "9999888877776666"
+        outstandingAmount:
+          type: number
+          format: double
+          minimum: 0
+          description: יתרה חייבת
+          example: 12000.00
+        daysUnresponsive:
+          type: integer
+          minimum: 1
+          description: ימים ללא מענה
+          example: 60
+        collectionAgencyId:
+          type: string
+          description: מזהה סוכנות גבייה
+          example: "AGENCY_001"
+
+    ExternalTransferResponse:
+      type: object
+      properties:
+        transferredToAgency:
+          type: boolean
+          description: האם הועבר לסוכנות
+          example: true
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות
+          example: "6666"
+        agencyId:
+          type: string
+          description: מזהה סוכנות
+          example: "AGENCY_001"
+        internalNotificationsStopped:
+          type: boolean
+          description: האם הודעות פנימיות הופסקו
+          example: true
+
+    LegalDocumentationRequest:
+      type: object
+      required:
+        - cardNumber
+        - outstandingAmount
+        - daysPastDue
+        - legalAction
+      properties:
+        cardNumber:
+          type: string
+          pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי
+          example: "1234123412341234"
+        outstandingAmount:
+          type: number
+          format: double
+          minimum: 0
+          description: יתרה חייבת
+          example: 25000.00
+        daysPastDue:
+          type: integer
+          minimum: 1
+          description: ימים באיחור
+          example: 90
+        legalAction:
+          type: string
+          enum: [COURT_FILING, ARBITRATION, MEDIATION]
+          description: סוג הליך משפטי
+          example: "COURT_FILING"
+
+    LegalDocumentationResponse:
+      type: object
+      properties:
+        legalDocumentationPrepared:
+          type: boolean
+          description: האם התיעוד המשפטי הוכן
+          example: true
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות
+          example: "1234"
+        documentId:
+          type: string
+          description: מזהה מסמך
+        legalActionType:
+          type: string
+          description: סוג הליך משפטי
+          example: "COURT_FILING"
+
+    CardDetailsResponse:
+      type: object
+      properties:
+        lastFourDigits:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: 4 ספרות אחרונות בלבד
+          example: "1111"
+        accountStatus:
+          type: string
+          enum: [ACTIVE, OVERDUE, SUSPENDED, CLOSED]
+        currentBalance:
+          type: number
+          format: double
+
+    BulkReminderRequest:
+      type: object
+      required:
+        - dueDate
+        - batchSize
+      properties:
+        dueDate:
+          type: string
+          format: date
+          description: תאריך פירעון
+          example: "2024-01-15"
+        batchSize:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: גודל אצווה
+          example: 1000
+
+    BulkReminderResponse:
+      type: object
+      properties:
+        batchProcessingStarted:
+          type: boolean
+          description: האם עיבוד האצווה החל
+          example: true
+        estimatedCompletionTime:
+          type: string
+          format: date-time
+          description: זמן סיום משוער
+
+    BatchStatusResponse:
+      type: object
+      properties:
+        successRate:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+          description: אחוז הצלחה
+        completedWithin30Minutes:
+          type: boolean
+          description: האם הושלם תוך 30 דקות
+          example: true
+        totalProcessed:
+          type: integer
+        successfulSent:
+          type: integer
+        failed:
+          type: integer
+
+    SecurityStatusResponse:
+      type: object
+      properties:
+        databaseEncryption:
+          type: string
+          enum: [ENABLED, DISABLED]
+          description: הצפנת בסיס נתונים
+          example: "ENABLED"
+        communicationEncryption:
+          type: string
+          description: הצפנת תקשורת
+          example: "TLS_1.3"
+        accessControlEnabled:
+          type: boolean
+          description: בקרת גישה מופעלת
+          example: true
+
+    AuditLogResponse:
+      type: object
+      properties:
+        auditEntries:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              action:
+                type: string
+              userId:
+                type: string
+              lastFourDigits:
+                type: string
+                pattern: '^[0-9]{4}$'
+              result:
+                type: string
+
+    SystemHealthResponse:
+      type: object
+      properties:
+        systemAvailability:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+          description: זמינות המערכת באחוזים
+        averageResponseTime:
+          type: number
+          format: double
+          description: זמן תגובה ממוצע במילישניות
+        status:
+          type: string
+          enum: [HEALTHY, DEGRADED, DOWN]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: קוד שגיאה
+        message:
+          type: string
+          description: הודעת שגיאה
+        missingFields:
+          type: array
+          items:
+            type: string
+          description: שדות חסרים (במקרה של שגיאת validation)
+
+paths:
+  /api/reminders/payment:
+    post:
+      summary: שליחת תזכורת לתשלום כרטיס אשראי
+      description: שולח תזכורת לתשלום לבעל כרטיס אשראי לפני תאריך הפירעון
+      tags:
+        - תזכורות תשלום
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReminderRequest'
+      responses:
+        '200':
+          description: תזכורת נשלחה בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentReminderResponse'
+        '400':
+          description: נתונים חסרים או לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "CARD_NOT_FOUND"
+                message: "כרטיס האשראי לא נמצא במערכת"
+
+  /api/alerts/overdue:
+    post:
+      summary: שליחת התראת יתרה באיחור
+      description: שולח התראה על יתרה חייבת שעברה את תאריך הפירעון
+      tags:
+        - התראות איחור
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverdueAlertRequest'
+      responses:
+        '200':
+          description: התראה נשלחה בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OverdueAlertResponse'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/collection/formal-notice:
+    post:
+      summary: שליחת הודעת גבייה רשמית
+      description: שולח הודעת גבייה רשמית לחשבונות בפיגור משמעותי
+      tags:
+        - גבייה רשמית
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormalNoticeRequest'
+      responses:
+        '201':
+          description: הודעה רשמית נוצרה ונשלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormalNoticeResponse'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/payment-plans/create:
+    post:
+      summary: יצירת הצעת תוכנית תשלומים
+      description: יוצר תוכנית תשלומים מותאמת אישית לחייב
+      tags:
+        - תוכניות תשלומים
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentPlanRequest'
+      responses:
+        '201':
+          description: תוכנית תשלומים נוצרה בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanResponse'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/collection/transfer-external:
+    post:
+      summary: העברה לסוכנות גבייה חיצונית
+      description: מעביר חשבון לסוכנות גבייה חיצונית לטיפול מתקדם
+      tags:
+        - גבייה חיצונית
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalTransferRequest'
+      responses:
+        '200':
+          description: חשבון הועבר בהצלחה לסוכנות חיצונית
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalTransferResponse'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/legal/prepare-documentation:
+    post:
+      summary: הכנת תיעוד להליכים משפטיים
+      description: מכין תיעוד משפטי לחשבונות בפיגור קיצוני
+      tags:
+        - הליכים משפטיים
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalDocumentationRequest'
+      responses:
+        '201':
+          description: תיעוד משפטי הוכן בהצלחה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalDocumentationResponse'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/cards/{cardNumber}/details:
+    get:
+      summary: קבלת פרטי כרטיס אשראי (מאובטח)
+      description: מחזיר פרטי כרטיס אשראי ללא חשיפת מספר הכרטיס המלא
+      tags:
+        - פרטי כרטיסים
+      parameters:
+        - name: cardNumber
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{16}$'
+          description: מספר כרטיס אשראי (16 ספרות)
+          example: "4444333322221111"
+      responses:
+        '200':
+          description: פרטי כרטיס (מאובטח)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardDetailsResponse'
+        '404':
+          description: כרטיס אשראי לא נמצא
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/reminders/bulk-send:
+    post:
+      summary: שליחת הודעות המוניות
+      description: שולח תזכורות תשלום לכמות גדולה של כרטיסי אשראי
+      tags:
+        - עיבוד המוני
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkReminderRequest'
+      responses:
+        '202':
+          description: עיבוד אצווה החל
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkReminderResponse'
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/reminders/batch-status:
+    get:
+      summary: בדיקת סטטוס עיבוד אצווה
+      description: מחזיר סטטוס עיבוד אצווה של הודעות המוניות
+      tags:
+        - עיבוד המוני
+      responses:
+        '200':
+          description: סטטוס עיבוד אצווה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStatusResponse'
+
+  /api/security/encryption-status:
+    get:
+      summary: בדיקת סטטוס הצפנה
+      description: מחזיר מידע על סטטוס ההצפנה במערכת
+      tags:
+        - אבטחה
+      responses:
+        '200':
+          description: סטטוס הצפנה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityStatusResponse'
+
+  /api/security/audit-log:
+    get:
+      summary: קבלת יומן ביקורת
+      description: מחזיר רשומות ביקורת של פעולות גבייה
+      tags:
+        - אבטחה
+      responses:
+        '200':
+          description: יומן ביקורת
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogResponse'
+
+  /api/system/health:
+    get:
+      summary: בדיקת בריאות המערכת
+      description: מחזיר מידע על זמינות וביצועי המערכת
+      tags:
+        - מערכת
+      responses:
+        '200':
+          description: סטטוס בריאות המערכת
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealthResponse'
+
+  /api/collection/process:
+    post:
+      summary: עיבוד תהליך גבייה כללי
+      description: מעבד תהליכי גבייה שונים (לבדיקות עומס)
+      tags:
+        - עיבוד כללי
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processType:
+                  type: string
+                  enum: [REMINDER, ALERT, FORMAL_NOTICE]
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                amount:
+                  type: number
+                  format: double
+      responses:
+        '200':
+          description: תהליך גבייה הושלם בהצלחה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  processCompleted:
+                    type: boolean
+                  processId:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '400':
+          description: נתונים לא תקינים
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+tags:
+  - name: תזכורות תשלום
+    description: פעולות הקשורות לתזכורות תשלום
+  - name: התראות איחור
+    description: פעולות הקשורות להתראות איחור
+  - name: גבייה רשמית
+    description: פעולות גבייה רשמית
+  - name: תוכניות תשלומים
+    description: יצירה וניהול תוכניות תשלומים
+  - name: גבייה חיצונית
+    description: העברה לסוכנויות גבייה חיצוניות
+  - name: הליכים משפטיים
+    description: הכנת תיעוד משפטי
+  - name: פרטי כרטיסים
+    description: קבלת פרטי כרטיסי אשראי
+  - name: עיבוד המוני
+    description: עיבוד כמויות גדולות של נתונים
+  - name: אבטחה
+    description: פעולות אבטחה וביקורת
+  - name: מערכת
+    description: בדיקות מערכת וביצועים
+  - name: עיבוד כללי
+    description: עיבוד תהליכי גבייה כלליים
