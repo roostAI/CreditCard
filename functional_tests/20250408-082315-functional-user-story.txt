@@ -1,0 +1,58 @@
+Functional Test Cases:
+
+1. Credit Card Due Reminder:
+   - Input: Due date, last 4 digits of credit card number
+   - Expected Output: Automated notification sent to cardholder with due date and last 4 digits of credit card number
+   - Edge Case: Test with due date set to today, tomorrow, and a past date
+
+2. Overdue Balance Alert:
+   - Input: Missed payment due date, last 4 digits of credit card number
+   - Expected Output: Alert sent to cardholder with overdue balance details and last 4 digits of credit card number
+   - Edge Case: Test with due date set to today, tomorrow, and a past date
+
+3. Collection Notification:
+   - Input: Delinquent account, last 4 digits of credit card number
+   - Expected Output: Collection notification sent to cardholder with amount owed, additional charges, and last 4 digits of credit card number
+   - Edge Case: Test with different amounts owed and additional charges
+
+4. Payment Plan Proposal:
+   - Input: Overdue balance, last 4 digits of credit card number
+   - Expected Output: Payment plan proposal sent to cardholder with repayment schedule, reduced interest rates or fees, and last 4 digits of credit card number
+   - Edge Case: Test with different overdue balances and repayment schedules
+
+5. Collection Agency Involvement:
+   - Input: Non-responsive cardholder, last 4 digits of credit card number
+   - Expected Output: Collection agency receives last 4 digits of credit card number
+   - Edge Case: Test with different collection agencies
+
+6. Legal Action Initiation:
+   - Input: Non-payment or default, last 4 digits of credit card number
+   - Expected Output: Legal documentation includes last 4 digits of credit card number
+   - Edge Case: Test with different legal actions
+
+Non-Functional Test Cases:
+
+1. Security:
+   - Input: Any communication or documentation related to the collection process
+   - Expected Output: Only the last 4 digits of the credit card number are included
+   - Edge Case: Test with full credit card number
+
+2. Performance:
+   - Input: High volume of notifications or alerts
+   - Expected Output: System should handle high volume without performance degradation
+   - Edge Case: Test with varying volumes of notifications or alerts
+
+3. Usability:
+   - Input: Any communication or documentation related to the collection process
+   - Expected Output: Information should be clear, concise, and easy to understand
+   - Edge Case: Test with different levels of complexity in the information
+
+4. Reliability:
+   - Input: Continuous operation of the system
+   - Expected Output: System should operate without failure under specified conditions
+   - Edge Case: Test with different operating conditions
+
+5. Scalability:
+   - Input: Increase in the number of cardholders
+   - Expected Output: System should be able to handle increased load
+   - Edge Case: Test with varying numbers of cardholders
