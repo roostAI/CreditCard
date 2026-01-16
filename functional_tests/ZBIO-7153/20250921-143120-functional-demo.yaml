@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  title: מערכת גבייה של כרטיסי אשראי - API
+  description: API למערכת גבייה של כרטיסי אשראי הכוללת תזכורות תשלום, התראות איחור, הודעות גבייה רשמיות ותוכניות תשלומים
+  version: 1.0.0
+  contact:
+    name: צוות פיתוח מערכת גבייה
+    email: support@creditcard-collection.com
+
+servers:
+  - url: ${API_BASE_URL}
+    description: שרת ייצור
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/payment-reminders:
+    post:
+      summary: שליחת תזכורת תשלום כרטיס אשראי
+      description: שולח תזכורת תשלום ללקוח עבור כרטיס אשראי עם תאריך פירעון מתקרב
+      tags:
+        - תזכורות תשלום
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardNumber
+                - dueDate
+                - amount
+                - customerEmail
+              properties:
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                  description: מספר כרטיס אשראי (16 ספרות)
+                  example: "1234567890123456"
+                dueDate:
+                  type: string
+                  format: date
+                  description: תאריך פירעון
+                  example: "2024-01-15"
+                amount:
+                  type: number
+                  format: double
+                  minimum: 0
+                  description: סכום לתשלום
+                  example: 1500.00
+                customerEmail:
+                  type: string
+                  format: email
+                  description: כתובת דוא"ל של הלקוח
+                  example: "customer@example.com"
+      responses:
+        '200':
+          description: תזכורת נשלחה בהצלחה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "תזכורת נשלחה בהצלחה"
+                  cardLastFour:
+                    type: string
+                    example: "3456"
+                  sentAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: בקשה לא תקינה
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "מספר כרטיס לא תקין"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      summary: קבלת רשימת תזכורות תשלום
+      description: מחזיר רשימת תזכורות תשלום שנשלחו
+      tags:
+        - תזכורות תשלום
+      responses:
+        '200':
+          description: רשימת תזכורות התקבלה בהצלחה
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentReminder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/overdue-alerts:
+    post:
+      summary: שליחת התראת יתרה באיחור
+      description: שולח התראה ללקוח על יתרה באיחור
+      tags:
+        - התראות איחור
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardNumber
+                - overdueAmount
+                - daysPastDue
+                - customerEmail
+              properties:
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                  description: מספר כרטיס אשראי
+                  example: "9876543210987654"
+                overdueAmount:
+                  type: number
+                  format: double
+                  minimum: 0
+                  description: סכום באיחור
+                  example: 2500.00
+                daysPastDue:
+                  type: integer
+                  minimum: 1
+                  description: מספר ימים באיחור
+                  example: 1
+                customerEmail:
+                  type: string
+                  format: email
+                  description: כתובת דוא"ל של הלקוח
+                  example: "customer@example.com"
+      responses:
+        '200':
+          description: התראת איחור נשלחה בהצלחה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "התראת איחור נשלחה"
+                  cardLastFour:
+                    type: string
+                    example: "7654"
+                  balanceDetails:
+                    type: string
+                    description: פרטי יתרה והשלכות
+                  consequences:
+                    type: string
+                    description: השלכות האיחור
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/formal-collection-notice:
+    post:
+      summary: שליחת הודעת גבייה רשמית
+      description: שולח הודעת גבייה רשמית לחשבון בפיגור משמעותי
+      tags:
+        - הודעות גבייה רשמיות
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardNumber
+                - overdueAmount
+                - daysPastDue
+                - additionalFees
+                - customerEmail
+              properties:
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                  example: "5555444433332222"
+                overdueAmount:
+                  type: number
+                  format: double
+                  minimum: 0
+                  example: 5000.00
+                daysPastDue:
+                  type: integer
+                  minimum: 1
+                  example: 35
+                additionalFees:
+                  type: number
+                  format: double
+                  minimum: 0
+                  example: 250.00
+                customerEmail:
+                  type: string
+                  format: email
+                  example: "customer@example.com"
+      responses:
+        '200':
+          description: הודעת גבייה רשמית נשלחה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "הודעת גבייה רשמית נשלחה"
+                  cardLastFour:
+                    type: string
+                    example: "2222"
+                  amountBreakdown:
+                    type: string
+                    description: פירוט סכום חייב וחיובים נוספים
+                  additionalCharges:
+                    type: string
+                    description: חיובים נוספים
+
+  /api/payment-plan-proposal:
+    post:
+      summary: יצירת הצעת תוכנית תשלומים
+      description: יוצר הצעת תוכנית תשלומים מותאמת אישית
+      tags:
+        - תוכניות תשלומים
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardNumber
+                - totalAmount
+                - requestedMonths
+                - customerEmail
+              properties:
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                  example: "1111222233334444"
+                totalAmount:
+                  type: number
+                  format: double
+                  minimum: 0
+                  example: 5000.00
+                requestedMonths:
+                  type: integer
+                  minimum: 1
+                  maximum: 60
+                  example: 12
+                customerEmail:
+                  type: string
+                  format: email
+                  example: "customer@example.com"
+      responses:
+        '201':
+          description: הצעת תוכנית תשלומים נוצרה בהצלחה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "הצעת תוכנית תשלומים נוצרה"
+                  cardLastFour:
+                    type: string
+                    example: "4444"
+                  paymentSchedule:
+                    type: string
+                    description: לוח זמנים מפורט
+                  reducedInterest:
+                    type: string
+                    description: ריביות מופחתות
+
+  /api/transfer-to-collection-agency:
+    post:
+      summary: העברת חשבון לסוכנות גבייה
+      description: מעביר חשבון ללא תגובה לסוכנות גבייה חיצונית
+      tags:
+        - סוכנויות גבייה
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardNumber
+                - totalAmount
+                - daysPastDue
+                - agencyId
+              properties:
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                  example: "6666777788889999"
+                totalAmount:
+                  type: number
+                  format: double
+                  minimum: 0
+                  example: 7500.00
+                daysPastDue:
+                  type: integer
+                  minimum: 1
+                  example: 65
+                agencyId:
+                  type: string
+                  example: "AGENCY_001"
+      responses:
+        '200':
+          description: החשבון הועבר לסוכנות גבייה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "החשבון הועבר לסוכנות גבייה"
+                  cardLastFour:
+                    type: string
+                    example: "9999"
+                  transferDate:
+                    type: string
+                    format: date-time
+
+  /api/legal-documentation:
+    post:
+      summary: יצירת תיעוד משפטי
+      description: יוצר תיעוד משפטי לחשבון בפיגור קיצוני
+      tags:
+        - תיעוד משפטי
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cardNumber
+                - totalAmount
+                - daysPastDue
+                - legalApproval
+              properties:
+                cardNumber:
+                  type: string
+                  pattern: '^[0-9]{16}$'
+                  example: "8888999900001111"
+                totalAmount:
+                  type: number
+                  format: double
+                  minimum: 0
+                  example: 10000.00
+                daysPastDue:
+                  type: integer
+                  minimum: 1
+                  example: 95
+                legalApproval:
+                  type: boolean
+                  example: true
+      responses:
+        '201':
+          description: תיעוד משפטי נוצר בהצלחה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "תיעוד משפטי נוצר"
+                  cardLastFour:
+                    type: string
+                    example: "1111"
+                  documentId:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+
+  /api/security-audit/card-exposure:
+    get:
+      summary: בדיקת אבטחת מידע - אי חשיפת מספר כרטיס מלא
+      description: בודק שאין חשיפה של מספרי כרטיסי אשראי מלאים במערכת
+      tags:
+        - אבטחת מידע
+      parameters:
+        - name: cardNumber
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]{16}$'
+          example: "4444333322221111"
+      responses:
+        '200':
+          description: בדיקת אבטחה הושלמה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "אין חשיפה של מספר כרטיס מלא"
+                  cardLastFour:
+                    type: string
+                    example: "1111"
+                  auditResult:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/performance-test/bulk-notifications:
+    post:
+      summary: בדיקת ביצועים - זמן תגובה לשליחת הודעות
+      description: בודק ביצועי המערכת בשליחת הודעות בכמויות גדולות
+      tags:
+        - בדיקות ביצועים
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountCount
+                - notificationType
+              properties:
+                accountCount:
+                  type: integer
+                  minimum: 1
+                  example: 1000
+                notificationType:
+                  type: string
+                  enum: [payment_reminder, overdue_alert, collection_notice]
+                  example: "payment_reminder"
+      responses:
+        '200':
+          description: בדיקת ביצועים הושלמה
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "בדיקת ביצועים הושלמה"
+                  averageResponseTime:
+                    type: number
+                    format: double
+                    description: זמן תגובה ממוצע באלפיות שנייה
+                  totalProcessingTime:
+                    type: number
+                    format: double
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: הרשאה באמצעות JWT token
+
+  schemas:
+    PaymentReminder:
+      type: object
+      properties:
+        id:
+          type: string
+        cardLastFour:
+          type: string
+        amount:
+          type: number
+          format: double
+        dueDate:
+          type: string
+          format: date
+        sentAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: הודעת שגיאה
+        code:
+          type: string
+          description: קוד שגיאה
+        timestamp:
+          type: string
+          format: date-time
+
+  responses:
+    Unauthorized:
+      description: לא מורשה - נדרש token הרשאה תקין
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "לא מורשה"
+            code: "UNAUTHORIZED"
