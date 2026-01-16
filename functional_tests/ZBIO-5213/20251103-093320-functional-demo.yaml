@@ -1,0 +1,660 @@
+openapi: 3.0.3
+info:
+  title: Credit Card Collection Lifecycle Management System API
+  description: API for managing credit card collection processes including notifications, payment plans, and agency transfers
+  version: 1.0.0
+  contact:
+    name: Collection System API Support
+    email: api-support@collectionsystem.com
+
+servers:
+  - url: '{BASE_URL}'
+    description: Environment-specific base URL
+    variables:
+      BASE_URL:
+        default: https://api.collectionsystem.com
+        description: Base URL from environment variable
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    AccountDetails:
+      type: object
+      required:
+        - accountId
+        - balance
+        - dueDate
+        - lastFourDigits
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        balance:
+          type: number
+          format: double
+          example: 1250.50
+        dueDate:
+          type: string
+          format: date
+          example: "2024-01-15"
+        lastFourDigits:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "1234"
+        status:
+          type: string
+          enum: [current, overdue, delinquent, default]
+
+    DueReminderRequest:
+      type: object
+      required:
+        - accountId
+        - notificationType
+        - dueDate
+        - amountDue
+        - lastFourDigits
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        notificationType:
+          type: string
+          enum: [dueReminder]
+        dueDate:
+          type: string
+          format: date
+          example: "2024-01-15"
+        amountDue:
+          type: number
+          format: double
+          example: 250.00
+        lastFourDigits:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "1234"
+
+    NotificationResponse:
+      type: object
+      properties:
+        notificationId:
+          type: string
+          example: "notif_123456"
+        status:
+          type: string
+          enum: [scheduled, sent, failed]
+        scheduledDate:
+          type: string
+          format: date-time
+
+    OverdueAlertRequest:
+      type: object
+      required:
+        - accountId
+        - overdueAmount
+        - daysPastDue
+        - lastFourDigits
+        - consequences
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        overdueAmount:
+          type: number
+          format: double
+          example: 500.00
+        daysPastDue:
+          type: integer
+          example: 15
+        lastFourDigits:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "1234"
+        consequences:
+          type: array
+          items:
+            type: string
+          example: ["late fees", "interest charges"]
+
+    OverdueAlertResponse:
+      type: object
+      properties:
+        alertId:
+          type: string
+          example: "alert_789012"
+        scheduledDate:
+          type: string
+          format: date-time
+        notificationType:
+          type: string
+          enum: [overdueAlert]
+        consequences:
+          type: array
+          items:
+            type: string
+
+    CollectionNotificationRequest:
+      type: object
+      required:
+        - accountId
+        - totalAmountOwed
+        - additionalCharges
+        - daysPastDue
+        - lastFourDigits
+        - collectionStage
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        totalAmountOwed:
+          type: number
+          format: double
+          example: 1500.00
+        additionalCharges:
+          type: number
+          format: double
+          example: 75.00
+        daysPastDue:
+          type: integer
+          example: 65
+        lastFourDigits:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "1234"
+        collectionStage:
+          type: string
+          enum: [informal, formal, legal]
+
+    CollectionNotificationResponse:
+      type: object
+      properties:
+        collectionId:
+          type: string
+          example: "coll_345678"
+        notificationDate:
+          type: string
+          format: date-time
+        stage:
+          type: string
+          enum: [informal, formal, legal]
+        chargesBreakdown:
+          type: object
+          properties:
+            principal:
+              type: number
+              format: double
+            interest:
+              type: number
+              format: double
+            fees:
+              type: number
+              format: double
+
+    PaymentPlanRequest:
+      type: object
+      required:
+        - accountId
+        - totalBalance
+        - proposedMonthlyPayment
+        - planDuration
+        - reducedInterestRate
+        - lastFourDigits
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        totalBalance:
+          type: number
+          format: double
+          example: 2000.00
+        proposedMonthlyPayment:
+          type: number
+          format: double
+          example: 200.00
+        planDuration:
+          type: integer
+          example: 12
+        reducedInterestRate:
+          type: number
+          format: double
+          example: 5.5
+        lastFourDigits:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "1234"
+
+    PaymentPlanResponse:
+      type: object
+      properties:
+        proposalId:
+          type: string
+          example: "plan_901234"
+        terms:
+          type: object
+          properties:
+            monthlyPayment:
+              type: number
+              format: double
+            duration:
+              type: integer
+            totalAmount:
+              type: number
+              format: double
+        monthlyPayment:
+          type: number
+          format: double
+          example: 200.00
+        reducedInterestRate:
+          type: number
+          format: double
+          example: 5.5
+
+    AgencyTransferRequest:
+      type: object
+      required:
+        - accountId
+        - agencyId
+        - transferReason
+        - accountData
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        agencyId:
+          type: string
+          example: "AGENCY001"
+        transferReason:
+          type: string
+          enum: [failed_collection_attempts, legal_escalation, customer_request]
+        accountData:
+          type: object
+          properties:
+            overdueAmount:
+              type: number
+              format: double
+              example: 3000.00
+            lastFourDigits:
+              type: string
+              pattern: "^\\d{4}$"
+              example: "1234"
+            paymentHistory:
+              type: array
+              items:
+                type: object
+
+    AgencyTransferResponse:
+      type: object
+      properties:
+        transferId:
+          type: string
+          example: "transfer_567890"
+        transferDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [transferred, pending, failed]
+
+    LegalDocumentRequest:
+      type: object
+      required:
+        - accountId
+        - documentType
+        - totalAmountOwed
+        - lastFourDigits
+        - collectionAttempts
+      properties:
+        accountId:
+          type: string
+          example: "12345"
+        documentType:
+          type: string
+          enum: [legal_notice, demand_letter, court_filing]
+        totalAmountOwed:
+          type: number
+          format: double
+          example: 5000.00
+        lastFourDigits:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "1234"
+        collectionAttempts:
+          type: integer
+          example: 5
+
+    LegalDocumentResponse:
+      type: object
+      properties:
+        documentId:
+          type: string
+          example: "doc_123789"
+        generatedDate:
+          type: string
+          format: date-time
+        documentType:
+          type: string
+          enum: [legal_notice, demand_letter, court_filing]
+
+    BulkNotificationRequest:
+      type: object
+      properties:
+        accountIds:
+          type: array
+          items:
+            type: string
+        notificationType:
+          type: string
+          enum: [dueReminder, overdueAlert, collectionNotice]
+
+    BulkNotificationResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+          example: "batch_456123"
+        totalCount:
+          type: integer
+        status:
+          type: string
+          enum: [processing, completed, failed]
+
+    BatchStatusResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+        processedCount:
+          type: integer
+        successCount:
+          type: integer
+        failedCount:
+          type: integer
+        processingTimeMinutes:
+          type: number
+          format: double
+        successRate:
+          type: number
+          format: double
+
+    NotificationList:
+      type: object
+      properties:
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              notificationId:
+                type: string
+              accountId:
+                type: string
+              type:
+                type: string
+              status:
+                type: string
+              lastFourDigits:
+                type: string
+                pattern: "^\\d{4}$"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: integer
+
+paths:
+  /api/accounts/{accountId}:
+    get:
+      summary: Retrieve credit card account details
+      description: Get detailed information about a specific credit card account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "12345"
+      responses:
+        '200':
+          description: Account details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDetails'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/accounts/{accountId}/notifications:
+    get:
+      summary: Get account notifications
+      description: Retrieve all notifications for a specific account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "12345"
+      responses:
+        '200':
+          description: Notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationList'
+        '404':
+          description: Account not found
+        '401':
+          description: Unauthorized access
+
+  /api/notifications/due-reminder:
+    post:
+      summary: Create due reminder notification
+      description: Generate and schedule a due reminder notification for an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DueReminderRequest'
+      responses:
+        '201':
+          description: Due reminder notification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/notifications/overdue-alert:
+    post:
+      summary: Generate overdue balance alert
+      description: Create an overdue balance alert notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverdueAlertRequest'
+      responses:
+        '201':
+          description: Overdue alert created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OverdueAlertResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/collections/notification:
+    post:
+      summary: Create collection notification
+      description: Generate a formal collection notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionNotificationRequest'
+      responses:
+        '201':
+          description: Collection notification created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionNotificationResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/payment-plans/proposal:
+    post:
+      summary: Generate payment plan proposal
+      description: Create a payment plan proposal for an overdue account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentPlanRequest'
+      responses:
+        '201':
+          description: Payment plan proposal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/collections/agency-transfer:
+    post:
+      summary: Transfer account to collection agency
+      description: Transfer a delinquent account to an external collection agency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyTransferRequest'
+      responses:
+        '201':
+          description: Account transferred successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyTransferResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/legal/documentation:
+    post:
+      summary: Generate legal documentation
+      description: Create legal documents for accounts requiring legal action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalDocumentRequest'
+      responses:
+        '201':
+          description: Legal documentation generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalDocumentResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/notifications/bulk-trigger:
+    post:
+      summary: Trigger bulk notifications
+      description: Process multiple notifications in batch for performance testing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkNotificationRequest'
+      responses:
+        '202':
+          description: Bulk notification processing started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkNotificationResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /api/notifications/batch-status/{batchId}:
+    get:
+      summary: Get batch processing status
+      description: Check the status and performance metrics of a bulk notification batch
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "batch_456123"
+      responses:
+        '200':
+          description: Batch status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStatusResponse'
+        '404':
+          description: Batch not found
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
