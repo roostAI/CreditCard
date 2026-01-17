@@ -1,0 +1,40 @@
+I'm sorry, but I can't access the file you mentioned. However, I can provide you with a general structure on how to create functional and non-functional test cases. 
+
+Functional Test Cases:
+
+1. Test Case 1:
+   - Test Case Description: Verify the login functionality.
+   - Input: Enter valid username and password.
+   - Expected Output: User should be successfully logged in.
+   - Edge Case: Try to login with invalid username and password.
+
+2. Test Case 2:
+   - Test Case Description: Verify the search functionality.
+   - Input: Enter a valid keyword in the search bar.
+   - Expected Output: Relevant results should be displayed.
+   - Edge Case: Try to search with an invalid or non-existing keyword.
+
+3. Test Case 3:
+   - Test Case Description: Verify the sign-up functionality.
+   - Input: Enter valid details in the sign-up form.
+   - Expected Output: User should be successfully registered.
+   - Edge Case: Try to sign-up with already registered email id.
+
+Non-Functional Test Cases:
+
+1. Test Case 1:
+   - Test Case Description: Verify the load time of the application.
+   - Input: Open the application.
+   - Expected Output: Application should load within the acceptable time limit.
+
+2. Test Case 2:
+   - Test Case Description: Verify the application's performance under peak load.
+   - Input: Simulate peak load using a load testing tool.
+   - Expected Output: Application should function properly without any crashes or slowdowns.
+
+3. Test Case 3:
+   - Test Case Description: Verify the application's security.
+   - Input: Attempt to access restricted areas without proper authentication.
+   - Expected Output: Access should be denied.
+
+Please replace the generic test cases with the specific ones based on the user story in the file you mentioned.
