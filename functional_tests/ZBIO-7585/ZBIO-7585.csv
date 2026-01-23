@@ -1,0 +1,21 @@
+Bitbucket connector setup and repository metadata population with retry and latency injection
+GitLab connectors globally deprioritized are skipped with clear UI messaging and deterministic plan behavior
+Okta SSO invalid configuration handling, session renewal, deep-link authorization, and dual-login plan broken handling
+Rest-Assured analyze logs stalled detection, timeout to stuck, retry, cancellation, and reconciliation
+Karate analyze under resource and dependency failures with recovery and insights/report validation
+Cross-framework insights visibility, reporter failure surfacing, analyze-not-triggered handling, and Allure reconciliation
+Local login CSRF enforcement, invalid credential messaging, and remember-me persistence
+Session expiry redirect to login and deep-link return without data leakage; logout clears session
+Logs deep-link streaming with pagination, blip recovery, deduplication, sticky auto-scroll, and clean cancellation/rerun
+Deep link security for invalid, expired, and unauthorized IDs across Workflow, Logs, and Insights
+Multi-framework plan transitions to Partial due to a single component failure, then completes after rerun of failed component
+Allure report generation failure, regeneration workflow, artifact integrity checks, and deep-link mapping
+Postman/Newman analyze with environment handling, reporter configuration changes, artifacts, and reconciliation
+Workflow dashboard filters, sorting, pagination, bulk retry/cancel, and context preservation
+Analyze trigger idempotency, deduplication under rapid retries, and conflict handling
+Logs pagination API returns ordered, non-duplicated lines and resumes after transient failures
+Connector validation transitions and metadata refresh
+Deep link API security for invalid, nonexistent, unauthorized, archived IDs
+Pytest API insights counters and classification mapping (failed, broken, skipped, xfail/xpass)
+Connector resilience to repository rename and branch deletion via pre-run validation, skip, and re-map
+Allure report generation regeneration endpoint, checksum validation, and cancellation semantics
