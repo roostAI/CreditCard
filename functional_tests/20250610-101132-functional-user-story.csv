@@ -1,0 +1,6 @@
+Testing HTTP GET method
+Testing HTTP POST method
+Testing HTTP PUT method
+Testing HTTP DELETE method
+Testing HTTP GET method with incorrect endpoint
+Testing HTTP POST method with incorrect payload
