@@ -1,0 +1,221 @@
+openapi: 3.0.0
+info:
+  title: Portfolio Rebalancing Suggestion System API
+  version: 1.0.0
+  description: API for managing and analyzing investment portfolios
+
+servers:
+  - url: https://api.portfoliorebalancing.com/v1
+
+paths:
+  /api/portfolio/composition:
+    get:
+      summary: Retrieve portfolio composition
+      description: Get the current composition of the user's portfolio
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  composition:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        asset:
+                          type: string
+                          enum: [Stock, Liquid funds, Commodities, Real Estate]
+                        percentage:
+                          type: number
+                          format: float
+                          minimum: 0
+                          maximum: 100
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/portfolio/analyze:
+    get:
+      summary: Analyze portfolio and suggest rebalancing
+      description: Analyze the current portfolio composition and provide rebalancing suggestions
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  needsRebalancing:
+                    type: boolean
+                  suggestions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        action:
+                          type: string
+                          enum: [sell, buy]
+                        asset:
+                          type: string
+                          enum: [Stock, Liquid funds, Commodities, Real Estate]
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/transaction/sell:
+    post:
+      summary: Sell an asset
+      description: Execute a sell transaction for a specific asset
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                asset:
+                  type: string
+                  enum: [Stock, Liquid funds, Commodities, Real Estate]
+                amount:
+                  type: number
+                  format: float
+                  minimum: 0
+              required:
+                - asset
+                - amount
+      responses:
+        '200':
+          description: Successful transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionConfirmed:
+                    type: boolean
+                  updatedComposition:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        asset:
+                          type: string
+                          enum: [Stock, Liquid funds, Commodities, Real Estate]
+                        percentage:
+                          type: number
+                          format: float
+                          minimum: 0
+                          maximum: 100
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/transaction/buy:
+    post:
+      summary: Buy an asset
+      description: Execute a buy transaction for a specific asset
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                asset:
+                  type: string
+                  enum: [Stock, Liquid funds, Commodities, Real Estate]
+                amount:
+                  type: number
+                  format: float
+                  minimum: 0
+              required:
+                - asset
+                - amount
+      responses:
+        '200':
+          description: Successful transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionConfirmed:
+                    type: boolean
+                  updatedComposition:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        asset:
+                          type: string
+                          enum: [Stock, Liquid funds, Commodities, Real Estate]
+                        percentage:
+                          type: number
+                          format: float
+                          minimum: 0
+                          maximum: 100
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+
