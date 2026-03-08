@@ -101,6 +101,36 @@
       "expectedResult": "All communication channels display identical core information: same overdue amount, same due dates, same masked card number (****XXXX), same payment instructions, with only formatting differences appropriate to each channel's constraints."
     },
     {
+      "type": "functional",
+      "title": "Payment Plan Proposal - Customer Outreach",
+      "description": "Verify that structured payment plan proposals are offered to cardholders unable to pay full overdue balance.",
+      "testId": "TC-021",
+      "testDescription": "As a card issuer, I want to offer payment plan proposals to cardholders who cannot pay their full overdue balance at once, providing structured repayment options with potential fee reductions.",
+      "prerequisites": "Credit card account with significant overdue balance, payment plan calculation system, cardholder hardship indicators, reduced interest rate capabilities.",
+      "stepsToPerform": "1. Set up credit card account with large overdue balance (>$1000)\n2. Configure cardholder profile indicating financial hardship\n3. Trigger payment plan proposal generation\n4. Verify proposal includes structured repayment schedule\n5. Check for reduced interest rates or fee waivers\n6. Confirm proposal includes last 4 digits of card number\n7. Verify payment plan terms are clearly explained",
+      "expectedResult": "Payment plan proposal is generated containing: structured repayment schedule with monthly amounts, reduced interest rates or waived fees, last 4 digits of card number for identification, clear acceptance instructions, contact information for questions, and legal terms of the payment agreement."
+    },
+    {
+      "type": "functional",
+      "title": "Collection Agency Involvement - Data Transfer",
+      "description": "Verify proper data transfer to collection agencies when accounts require escalated collection efforts.",
+      "testId": "TC-022",
+      "testDescription": "As a card issuer, I want to properly transfer delinquent account information to collection agencies while maintaining data security and providing necessary identification details.",
+      "prerequisites": "Credit card account with failed collection attempts, collection agency integration system, data security protocols, account transfer workflows.",
+      "stepsToPerform": "1. Set up severely delinquent account with failed internal collection attempts\n2. Initiate collection agency transfer process\n3. Verify secure data transmission to collection agency\n4. Confirm only last 4 digits of card number are transferred\n5. Check that full account history is provided to agency\n6. Verify agency receives proper identification information\n7. Confirm data encryption during transfer",
+      "expectedResult": "Collection agency receives complete account information including: total balance owed, payment history, contact attempts made, last 4 digits of card number for identification, cardholder contact information, and account status, all transmitted through secure encrypted channels."
+    },
+    {
+      "type": "functional",
+      "title": "Legal Action Initiation - Documentation Preparation",
+      "description": "Verify proper preparation of legal documentation for extreme cases of non-payment or default.",
+      "testId": "TC-023",
+      "testDescription": "As a card issuer, I want to prepare comprehensive legal documentation for cases requiring legal action while ensuring proper account identification and data security.",
+      "prerequisites": "Credit card account with extreme delinquency, legal action criteria met, legal documentation templates, compliance with legal requirements.",
+      "stepsToPerform": "1. Set up account meeting legal action criteria (180+ days delinquent)\n2. Generate legal action documentation\n3. Verify documentation includes last 4 digits of card number\n4. Check complete account history and collection attempts are documented\n5. Confirm legal compliance requirements are met\n6. Verify proper cardholder identification in legal documents\n7. Check that full card number is never included in legal documents",
+      "expectedResult": "Legal documentation is prepared containing: complete account history, total amount owed including fees, last 4 digits of card number for identification, record of all collection attempts, cardholder information, legal grounds for action, and full compliance with legal requirements while maintaining card data security."
+    },
+    {
       "type": "negative",
       "title": "System Failure During Critical Collection Period",
       "description": "Verify system behavior when notification services fail during critical collection periods.",

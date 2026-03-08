@@ -147,6 +147,115 @@ paths:
         '500':
           description: Internal server error
 
+  /collection/notifications/payment-plan-proposals:
+    post:
+      tags:
+        - Payment Plan Proposals
+      summary: Generate payment plan proposals for overdue balances
+      description: Create structured payment plan proposals for cardholders unable to pay full balance at once
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentPlanProposalRequest'
+            examples:
+              payment_plan_proposal:
+                summary: Standard payment plan proposal
+                value:
+                  cardLastFour: "1234"
+                  overdueAmount: 1500.00
+                  proposedMonthlyPayment: 250.00
+                  proposedTermMonths: 6
+                  reducedInterestRate: 5.5
+      responses:
+        '201':
+          description: Payment plan proposal generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentPlanProposalResponse'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /collection/notifications/collection-agency:
+    post:
+      tags:
+        - Collection Agency
+      summary: Initiate collection agency involvement
+      description: Process collection agency involvement for unresponsive accounts
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionAgencyRequest'
+            examples:
+              agency_involvement:
+                summary: Collection agency involvement
+                value:
+                  cardLastFour: "1234"
+                  balanceAmount: 2500.00
+                  monthsDelinquent: 6
+                  accountIdentifier: "ACC-123456"
+      responses:
+        '201':
+          description: Collection agency involvement initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionAgencyResponse'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
+  /collection/notifications/legal-action:
+    post:
+      tags:
+        - Legal Action
+      summary: Initiate legal action for extreme non-payment cases
+      description: Prepare legal documentation for accounts in extreme default status
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalActionRequest'
+            examples:
+              legal_initiation:
+                summary: Legal action initiation
+                value:
+                  cardLastFour: "1234"
+                  totalOwed: 5000.00
+                  accountIdentifier: "ACC-123456"
+                  extremeDefaultStatus: true
+      responses:
+        '201':
+          description: Legal action initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalActionResponse'
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+
   /collection/notifications/batch:
     post:
       tags:
@@ -409,6 +518,7 @@ components:
         cardLastFour:
           type: string
           pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
           example: "1234"
         daysOverdue:
           type: integer
@@ -443,6 +553,8 @@ components:
         cardLastFour:
           type: string
           pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
+          example: "1234"
         daysPastDue:
           type: integer
           minimum: 30
@@ -467,6 +579,116 @@ components:
           enum: [English, Spanish, French]
           default: English
 
+    PaymentPlanProposalRequest:
+      type: object
+      required:
+        - cardLastFour
+        - overdueAmount
+        - proposedMonthlyPayment
+        - proposedTermMonths
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
+          example: "1234"
+        overdueAmount:
+          type: number
+          format: decimal
+          minimum: 0
+          description: Total overdue balance amount
+        proposedMonthlyPayment:
+          type: number
+          format: decimal
+          minimum: 0
+          description: Proposed monthly payment amount
+        proposedTermMonths:
+          type: integer
+          minimum: 1
+          maximum: 60
+          description: Proposed payment plan term in months
+        reducedInterestRate:
+          type: number
+          format: decimal
+          minimum: 0
+          description: Reduced interest rate for payment plan
+        region:
+          type: string
+          enum: [US, CA]
+          default: US
+        language:
+          type: string
+          enum: [English, Spanish, French]
+          default: English
+
+    CollectionAgencyRequest:
+      type: object
+      required:
+        - cardLastFour
+        - balanceAmount
+        - monthsDelinquent
+        - accountIdentifier
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
+          example: "1234"
+        balanceAmount:
+          type: number
+          format: decimal
+          minimum: 0
+          description: Overdue balance amount
+        monthsDelinquent:
+          type: integer
+          minimum: 1
+          description: Number of months account has been delinquent
+        accountIdentifier:
+          type: string
+          description: Account identification information for collection agency
+        previousNotificationAttempts:
+          type: integer
+          minimum: 0
+          description: Number of previous notification attempts
+        region:
+          type: string
+          enum: [US, CA]
+          default: US
+
+    LegalActionRequest:
+      type: object
+      required:
+        - cardLastFour
+        - totalOwed
+        - accountIdentifier
+        - extremeDefaultStatus
+      properties:
+        cardLastFour:
+          type: string
+          pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
+          example: "1234"
+        totalOwed:
+          type: number
+          format: decimal
+          minimum: 0
+          description: Total amount owed
+        accountIdentifier:
+          type: string
+          description: Account identification information for legal documentation
+        extremeDefaultStatus:
+          type: boolean
+          description: Confirmation that account is in extreme default status
+        previousCollectionEfforts:
+          type: array
+          items:
+            type: string
+          description: Documentation of previous collection efforts
+        region:
+          type: string
+          enum: [US, CA]
+          default: US
+
     BatchNotificationRequest:
       type: object
       required:
@@ -480,6 +702,9 @@ components:
               - $ref: '#/components/schemas/PaymentReminderRequest'
               - $ref: '#/components/schemas/OverdueAlertRequest'
               - $ref: '#/components/schemas/FormalCollectionRequest'
+              - $ref: '#/components/schemas/PaymentPlanProposalRequest'
+              - $ref: '#/components/schemas/CollectionAgencyRequest'
+              - $ref: '#/components/schemas/LegalActionRequest'
         processingMode:
           type: string
           enum: [synchronous, asynchronous]
@@ -510,6 +735,8 @@ components:
         cardLastFour:
           type: string
           pattern: '^[0-9]{4}$'
+          description: Last four digits of the credit card
+          example: "1234"
         contactInfo:
           type: object
           properties:
@@ -576,6 +803,84 @@ components:
                 contactInfo:
                   type: string
 
+    PaymentPlanProposalResponse:
+      allOf:
+        - $ref: '#/components/schemas/NotificationResponse'
+        - type: object
+          properties:
+            proposalId:
+              type: string
+              description: Payment plan proposal identifier
+            repaymentSchedule:
+              type: array
+              items:
+                type: object
+                properties:
+                  paymentNumber:
+                    type: integer
+                  dueDate:
+                    type: string
+                    format: date
+                  amount:
+                    type: number
+                    format: decimal
+            acceptanceDeadline:
+              type: string
+              format: date
+            reducedInterestRate:
+              type: number
+              format: decimal
+            totalPaymentAmount:
+              type: number
+              format: decimal
+
+    CollectionAgencyResponse:
+      allOf:
+        - $ref: '#/components/schemas/NotificationResponse'
+        - type: object
+          properties:
+            agencyReferenceId:
+              type: string
+              description: Collection agency reference identifier
+            agencyContactInfo:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+            transferDate:
+              type: string
+              format: date-time
+            cardholderNotificationSent:
+              type: boolean
+
+    LegalActionResponse:
+      allOf:
+        - $ref: '#/components/schemas/NotificationResponse'
+        - type: object
+          properties:
+            legalCaseId:
+              type: string
+              description: Legal case identifier
+            legalDocumentationPrepared:
+              type: boolean
+            cardholderNotificationSent:
+              type: boolean
+            legalProceduresInitiated:
+              type: boolean
+            legalContactInfo:
+              type: object
+              properties:
+                firm:
+                  type: string
+                attorney:
+                  type: string
+                phone:
+                  type: string
+
     BatchProcessingResponse:
       type: object
       properties:
@@ -603,6 +908,7 @@ components:
         maskedCardNumber:
           type: string
           pattern: '^\*{4}[0-9]{4}$'
+          example: "****1234"
         currentStatus:
           type: string
           enum: [current, early_delinquent, late_delinquent, collection_ready, payment_plan]
@@ -643,6 +949,7 @@ components:
         maskedCardNumber:
           type: string
           pattern: '^\*{4}[0-9]{4}$'
+          example: "****1234"
         channel:
           type: string
         sentTimestamp:
@@ -747,6 +1054,7 @@ components:
               maskedCardNumber:
                 type: string
                 pattern: '^\*{4}[0-9]{4}$'
+                example: "****1234"
               details:
                 type: object
               complianceFlags:
@@ -824,6 +1132,12 @@ tags:
     description: Operations for overdue balance alerts
   - name: Collection Notices
     description: Operations for formal collection notices
+  - name: Payment Plan Proposals
+    description: Operations for payment plan proposals for overdue balances
+  - name: Collection Agency
+    description: Operations for collection agency involvement
+  - name: Legal Action
+    description: Operations for legal action initiation
   - name: Batch Processing
     description: Batch processing capabilities for high-load scenarios
   - name: Account Management
