@@ -1,0 +1,1048 @@
+openapi: 3.0.0
+info:
+  title: Credit Card Debt Collection System API
+  description: API for automating debt collection processes with proper compliance and PII protection
+  version: 1.0.0
+  contact:
+    name: Credit Card Company API Support
+    email: api-support@creditcard.com
+
+servers:
+  - url: https://api.creditcard.com/v1/collection
+    description: Production server
+  - url: https://staging-api.creditcard.com/v1/collection
+    description: Staging server
+
+security:
+  - bearerAuth: []
+  - apiKey: []
+
+paths:
+  /system/status:
+    get:
+      summary: Check collection system operational status
+      tags:
+        - System Management
+      responses:
+        '200':
+          description: System status information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [operational, maintenance, degraded]
+                  pii_masking_enabled:
+                    type: boolean
+                  compliance_rules_active:
+                    type: boolean
+                  notification_channels_configured:
+                    type: boolean
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /accounts/{accountId}/notifications/due-reminder:
+    post:
+      summary: Generate automated due reminder notification
+      tags:
+        - Notifications
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                card_number:
+                  type: string
+                  pattern: '^\d{16}$'
+                days_before_due:
+                  type: integer
+                  minimum: 1
+                channel:
+                  type: string
+                  enum: [email, SMS, mobile_app]
+              required:
+                - card_number
+                - days_before_due
+                - channel
+      responses:
+        '201':
+          description: Due reminder notification created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notification_id:
+                    type: string
+                  masked_card:
+                    type: string
+                    pattern: '^XXXX-XXXX-XXXX-\d{4}$'
+                  channel:
+                    type: string
+                  due_date:
+                    type: string
+                    format: date
+                  minimum_payment:
+                    type: number
+                    format: decimal
+                  total_balance:
+                    type: number
+                    format: decimal
+                  audit_trail_id:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /accounts/{accountId}/overdue/process:
+    post:
+      summary: Process overdue account and escalate status
+      tags:
+        - Collection Management
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  type: number
+                  format: decimal
+                days_overdue:
+                  type: integer
+                  minimum: 1
+                current_status:
+                  type: string
+                  enum: [Current, 30-Days-Overdue, 60-Days-Overdue, 90-Days-Overdue]
+              required:
+                - balance
+                - days_overdue
+                - current_status
+      responses:
+        '200':
+          description: Overdue processing completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account_id:
+                    type: string
+                  new_status:
+                    type: string
+                  late_fee_applied:
+                    type: number
+                    format: decimal
+                  next_escalation_days:
+                    type: integer
+                  alert_generated:
+                    type: boolean
+                  masked_card_number:
+                    type: string
+
+  /accounts/{accountId}/collection-notice/formal:
+    post:
+      summary: Generate formal collection notice with FDCPA compliance
+      tags:
+        - Legal Compliance
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                days_delinquent:
+                  type: integer
+                  minimum: 30
+                balance:
+                  type: number
+                  format: decimal
+                delivery_method:
+                  type: string
+                  enum: [certified_mail, registered_mail]
+              required:
+                - days_delinquent
+                - balance
+                - delivery_method
+      responses:
+        '201':
+          description: Formal collection notice generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notice_id:
+                    type: string
+                  fdcpa_section_809_included:
+                    type: boolean
+                  delivery_method:
+                    type: string
+                  dispute_period_activated:
+                    type: boolean
+                  dispute_expiry_date:
+                    type: string
+                    format: date
+                  new_status:
+                    type: string
+
+  /accounts/{accountId}/payment-plan:
+    post:
+      summary: Create payment plan proposal
+      tags:
+        - Payment Plans
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  type: number
+                  format: decimal
+                plan_duration:
+                  type: integer
+                  minimum: 3
+                  maximum: 24
+                hardship_documentation:
+                  type: boolean
+              required:
+                - balance
+                - plan_duration
+                - hardship_documentation
+      responses:
+        '201':
+          description: Payment plan proposal created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plan_id:
+                    type: string
+                  monthly_payment:
+                    type: number
+                    format: decimal
+                  reduced_interest_rate:
+                    type: number
+                    format: decimal
+                  approval_required:
+                    type: boolean
+                  status:
+                    type: string
+                    enum: [pending_approval, approved, rejected]
+
+  /accounts/{accountId}/collection-agency/assign:
+    post:
+      summary: Assign account to external collection agency
+      tags:
+        - External Collection
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                days_delinquent:
+                  type: integer
+                  minimum: 90
+                balance:
+                  type: number
+                  format: decimal
+              required:
+                - days_delinquent
+                - balance
+      responses:
+        '201':
+          description: Account assigned to collection agency
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assignment_id:
+                    type: string
+                  collection_agency:
+                    type: string
+                  encrypted_data_file:
+                    type: string
+                  transfer_method:
+                    type: string
+                    enum: [secure_ftp, encrypted_email]
+                  new_status:
+                    type: string
+                  legal_referral_generated:
+                    type: boolean
+
+  /notifications/multi-channel:
+    post:
+      summary: Deliver notification through multiple channels with failure recovery
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: string
+                primary_channel:
+                  type: string
+                  enum: [email, SMS, mobile_app]
+                secondary_channel:
+                  type: string
+                  enum: [email, SMS, mobile_app]
+                notification_type:
+                  type: string
+                  enum: [overdue, due_reminder, collection_notice]
+                retry_count:
+                  type: integer
+                  default: 3
+              required:
+                - customer_id
+                - primary_channel
+                - secondary_channel
+                - notification_type
+      responses:
+        '200':
+          description: Notification delivery process initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  delivery_id:
+                    type: string
+                  primary_attempt:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        enum: [success, failed, pending]
+                      failure_reason:
+                        type: string
+                  fallback_triggered:
+                    type: boolean
+                  final_delivery_method:
+                    type: string
+
+  /accounts/{accountId}/rehabilitation:
+    post:
+      summary: Rehabilitate account during active collection
+      tags:
+        - Account Management
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                overdue_balance:
+                  type: number
+                  format: decimal
+                payment_amount:
+                  type: number
+                  format: decimal
+                payment_percentage:
+                  type: number
+                  format: decimal
+                  minimum: 50
+              required:
+                - overdue_balance
+                - payment_amount
+                - payment_percentage
+      responses:
+        '200':
+          description: Account rehabilitation processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rehabilitation_id:
+                    type: string
+                  recalled_from_agency:
+                    type: boolean
+                  new_status:
+                    type: string
+                  fees_reversed:
+                    type: number
+                    format: decimal
+                  credit_bureau_updated:
+                    type: boolean
+
+  /system/recovery:
+    post:
+      summary: Initiate system recovery for integration failures
+      tags:
+        - System Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                failure_type:
+                  type: string
+                  enum: [network_timeout, api_unavailable, data_corruption]
+                operation:
+                  type: string
+                failure_point:
+                  type: string
+                recovery_action:
+                  type: string
+                  enum: [transaction_rollback, retry_queue, rollback_restart]
+              required:
+                - failure_type
+                - operation
+                - failure_point
+                - recovery_action
+      responses:
+        '202':
+          description: Recovery process initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recovery_id:
+                    type: string
+                  status:
+                    type: string
+                    enum: [initiated, in_progress, completed, failed]
+                  data_integrity_maintained:
+                    type: boolean
+
+  /communications/fdcpa-compliance:
+    post:
+      summary: Generate FDCPA compliant communication
+      tags:
+        - Legal Compliance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                communication_type:
+                  type: string
+                  enum: [initial_notice, validation_notice, final_notice, legal_notice]
+                collection_stage:
+                  type: string
+                  enum: [30-Days-Overdue, Formal Collection, Pre-Legal, Legal Action]
+                contact_time:
+                  type: string
+                  enum: [business_hours, any_time]
+                account_id:
+                  type: string
+              required:
+                - communication_type
+                - collection_stage
+                - contact_time
+                - account_id
+      responses:
+        '201':
+          description: FDCPA compliant communication generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  communication_id:
+                    type: string
+                  fdcpa_disclosures_included:
+                    type: boolean
+                  prohibited_language_blocked:
+                    type: boolean
+                  debt_validation_notice_included:
+                    type: boolean
+                  customer_rights_explained:
+                    type: boolean
+
+  /accounts/{accountId}/strategy/assign:
+    post:
+      summary: Assign dynamic collection strategy based on customer segmentation
+      tags:
+        - Collection Strategy
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payment_score:
+                  type: string
+                  enum: [excellent, good, fair, poor]
+                balance:
+                  type: number
+                  format: decimal
+                tenure_months:
+                  type: integer
+                risk_score:
+                  type: string
+                  enum: [low, medium, high]
+                days_overdue:
+                  type: integer
+              required:
+                - payment_score
+                - balance
+                - tenure_months
+                - risk_score
+                - days_overdue
+      responses:
+        '200':
+          description: Collection strategy assigned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  strategy:
+                    type: string
+                    enum: [soft, standard, aggressive]
+                  notification_frequency:
+                    type: string
+                    enum: [daily, weekly, bi-weekly]
+                  escalation_days:
+                    type: integer
+
+  /payments/batch-process:
+    post:
+      summary: Process batch payments during collection cycles
+      tags:
+        - Payment Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      account_id:
+                        type: string
+                      payment_type:
+                        type: string
+                        enum: [partial, full, overpayment]
+                      payment_amount:
+                        type: number
+                        format: decimal
+                      overdue_balance:
+                        type: number
+                        format: decimal
+              required:
+                - payments
+      responses:
+        '200':
+          description: Batch payment processing completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batch_id:
+                    type: string
+                  processed_count:
+                    type: integer
+                  failed_count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        account_id:
+                          type: string
+                        status:
+                          type: string
+                        new_account_status:
+                          type: string
+
+  /customers/{customerId}/preferences:
+    put:
+      summary: Update customer communication preferences
+      tags:
+        - Customer Management
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                preference_change:
+                  type: string
+                  enum: [opt_out, cease_communication, email_only, attorney_represented]
+                communication_type:
+                  type: string
+                  enum: [marketing, all, notifications, collections]
+                request_type:
+                  type: string
+                  enum: [marketing_only, complete_cease, channel_preference, legal_representation]
+              required:
+                - preference_change
+                - communication_type
+                - request_type
+      responses:
+        '200':
+          description: Communication preferences updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customer_id:
+                    type: string
+                  enforcement_action:
+                    type: string
+                  legal_communications_continue:
+                    type: boolean
+                  synchronized_across_systems:
+                    type: boolean
+
+  /accounts/{accountId}/fees:
+    post:
+      summary: Calculate and apply collection fees
+      tags:
+        - Fee Management
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  type: number
+                  format: decimal
+                status:
+                  type: string
+                  enum: [30-Days-Overdue, External Collection, Legal Action]
+                duration:
+                  type: integer
+              required:
+                - balance
+                - status
+                - duration
+      responses:
+        '201':
+          description: Fees calculated and applied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fee_id:
+                    type: string
+                  fee_amount:
+                    type: number
+                    format: decimal
+                  fee_type:
+                    type: string
+                  applied_date:
+                    type: string
+                    format: date-time
+
+  /accounts/{accountId}/fees/{feeId}/dispute:
+    post:
+      summary: Process fee dispute
+      tags:
+        - Fee Management
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: feeId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dispute_reason:
+                  type: string
+                supporting_documentation:
+                  type: boolean
+              required:
+                - dispute_reason
+      responses:
+        '200':
+          description: Fee dispute processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dispute_id:
+                    type: string
+                  dispute_result:
+                    type: string
+                    enum: [valid, invalid]
+                  fee_action:
+                    type: string
+                    enum: [maintained, reversed]
+                  notification_type:
+                    type: string
+
+  /accounts/{accountId}/legal-documentation:
+    post:
+      summary: Generate legal documentation for court filing
+      tags:
+        - Legal Processing
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                balance:
+                  type: number
+                  format: decimal
+                days_overdue:
+                  type: integer
+                  minimum: 120
+                jurisdiction:
+                  type: string
+                  enum: [California, New York, Texas, Florida]
+                court_requirements:
+                  type: string
+              required:
+                - balance
+                - days_overdue
+                - jurisdiction
+                - court_requirements
+      responses:
+        '201':
+          description: Legal documentation generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  case_id:
+                    type: string
+                  documents_generated:
+                    type: array
+                    items:
+                      type: string
+                  law_firm_assigned:
+                    type: string
+                  estimated_legal_costs:
+                    type: number
+                    format: decimal
+                  case_tracking_initiated:
+                    type: boolean
+
+  /accounts/{accountId}/international:
+    post:
+      summary: Process international account collection
+      tags:
+        - International Collection
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country:
+                  type: string
+                  enum: [Canada, Mexico, Germany, Japan, United Kingdom]
+                original_currency:
+                  type: string
+                  enum: [USD, CAD, MXN, EUR, JPY, GBP]
+                language:
+                  type: string
+                  enum: [English, Spanish, German, Japanese, French]
+                overdue_amount:
+                  type: number
+                  format: decimal
+              required:
+                - country
+                - original_currency
+                - language
+                - overdue_amount
+      responses:
+        '200':
+          description: International collection processing initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collection_id:
+                    type: string
+                  local_currency:
+                    type: string
+                  converted_amount:
+                    type: number
+                    format: decimal
+                  language_used:
+                    type: string
+                  delivery_method:
+                    type: string
+                  compliance_regulations:
+                    type: array
+                    items:
+                      type: string
+                  currency_conversion_fees:
+                    type: number
+                    format: decimal
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input parameters
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: string
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              message:
+                type: string
+
+    Unauthorized:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              message:
+                type: string
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              message:
+                type: string
+              incident_id:
+                type: string
+
+  schemas:
+    Account:
+      type: object
+      properties:
+        account_id:
+          type: string
+        card_number:
+          type: string
+          pattern: '^\d{16}$'
+        masked_card_number:
+          type: string
+          pattern: '^XXXX-XXXX-XXXX-\d{4}$'
+        balance:
+          type: number
+          format: decimal
+        overdue_balance:
+          type: number
+          format: decimal
+        status:
+          type: string
+          enum: [Current, 30-Days-Overdue, 60-Days-Overdue, 90-Days-Overdue, External Collection, Legal Action]
+        days_overdue:
+          type: integer
+        customer_id:
+          type: string
+        created_date:
+          type: string
+          format: date-time
+        last_updated:
+          type: string
+          format: date-time
+
+    Customer:
+      type: object
+      properties:
+        customer_id:
+          type: string
+        payment_history_score:
+          type: string
+          enum: [excellent, good, fair, poor]
+        risk_score:
+          type: string
+          enum: [low, medium, high]
+        tenure_months:
+          type: integer
+        communication_preferences:
+          type: object
+          properties:
+            primary_channel:
+              type: string
+              enum: [email, SMS, mobile_app, postal_mail]
+            secondary_channel:
+              type: string
+              enum: [email, SMS, mobile_app, postal_mail]
+            opt_out_marketing:
+              type: boolean
+            opt_out_collections:
+              type: boolean
+        contact_information:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            address:
+              type: object
+              properties:
+                street:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zip_code:
+                  type: string
+                country:
+                  type: string
+
+    CollectionStrategy:
+      type: object
+      properties:
+        strategy_id:
+          type: string
+        strategy_type:
+          type: string
+          enum: [soft, standard, aggressive]
+        notification_frequency:
+          type: string
+          enum: [daily, weekly, bi-weekly, monthly]
+        escalation_timeline:
+          type: integer
+        compliance_requirements:
+          type: array
+          items:
+            type: string
