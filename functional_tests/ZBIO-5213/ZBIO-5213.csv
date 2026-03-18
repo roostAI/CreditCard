@@ -1,0 +1,16 @@
+End-to-End Credit Card Due Reminder to Collection Notification Workflow
+PII Exposure Edge Case Validation - Notification Content Never Contains Full Card Number
+UI Boundary and State Transition - Monetary Fields and Workflow Advancement
+Payment Plan Proposal, Negotiation, Acceptance, and Early Reversal
+Error Handling and Audit Trail for Notification & Legal Document Integration Failures
+Role-Based Access Control and Approval Workflow for Notifications
+Multi-Missed Payment Workflow with Late Fee, Notification, and Reversal
+Agency Handoff - Notification and API Payload Masking Validation
+Notification Trigger and Content Validation for Invalid Card Numbers
+Legal Action Initiation - Notification, Document Masking, and Compliance Audit
+Due Reminder Reconfiguration and Notification Retest with Date Adjustment
+Duplicate Notification Prevention for Overdue Alerts
+Audit Review and Notification Tracking Across Multi-Channel Delivery
+Data Refresh and Overwrite Post Payment after Agency Handoff
+Multi-Stage Notification Failure Simulation with Manual Recovery and Compliance Checking
+API Handoff Payload Masking and Compliance - Outbound Call to External Agency
