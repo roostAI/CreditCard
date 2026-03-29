@@ -1,0 +1,4 @@
+Testing HTTP GET method to open a file
+Testing HTTP GET method to read a file
+Testing HTTP GET method to measure response time when opening a file
+Testing HTTP GET method to handle multiple requests
