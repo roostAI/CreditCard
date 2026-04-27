@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "functional-user-story_hapo",
+    "created_at": "2026-04-27T10:02:36.179Z",
+    "updated_at": "2026-04-27T10:02:36.179Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "functional-user-story_hapo.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/3a2894cb-5519-4a54-8b2c-89c69b0a715a/functional_tests/functional-user-story_hapo/functional-user-story_hapo.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "hapo1.xlsx",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/3a2894cb-5519-4a54-8b2c-89c69b0a715a/functional_tests/functional-user-story_hapo/hapo1.xlsx",
+        "fileSha": "1921256bc5"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
