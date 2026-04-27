@@ -1,0 +1,302 @@
+[
+  {
+    "type": "Positive",
+    "title": "Successful Card Details Viewing from Main Menu (Multi-card, MasterCard Brand, End-to-End)",
+    "description": "Validates business, security, and regulatory workflow for viewing credit card details (MasterCard brand) starting from main menu, including selection, OTP authentication, PCI DSS data masking, timer enforcement, and proper session closure.",
+    "testId": "TC_CC_E2E_001",
+    "testDescription": "Assure correct, auditable, compliant flow for viewing card details, spanning UI triggers, authentication, encryption, display, and session end.",
+    "prerequisites": "User is logged in with valid session; at least two eligible cards registered; user has correct phone number for OTP; MasterCard present in list.",
+    "stepsToPerform": "Navigate to main menu. Select 'View credit card details'. Confirm multiple cards show. Select MasterCard. Proceed to pre-view security modal. Confirm privacy warning, timer info, and consent to proceed. Request OTP (SMS). Enter valid OTP. Wait for encrypted payload retrieval and decryption. Inspect MasterCard screen: card number (masked), expiry, CVV (masked), brand icon, timer starts (90 seconds). Click copy icon for masked data. Allow timer to expire. Verify session termination and record audit event.",
+    "expectedResult": "All screens and messages match regulatory and UI requirements; only masked PII shown; flow times out after 90 seconds; audit logs generated; session cleared; user returned to main menu or closure screen; MasterCard-specific display correct."
+  },
+  {
+    "type": "Negative",
+    "title": "Zero-State Handling: No Eligible Cards – HTTP 204 & ID=31 Error Flow",
+    "description": "Verifies robust handling and UI for zero-state (no eligible cards) on both main menu and post-card-issuance lobby with HTTP 204 and ID=31, including guidance, navigation, and recovery.",
+    "testId": "TC_CC_ZERO_002",
+    "testDescription": "Confirm error codes/UI messaging for HTTP 204 and ID=31, and that guidance for new card issuance is regulatory-grade.",
+    "prerequisites": "User account has no eligible cards; simulate backend returning HTTP 204 and ID=31 codes for selected workflow entry-point.",
+    "stepsToPerform": "Launch 'View credit card details' from main menu. System sends card-account/details request. Verify backend responds HTTP 204. Confirm UI shows zero-state message ('No cards found for your account'). Click 'Order new card' button. Verify navigation to card issuance workflow. Repeat steps from post-card-issuance lobby. Simulate backend responding HTTP 203 with ID=31. Confirm UI shows 'New card details not available' message. Click 'Try again' button; verify re-attempt and error persists.",
+    "expectedResult": "Zero-state screens properly handle both error codes; regulatory guidance and correct navigation options provided; audit trail records attempt and user intent; session remains secure and cleared after error."
+  },
+  {
+    "type": "Security/Negative",
+    "title": "OTP Authentication – Failed Attempts, Lockout, and Recovery Handling",
+    "description": "Tests robust error handling and lockout enforcement for OTP input, including boundary values, error modals, attempt limits, and audit logging, covering both SMS and voice pathways.",
+    "testId": "TC_CC_OTP_003",
+    "testDescription": "Ensure compliance for OTP max attempt logic, lockout modal triggers, recovery guidance, and post-error navigation with dual-channel OTP.",
+    "prerequisites": "User proceeds to OTP input; SMS and voice phone numbers present; backend configured for attempt limits (e.g., max 5 tries); regulatory audit enabled.",
+    "stepsToPerform": "Request SMS OTP, receive code. Enter incorrect OTP 5 times. On final attempt, verify UI displays lockout modal (ID=32). Confirm message details, timer for recovery (10 minutes), audit record of lockout event. Click 'Close' on modal. Attempt to restart process within lockout; verify rejection and correct UI guidance. After timer expires, retry and receive new OTP. Request voice OTP; simulate backend voice failover. Enter valid OTP and proceed.",
+    "expectedResult": "Lockout enforced after boundary exceeded; error modal content aligns with domain rules (timer, guidance text); retry process only allowed post-timer; all actions audited; voice failover works; UI/UX disables OTP box during lockout."
+  },
+  {
+    "type": "Integration/Boundary",
+    "title": "Brand-specific Display: American Express with Dual CVV Presentation & Timer Enforcement",
+    "description": "Validates Amex-specific display logic including showing two CVV fields, PCI DSS masking, timer enforcement, UI reversals, and session-bound decryption.",
+    "testId": "TC_CC_BRAND_004",
+    "testDescription": "Ensure Amex brand logic with dual CVV, timer, data masking, encryption, and copy-to-clipboard is correct and compliant.",
+    "prerequisites": "User has Amex card in account; session established; backend returns two CVVs and correct brand code; PCI DSS configs enabled.",
+    "stepsToPerform": "Navigate from main menu to 'View credit card details'. Select Amex card from list. Proceed through pre-view confirmation modal. Request and enter valid OTP. Retrieve encrypted payload; decrypt session-bound. Confirm UI displays card front: number (masked), expiry, primary CVV. Click 'View CVV' to show second CVV. Timer displays 90 seconds countdown, visual privacy indicator. Attempt to copy CVV fields to clipboard. Click 'Back to card details' and confirm UI updates. Wait for timer to expire. Confirm session termination and return to closure screen.",
+    "expectedResult": "Dual CVV shown for Amex; timer strictly enforced; PCI DSS masking maintained throughout; copy-to-clipboard logic masks as required; session clears on timeout; audit events for every view/copy action; UI reversals allowed only within session."
+  },
+  {
+    "type": "UI/Error Handling",
+    "title": "No Mobile Number on File – Error Modal, Audit, and Guidance",
+    "description": "Tests error state where user has no mobile number registered for OTP delivery; checks modal, guidance, process abort, audit event, and navigation.",
+    "testId": "TC_CC_ERROR_005",
+    "testDescription": "Validate error modal for missing phone, regulatory guidance, session abort, and audit coverage.",
+    "prerequisites": "User account lacks mobile number; backend configured to return HTTP 203 with ID=31 on OTP request.",
+    "stepsToPerform": "Progress through card selection and pre-view confirmation. Trigger OTP generation. Backend returns ID=31 (no phone on file). Verify error modal appears: regulatory guidance on updating phone, warning of process abort. Click 'Close' to dismiss modal. Confirm session terminated and UI returns to main menu. Check that audit log records phone error and user navigation. Attempt to re-access 'View credit card details', verify error persists unless phone is updated.",
+    "expectedResult": "Error state triggers correct modal; guidance provided on next actions; abort and session clear; audit log records error and user actions; UI prevents process continuation until regulatory compliance (phone update) is met."
+  },
+  {
+    "type": "Boundary/Negative",
+    "title": "Session Timeout During Card Data Viewing – Timer Enforcement and UI State Reversal",
+    "description": "Verifies hard enforcement of the 90-second timer for credit card details visibility, including mid-session expiration, UI updates, error modals, audit logging, session clearance, and regulatory edge-case handling.",
+    "testId": "TC_CC_TIMEOUT_006",
+    "testDescription": "Ensure timer expiry at any stage strictly clears session, updates UI, presents correct modal guidance, disables further interaction or repeated viewing, and records audit events.",
+    "prerequisites": "User progresses through full authentication to card data viewing; timer configured to 90 seconds; audit logging enabled.",
+    "stepsToPerform": "Launch 'View credit card details' from main menu. Select eligible card and pass OTP authentication. Begin viewing card details; timer is visible and counts down from 90 seconds. Withhold all user actions until timer expires. Observe UI as timer reaches zero. Attempt to interact with card display fields post-expiry (copy, view CVV, refresh). Click 'Finish'. Attempt to re-access card details within same session. Try to use back navigation. Review audit log for session timeout event.",
+    "expectedResult": "Timer causes immediate session clearance; UI disables sensitive actions; error modal/guidance appears; all card fields become masked; repeat access is blocked until new initiation; audit log records exact session timeout and closure details."
+  },
+  {
+    "type": "Integration/State Transition",
+    "title": "Return to Home from Card Selection Screen – Session Management and Navigation Fidelity",
+    "description": "Validates correct handling of session, navigation, and audit when user initiates 'View credit card details' but backs out to home before authentication or card data exposure.",
+    "testId": "TC_CC_UI_NAV_007",
+    "testDescription": "Ensure 'Return to home' action in card selection properly aborts process, clears session, resets all state, and aligns with security and regulatory audit trail.",
+    "prerequisites": "User in authenticated session; card selection list shows eligible cards; UI and audit events enabled.",
+    "stepsToPerform": "Navigate to main menu. Select 'View credit card details'. Wait for card selection screen to show (multi-card or single). Click 'Return to home'. Confirm redirection to home/credit card dashboard. Re-access 'View credit card details' immediately; confirm session and state reset. Review UI for stale fields or prior data leakage. Attempt to start new card viewing operation. Inspect audit log for navigation and abort event.",
+    "expectedResult": "'Return to home' cleanly aborts session; no stale data remains; new workflow is fresh; audit record reflects abort and navigation intent; UI is compliant—no previous card data or state persists."
+  },
+  {
+    "type": "Boundary/Positive",
+    "title": "Multi-Card Account with Brand-Specific UI Elements – Card List Fetch and Contextual Messaging",
+    "description": "Tests comprehensive card list retrieval for accounts with multiple eligible cards, ensuring correct brand graphics, field mapping, context messages, masking, and client-side cache for back-and-forth navigation.",
+    "testId": "TC_CC_MULTICARD_008",
+    "testDescription": "Verify accurate card list rendering (MasterCard, Visa, Isracard), UI fidelity with graphics, privacy messaging, and session/data cache states for navigation reversals.",
+    "prerequisites": "Account with at least three eligible cards of different brands; regulatory UI/graphics mapping enabled; client cache active.",
+    "stepsToPerform": "Launch 'View credit card details' from main menu. Expect list with MasterCard, Visa, Isracard shown with correct brand images. Read context-sensitive message about card eligibility and new card delays. Select Visa; confirm card selection, proceed. Within card selection, use back navigation and select Isracard. Read new message per brand. Use cache to go back and forth between cards without re-fetching list. Click 'Return to home' without proceeding. Check audit log for card selection, back, and abort events.",
+    "expectedResult": "All cards and brands shown with correct fields and graphics; context messages update per selection; navigation reversal honors client cache and data masking; regulatory guidance is shown on delay/new cards; audit log details card selection history."
+  },
+  {
+    "type": "Negative/State Transition",
+    "title": "OTP Resend via Voice – Backend Failover, UI Error Handling, and Recovery",
+    "description": "Validates alternate OTP delivery via voice call, including backend failover handling, error modals, session lockout logic, retry guidance, and state persistence across communication channel changes.",
+    "testId": "TC_CC_OTPVOICE_009",
+    "testDescription": "Ensure that OTP resend (SMS→Voice toggle) triggers backend voice failover, UI error modal, lockout timing, guidance copy, and proper session recovery.",
+    "prerequisites": "User at OTP input screen; phone number present for both SMS and voice; backend voice delivery configured with simulated failure; audit logging enabled.",
+    "stepsToPerform": "Initiate 'View credit card details' flow. Successfully reach OTP input screen after card selection. Click 'Resend OTP via Voice'. Backend simulates failure to deliver voice call. UI presents error modal with regulatory guidance ('Voice OTP unavailable, try SMS or retry later'). Attempt to switch back to SMS OTP. Observe attempt-count limits. Retry voice after lockout timer (10 min) expires. Enter OTP after recovery, proceed to card view. Confirm state persistence across channel changes. Review audit log.",
+    "expectedResult": "Voice failover triggers clear error modal; UI disables voice resend until timer; retry logic and guidance text aligns with security rules; state persists and allows cross-channel transition; audit trail logs all OTP channel selections and failures."
+  },
+  {
+    "type": "Security/Boundary",
+    "title": "Invalid Data Masking on Card Data Display – PCI DSS Field Redaction Verification",
+    "description": "Ensures PCI DSS-compliant masking of card fields (card number, CVV, expiry) across all positive and error flows, including attempted unmask, copy, session abort, and modal error states.",
+    "testId": "TC_CC_MASKING_010",
+    "testDescription": "Verify that masking rules are enforced on all card details screens—masked fields, UI controls, copy actions, error cases, and session clearing—never expose full PII.",
+    "prerequisites": "User with eligible card; masking/configuration rules active; audit enabled for copy/view events.",
+    "stepsToPerform": "Launch 'View credit card details' workflow. Progress to card details screen (any brand). Inspect displayed fields: card number, CVV, expiry—confirm partial masking present. Click 'Copy details' and check clipboard data for masking. Attempt to toggle/unmask CVV (if allowed). Enter a session error flow (timer expiry, abort, backend HTTP 203/204). Inspect UI for masking post-error. Try multi-step navigation/reversal to see if full data persists. Audit logs for all copy/view actions.",
+    "expectedResult": "No unmasked PII in any screen, modal, error, or clipboard; UI controls enforce masking; PCI DSS rules validated; audit log records all exposures/copy events; errors do not leak sensitive data post-abort."
+  },
+  {
+    "type": "Negative/Boundary",
+    "title": "Pre-View Confirmation Modal – Abort Flow and Session Clearance",
+    "description": "Verifies UI behavior, session clearing, and audit logging when user chooses to abort (clicks 'Back') in the pre-view confirmation modal before entering OTP authentication. Ensures all state, security, and navigation actions align with regulatory requirements.",
+    "testId": "TC_CC_PREVIEW_011",
+    "testDescription": "Validate correct session termination, UI reversals, and guidance for abort action in pre-view modal; no card data exposed, full audit coverage.",
+    "prerequisites": "User logged in; eligible card(s) loaded; workflow triggered from main menu or post-order lobby; client and audit events enabled.",
+    "stepsToPerform": "Initiate 'View credit card details'. Select eligible card and proceed. Arrive at pre-view confirmation modal. Review privacy/security warnings and timer info. Click 'Back' instead of proceeding. Confirm UI redirects to card selection or home. Attempt re-entry to 'View credit card details' immediately. Inspect UI for cleared state and absence of sensitive fields. Review audit log for abort action and navigation. Confirm no historical or cached card fields are visible.",
+    "expectedResult": "Abort action immediately cancels workflow, clears session, and redirects user; audit log records navigation and abort intent; UI is compliant—no card data exposed or cache persists; regulatory messaging presented."
+  },
+  {
+    "type": "Boundary/Integration",
+    "title": "Card Data Display – Session-Bound Decryption and Field Mapping for Isracard",
+    "description": "Validates Isracard brand-specific display logic, encrypted payload handling, session-bound decryption key exchange, precise field mapping (card number, expiry, CVV), timer enforcement, PCI DSS masking, and audit for each exposure/copy action.",
+    "testId": "TC_CC_ISRACARD_012",
+    "testDescription": "Ensure Isracard-specific UI display is correct, decryption key is session-bound, PCI DSS masking is enforced, timer and audit logic are triggered accurately.",
+    "prerequisites": "User has Isracard in account; eligible session; backend returns Isracard brand (brandCode=7); PCI DSS configs enabled; audit for all data access.",
+    "stepsToPerform": "Start 'View credit card details' workflow (main menu or post-order). Select Isracard. Pass pre-view confirmation modal. Request/enter valid OTP. Retrieve encrypted payload. Obtain session-bound decryption key. Decrypt payload and display fields: masked card number, expiry, CVV, brand image, cardholder name. Timer starts (90 seconds). Click copy icon for card number/CVV, inspect clipboard. Attempt UI navigation during timer. Wait for timeout. Confirm session termination and audit trail.",
+    "expectedResult": "Isracard fields display with correct masking, timer, and brand graphics; copy actions are PCI DSS-compliant; encryption/decryption honors session; timer enforces visibility, session clears on expiry; audit logs all exposures and copy actions."
+  },
+  {
+    "type": "UI/Boundary",
+    "title": "OTP Input Validation – Numerics Only, Field Focus, Clearing, and Attempt Counting",
+    "description": "Validates OTP text box behavior for numerics-only entry, UI focus, clearing after error, accept/reject input, and correct attempt counting under PCI DSS and regulatory constraints. Covers error modal fade, lockout, and session persistence.",
+    "testId": "TC_CC_OTP_UI_013",
+    "testDescription": "Assure OTP input box only accepts valid input, clears and refocuses correctly on error, disables after lockout, and aligns with domain rules for numerics, UI display, and attempt limits.",
+    "prerequisites": "User with valid phone for OTP; eligible card; UI, audit, and error modal logic active; backend OTP services enabled.",
+    "stepsToPerform": "Proceed to OTP input screen after card selection/pre-view modal. Enter alphanumeric characters in OTP box. Observe rejection and UI feedback. Enter incomplete numeric OTP; attempt to proceed. Enter incorrect numeric OTP; trigger error modal. Check text box clearing and UI focus. Enter valid OTP after error; confirm acceptance. Exceed max attempts for lockout. Observe box disabling. Try to interact post-lockout (focus, entry). Review audit log for all input attempts.",
+    "expectedResult": "OTP box accepts only numerics, rejects alphanumerics; UI clears and returns focus on error; incomplete OTP is not accepted; lockout after max attempts disables input; audit logs every entry and error; modal and guidance text are compliant."
+  },
+  {
+    "type": "Integration/Edge Case",
+    "title": "HTTP Error Handling – ID=32 on Card Fetch from Post-Issuance Lobby",
+    "description": "Tests dual backend error codes (HTTP 203 with ID=32) for card fetch in post-card-issuance lobby, including regulatory UI guidance, error modal, session clearance, and abort navigation.",
+    "testId": "TC_CC_ERROR_014",
+    "testDescription": "Ensure correct response to backend ID=32 for card details fetch; UI, modal, and navigation actions all comply with business and regulatory requirements.",
+    "prerequisites": "User with newly issued card; workflow initiated from post-issuance lobby; backend configured for HTTP 203 with ID=32; audit enabled.",
+    "stepsToPerform": "Launch 'View credit card details' from post-card-issuance lobby. System sends card details request with new cardId. Backend returns HTTP 203 with ID=32. UI displays 'No cards' modal and regulatory guidance to retry or order new. Click 'Try again'; repeat and error persists. Click 'Home'; session is cleared. Attempt re-entry from main menu. Confirm state reset and absence of stale fields. Inspect audit log for all modal, abort, and navigation actions.",
+    "expectedResult": "Error modal and UI guidance are shown as per regulatory texts; session clears after abort; repeat attempts are rejected until card is available; audit trail complete; UI prevents sensitive data exposure in error."
+  },
+  {
+    "type": "Positive/State Transition",
+    "title": "Explicit User Logout After Card Viewing – Session and Audit Enforcement",
+    "description": "Validates workflow when user explicitly logs out after viewing card details: timer expiry, session state clearing, audit log, and navigation fidelity for regulatory compliance.",
+    "testId": "TC_CC_LOGOUT_015",
+    "testDescription": "Ensure that explicit logout after viewing card details clears session, disables repeat access, and audits the process, including all relevant UI and backend events.",
+    "prerequisites": "User authenticated with valid session; eligible card available; audit and logout enabled; timer logic active.",
+    "stepsToPerform": "Launch 'View credit card details' from menu. Select card, proceed, complete OTP authentication. View card data; timer is visible. Click 'Logout' button during or after details exposure. Confirm session termination on backend. Attempt to access card details again. UI should require re-authentication. Confirm that all fields and flows are reset. Inspect audit log for logout, session closure, and card viewing history.",
+    "expectedResult": "Explicit logout terminates session, disables sensitive actions, clears card fields, forces re-authentication for repeat access; audit log records all relevant events; PCI DSS and regulatory rules are fully enforced on session closure."
+  },
+  {
+    "type": "Positive/Edge Case",
+    "title": "Viewing Credit Card Details After New Card Issuance – Delayed Appearance Logic",
+    "description": "Validates that newly-issued cards appear in the card selection list only after backend approval, handling time-based delay, UI messages, retry, and regulatory compliance.",
+    "testId": "TC_CC_NEW_016",
+    "testDescription": "Ensure newly ordered cards are not visible until approval, display delay messaging, enable retry, and audit process for both main menu and post-order lobby.",
+    "prerequisites": "User has just completed card order; card approval pending; backend configured for delayed card appearance; workflow initiated from both main and lobby.",
+    "stepsToPerform": "Order a new card and reach post-order lobby. Initiate 'View credit card details'. Backend returns HTTP 203 with ID=31 (new card not available). Confirm UI shows 'Try again later' delay message. Wait one minute, retry flow. Backend approves card (status updated). Launch 'View credit card details' again. Verify new card appears in selection list with matching brand/graphic. Select card and proceed to pre-view confirmation modal. Check audit log for retry and new card reveal events.",
+    "expectedResult": "Initial attempt shows delay message, prevents card selection; approved card appears only after time/approval; UI/messages align with regulatory requirements; audit log records all events; session and cache updated correctly."
+  },
+  {
+    "type": "Boundary/Negative",
+    "title": "Credit Card Details Viewing – Max Cards Per Account Boundary Value",
+    "description": "Tests system's compliance for maximum allowed cards per account in card viewing UI, covers fetch, selection, masking, overflow, cache, and audit for regulatory-grade boundary validation.",
+    "testId": "TC_CC_BVA_017",
+    "testDescription": "Verify card list UI and backend handle account with boundary-value max cards (e.g. 10), no data leaks on overflow, navigation reversals, and correct audit for each selection.",
+    "prerequisites": "Account with maximum allowed cards (e.g. 10); regulatory/PCI DSS configs active; backend returns correct max-count list.",
+    "stepsToPerform": "Login and start 'View credit card details' flow from main menu. System fetches list with 10 cards – different brands. Verify UI renders max cards with correct graphics/fields. Attempt to scroll/select overflow card (11th). Confirm UI blocks or does not display excess card. Select cards at boundary (first, last, middle). Perform navigation reversals (back, select, reselect). Confirm masking, session cache, and audit logs for each selection. Try 'Return to home' after 3 cards viewed.",
+    "expectedResult": "UI displays maximum allowed cards only; overflow cards not exposed; masking, PCI DSS compliance across all; reversals/cache retain state for 10 cards; audit log captures each selection and abort; no leakage of excess data."
+  },
+  {
+    "type": "Integration/Negative",
+    "title": "Encrypted Payload Retrieval Failure – Error Modal, Session Abort, and Audit Logging",
+    "description": "Simulates backend failure during card data decryption/encrypted payload retrieval, testing error display, session handling, guidance copy, regulatory messaging, and audit trail.",
+    "testId": "TC_CC_ENCRYPT_018",
+    "testDescription": "Ensure card data retrieval failure triggers correct modals, aborts session, gives compliant guidance, and logs full audit trace.",
+    "prerequisites": "User with eligible card; valid OTP entered; backend prepared to simulate failure in GetEncryptedCardData (e.g. decryption failed, missing key).",
+    "stepsToPerform": "Progress through 'View credit card details' flow – card selection, pre-view modal, OTP authentication. After valid OTP, system attempts encrypted payload retrieval, but backend returns error (HTTP 500 or error code). UI shows error modal: 'Card details unavailable, try again later.' Confirm regulatory guidance, session abort, and modal timeout. Click 'Close' to exit. Confirm user is redirected to home. Attempt to retry from main menu. Inspect audit log for error, abort, and retry events.",
+    "expectedResult": "Error modal with compliant guidance shown; session aborted and cleared; repeat attempts possible after reset; audit log records full sequence; no partially exposed card data."
+  },
+  {
+    "type": "Positive/Boundary",
+    "title": "Card Data Display – Minimum Field Boundary and Audit Logging",
+    "description": "Validates card details viewing with minimum/edge value fields (short expiry, single CVV for non-Amex, minimum name length), ensures PCI DSS masking, timer, UI feedback, and audit compliance.",
+    "testId": "TC_CC_MINBOUND_019",
+    "testDescription": "Assure UI, masking, timer, and audit for minimum boundary values (short expiry, short name, minimum card length).",
+    "prerequisites": "User has eligible card with minimum data fields (e.g. single CVV, shortest allowable expiry, minimum-length cardholder name); masking enabled.",
+    "stepsToPerform": "Start 'View credit card details' flow from main menu. Select a card with minimum field values (e.g. expiry MM/YY, cardholder 'A B'). Proceed through pre-view modal, request/enter valid OTP. Inspect card details screen for correct masking of short card number/CVV/expiry. Attempt to copy details to clipboard. Wait for timer to expire. Verify UI disables all actions post-timer. Check audit logs for viewing and copying actions.",
+    "expectedResult": "Short field values are shown correctly, masking enforced; timer disables access after 90 seconds; all views/copies audited; UI aligns with regulatory requirements."
+  },
+  {
+    "type": "UI/Positive",
+    "title": "Dual-Channel OTP Display and SMS/Voice Toggle – UI Feedback and Masked Phone Number",
+    "description": "Validates UI behavior for dual-channel OTP options (SMS/Voice), masked phone display, toggle feedback, attempt counts, regulatory guidance, and audit logging.",
+    "testId": "TC_CC_DUALOTP_020",
+    "testDescription": "Ensure user can toggle between SMS/Voice OTP, confirm masked phone shown, UI updates, guidance copy, and audit recorded for every toggle/attempt.",
+    "prerequisites": "User has phone on file for both SMS and voice; UI OTP toggle enabled; backend supports both channels; audit enabled.",
+    "stepsToPerform": "Progress to OTP authentication after card selection/pre-view modal. Confirm masked phone number shown (e.g. 052-6***53). Click 'Send code via SMS' and observe UI feedback. Click 'Send code via Voice' and confirm toggle feedback, timing, and regulatory guidance shown. Enter OTP from each channel, confirm UI updates. Exceed attempt limit on one channel, switch to alternate. Review audit log for each toggle, send, and entry event.",
+    "expectedResult": "Masked phone number displayed on OTP screen; UI feedback and guidance show per channel; toggling is allowed within attempt limits; audit log records each toggle/action; regulatory/copy is present; session honors channel switch rules."
+  },
+  {
+    "type": "UI/Positive",
+    "title": "Pre-View Confirmation Modal – Security and Timer Enforcement",
+    "description": "Validates that pre-view confirmation modal correctly renders security warnings, timer guidance, user consent, proper visuals, and navigation options before proceeding to OTP authentication.",
+    "testId": "TC_CC_PREVIEWMODAL_021",
+    "testDescription": "Ensure that modal displays privacy text, session instructions, timer warning, visual components, and proper UI navigations; user must consent before moving forward.",
+    "prerequisites": "User logged in on valid device; at least one eligible card available; modal logic and text/image assets enabled.",
+    "stepsToPerform": "Initiate 'View credit card details' workflow. Select card from eligible list. Arrive at pre-view confirmation modal (Sc0004). Inspect modal for presence and accuracy of privacy warning, timer text (90 seconds), and icon images. Confirm guidance not to store/copy card data or view with others present. Click 'Back' and confirm navigation to card selection. Re-enter modal. Click 'Proceed' and ensure flow advances to OTP screen. Check audit log for both 'Back' and 'Proceed' actions.",
+    "expectedResult": "Modal displays proper security, privacy, and timer guidance; visuals/icons load as required; 'Back' reverses flow without retention; consent is enforced before progressing to OTP; audit records modal navigation and consent events."
+  },
+  {
+    "type": "Integration/Negative",
+    "title": "Card Selection UI – Zero-State Handling for Non-Bank Cards",
+    "description": "Verifies card selection UI and error handling for accounts where only non-bank cards are present, ensuring regulatory messaging, navigation to card issuance, and audit logging.",
+    "testId": "TC_CC_ZEROSTATE_NONBANK_022",
+    "testDescription": "Validate workflow when user has only non-bank cards, confirming zero-state UI, guidance to order new card, and navigation fidelity.",
+    "prerequisites": "User account contains only credit cards from other banks or affiliations; workflow initiated from both main menu and lobby.",
+    "stepsToPerform": "Launch 'View credit card details' from main menu. Card fetch returns only non-bank cards. Inspect UI for zero-state message explaining 'No eligible bank cards found'. Click 'Order new card' and verify navigation to card issuance screen. Attempt to re-access 'View credit card details' before new card issued. Check audit log for zero-state encounter and navigation attempt.",
+    "expectedResult": "UI correctly identifies non-bank card zero state; proper guidance message per regulatory requirement shown; ordering new card workflow available; audit logs both error encounter and navigation to issuance."
+  },
+  {
+    "type": "UI/Boundary",
+    "title": "Card Details Viewing – Copy to Clipboard Error Handling Post-Timer Expiry",
+    "description": "Tests system's behavior when user attempts copy-to-clipboard action on card details after timer has expired, ensuring PCI DSS masking, disabling, modal guidance, and audit coverage.",
+    "testId": "TC_CC_COPYEXPIRE_023",
+    "testDescription": "Ensure copy action is blocked after session timeout, error modal is shown, and audit log records all attempted actions.",
+    "prerequisites": "User completes authentication; card details screen is visible; timer logic active; audit enabled.",
+    "stepsToPerform": "Launch 'View credit card details' workflow; select card and authenticate via OTP. Arrive at card details screen with visible timer. Wait until timer expires (90 seconds). Attempt to click 'Copy card details' or 'Copy CVV'. Observe UI feedback/modal. Try to re-activate card view. Inspect clipboard contents for any exposed PII. Review audit log for copy attempt post-timer.",
+    "expectedResult": "Copy action disabled post-timer; error modal with guidance text appears; clipboard contains only masked/empty data; no PII exposed; audit log records invalid copy attempt and session expiry."
+  },
+  {
+    "type": "Integration/Positive",
+    "title": "Dual-Session Device Validation – Prevent Multiple Concurrent Credit Card Viewing Sessions",
+    "description": "Tests enforcement of one credit card details viewing session per device, including session state, error modal for concurrent access, UI feedback, and audit trail.",
+    "testId": "TC_CC_DUALSESSION_024",
+    "testDescription": "Validate that user cannot view credit card details in multiple browser tabs/devices simultaneously; proper error modal, UI feedback, and audit trails are enforced.",
+    "prerequisites": "Eligible account; session started for credit card details viewing on one device/browser; session logic and audit enabled.",
+    "stepsToPerform": "Initiate 'View credit card details' workflow in first browser/tab. Progress to card details viewing (timer active). Open second browser/tab/device and attempt to start new card details viewing session. Observe error modal stating session already active. Attempt to interact on both sessions. Let timer expire on first session; reattempt on second session. Confirm UI updates and audit logs for session state changes, concurrent attempt, expiry.",
+    "expectedResult": "Second session is prevented, with clear error modal and guidance text; only one session active at a time; audit log records concurrent access attempts, session expiry, and user navigation."
+  },
+  {
+    "type": "Negative/Edge Case",
+    "title": "OTP Expiration and Validation – Error Handling and Session State",
+    "description": "Validates expired OTP scenario: user enters expired code, receives proper error modal, UI disables input, session aborts or guidance is shown, and audit logs all events.",
+    "testId": "TC_CC_OTPEXPIRED_025",
+    "testDescription": "Ensure handling of expired OTP, including UI error message, OTP input box behavior, session revocation, retry guidance, and logging.",
+    "prerequisites": "User proceeds to OTP input screen; OTP generated but not entered in valid time window; backend configured for expiration response.",
+    "stepsToPerform": "Progress to OTP input after card selection/pre-view modal. Wait for OTP validity window to expire (e.g. 120 seconds). Enter expired OTP. UI displays error modal ('OTP code expired, please restart recovery process'). Observe input box: field is cleared and disabled. Attempt to resend OTP; inspect UI for guidance. Click modal close; workflow aborts to home/menu. Attempt immediate restart of process. Audit log for expired code entry, error modal, abort.",
+    "expectedResult": "Expired OTP triggers compliant error modal; input field disabled and cleared; session abort enforced; guidance text provided for retry; audit trail captures all entry, error, abort, and re-initiation attempts."
+  },
+  {
+    "type": "Boundary/Negative",
+    "title": "OTP Generation Attempt Limit – Excessive Resend and Error Modal Enforcement",
+    "description": "Validates enforcement of maximum allowed OTP generation attempts, including UI feedback, error modal, timer lockout, regulatory guidance, and audit trail integrity during ‘View Credit Card Details’ flow.",
+    "testId": "TC_CC_OTPMAXGEN_026",
+    "testDescription": "Ensure system blocks further OTP generation after boundary limit, shows error modal, disables resend/cancel actions, maintains consistent audit logs and regulatory guidance.",
+    "prerequisites": "User at OTP generation screen; phone number is valid; backend configured for max OTP generation attempts (e.g. 3 requests); session and audit enabled.",
+    "stepsToPerform": "Start View Credit Card Details flow from main menu. Progress through card selection and pre-view modal. Request OTP via SMS. Repeat OTP generation up to allowed limit (e.g. 3). Attempt to resend OTP on fourth try; backend responds with HTTP 203 ID=32. UI triggers error modal (Sc0010) about excessive requests and required wait time (10 minutes). Observe modal guidance and text. Try actions: resend OTP, back navigation, and close modal. Confirm all actions are disabled except closure. Click 'Close', verify user is sent to main menu. Review audit log for each OTP generation attempt, error modal, and workflow abort.",
+    "expectedResult": "No further OTPs generated after max limit; error modal is displayed with compliant guidance; session abort enforced; resend actions disabled; audit logs detail each request and error occurrence; regulatory text meets business requirements."
+  },
+  {
+    "type": "Positive/State Transition",
+    "title": "Card Details Viewing via Lobby Completion – Workflow Recovery and Audit Events",
+    "description": "Tests seamless transition from card issuance lobby to credit card details viewing, including zero-state recovery, card appearance, timer enforcement, and audit for entry/exit actions.",
+    "testId": "TC_CC_LOBBYCOMPLETE_027",
+    "testDescription": "Verify correct transition and state-management after card issuance, including recovery from zero-state to card appearance, timer, masking, and session/audit compliance.",
+    "prerequisites": "User completes card order workflow; new card pending; backend supports delayed card appearance; lobby actions accessible.",
+    "stepsToPerform": "Order new card and stay on post-issuance lobby. Initiate View Credit Card Details. System responds with zero-state (new card not available). Click 'Try again' as guided. Card appears after backend status update. Select card, go through pre-view modal (Sc0004), request/enter OTP. View card details screen, confirm timer and masking. Click 'Finish' to end session. Attempt to re-enter via lobby; verify audit log and session reset. Check closure screen text for regulatory info.",
+    "expectedResult": "Transition from lobby to card view honors state change; timer, masking, and regulatory text shown; session and UI reset after finish; audit logs detail every action and state transition; compliant closure messaging."
+  },
+  {
+    "type": "Security/Integration",
+    "title": "Session-Bound Encryption Key Mis-match – Error Handling and Compliance",
+    "description": "Verifies robust handling of session-bound encryption key mismatches during encrypted card data retrieval, including error modal display, guidance, session abort, and full audit trace.",
+    "testId": "TC_CC_KEYMISMATCH_028",
+    "testDescription": "Ensure any failure to decrypt card data due to session-key mismatch triggers compliant error modal, disables sensitive actions, aborts session, and logs all relevant audit events.",
+    "prerequisites": "User in authenticated workflow; valid OTP entered; backend purposely returns mismatched encryption key to simulate failure.",
+    "stepsToPerform": "Initiate View Credit Card Details and progress past OTP authentication. System requests encrypted card data with session key. Backend responds with mismatched key/error. UI presents error modal: 'Unable to view card details, please try again.' Observe guidance text and error modal visuals. Click 'Close' or attempt any navigation. Confirm all sensitive actions are disabled. User is redirected to home or card dashboard. Try to restart workflow; confirm normal operation. Inspect audit log for encrypted card data failure, modal display, session abort, and navigation recovery.",
+    "expectedResult": "UI shows error modal for encryption key mismatch; session aborted and all actions disabled; guidance text satisfies regulatory requirements; audit trail records all events and navigation; no card data exposed."
+  },
+  {
+    "type": "UI/Positive",
+    "title": "Cardholder Name Field – Minimum and Maximum Length Validation",
+    "description": "Verifies UI and backend handling for cardholder name boundaries (minimum and maximum allowed lengths), ensuring masking, proper display, error handling, and audit logging for regulatory compliance.",
+    "testId": "TC_CC_NAMEBOUND_029",
+    "testDescription": "Ensure cardholder names are rendered correctly at boundary values, masking maintained, UI visuals correct, and error handling/audit logs comply with PCI DSS.",
+    "prerequisites": "User with cards having minimum and maximum length cardholder names; backend enabled for edge-case scenarios; audit logging active.",
+    "stepsToPerform": "Start View Credit Card Details workflow. Select card with minimum-length name. Review UI for correct name display and masking. Repeat process for card with maximum-length name. Attempt clipboard copy for both names. Trigger error flow (session timeout, navigation reversal) for each case. Return to card selection and select other cards. Check audit logs for viewing/copy events at boundary values. Inspect UI for overflow, text truncation, or masking anomalies.",
+    "expectedResult": "Name fields display correctly at boundary values; masking and redaction enforced; UI handles overflow/truncation gracefully; error flows remain compliant; audit logs record every exposure/copy; regulatory requirements satisfied."
+  },
+  {
+    "type": "Integration/Negative",
+    "title": "Backend HTTP 500 Service Failure During Card Fetch – UI and Recovery Flow",
+    "description": "Simulates backend service disruption (HTTP 500) during card fetch, validating error modal, recovery options, regulatory guidance, session clearing, and audit trail.",
+    "testId": "TC_CC_HTTP500FETCH_030",
+    "testDescription": "Ensure backend service failure triggers compliant UI/modal, disables sensitive operations, enables user recovery, and audits events with no data leakage.",
+    "prerequisites": "User attempts to fetch eligible cards via main menu or lobby; backend set to return HTTP 500 error code; audit logic enabled.",
+    "stepsToPerform": "Launch View Credit Card Details from main menu. System requests card list; backend returns HTTP 500. UI triggers error modal: 'Unable to fetch card list, please retry later.' Observe text guidance and any visuals. Click 'Try again' and confirm error persists. Attempt 'Order new card' or 'Return to home'; verify session reset and clean navigation. Inspect audit log for failure, error modal, navigation, and abort actions. Retry from main menu after session reset; confirm normal workflow resumes.",
+    "expectedResult": "UI displays correct error modal for service failure; session cleared and disables sensitive actions; guidance text provided; audit logs all failure events and recovery attempts; no PII or sensitive card data exposed."
+  }
+]
