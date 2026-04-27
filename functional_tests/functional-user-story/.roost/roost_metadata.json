@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "functional-user-story",
+    "created_at": "2026-04-27T05:14:56.813Z",
+    "updated_at": "2026-04-27T05:14:56.813Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "functional-user-story.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story/fd28b3a6-cb87-4877-ad39-4c6e5035f6b3/functional_tests/functional-user-story/functional-user-story.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "roost_user_input.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story/fd28b3a6-cb87-4877-ad39-4c6e5035f6b3/functional_tests/functional-user-story/roost_user_input.txt",
+        "fileSha": "3b32c76cef"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
