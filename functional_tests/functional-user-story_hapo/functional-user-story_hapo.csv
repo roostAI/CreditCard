@@ -1,0 +1,30 @@
+End-to-end card details viewing from main menu with positive flow
+Handle no cards present with regulatory zero-state error screens
+OTP entry boundary, lockout, and recovery
+Error propagation and retry logic for card details API failures
+Enforcement of strict access control for non-cardholders
+Back navigation from card details screen before timer expiry
+Handle unknown brandCode in card details rendering
+Timer expiry enforces data erasure for card details
+Privacy and error message rendering in Hebrew (RTL) and English (LTR)
+Card list real-time update after new card order
+Copy-to-clipboard during timer, masking, and audit verification
+Block OTP initiation with no registered mobile phone
+Card selection with multiple cards, branding, and filter integrity
+Amex dual-CVV display, timer, and PCI masking
+Session finish screen displays contextual info and actions
+Preparation screen displays API-driven privacy/security info
+Resend OTP by voice, timer, and lockout logic
+Handle expired OTP code, error and restart workflow
+Card selection handles maximum cards and overflow
+Concurrent sessions on multiple devices with cache integrity
+API timeout handling, masking, and retry logic
+Copy-to-clipboard after timer expiry masks all values
+Minimum timer boundary and early session finish for CVV screen
+Switching cards mid-session triggers masking and workflow restart
+Cache redaction and masking via back navigation after reveal
+Exhaustive validation of HTTP status and errorId-to-UI mapping
+Brand image and fallback rendering logic for card selection/details
+Full workflow restart after abort/timer expiry ~ masking and API refresh
+Negative input validation for OTP entry screen
+Full client/server rendering, cache expiry and back navigation masking
