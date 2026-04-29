@@ -1,0 +1,24 @@
+User Registration - Happy Path and Validation Boundaries
+Login with MFA, Failures, Lockout, and Session Controls
+Token Refresh and Session Invalidation
+Logout Invalidates Session Tokens
+Credit Application Step 1 - Happy Path, Duplicate, and Sequential Step Enforcement
+Submit Financials - Field Validation, Session Token Expiry, Out-of-Order Steps
+Application Step 3 - Approval, Decline, Signature Errors, Idempotency
+Enforce Sequential Application Step Order
+Autosave Drafts During Application
+Masked PAN Display in Browser UI and DOM
+TLS 1.3 and PCI Iframe Tokenisation on Web Forms
+Session Timeout Warning Modal Shown 2 Minutes Prior
+Web Payment Transaction Processing (Standard/Essential/Over-limit/Decline/Frequency/Foreign Fee/Query)
+List Transactions for Billing Cycle Dates, Forbidden Access
+Retrieve Account Summary and Conditional Rewards / Access Control
+Freeze Card with Valid OTP / Invalid Transition / Lost Card / Already Blocked
+Report Lost Card and Trigger Re-Issue / Already Blocked Errors
+PIN Set and Mismatch Validation
+Retrieve Statement in JSON / Not Found Error
+Billing Statement Calculations (Interest, Grace Period, Late Fee, Rewards Rounding)
+Payment Submission Minimum, Below Minimum Due Error
+PAN Masking Enforcement, Audit Logs Privacy, CSRF/SameSite, Session Expiry/Timeout, Notification Idempotency
+Audit Trail for Card Status and Re-Issue Events
+Full User Journey from Registration to Account Closure
