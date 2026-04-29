@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "roost_test_1777459838",
+    "created_at": "2026-04-29T10:54:48.779Z",
+    "updated_at": "2026-04-29T10:54:48.779Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "roost_test_1777459838.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/1777459838/functional_tests/roost_test_1777459838/roost_test_1777459838.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "Aegis_WebCC_SRS.pdf",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/1777459838/functional_tests/roost_test_1777459838/Aegis_WebCC_SRS.pdf",
+        "fileSha": "dcebdb1a12"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
