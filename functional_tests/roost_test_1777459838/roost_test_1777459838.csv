@@ -1,0 +1,30 @@
+Register user via API with varied inputs (valid, invalid, duplicate)
+Login behavior with and without MFA, lockout and rate limit
+Login is rate-limited by IP address after excessive attempts
+Session warning modal and auto-logout after inactivity
+Session warning modal displays exactly at 13 minutes inactivity
+Refresh token rotation and single-use enforcement
+Start new credit application and prevent duplicates
+Submit financials, reject expired session, and test income boundary
+Submit application with e-signature; auto-approve, decline logic
+Application draft autosave and recovery
+Initiate payment, handle buffer, invalid and frequency errors
+Enforce transaction frequency limit
+List transactions with pagination/filter and forbidden access
+Apply 3% foreign transaction fee for non-CAD payments
+Get account summary and points with owner-only access
+Freeze card, invalid transitions, report lost
+Set PIN, validate blocked card error
+Retrieve statement in JSON and PDF format, validate fields and calculations
+Validate statement field accuracy and interest/late fee calculations
+Rewards accrual with floor rounding for Travel/Other MCC
+Make payment and reject below minimum required
+Card number masking compliance (PAN extraction)
+Card entry fields rendered with PCI-compliant iframe tokenization
+Account deletion allowed within 14 days, forbidden after
+Enforce CSRF token on state-changing endpoints
+Audit log created for credit limit change
+API gateway rate-limits and auto-scaling under heavy load
+Notification delivery via webhook for all event types, validation and boundaries
+Notification metadata verification
+Notification triggers required for all enumerated alert types
