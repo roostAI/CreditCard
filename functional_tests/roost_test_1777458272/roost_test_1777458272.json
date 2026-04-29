@@ -1,0 +1,662 @@
+[
+  {
+    "type": "functional",
+    "title": "User registration with valid data",
+    "description": "Verifies that a user can register successfully with all required fields containing valid and unique data.",
+    "testId": "TC-AUTH-01",
+    "testDescription": "A new customer completes the portal registration form with all valid details, submits the form, and receives a verification email as triggered by successful registration.",
+    "prerequisites": "No existing user account in the system with the given email. Email inbox is accessible to capture verification email. Test browser is cleared of session and cookies.",
+    "stepsToPerform": "1. Navigate to the registration page on the Aegis web portal.\n2. Enter valid first name (min 2, max 50 chars, alpha only).\n3. Enter valid last name (min 2, max 50 chars, alpha only).\n4. Enter a unique, valid email address not used in any existing account (RFC 5322 format).\n5. Enter a strong password meeting all complexity rules (min 12 chars, 1 upper, 1 lower, 1 digit, 1 symbol).\n6. Enter a valid date of birth that makes the user at least 18 years old (ISO 8601 YYYY-MM-DD).\n7. Enter a valid phone number in E.164 format (e.g., +14165551234).\n8. Enter the last 4 digits of a valid SSN.\n9. Check the box to agree to the terms and conditions.\n10. Submit the registration form.\n11. Check the email inbox for the verification message sent by the system.\n12. Validate API response using developer tools for expected HTTP status and fields.",
+    "expectedResult": "The system returns HTTP 201 with user_id and verification_token. User receives a verification email. No errors are shown. Registration audit log is recorded.",
+    "sourceCitation": {
+      "location": "Section 3.1 User Registration, page 4",
+      "excerpt": "POST/v2/auth/register Creates a new portal user account. Triggers email verification workflow."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Registration fails for underage applicant",
+    "description": "Verifies that registration is rejected if the applicant is younger than 18 years, as determined by the provided date_of_birth.",
+    "testId": "TC-AUTH-02",
+    "testDescription": "A user attempts to sign up with a valid registration form, but enters a date_of_birth making them less than 18 years old, expecting the registration to be rejected.",
+    "prerequisites": "No account exists for the given email. User's system clock and browser timezone are set to current date.",
+    "stepsToPerform": "1. Access the web portal registration page.\n2. Enter valid first and last name within length and character constraints.\n3. Enter a unique, valid email.\n4. Enter a valid phone number in E.164 format.\n5. Enter a strong password meeting complexity requirements.\n6. Enter a date_of_birth less than 18 years before today (e.g., today's date minus 16 years).\n7. Enter valid SSN last 4 digits.\n8. Agree to the terms.\n9. Attempt to submit the form.\n10. Observe the error displayed to the user and review the network/API response.\n11. Attempt to check for verification email (should not exist).",
+    "expectedResult": "The system returns HTTP 400 with an error message specifying age must be >= 18; registration fails, no account is created, and no verification email is sent.",
+    "sourceCitation": {
+      "location": "Section 3.1 User Registration, page 4",
+      "excerpt": "date_of_birth Date Required ISO 8601 (YYYY-MM-DD); age must be >= 18"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Login with valid credentials and MFA",
+    "description": "Verifies that a user can log in successfully with correct credentials and a valid MFA code when MFA is enabled on their account.",
+    "testId": "TC-AUTH-03",
+    "testDescription": "A registered, email-verified user with MFA enabled logs into the portal using correct email and password, and enters the required MFA code to receive an access and refresh token pair.",
+    "prerequisites": "User is registered, email-verified, and has MFA enabled. Device is not recognized as 'trusted'. User has access to TOTP generator or MFA device.",
+    "stepsToPerform": "1. Navigate to the Aegis portal login page.\n2. Enter the registered email address of a verified user with MFA enabled.\n3. Enter the correct password.\n4. Submit the credentials.\n5. Observe MFA prompt appears.\n6. Open the registered TOTP app/device and generate a current 6-digit code.\n7. Enter the valid MFA code in the portal form.\n8. Submit the code.\n9. Optionally provide device_id to recognize device.\n10. Optionally select 'remember_me' to extend refresh token TTL.\n11. Observe network request to POST /v2/auth/login with MFA code.\n12. Validate the API response.",
+    "expectedResult": "User is authenticated and receives a 200 response with valid access_token, refresh_token, and expires_in values. Session starts. No errors are shown.",
+    "sourceCitation": {
+      "location": "Section 3.2 Login & Token Issuance, page 5",
+      "excerpt": "POST/v2/auth/login Authenticates user credentials and issues JWT access + refresh token pair."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Rate limiting on login endpoint",
+    "description": "Verifies that the login API enforces a rate limit of 10 requests per minute per IP address and returns the appropriate rate limit error response.",
+    "testId": "TC-AUTH-04",
+    "testDescription": "A user (or script) attempts to log in more than 10 times in 1 minute from the same IP, triggering the rate limit enforcement mechanism.",
+    "prerequisites": "User account exists. Automation tools available to send concurrent login requests from the same IP.",
+    "stepsToPerform": "1. Begin with an unset browser session (no user is logged in).\n2. Prepare valid user credentials (email and password).\n3. Open developer console or automation tool.\n4. Submit the login form with valid or invalid credentials 10 times rapidly within a 60-second period (same IP).\n5. For each attempt, validate the response received.\n6. On the 11th attempt within the same minute, submit the same login request.\n7. Observe the HTTP response and error message after exceeding 10 requests in 1 minute.\n8. Check if the response contains information about retry timing (e.g., 'retry_after').\n9. Wait for the specified cool-down period and retry to confirm access is restored.\n10. Optionally audit logs for rate-limit event.",
+    "expectedResult": "On the 11th login attempt, the system returns HTTP 429 with error: RATE_LIMITED and 'retry_after' field. Further attempts before the window expire are also rejected.",
+    "sourceCitation": {
+      "location": "Section 3.2 Login & Token Issuance, page 5",
+      "excerpt": "429 Rate limit exceeded (10 req/min per IP) error: RATE_LIMITED, retry_after"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Account lockout after failed login attempts",
+    "description": "Verifies that after 5 consecutive failed login attempts, the account is locked and further login attempts are blocked with a specific error.",
+    "testId": "TC-AUTH-05",
+    "testDescription": "A user enters incorrect credentials 5 times in a row, causing their account to lock; the 6th attempt returns an ACCOUNT_LOCKED error, and the unlock_at time is provided.",
+    "prerequisites": "User account is registered, email-verified, and currently unlocked. MFA is off for simplicity.",
+    "stepsToPerform": "1. Open the portal login page.\n2. Enter the correct email address but an incorrect password.\n3. Submit the login form and observe the error response.\n4. Repeat steps 2–3 a total of 5 times within a short period (within same hour).\n5. On each failed attempt, check that INVALID_CREDENTIALS is returned (401 code).\n6. Attempt a 6th login with either the correct or incorrect password.\n7. Observe the system's response and error message.\n8. Check that HTTP 403 with error: ACCOUNT_LOCKED and 'unlock_at' is returned.\n9. Try another login after the unlock_at time and validate restoration.\n10. Optionally check audit logs for lockout entry.",
+    "expectedResult": "System returns HTTP 403 with error: ACCOUNT_LOCKED and unlock_at field on the 6th attempt. Login is prevented until unlock time elapses.",
+    "sourceCitation": {
+      "location": "Section 3.2 Login & Token Issuance, page 5",
+      "excerpt": "403 Account locked after 5 failed attempts error: ACCOUNT_LOCKED, unlock_at"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "JWT token refresh with valid refresh token",
+    "description": "Verifies that a user can successfully request and receive a new access token by submitting a valid, unused refresh token, and that token rotation is enforced.",
+    "testId": "TC-AUTH-06",
+    "testDescription": "A logged-in user uses their valid, unexpired refresh token to obtain a new access + refresh token pair, as per security and session management requirements.",
+    "prerequisites": "User is logged in and has valid, unexpired refresh_token from previous /login. No logout has occurred since last login. Old tokens not used/rotated yet.",
+    "stepsToPerform": "1. Complete login and capture the access_token and refresh_token returned in the response.\n2. Wait for the access token to near its expiry (optional step to simulate session expiry).\n3. Prepare API request to POST /v2/auth/token/refresh.\n4. Include the valid refresh_token in the request body.\n5. Submit the refresh token request.\n6. Observe HTTP/JSON response and validate returned access and refresh tokens.\n7. Confirm that the new access_token is usable for authenticated endpoints.\n8. Attempt later to use the same (used/old) refresh token again, expecting it to fail.\n9. Review application logs for token rotation entry.",
+    "expectedResult": "HTTP 200 is returned with new, valid access_token and refresh_token. Reuse of the old refresh_token fails.",
+    "sourceCitation": {
+      "location": "Section 3.3 Token Refresh & Logout, page 5",
+      "excerpt": "POST/v2/auth/token/refresh Issues a new access token using a valid refresh token (rotation enforced)."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Session expiry after inactivity with warning modal",
+    "description": "Verifies that a user session expires after 15 minutes of inactivity and a warning modal appears 2 minutes before auto-logout, as per requirements.",
+    "testId": "TC-AUTH-07",
+    "testDescription": "A logged-in user is inactive for 13 minutes and receives a session expiry warning modal, then is automatically logged out at 15 minutes of inactivity.",
+    "prerequisites": "User is logged in to the portal and actively viewing a UI screen. No user action for specified test duration. No other tab refresh or activity.",
+    "stepsToPerform": "1. Login successfully to the portal and access the dashboard or any page.\n2. Start a timer to measure inactivity.\n3. Do not interact with the browser, UI, or send any requests for 13 minutes.\n4. At minute 13, observe if a 2-minute warning modal appears indicating imminent session timeout.\n5. Confirm that the modal displays countdown or warning for session expiry.\n6. Without interacting, continue to wait for the session to reach 15 minutes of inactivity.\n7. Observe system auto-logout at minute 15 and redirection to login or session expired screen.\n8. Try to access a protected page (dashboard, account summary) and check authentication requirements.\n9. Optionally check that session tokens/cookies have expired/been cleared in browser.",
+    "expectedResult": "A warning modal is shown at 13 minutes of inactivity. At 15 minutes, session is terminated and the user is logged out.",
+    "sourceCitation": {
+      "location": "NFR-06 Session Timeout, page 15",
+      "excerpt": "Web portal sessions expire after 15 minutes of inactivity. User receives 2-minute warning modal before auto-logout."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Initiate credit application step 1 with all required data",
+    "description": "Verifies that a user can start a new credit card application, providing all required fields, and receives an application_id and session_token for subsequent steps.",
+    "testId": "TC-APP-01",
+    "testDescription": "An authenticated user starts a credit card application by submitting all required personal information fields in the portal form. The system creates the application and returns session metadata.",
+    "prerequisites": "User is authenticated and does not have an active application in progress. User profile information is available for matching email.",
+    "stepsToPerform": "1. Login to the portal and navigate to the credit card application area.\n2. Select 'Start New Application'.\n3. Enter full legal name (max 100 chars) as on government ID.\n4. Ensure the email field matches the authenticated user and is prefilled or entered.\n5. Enter a valid phone number in E.164 format.\n6. Provide full residential address (street, city, province, postal code) as per field validation rules.\n7. Select a valid ID type (PASSPORT, DRIVERS_LICENSE, PR_CARD).\n8. Enter a valid, unique ID number (alphanumeric, max 20 chars).\n9. Review all fields for accuracy.\n10. Submit the application form via the portal UI.\n11. Observe API request to POST /v2/applications/start.\n12. Validate the response and UI updates.",
+    "expectedResult": "The system returns HTTP 201 with application_id and session_token. Application state transitions to Step 2.",
+    "sourceCitation": {
+      "location": "Section 4.1 Step 1 — Personal Information, page 6",
+      "excerpt": "POST/v2/applications/start Initiates a new credit card application. Returns session token for subsequent steps."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Prevent duplicate active application",
+    "description": "Verifies that the system forbids initiating a new credit application if one is already active for the authenticated user.",
+    "testId": "TC-APP-02",
+    "testDescription": "A user with an active (not submitted/closed) application attempts to start another credit application in the portal, expecting a DUPLICATE_APPLICATION error.",
+    "prerequisites": "User is authenticated with an existing, active (in-progress) application (status not completed, approved, or declined).",
+    "stepsToPerform": "1. Ensure user is logged in to the portal with an active credit application in progress.\n2. Navigate to the application area.\n3. Click 'Start New Application' or equivalent UI action to open step 1.\n4. Enter all valid required fields (as per step 1 rules).\n5. Submit the form.\n6. Monitor API request to POST /v2/applications/start.\n7. Capture HTTP response and verify error status.\n8. Observe the user-facing error message.\n9. Optionally audit for system log of duplicate attempt.",
+    "expectedResult": "The system returns HTTP 409 with error: DUPLICATE_APPLICATION. No new application or session is created.",
+    "sourceCitation": {
+      "location": "Section 4.1 Step 1 — Personal Information, page 6",
+      "excerpt": "409 Active application already in progress error: DUPLICATE_APPLICATION"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Auto-save application draft to localStorage",
+    "description": "Verifies that the portal auto-saves a draft of the user's application data to localStorage every 60 seconds in step 1 and/or subsequent steps.",
+    "testId": "TC-APP-03",
+    "testDescription": "A user fills in the credit application form but does not submit it. The draft data is automatically saved to localStorage every 60 seconds, allowing recovery after refresh.",
+    "prerequisites": "User is logged in and starts a new application (step 1 or further). LocalStorage is clear. Supported browser with developer tools.",
+    "stepsToPerform": "1. Login to the portal and enter the application workflow.\n2. Begin filling out the personal information fields of the application (step 1).\n3. Wait 60 seconds without submitting the form.\n4. Open browser developer tools and inspect localStorage for saved draft key/value.\n5. Modify data in one of the input fields.\n6. Wait an additional 60 seconds.\n7. Check localStorage again for updated draft data.\n8. Refresh the browser tab/page.\n9. Observe if previously entered form data is restored from localStorage draft.\n10. Optionally check if auto-save continues after refresh.",
+    "expectedResult": "Draft application data is auto-saved to localStorage every 60 seconds. After reload, data is recovered, preventing data loss.",
+    "sourceCitation": {
+      "location": "Section 4 Credit Application Web Flow, page 6",
+      "excerpt": "Auto-save occurs every 60 seconds to {c('localStorage')} as a draft."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Step 2 financial submission with expired session token",
+    "description": "Verifies that an expired or invalid session token prevents financial information submission and returns a SESSION_EXPIRED error.",
+    "testId": "TC-APP-04",
+    "testDescription": "A user attempts to submit financial information during credit card application Step 2 using an expired session token, expecting the API to reject the submission and return an appropriate error.",
+    "prerequisites": "Step 1 of credit application completed; session_token purposely expired (older than 30 minutes) or invalid in system; application_id valid.",
+    "stepsToPerform": "1. Log in as a registered user. 2. Initiate Step 1 of credit card application and obtain application_id and session_token. 3. Wait for session_token to expire (simulate 30+ minutes elapsed). 4. Prepare Step 2 financial details with valid data. 5. Set X-App-Session header with expired or invalid session_token. 6. Submit POST /v2/applications/{application_id}/financials to the API. 7. Capture API response and HTTP code. 8. Check audit log for rejected submission entry. 9. Attempt to refresh session token for validation. 10. Re-attempt submission with refreshed token to confirm system accepts re-authenticated requests.",
+    "expectedResult": "Submission is rejected with HTTP 401; response body contains error: SESSION_EXPIRED; no financials saved; audit log entry records rejection.",
+    "sourceCitation": {
+      "location": "Section 4.2 Step 2 — Financial Information, page 7",
+      "excerpt": "401 session_token expired or invalid error: SESSION_EXPIRED"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary test for maximum gross annual income",
+    "description": "Validates system acceptance at maximum allowed gross annual income and rejection above this boundary.",
+    "testId": "TC-APP-05",
+    "testDescription": "User submits Step 2 financial information with gross_annual_income at 9,999,999.99 CAD and then at 10,000,000.00 CAD to test acceptance at the documented maximum and rejection above it.",
+    "prerequisites": "Step 1 of credit application completed; session_token valid; application_id obtained.",
+    "stepsToPerform": "1. Log in as a registered user. 2. Initiate Step 1 and capture application_id and session_token. 3. Prepare Step 2 payload with gross_annual_income at 9,999,999.99 CAD and valid other fields. 4. Submit POST /v2/applications/{application_id}/financials with max income. 5. Capture API response and HTTP code. 6. Prepare Step 2 payload with gross_annual_income at 10,000,000.00 CAD. 7. Submit POST /v2/applications/{application_id}/financials with above max income. 8. Capture API response and HTTP code. 9. Validate system response for both scenarios. 10. Check audit logs for correct handling.",
+    "expectedResult": "Submission at 9,999,999.99 CAD is accepted (HTTP 200); submission at 10,000,000.00 CAD is rejected with error specifying invalid gross_annual_income limit.",
+    "sourceCitation": {
+      "location": "Section 4.2 Step 2 — Financial Information, page 7",
+      "excerpt": "gross_annual_income Decimal Required Positive; max 9,999,999.99; in CAD"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Decisioning logic for auto-approve, refer, decline",
+    "description": "Verifies credit application final decision logic based on FICO score bands: auto-approve (>680), refer (600–680), and auto-decline (<600).",
+    "testId": "TC-APP-06",
+    "testDescription": "User completes a credit card application with three different simulated FICO scores (700, 650, 590) to confirm proper decision output, including field response and masked card number for approved.",
+    "prerequisites": "Steps 1 and 2 completed; session_token valid; application_id available; stub FICO scoring logic to provide desired values for testing.",
+    "stepsToPerform": "1. Log in as a registered user. 2. Complete Step 1 and Step 2 to obtain application_id and session_token. 3. For FICO=700, submit Step 3 with valid card_product_id and e_signature. 4. Record response and confirm decision: APPROVED. 5. For FICO=650, submit Step 3 with same valid data. 6. Record response and confirm decision: PENDING. 7. For FICO=590, submit Step 3 with same valid data. 8. Record response and confirm decision: DECLINED. 9. Validate that response fields match excerpted rules (credit_limit, card_number_masked, review_eta_hours, reason_code). 10. Review audit log entry for each scenario.",
+    "expectedResult": "FICO > 680: decision: APPROVED with credit_limit & masked card number; FICO 600–680: decision: PENDING; FICO < 600: decision: DECLINED with reason_code.",
+    "sourceCitation": {
+      "location": "Section 4.3 Step 3 — Decision & Card Selection, page 8",
+      "excerpt": "200 Auto-Approved (FICO > 680), 200 Referred to underwriter (FICO 600-680), 200 Auto-Declined (FICO < 600)"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Reject credit application on missing e-signature",
+    "description": "Ensures final application submission fails if e_signature field is missing or malformed, returning SIGNATURE_REQUIRED error.",
+    "testId": "TC-APP-07",
+    "testDescription": "User attempts to finalize Step 3 of a credit application omitting or mis-formatting e_signature, confirming system rejects submission and logs the error.",
+    "prerequisites": "Steps 1 and 2 completed successfully; session_token valid; application_id available; test with both missing and malformed e_signature.",
+    "stepsToPerform": "1. Log in as a registered user. 2. Complete Step 1 and Step 2, capturing application_id and session_token. 3. Prepare Step 3 POST payload with e_signature omitted. 4. Submit application and record API response. 5. Prepare Step 3 POST payload with malformed e_signature (not base64 encoded). 6. Submit application and record API response. 7. Validate HTTP status and error message. 8. Attempt submission again with valid e_signature and verify acceptance. 9. Check audit log for error entries on failed submissions.",
+    "expectedResult": "Submissions missing or malformed e_signature are rejected with HTTP 400 error: SIGNATURE_REQUIRED. Valid e_signature is accepted.",
+    "sourceCitation": {
+      "location": "Section 4.3 Step 3 — Decision & Card Selection, page 8",
+      "excerpt": "400 e_signature missing or malformed error: SIGNATURE_REQUIRED"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Initiate web payment with valid amount",
+    "description": "Validates successful initiation and posting of a web-initiated transaction with required fields and valid amount.",
+    "testId": "TC-TRN-01",
+    "testDescription": "Authenticated account owner submits a payment transaction with valid amount, merchant info, and type, confirming the system authorizes and posts the transaction, updating available credit.",
+    "prerequisites": "Account exists; valid JWT session; sufficient available credit; merchant and mcc_code known; account_id matches user.",
+    "stepsToPerform": "1. Log in and access dashboard. 2. Fetch account summary to determine available_credit. 3. Prepare valid transaction payload (amount > 0.00, currency = CAD, purchase type). 4. Initiate POST /v2/accounts/{account_id}/transactions. 5. Capture response and HTTP status code. 6. Validate returned transaction_id, available_credit, and auth_code. 7. Confirm transaction appears in account history. 8. Check audit log entry for the transaction. 9. Validate statement update after transaction.",
+    "expectedResult": "Transaction is authorized (HTTP 200); transaction_id and available_credit are returned; audit log reflects transaction; account history updated.",
+    "sourceCitation": {
+      "location": "Section 5.1 Initiate a Web Payment, page 9",
+      "excerpt": "POST/v2/accounts/{account_id}/transactions Authorises and posts a web-initiated transaction (REQ-004, REQ-005, REQ-006)."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Reject transaction for insufficient funds",
+    "description": "Ensures a web payment is denied if account has insufficient funds, responding with INSUFFICIENT_FUNDS error.",
+    "testId": "TC-TRN-02",
+    "testDescription": "Account owner attempts a payment transaction exceeding available credit limit, validating system rejects with proper error and does not post the transaction.",
+    "prerequisites": "Account exists; valid JWT session; available_credit less than intended transaction_amount.",
+    "stepsToPerform": "1. Log in as account owner. 2. Fetch account summary to determine available_credit. 3. Prepare transaction payload with amount > available_credit. 4. Initiate POST /v2/accounts/{account_id}/transactions. 5. Capture response and HTTP status code. 6. Validate error INSUFFICIENT_FUNDS and available_credit in response body. 7. Confirm no new transaction is posted. 8. Check audit log for attempted transaction and rejection. 9. Review account history for absence of failed transaction.",
+    "expectedResult": "Transaction is rejected (HTTP 402); response contains error: INSUFFICIENT_FUNDS, available_credit; no transaction posted.",
+    "sourceCitation": {
+      "location": "Section 5.1 Initiate a Web Payment, page 9",
+      "excerpt": "402 Insufficient funds (ISO 8583: 51) error: INSUFFICIENT_FUNDS, available_credit"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Essential service over-limit transaction handling",
+    "description": "Validates correct posting of essential service transaction when over-limit using the 5% buffer and over_limit_flag in response.",
+    "testId": "TC-TRN-03",
+    "testDescription": "Account owner initiates a transaction categorized as 'essential service' exceeding credit limit by ≤5%, confirming transaction posts successfully and over_limit_flag: true is returned.",
+    "prerequisites": "Account exists; valid JWT session; available_credit; essential service merchant category configured; amount exceeds credit limit by up to 5%.",
+    "stepsToPerform": "1. Log in as account owner. 2. Retrieve account summary for available_credit. 3. Identify MCC code for essential service category. 4. Prepare transaction payload with amount exceeding credit limit by ≤5%. 5. Submit POST /v2/accounts/{account_id}/transactions. 6. Capture API response and HTTP status. 7. Confirm transaction_id and over_limit_flag: true in response. 8. Validate credit update and audit log entry. 9. Check account transaction history for new over-limit transaction. 10. Confirm essential service buffer logic in billing statement.",
+    "expectedResult": "Transaction is posted with HTTP 200; response includes transaction_id and over_limit_flag: true; audit log and history reflect transaction.",
+    "sourceCitation": {
+      "location": "Section 5.1 Initiate a Web Payment, page 9",
+      "excerpt": "Essential service over-limit (5% buffer used) transaction_id, over_limit_flag: true"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Foreign transaction fee calculation logic",
+    "description": "Validates foreign transaction fee calculation with currency_code ≠ CAD, ensuring correct application of 3% fee and formula as specified.",
+    "testId": "TC-TRN-04",
+    "testDescription": "User posts a web payment in USD, providing exchange_rate. System must return total in CAD calculated per formula, with foreign_fee_amount itemized as per rules.",
+    "prerequisites": "Account exists; valid JWT session; available_credit in CAD; merchant transaction in USD; current exchange_rate available.",
+    "stepsToPerform": "1. Log in as account owner. 2. Retrieve available_credit. 3. Prepare transaction payload: amount in USD, currency_code: USD, exchange_rate specified. 4. Submit POST /v2/accounts/{account_id}/transactions. 5. Capture API response and HTTP status. 6. Validate that Total_CAD = (transaction_amount × exchange_rate) × 1.03 is applied. 7. Confirm foreign_fee_amount field is itemized in response. 8. Check account history for correct posting. 9. Validate billing statement reflects foreign transaction and fee. 10. Review audit log for fee calculation entry.",
+    "expectedResult": "Transaction posts; Total_CAD and foreign_fee_amount calculated correctly; formula proved in response and billing statement.",
+    "sourceCitation": {
+      "location": "Section 5.3 Foreign Transaction Fee Calculation, page 10",
+      "excerpt": "Total_CAD = (transaction_amount × exchange_rate) × 1.03"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Transaction frequency limit enforcement",
+    "description": "Validates system enforces transaction frequency limits by rejecting the 11th transaction within 60 min and requiring MFA.",
+    "testId": "TC-TRN-05",
+    "testDescription": "Account owner submits 11 web payment transactions within a 60-minute window; expects system to reject the 11th with FREQ_EXCEEDED error and mfa_required: true.",
+    "prerequisites": "Account exists; valid JWT session; available_credit; 10 successful transactions posted in prior 60 minutes.",
+    "stepsToPerform": "1. Log in as account owner. 2. Retrieve account summary. 3. Post 10 transactions (amount > 0.00 each) in quick succession. 4. Record success responses for each. 5. Attempt to post 11th transaction within the same 60 minutes. 6. Capture API response and HTTP status code. 7. Validate error: FREQ_EXCEEDED, mfa_required: true in body. 8. Attempt to complete MFA for next transaction. 9. Reattempt transaction with MFA to test acceptance. 10. Check audit log for rate limit and MFA events.",
+    "expectedResult": "11th transaction is rejected (HTTP 429); response includes error: FREQ_EXCEEDED, mfa_required: true; audit log records frequency violation.",
+    "sourceCitation": {
+      "location": "Section 5.1 Initiate a Web Payment, page 9",
+      "excerpt": "429 >10 transactions in 60 min (ISO 8583: 65) error: FREQ_EXCEEDED, mfa_required: true"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Get account summary as account owner",
+    "description": "Verifies account owner access to current balance, available credit, card status, and billing cycle info via GET /summary endpoint.",
+    "testId": "TC-DASH-01",
+    "testDescription": "Account owner retrieves account summary, confirming all key fields are returned and data matches expected account state; forbidden if token does not own account.",
+    "prerequisites": "Account exists; JWT token with owner privileges; account_id is valid and belongs to user.",
+    "stepsToPerform": "1. Log in as account owner. 2. Obtain valid account_id. 3. Send GET /v2/accounts/{account_id}/summary request. 4. Capture API response and HTTP status. 5. Validate presence of current_balance, available_credit, credit_limit, account_status, billing_cycle_end, points_balance. 6. Verify account_status and balance fields are correct from backend. 7. Query with include_rewards=true to validate optional field. 8. Attempt access as non-owner to confirm forbidden response. 9. Confirm audit log entry for summary access. 10. Validate UI dashboard reflects returned data.",
+    "expectedResult": "Owner receives full account summary with correct balance, credit, status, cycle info; forbidden for non-owner; audit log reflects access.",
+    "sourceCitation": {
+      "location": "Section 6.1 Get Account Summary, page 11",
+      "excerpt": "GET/v2/accounts/{account_id}/summary Returns current balance, available credit, card status, and billing cycle info."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Reject summary fetch by non-owner",
+    "description": "Verifies that a user cannot access the account summary of an account they do not own. Ensures proper enforcement of access control and returns the correct error.",
+    "testId": "TC-DASH-02",
+    "testDescription": "A user attempts to retrieve the account summary of another user's account using a valid session token. The system must deny access and return a 403 FORBIDDEN response as required by the access control policy.",
+    "prerequisites": "User A and User B are active in the platform. User A has at least one account. User B is authenticated via valid OAuth2 JWT Bearer token and does not own User A's account.",
+    "stepsToPerform": "1. User B logs in successfully and obtains a valid access token.\n2. User A's account_id is known but not owned by User B.\n3. Ensure both users are not locked or disabled, and sessions are valid.\n4. User B prepares a GET request to /v2/accounts/{account_id}/summary with User A's account_id in the URL.\n5. Attach User B's access token in the Authorization: Bearer header.\n6. Set additional valid headers (e.g., Host, User-Agent) as required by API.\n7. Do not include any ownership-elevating headers or tokens.\n8. Submit the request and capture the HTTP response and payload.\n9. Verify that no account summary details are returned in the response.",
+    "expectedResult": "The API returns HTTP 403 with error: FORBIDDEN. No sensitive or summary account data is leaked to User B.",
+    "sourceCitation": {
+      "location": "Section 6.1 Get Account Summary, page 11",
+      "excerpt": "403 Token does not own this account error: FORBIDDEN"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Freeze card with valid OTP",
+    "description": "Verifies that a cardholder can successfully freeze their active card using the correct OTP. Checks both card status update and audit logging.",
+    "testId": "TC-DASH-03",
+    "testDescription": "A user freezes their own card from the dashboard by providing the correct OTP received via SMS or email, resulting in the card status changing from Active to Frozen.",
+    "prerequisites": "User is authenticated, owns a card in Active status, and has a valid mobile/email for OTP delivery. User has not exhausted OTP attempts.",
+    "stepsToPerform": "1. User logs in to the web portal and accesses their dashboard.\n2. User navigates to the card management section and selects their Active card.\n3. User selects the option to freeze the card.\n4. System initiates the freeze workflow and sends a 6-digit OTP to User's registered device.\n5. User receives the OTP and enters it in the confirmation dialog.\n6. User submits the freeze request with the OTP using PATCH /v2/cards/{card_id}/status.\n7. System validates the OTP and checks current card status.\n8. If OTP is correct and card is Active, status is updated to Frozen. The response and audit trail are updated.\n9. User verifies in the dashboard that card status displays Frozen.",
+    "expectedResult": "API returns HTTP 200 with card_id and new_status='Frozen'. An audit log entry records the action. UI reflects the frozen status.",
+    "sourceCitation": {
+      "location": "Section 6.2 Update Card Status (Freeze / Unfreeze), page 11",
+      "excerpt": "PATCH/v2/cards/{card_id}/status Allows user to freeze or unfreeze their card via the web portal (REQ-007)."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Reject freeze/unfreeze with invalid OTP",
+    "description": "Verifies that submitting an incorrect or expired OTP when attempting to freeze or unfreeze a card results in the action being rejected, ensuring OTP security enforcement.",
+    "testId": "TC-DASH-04",
+    "testDescription": "A user tries to freeze or unfreeze their card but enters an invalid or expired OTP. The system must reject the request and inform the user of failed OTP validation.",
+    "prerequisites": "User is logged in, owns a card in Active or Frozen state, and has an outstanding OTP for card operation.",
+    "stepsToPerform": "1. User logs in and accesses the card management section.\n2. User selects a card (Active or Frozen) and chooses to freeze or unfreeze.\n3. System sends a 6-digit OTP to User's device.\n4. User intentionally enters an incorrect OTP or uses an expired OTP from a previous attempt.\n5. User submits a PATCH /v2/cards/{card_id}/status request with the invalid OTP value.\n6. System verifies the OTP against expected value and validity window.\n7. System decrements the number of OTP attempts remaining.\n8. System rejects the update attempt, does not change card status, and returns an error response.\n9. UI displays an error message showing failed OTP validation and attempts remaining.",
+    "expectedResult": "API returns HTTP 401 with error: OTP_FAILED and attempts_remaining. Card status is unchanged.",
+    "sourceCitation": {
+      "location": "Section 6.2 Update Card Status (Freeze / Unfreeze), page 11",
+      "excerpt": "401 OTP invalid or expired error: OTP_FAILED, attempts_remaining"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Report card lost/stolen triggers irreversible block",
+    "description": "Verifies the report lost/stolen workflow sets the card status to Blocked, prevents reversal/unfreeze, and initiates the card replacement process, as required by business rules.",
+    "testId": "TC-DASH-05",
+    "testDescription": "A user reports their card as lost or stolen via the dashboard. The system irreversibly blocks the card and schedules a replacement, ensuring the action cannot be undone and is properly logged.",
+    "prerequisites": "User is logged in, card is in Active or Frozen state, and is not previously blocked or closed.",
+    "stepsToPerform": "1. User logs in to the web dashboard.\n2. User navigates to the card management screen.\n3. User selects the card to report as lost or stolen.\n4. User chooses 'Report Lost/Stolen' and specifies loss_type (e.g., LOST).\n5. User optionally enters last_known_use date/time for fraud investigation.\n6. User optionally enters or confirms delivery address for replacement card.\n7. User submits POST /v2/cards/{card_id}/report-lost.\n8. System verifies eligibility and transitions card to Blocked status immediately.\n9. System responds with blocked_card_id, new_card_eta, and case_number. Audit trail is updated. Further status changes are forbidden.",
+    "expectedResult": "API returns HTTP 200, card is set to Blocked irreversibly, replacement card process is scheduled, and the action is audit-logged. Any further transition (unfreeze/unblock) is rejected.",
+    "sourceCitation": {
+      "location": "Section 6.3 Report Card Lost or Stolen, page 12",
+      "excerpt": "POST/v2/cards/{card_id}/report-lost Immediately blocks card and triggers re-issue workflow (REQ-007). Irreversible."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Set new card PIN and validation",
+    "description": "Verifies that a user can set or reset their card's PIN after correctly inputting two matching 4-digit numbers and the required OTP. Checks encryption, format, and confirmation logic.",
+    "testId": "TC-DASH-06",
+    "testDescription": "A user sets or resets a web-based card PIN by entering two identical 4-digit numbers and a valid session OTP, triggering the PIN update if all validations are passed.",
+    "prerequisites": "User is logged in, card is not in 'Blocked' state, and a valid session-based OTP has been generated for PIN change.",
+    "stepsToPerform": "1. User logs in and accesses the card management - PIN controls.\n2. User selects 'Set/Reset PIN' for a non-blocked card.\n3. User requests an OTP for PIN change and receives it via their registered method.\n4. User enters a new 4-digit PIN and confirms by re-entering it.\n5. User inputs the received session OTP.\n6. System validates format: PINs are numeric and 4 digits.\n7. System checks both PIN entries match exactly.\n8. System verifies the OTP is correct and unexpired.\n9. Upon all validations passing, user submits PUT /v2/cards/{card_id}/pin. The PIN is encrypted and saved.",
+    "expectedResult": "API returns HTTP 200 with success: true and updated_at timestamp. PIN is set/reset, and no plaintext PIN is exposed in the UI or logs.",
+    "sourceCitation": {
+      "location": "Section 6.4 Set Web-Based PIN (Virtual PIN), page 12",
+      "excerpt": "PUT/v2/cards/{card_id}/pin Sets or resets the card PIN via the authenticated web portal (REQ-008)."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Retrieve statement in PDF and JSON formats",
+    "description": "Verifies a user can download their credit card statement in both PDF and JSON formats, containing all key financial details as specified by the API.",
+    "testId": "TC-BILL-01",
+    "testDescription": "A user requests and receives a billing statement for a given period as both a PDF and JSON document, each containing transactional, billing, and reward data in accordance with business requirements.",
+    "prerequisites": "User is logged in, owns an account with at least one generated billing statement. statement_id for an existing statement is known.",
+    "stepsToPerform": "1. User logs in to the dashboard and selects an account.\n2. User navigates to the billing/statements section.\n3. System displays a list of available statements.\n4. User notes the statement_id for a recent statement.\n5. User requests the statement in JSON by calling GET /v2/accounts/{account_id}/statements/{statement_id}?format=JSON.\n6. User requests the same statement in PDF by repeating the GET call with format=PDF.\n7. System generates/downloads the files per request.\n8. User verifies each file contains statement_date, total_spend, adb, interest_charged, late_fee, rewards_earned, minimum_payment_due, due_date.\n9. User validates that downloaded files accurately reflect billing details.",
+    "expectedResult": "User successfully downloads both PDF and JSON statement files. Each file contains all specified fields and matches account transaction data.",
+    "sourceCitation": {
+      "location": "Section 7.1 Statement & Billing Cycle API, page 13",
+      "excerpt": "GET/v2/accounts/{account_id}/statements/{statement_id} Returns a full billing statement including ADB, interest, fees, and rewards (REQ-009 to REQ-013)."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Apply interest calculation using ADB method",
+    "description": "Verifies that the interest charge on a statement is calculated as specified: Interest = (ADB × APR / 365) × Days_in_Billing_Cycle.",
+    "testId": "TC-BILL-02",
+    "testDescription": "The system computes and displays the correct interest value on a billing statement using the defined ADB (Average Daily Balance) formula, including all required variables.",
+    "prerequisites": "User has an account with transactions within a cycle, an interest-applying APR (annual percentage rate), and a finalized statement generated by the system.",
+    "stepsToPerform": "1. User logs in and selects the relevant account.\n2. User navigates to the statements section.\n3. User picks a statement where interest should be present.\n4. User retrieves statement details (JSON or PDF).\n5. User notes ADB (average daily balance), APR, statement period length.\n6. User manually computes expected interest = (ADB × APR / 365) × Days_in_Billing_Cycle.\n7. Compare manual calculation to interest_charged shown on the statement.\n8. Verify calculation methods (decimal precision, no rounding errors beyond $0.01).\n9. Ensure that the source system matches exactly per specified formula.",
+    "expectedResult": "Statement interest charge matches value computed using Interest = (ADB × APR / 365) × Days_in_Billing_Cycle.",
+    "sourceCitation": {
+      "location": "Section 7.2 Billing Calculation Rules, page 13",
+      "excerpt": "REQ-009 — Interest (ADB Method) Interest = (ADB × APR / 365) × Days_in_Billing_Cycle"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Test grace period enforcement logic",
+    "description": "Verifies the system grants the 21-day grace period for interest charges only when the previous statement balance is paid in full.",
+    "testId": "TC-BILL-03",
+    "testDescription": "Checks that the grace period is applied when the prior period's statement balance is fully paid, and that interest is charged from statement date otherwise.",
+    "prerequisites": "Account with at least two completed billing cycles. Previous statement paid in full and not paid in full cases tested.",
+    "stepsToPerform": "1. User logs in and selects their account.\n2. Confirm prior statement has balance X (simulate both paid in full and not paid scenarios).\n3. For 'paid in full': Make payment for full statement amount before due date.\n4. For 'not paid in full': Pay only partial or no amount before due date.\n5. After cycle closes, retrieve the next statement.\n6. Check if grace period (no interest on purchases) is granted (field/report/indicator).\n7. Repeat retrieval where previous balance was unpaid—expect interest accrual from day 1.\n8. Compare system fields and payment/interest display for both pathways.\n9. Ensure the API and UI match the requirements definition.",
+    "expectedResult": "Grace period is ONLY applied if prev_statement_balance_paid_in_full = true. Otherwise, interest charges accrue as per standard logic.",
+    "sourceCitation": {
+      "location": "Section 7.2 Billing Calculation Rules, page 13",
+      "excerpt": "REQ-010 — Grace Period Logic Grace period (21 days) only if prev_statement_balance_paid_in_full = true"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Late fee trigger when payment is overdue",
+    "description": "Verifies that the $35 late fee is only charged if payment is received more than two days after the due date as dictated by business rule.",
+    "testId": "TC-BILL-04",
+    "testDescription": "Tests payment timing around the due date to ensure the $35 late fee is correctly applied only when payment is late by more than two days. Checks boundary conditions exactly at and just over threshold.",
+    "prerequisites": "User has an active account with a statement due date, no prior late fee this cycle, and can submit and schedule payments spanning before and after (due_date + 2 days).",
+    "stepsToPerform": "1. User logs in, identifies statement due date.\n2. User schedules/executes a payment exactly on the due date—validate no late fee.\n3. User schedules/executes payment one day after due date—validate still no late fee.\n4. User schedules/executes payment exactly two days after due date—validate still no late fee.\n5. User misses payment and submits it on the third day (due_date + 3 days).\n6. System processes payment on the received date.\n7. Next billing statement is generated.\n8. Retrieve statement and confirm if $35 late fee is included for payment received after due_date + 2 days.\n9. Validate that no fee is present for payments received by due_date + 2 days, and fee is present for any payment after.",
+    "expectedResult": "API applies late_fee = $35.00 if payment_received_date > due_date + 2 days. No fee for on time or within two days late.",
+    "sourceCitation": {
+      "location": "Section 7.2 Billing Calculation Rules, page 13",
+      "excerpt": "REQ-011 — Late Fee Trigger late_fee = $35.00 if payment_received_date > due_date + 2 days"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Rewards accrual for travel MCC and other categories",
+    "description": "Verifies correct rewards point accrual for transactions: 3x points for travel MCCs and 1x for all other purchases, with points always floored.",
+    "testId": "TC-BILL-05",
+    "testDescription": "A user completes purchases under Travel and non-Travel MCC categories and receives statement rewards accurately calculated as per business rule.",
+    "prerequisites": "Account is active, user has valid card, and can make web purchases with known MCC codes corresponding to travel and other categories.",
+    "stepsToPerform": "1. User logs in and verifies available credit.\n2. User initiates a purchase transaction with a Travel MCC (e.g., airline or hotel) for a known amount.\n3. User completes another purchase with a non-Travel MCC (e.g., grocery or retail).\n4. Wait for transactions to post and appear in transaction history.\n5. After billing cycle closes, user retrieves billing statement.\n6. Collect the posted rewards_earned value and detailed points accruals for both transactions.\n7. Manually compute expected points (Travel: floor(amount × 3), Other: floor(amount × 1)).\n8. Compare actual and expected points totals for each transaction.\n9. Validate system always uses floor(), never round or ceil, per requirements.",
+    "expectedResult": "Statement shows points += floor(amount × 3) for Travel MCC codes, points += floor(amount × 1) for others. Total matches calculations.",
+    "sourceCitation": {
+      "location": "Section 7.2 Billing Calculation Rules, page 13",
+      "excerpt": "REQ-012 — Rewards Accrual Travel MCC: points += floor(amount × 3) | All other: points += floor(amount × 1)"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Submit payment with exact minimum payment amount",
+    "description": "Verifies that a credit card payment can be successfully submitted when the payment_amount is set to the exact minimum payment due, confirming enforcement of the lower payment boundary.",
+    "testId": "TC-BILL-06",
+    "testDescription": "A user must be able to make a payment equal to the minimum payment due on their credit card. This test covers the precise acceptance of the system's minimum allowed value, checks no error is returned, and validates processing logic.",
+    "prerequisites": "User account is in good standing, account has an outstanding minimum_payment_due ≥ $1.00, and a verified/linked bank account exists for payment.",
+    "stepsToPerform": "1. Log into the portal using valid credentials. 2. Navigate to the account dashboard. 3. Retrieve the current statement and note 'minimum_payment_due'. 4. Begin payment via the portal, select a linked bank account as funding source. 5. Enter payment_amount equal to minimum_payment_due (e.g., $75.20). 6. Select payment_type 'MINIMUM'. 7. Review payment details and confirm submission. 8. Confirm CSRF token is present in headers. 9. Submit payment. 10. Observe frontend loads payment confirmation and verify new_balance_estimate reflects payment.",
+    "expectedResult": "System responds with HTTP 200; payment is accepted and queued, payment_id and new_balance_estimate are returned, no 'BELOW_MINIMUM' error presented.",
+    "sourceCitation": {
+      "location": "Section 7.3 Make a Payment, page 14",
+      "excerpt": "payment_amount Decimal Required Decimal(10,2); min $1.00; max = total_balance"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "security",
+    "title": "PAN masking in browser display",
+    "description": "Verifies that the browser never displays the full Primary Account Number (PAN) and only exposes the masked last four digits, to meet PCI-DSS masking requirements.",
+    "testId": "TC-SEC-01",
+    "testDescription": "A logged-in user accessing their card details through the dashboard should only ever see their PAN rendered in masked format (e.g., **** **** **** 1234). This test ensures that no API or UI element ever transmits or reveals the full PAN to the frontend.",
+    "prerequisites": "User has an active card with a valid card_number issued; account is in good standing. User is logged into a browser session.",
+    "stepsToPerform": "1. Log in as the cardholder via the web portal. 2. Navigate to the account dashboard. 3. Click on 'Card Details' to view card info. 4. Inspect the rendered PAN field in the UI. 5. Use browser Dev Tools to review actual DOM content for PAN value. 6. Intercept API traffic (e.g., with Chrome Dev Tools/Proxy) and confirm full PAN is not present in responses. 7. Attempt to copy the visible PAN value and paste to verify masking. 8. Review HTML to confirm no raw PAN leaks in hidden/form fields. 9. Validate session does not expose PAN in cookies, localStorage, or JavaScript variables.",
+    "expectedResult": "PAN is always displayed as masked (**** **** **** 1234); full PAN never transmitted to frontend or present in DOM/API; no possibility for user or script to access full PAN.",
+    "sourceCitation": {
+      "location": "Section 8.1 Security & Compliance Requirements, page 15",
+      "excerpt": "REQ-014 Data Masking PAN displayed in browser as **** **** **** 1234 only. Full PAN never transmitted to frontend."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Right to rescind account within 14 days",
+    "description": "Verifies that account holders can invoke the right to rescind and delete their account within 14 days of issuance with no membership fee and that the endpoint is not available afterwards.",
+    "testId": "TC-SEC-02",
+    "testDescription": "A new cardholder should be able to delete their account (close and rescind) using the dedicated endpoint within 14 days of account creation, with no fees imposed. This test confirms the endpoint is callable during this window and rejected after.",
+    "prerequisites": "User account was created/issued within the last 10 days. No membership fee has been assessed. User is authenticated with valid JWT tokens.",
+    "stepsToPerform": "1. Log in as the new cardholder within 14 days of card issuance. 2. Navigate to account settings. 3. Locate and initiate the 'Close Account' or 'Rescind Account' option. 4. Confirm rescue modal and proceed with deletion. 5. System initiates DELETE /v2/accounts/{id} call. 6. Observe for CSRF token in request header. 7. Confirm frontend handles 200 success and shows confirmation UI. 8. Attempt a repeat rescind after deletion (should now fail). 9. Log creation timestamp in audit trail and review no membership fee was triggered.",
+    "expectedResult": "Account deletion (rescind) is accepted and processed within 14 days (HTTP 200, account closed, no membership fee). Endpoint is no longer available or returns error after 14 days.",
+    "sourceCitation": {
+      "location": "Section 8.1 Security & Compliance Requirements, page 15",
+      "excerpt": "REQ-016 Right to Rescind DELETE /v2/accounts/{{id}} must be available for 14 days post-issuance with no membership fee."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "security",
+    "title": "TLS 1.3 enforced for all web forms",
+    "description": "Verifies that all web-based forms and APIs involved in the credit card management flow are exclusively served and submitted over a TLS 1.3 encrypted transport, in compliance with highest PCI-DSS standards.",
+    "testId": "TC-SEC-03",
+    "testDescription": "Simulates user and attacker scenarios to ensure all form submissions (login, registration, payments, card management, statement requests) negotiate TLS 1.3; checks for fallback to lower/unencrypted protocols is always prevented and no sensitive field is transmitted unencrypted.",
+    "prerequisites": "Browser with developer tools and ability to inspect network security details. Application deployed with TLS 1.3 enforced.",
+    "stepsToPerform": "1. Launch browser. 2. Enter the portal URL (https://portal.aegiscard.com) in the address bar. 3. Open browser Dev Tools > Security tab. 4. Authenticate via login form. 5. Track all form submissions (register, PIN set, payment, etc.). 6. Click on each form request and inspect 'Connection' protocol. 7. Confirm protocol is 'TLS 1.3' for all requests. 8. Attempt (if possible) to force TLS 1.2 or downgrade; observe connection refusal. 9. Check all card entry fields render via iframe tokenisation (if applicable) and no raw data in DOM.",
+    "expectedResult": "All web forms and API POST/PUT/PATCH are transmitted solely over TLS 1.3; any weaker/no encryption is strictly refused by server and browser.",
+    "sourceCitation": {
+      "location": "Section 8.1 Security & Compliance Requirements, page 15",
+      "excerpt": "NFR-01 PCI-DSS L1 All web forms transmit over TLS 1.3."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Audit trail on credit limit change",
+    "description": "Ensures every credit_limit change request is logged with user_id, session_id, ip_address, and UTC timestamp, and that the audit log is immutable per compliance requirements.",
+    "testId": "TC-SEC-04",
+    "testDescription": "A user-initiated credit limit increase should result in a complete, immutable audit trail entry recording user_id, session_id, ip_address, and timestamp_utc. This verifies downstream compliance and monitoring.",
+    "prerequisites": "User has an active card and account; credit limit is eligible for modification; user authenticated to web portal.",
+    "stepsToPerform": "1. Log in with a valid user/account. 2. Navigate to account management. 3. Initiate a credit limit increase/decrease request. 4. Enter new credit limit and submit. 5. Pass OTP authentication if prompted. 6. Observe successful API response. 7. Access audit trail log (admin/test interface or DB export). 8. Search for the latest audit logs for credit_limit changes. 9. Verify recorded user_id, session_id, ip_address, and timestamp_utc are present and correct. 10. Confirm audit trail cannot be edited or deleted.",
+    "expectedResult": "Audit trail entry exists with correct fields: user_id, session_id, ip_address, timestamp_utc. Entry is immutable.",
+    "sourceCitation": {
+      "location": "Section 8.1 Security & Compliance Requirements, page 15",
+      "excerpt": "NFR-04 Audit Trail All credit_limit changes log user_id, session_id, ip_address, timestamp_utc to immutable audit log."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "security",
+    "title": "CSRF token requirement for all state-changing endpoints",
+    "description": "Confirms that all state-changing API endpoints strictly require and validate the presence of a CSRF token in the X-CSRF-Token header, and reject requests lacking a valid token.",
+    "testId": "TC-SEC-05",
+    "testDescription": "For every endpoint that causes state changes (e.g., payments, account edits, PIN changes, card status updates, application submit/withdraw), verify that omitting or submitting an invalid CSRF token leads to proper rejection and error log.",
+    "prerequisites": "User is authenticated in browser session; CSRF token is available in cookies/headers; ability to manipulate outgoing requests for negative path.",
+    "stepsToPerform": "1. Log in to the web portal. 2. Start a state-changing action (e.g., submit a payment). 3. Submit request with valid CSRF token in X-CSRF-Token header; confirm success. 4. Initiate same action with CSRF token omitted. 5. Observe error/denial from API. 6. Repeat with invalid/wrong CSRF token value. 7. Attempt same action from a different domain (simulated CSRF attack). 8. Confirm strict SameSite=Strict cookie is used by application. 9. Review audit or error log for rejection event.",
+    "expectedResult": "State-changing actions succeed only with valid CSRF token. Requests without or with invalid token are rejected and logged in accordance with NFR-05.",
+    "sourceCitation": {
+      "location": "NFR-05 CSRF Protection, page 15",
+      "excerpt": "All state-changing endpoints require a CSRF token in X-CSRF-Token header."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Notification delivery via email, SMS, in-app, push",
+    "description": "Validates that the notification system reliably delivers or queues alerts in real-time via all supported channels when triggered by qualifying account events.",
+    "testId": "TC-NOTIF-01",
+    "testDescription": "Simulate a payment, card freeze, or statement generation to cause a notification to be sent. Ensure notification engine routes the alert to web portal, email, SMS, and push channels, each with correct formatting/severity and no loss/delay.",
+    "prerequisites": "Account is configured with valid email, SMS-capable phone, and push registration; notification preferences are set to opt-in for all channels.",
+    "stepsToPerform": "1. Log in as user with all notification preferences enabled. 2. Trigger an event (e.g., make a payment, lock PIN, or statement ready). 3. Backend calls POST /v2/notifications/webhook with appropriate alert_type and all channels. 4. Confirm alert received in in-app notification UI. 5. Check registered email inbox for notification delivery. 6. Review mobile phone for SMS receipt. 7. Confirm push notification appears on registered device. 8. Inspect Notification & Alert logs to confirm all channels indicate 'delivered_at' timestamp. 9. Repeat with critical event (FRAUD_FLAG/OVER_LIMIT) to verify severity propagation.",
+    "expectedResult": "Notifications are delivered in real-time to all enabled channels (web, email, SMS, push) with correct content, severity, and delivery confirmation.",
+    "sourceCitation": {
+      "location": "Section 8.2 Notification & Alert Webhooks, page 16",
+      "excerpt": "POST/v2/notifications/webhook Internal endpoint called by Notification Engine. Sends real-time alerts to web portal and email (REQ-011, REQ-008)."
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Reject unknown alert type or channel",
+    "description": "Ensures that alerts submitted with an unrecognized alert_type or delivery channel are rejected with appropriate error, preventing invalid or unsupported notification types from propagating.",
+    "testId": "TC-NOTIF-02",
+    "testDescription": "Submit a notification webhook payload with an intentionally invalid alert_type (e.g., 'ALIEN_HACK') or a non-existent channel type, and confirm the system returns a 400 error with INVALID_ALERT_TYPE, without queuing or sending any notification.",
+    "prerequisites": "Notification engine is operational. Test can invoke POST /v2/notifications/webhook. No legitimate event is being triggered.",
+    "stepsToPerform": "1. Compose POST request to /v2/notifications/webhook. 2. Populate account_id with a valid test account. 3. Set alert_type to an invalid value (e.g., 'ALIEN_HACK'). 4. Set channel to an invalid value (e.g., 'CARRIER_PIGEON'). 5. Fill message_body with sample text. 6. Set severity to 'INFO'. 7. Provide valid idempotency_key (UUID v4). 8. Submit request to the endpoint. 9. Observe API response for HTTP 400 and error details. 10. Confirm that no notification was created, delivered, or logged.",
+    "expectedResult": "API returns HTTP 400 with error: INVALID_ALERT_TYPE, and no notification is sent or queued on any channel.",
+    "sourceCitation": {
+      "location": "Section 8.2 Notification & Alert Webhooks, page 16",
+      "excerpt": "400 Unknown alert_type or channel error: INVALID_ALERT_TYPE"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Prevent duplicate notifications with idempotency key",
+    "description": "Verifies the system prevents duplicate delivery of the same notification by enforcing idempotency key checks, ensuring the same payload with the same key is rejected with an explicit error.",
+    "testId": "TC-NOTIF-03",
+    "testDescription": "Submit two identical webhook notification payloads (same account_id, alert_type, channel, idempotency_key) in succession and confirm the system accepts the first and rejects the second with error DUPLICATE_NOTIFICATION.",
+    "prerequisites": "System is ready to accept notification webhooks, test account is eligible for receiving alerts.",
+    "stepsToPerform": "1. Generate a valid UUID v4 idempotency_key. 2. Compose a correct POST to /v2/notifications/webhook using this idempotency_key. 3. Set valid values for account_id, alert_type (e.g., 'STATEMENT_READY'), channel (e.g., 'EMAIL'), message_body, and severity. 4. Submit the request and confirm HTTP 200 success. 5. Immediately resend an identical request (same idempotency_key and payload). 6. Observe API response status. 7. Confirm system returns HTTP 409 with error: DUPLICATE_NOTIFICATION. 8. Review notification logs to confirm only one delivery occurred. 9. Repeat with a new idempotency_key and confirm new notification is processed.",
+    "expectedResult": "First notification successfully delivered/queued, second identical request with same idempotency_key is rejected (HTTP 409, error: DUPLICATE_NOTIFICATION), no duplicate sent.",
+    "sourceCitation": {
+      "location": "Section 8.2 Notification & Alert Webhooks, page 16",
+      "excerpt": "409 Duplicate idempotency_key error: DUPLICATE_NOTIFICATION"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "e2e",
+    "title": "Full user journey: registration to statement to payment",
+    "description": "Validates the complete customer lifecycle from account creation, email verification, and login, through credit application and card selection, dashboard access, initiation of repayment, and statement review.",
+    "testId": "TC-E2E-01",
+    "testDescription": "A typical customer flow is exercised: user registers a new account, verifies email, logs in, completes the multi-stage credit application, selects a card, accesses their dashboard, initiates a payment, and confirms the correct transaction and statement information is present. This test ensures session management, workflow continuity, intermediate and final state validation, and business rules all function holistically.",
+    "prerequisites": "No existing account with test email; test bank account can be simulated or attached; all system flows operational (registration, verification, app, payment, notifications, statements).",
+    "stepsToPerform": "1. Visit registration page. 2. Complete and submit registration form with valid personal details. 3. Receive and follow verification email link (capture verification_token). 4. Log in using new credentials. 5. Complete Step 1: application (personal info, address). 6. Complete Step 2: financial info, grant credit bureau consent. 7. Complete Step 3: card selection and e-signature. 8. Review decision in UI (approved/referred/declined). 9. If approved, view dashboard with new card summary. 10. Initiate a payment using a linked bank account. 11. Retrieve and review statement showing payment and transaction. 12. Confirm notifications received for statement/payment.",
+    "expectedResult": "User is able to register, complete multifactor and credit application, obtain card, access dashboard, pay, and review statements, with all state updates and notifications reflected throughout.",
+    "sourceCitation": {
+      "location": "Sections 3.1–7.3, pages 4–14",
+      "excerpt": "Complete user workflow: registration→email verification→login→credit application→card selection→dashboard→payment→statement review"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "end-to-end",
+    "title": "End-to-end credit card application and approval",
+    "description": "Verifies the complete user journey for credit card application through all web form steps, including session_token gating, required field validations, auto-save behavior, and receipt of application decision.",
+    "testId": "TC-E2E-02",
+    "testDescription": "A user files a new credit card application via the web portal, completes Step 1 (Personal Information), Step 2 (Financial Information), and Step 3 (Decision & Card Selection). Validates issuance and use of session_token, every-step validation, auto-saving drafts, and correct decision returned for a FICO > 680 scenario.",
+    "prerequisites": "Registered and email-verified user, browser with cookies enabled, no existing incomplete applications for the user, network connection stable.",
+    "stepsToPerform": "1. Log in to https://portal.aegiscard.com as a registered user. 2. Navigate to the 'Apply for Credit Card' workflow. 3. Complete the Step 1 form with valid personal information and required KYC fields. 4. Submit Step 1; capture returned application_id and session_token. 5. Simulate waiting >60 seconds; validate auto-save draft in localStorage. 6. Fill Step 2 with valid financial data; include session_token in X-App-Session header. 7. Submit Step 2; verify soft credit pull and status PENDING_REVIEW. 8. Select card product and provide e_signature in Step 3; submit application. 9. Validate final decision response for 'APPROVED' and masked card number. 10. Re-open the application flow; ensure completed state and correct decision is reflected.",
+    "expectedResult": "User is able to submit the full 3-step application, session_token is required/gated on steps 2 and 3, auto-save occurs in Step 1, and an approved decision with masked card number is shown at the end.",
+    "sourceCitation": {
+      "location": "Section 4 Credit Application Web Flow, pages 6–8",
+      "excerpt": "Three-step application: personal info→financials→decision, with auto-save and session_token gating"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Session expires during credit application step",
+    "description": "Ensures that if session_token expires mid-application (any step after Step 1), the user is prevented from proceeding, receives an appropriate error, and must restart or refresh their session to continue.",
+    "testId": "TC-E2E-03",
+    "testDescription": "User starts a new credit application, completes Step 1, then lets session_token expire (by waiting more than 30 minutes) before attempting to continue. Validates session timeout enforcement at API and UI, proper error messaging, and inability to submit further steps without a valid session.",
+    "prerequisites": "Active logged-in portal session, step 1 completed with current application_id and session_token, no other applications in progress.",
+    "stepsToPerform": "1. Log in as described and initiate a new application (obtain application_id and session_token). 2. Complete and successfully submit Step 1. 3. Wait for at least 31 minutes to ensure session_token expiry. 4. Attempt to begin Step 2 by filling in the financial information form. 5. Submit Step 2 with the expired session_token in X-App-Session header. 6. Observe the error message, noting session expiration trigger. 7. Attempt to refresh or reuse the expired session_token and resubmit. 8. Check UI for redirect to login or fresh application prompt. 9. Start a new application to confirm workflow is available after timeout.",
+    "expectedResult": "User cannot submit Step 2 with an expired session_token; API returns error: SESSION_EXPIRED, UI displays an appropriate session expiry message, and user is prompted to start or refresh session to continue.",
+    "sourceCitation": {
+      "location": "Section 4.2 Step 2 — Financial Information, page 7",
+      "excerpt": "session_tokenString Required Header: X-App-Session; expires 30 min"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Real-time transaction feed on dashboard",
+    "description": "Verifies that the user's dashboard displays a live-updating transaction feed sourced from the specified WebSocket endpoint, reflecting posted transactions instantly during a session.",
+    "testId": "TC-E2E-04",
+    "testDescription": "A user logs into their account dashboard and observes the real-time transaction stream. Validates successful WebSocket connection (wss://realtime.aegiscard.com/v2/stream), live delivery of new transactions (including POS events and web payments), UI update on incoming events, and resilience to connection drops.",
+    "prerequisites": "User has an active account with at least one transaction in the past 24 hours; browser supports WebSockets; user is logged in with a valid session.",
+    "stepsToPerform": "1. Log in to the portal and navigate to the dashboard. 2. Watch the transaction feed area for baseline data (no activity pre-existing). 3. Initiate a new purchase transaction via the portal or test API. 4. Validate a new entry appears within seconds of posting. 5. Trigger a transaction from a second device (POS/web) and confirm feed delivery. 6. Force a WebSocket disconnect (e.g., network toggle) and ensure auto-reconnect. 7. Review feed for duplicate, dropped, or missing events. 8. Refresh the dashboard and confirm live feed functionality persists. 9. Check that only masked PAN/transaction data is rendered per compliance.",
+    "expectedResult": "Transaction activity appears live and matches event timing and content, with no duplicates, missed events, or non-masked sensitive data; feed auto-recovers from disconnects.",
+    "sourceCitation": {
+      "location": "Section 2 Web Application Architecture, page 3",
+      "excerpt": "WebSocket endpoint: wss://realtime.aegiscard.com/v2/stream — Live transaction feed"
+    },
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Session timeout modal in SPA with auto-logout",
+    "description": "Validates that after 13 minutes of user inactivity, the SPA displays a 2-minute session expiry warning modal, and logs the user out automatically at 15 minutes as per session enforcement.",
+    "testId": "TC-E2E-05",
+    "testDescription": "A user logs in to the React SPA and remains idle with no keyboard/mouse interaction. At exactly 13 minutes of inactivity, a warning modal appears. At 15 minutes, user is forcefully logged out, session cookies are cleared, and an appropriate message is shown.",
+    "prerequisites": "User is fully authenticated (valid JWT token in HttpOnly cookie), SPA is loaded, and user is not enrolled in 'remember_me' token extension.",
+    "stepsToPerform": "1. Log in to the SPA. 2. Cease all interaction/input for >13 minutes (monitor device clock). 3. Confirm normal UI state through minute 13. 4. At minute 13, validate 2-minute warning modal is displayed. 5. Observe modal countdown timer and no inputs taken. 6. At exactly 15 minutes, confirm automatic logout event. 7. Attempt to interact with any SPA feature post-logout. 8. Observe redirection to login screen and loss of session-only state. 9. Log back in and verify a fresh session is created.",
+    "expectedResult": "Session warning modal is shown at minute 13, user is logged out without interaction at minute 15, and all session cookies are deleted; SPA prevents further use until re-authentication.",
+    "sourceCitation": {
+      "location": "NFR-06 Session Timeout, page 15",
+      "excerpt": "User receives 2-minute warning modal before auto-logout."
+    },
+    "_groundingFailed": true
+  }
+]
