@@ -1,0 +1,29 @@
+User registration submits valid and invalid data
+Login attempt with correct and incorrect credentials
+Account lockout after 5 failed logins
+Login rate limiting enforced per IP
+Token refresh with valid and invalid refresh_token
+Session expires after 15 minutes inactivity
+Session timeout warning modal is displayed before expiry
+Step 1 - Personal info submission, duplicate application, session expiry
+Step 2 - Financials submission and session expiry
+Step 3 - Decision logic for FICO boundary
+Transaction request with normal, over-limit, insufficient funds, invalid amount, card state, and frequency cap
+Foreign transaction fee calculation and exchange_rate boundary
+Paginated and date-ranged transaction history retrieval
+Account dashboard summary and rewards retrieval
+Web card freeze/unfreeze workflow and PIN setting
+Lost or stolen card reporting and rejection
+Billing statement retrieval and not found handling
+Interest, grace period, late fee, rewards boundary scenarios
+Payment with valid, below minimum, and minimum due
+Account deletion within and after 14-day window
+PAN masking and PCI-DSS protection in browser and DOM
+CSRF protection and SameSite=Strict cookie policy
+CSRF token requirement for state-changing endpoints
+Audit trail logs for credit_limit changes and card events
+API p95 latency ≤ 1500 ms under load
+API gateway sustains 5,000 concurrent requests/sec with auto-scaling
+Notification webhook delivers LATE_PAYMENT alert to all channels
+Idempotency key prevents duplicate notifications
+Notification error handling for unknown alert type
