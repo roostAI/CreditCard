@@ -1,0 +1,34 @@
+Card selection list displays only eligible and user-owned cards, with masked details and correct branding
+Still pending card state message shown
+Pre-view warning privacy screen and timer display
+Pre-view image assets loaded from local client library
+Navigation back, home, or return clears session and redirects user
+Action buttons appear and work in 'No Cards' state
+No Eligible Cards blocks retrieval and shows explanatory UI
+Owner name field is populated from backend service for card selection UI
+Card masking rules and brand-dependent image/label rendering
+Card details and CVV are copied only when visible
+AMEX dual-CVV display and toggle actions
+Field population from backend for card selection screen
+Privacy enforcement, guidance, and timer are sourced from backend and shown before card details
+Masked phone number is always shown in the OTP entry notification
+OTP error message disappears as soon as input changes
+Card retrieval API boundary responses (204, 203+ID=31) trigger 'No Cards' UI state
+OTP verification for valid and invalid codes triggers correct state transitions
+OTP expiry and block handling disables input, instructs restart, and logs audit
+No phone detected for OTP blocks and prevents further attempts
+Attempt retry for card retrieval post-issuance with dynamic API response
+Attempt counter resets after block duration
+Audit event is logged for navigation or session closure
+Timer component initiates at 90 seconds, counts down accurately, and triggers session end
+Block duration for exceeded OTP requests enforces 10-minute timeout
+Session timer accuracy validated for regulatory compliance
+PII masking enforced for all card/phone fields in UI, API, logs
+Card number and suffix display rules enforce masking in UI and copy to clipboard
+Masked CVV visible only during permitted session, never present in logs or clipboard post-expiry
+Copy card/CVV data to clipboard only when visible in UI
+CVV screen transition occurs upon 'view CVV' button press from card details
+Explicit session end via 'finish' button
+Auto-close session when timer expires
+Explicit user return from any workflow stage resets session and navigation
+API response decision table triggers correct UI/error screen and ensures no card detail exposure

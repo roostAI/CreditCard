@@ -1,0 +1,716 @@
+[
+  {
+    "type": "state-transition",
+    "title": "Correct Transition to Pre-View Warning",
+    "description": "Verifies that a valid card details retrieval triggers the privacy/pre-view enforcement screen before card data is actually displayed. Automation: HIGH — UI state assertions.",
+    "testId": "TC-CDR-04",
+    "testDescription": "Upon successful card details retrieval (normal API response), system must activate 'pre-view warning' screen, enforcing privacy and timer constraints before card details exposure.",
+    "prerequisites": "User clicks 'View Card Details', API returns valid response, UI is ready to transition.",
+    "stepsToPerform": "1. Log in and navigate to card details.\n2. Select card and trigger API call.\n3. Simulate API returning successful card details.\n4. Observe UI does NOT show card info immediately.\n5. Confirm transition to pre-view warning with privacy info.\n6. Verify timer (90 seconds) displayed.\n7. Validate warning messages per service response.\n8. Check audit log for pre-view display event.",
+    "expectedResult": "1. UI transitions to pre-view warning after valid API response.\n2. Card details are NOT shown before warning.\n3. Privacy/secure handling messages and timer are present.\n4. Audit record for pre-view step.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0002",
+      "excerpt": "לאחר קבלת תשובה תקינה מהשירות יש להפעיל מסך הכנה לפני צפיה"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Navigation Back and Home Redirection",
+    "description": "Checks navigation controls for returning home or back from any card details state, confirming that correct redirection occurs to card hub. Automation: HIGH — UI navigation assertions.",
+    "testId": "TC-CDR-05",
+    "testDescription": "User in any card details UI or 'no cards' state clicks back or home, system provides explicit redirection to card hub (world of credit cards) and clears session state.",
+    "prerequisites": "User is in card details UI, 'no cards' screen, or selection menu, navigation controls present.",
+    "stepsToPerform": "1. Log in and open card details (with or without card).\n2. Locate 'Back' and 'Home' buttons in UI.\n3. Click 'Back', observe redirected to credit card hub.\n4. Click 'Home', observe same redirection.\n5. Validate session clearance.\n6. Check any caching removed as appropriate.\n7. Confirm audit log tracks navigation event.\n8. Repeat with 'no cards' UI for consistency.",
+    "expectedResult": "1. User redirected to card hub upon 'Back' or 'Home'.\n2. No session/cached card details remain.\n3. Audit/trace log captures navigation.\n4. No regression across UI states.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, multiple button rows (6, 7, 20)",
+      "excerpt": "בעת לחיצה הלקוח יופנה לעולם כרטיסי אשראי"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "No Eligible Cards Main Menu Flow",
+    "description": "Ensures that when a user has no eligible cards, a 'no cards available' state is presented, with proper explanatory text and correct UI controls. Automation: HIGH — UI assertions.",
+    "testId": "TC-NOC-01",
+    "testDescription": "User attempts to view card details from main menu when no eligible cards are linked. System displays 'No Cards' UI with full message, disables card retrieval, and only shows allowed actions.",
+    "prerequisites": "User account has no eligible cards, main menu access permitted.",
+    "stepsToPerform": "1. Log in with test user lacking card linkage.\n2. Navigate to main menu.\n3. Click 'View Card Details'.\n4. Confirm 'No Cards' UI is presented.\n5. Validate messaging covers lack of eligible cards.\n6. Check retrieval API is NOT called.\n7. Observe UI controls for home and card order.\n8. Audit log records zero-card access attempt.",
+    "expectedResult": "1. 'No Cards' UI state appears with correct text.\n2. Card retrieval action blocked.\n3. Only navigation/order controls available.\n4. Audit log matches zero-card state.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0001 - מסך מצב אפס - אין כרטיסים",
+      "excerpt": "לא נמצאו כרטיסים על שמך שניתן לצפות בפרטים שלהם"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "No Cards State After Card Issuance",
+    "description": "Verifies that newly issued cards in 'incomplete' state correctly trigger 'no card details found' UI with retry options. Automation: HIGH — UI + API assertions.",
+    "testId": "TC-NOC-02",
+    "testDescription": "After card issuance, before approval, user tries viewing details. UI presents 'No Card Details Found' for the new card, retry and navigation controls enabled according to source.",
+    "prerequisites": "Card has been issued but not yet approved; user in actions lobby post-issuance.",
+    "stepsToPerform": "1. Issue new card for synthetic user.\n2. Quickly attempt 'View Card Details' from lobby.\n3. Monitor response for incomplete card.\n4. Ensure UI presents 'No Card Details Found'.\n5. Confirm proper explanatory text is shown.\n6. Verify 'Try Again' button is enabled.\n7. Check navigation to main menu remains possible.\n8. Audit log records incomplete issuance flow.",
+    "expectedResult": "1. 'No Card Details Found' UI for new cards before approval.\n2. Retry and navigation controls per source.\n3. Card retrieval attempts blocked until approval.\n4. Audit events confirm post-issuance path.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0002 - מסך מצב אפס - אין כרטיסים",
+      "excerpt": "לא נמצאו פרטי הכרטיס החדש"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "No Cards Handling for API 204 and 203+31",
+    "description": "Ensures system correctly handles both API boundary responses (204, 203 with ID=31) by displaying 'No Cards' UI state regardless of source entry point. Automation: HIGH — API response matrix assertions.",
+    "testId": "TC-NOC-03",
+    "testDescription": "For both main menu and post-issuance flows, simulate API returning HttpStatusCode=204 or 203 with ID=31. Verify 'No Cards Available' UI is shown exactly as specified, with no data leakage.",
+    "prerequisites": "User tries viewing card details; API configured to return boundary values (204, 203+31).",
+    "stepsToPerform": "1. Log in as test user with zero eligible cards.\n2. Simulate API returning 204.\n3. Observe 'No Cards' UI.\n4. Repeat with API returning 203 and ID=31.\n5. Validate UI state consistency across both codes.\n6. Confirm no card details are displayed.\n7. Audit log matches error event.\n8. Test for absence of card data in all response payloads and logs.",
+    "expectedResult": "1. 'No Cards' UI appears for both 204 and 203+31 responses.\n2. No card details or sensitive values exposed.\n3. Logs confirm error handling.\n4. All navigation and retry controls as per source.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0001 + Sc0002, column 10",
+      "excerpt": "* אם בפלט התקבל HttpStatusCode = 204 או  HttpStatusCode = 203  עם ID=31    יש להציג מסך אין כרטיסים"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Action Buttons in No Cards State",
+    "description": "Confirms the presence and correct behavior of action buttons ('Go to Home', 'Order Card') in 'No Cards' UI so users are guided to next valid operations without card access. Automation: HIGH — UI and action assertion.",
+    "testId": "TC-NOC-04",
+    "testDescription": "When 'No Cards' UI state appears, verify that only action buttons for home redirection and new card order are shown, and that their click behavior matches source rules.",
+    "prerequisites": "User in 'No Cards Available' UI, no eligible cards present.",
+    "stepsToPerform": "1. Log in and access 'View Card Details' with no cards.\n2. Verify UI presents correct action buttons.\n3. Click 'Go to Home' and check redirection.\n4. Click 'Order Card' and validate process initiation.\n5. Check button state (enabled/disabled).\n6. Ensure no card retrieval occurs after action.\n7. Validate audit log for action triggers.\n8. Confirm no sensitive card data present in UI.",
+    "expectedResult": "1. Only permitted action buttons appear in 'No Cards' UI.\n2. Buttons trigger correct redirections.\n3. No data leakage occurs.\n4. Audit events record action usage.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0001, columns for buttons",
+      "excerpt": "בעת לחיצה הלקוח יופנה לעולם כרטיסי אשראי, ...לתהליך הזמנת כרטיס חדש"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Card Selection List for Multiple Cards",
+    "description": "Validates the UI correctly lists all eligible cards for selection, with masking and brand info, prior to viewing card details. Automation: MEDIUM — UI content and masking assertions.",
+    "testId": "TC-CSUI-01",
+    "testDescription": "User with multiple cards accesses 'View Card Details'; UI displays list of eligible cards with masked details, customer name, brand. Selection advances to next retrieval flow.",
+    "prerequisites": "User authenticated, multiple eligible cards linked, selection UI component available.",
+    "stepsToPerform": "1. Log in as test user with two or more cards.\n2. Navigate to card selection screen.\n3. Confirm list is present and shows all cards.\n4. Verify details are masked (e.g. last 4 digits, no full PAN).\n5. Check customer name and card brand for each entry.\n6. Select a card and trigger retrieval.\n7. Monitor UI response and next flow.\n8. Audit log captures selection event.",
+    "expectedResult": "1. UI lists all eligible cards, details are masked.\n2. Brand and customer info present for each card.\n3. Card selection triggers correct retrieval.\n4. No PII or sensitive card data in UI or logs.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0003, card selection area",
+      "excerpt": "בחרי את הכרטיס שתרצי לראות את הפרטים שלו"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Card Masking and Brand Display",
+    "description": "Verifies that card images and the last four digits are correctly displayed and masked for each card, enforcing privacy and brand recognition as required for regulatory and user-expectation reasons. Ensures that no full card numbers are exposed in the UI and that only permitted brand imagery appears. Automation: HIGH — mainly UI and API assertions.",
+    "testId": "TC-CSUI-02",
+    "testDescription": "A user with multiple cards accesses the card selection UI. The interface must show each card using only the last four digits and display the corresponding brand image fetched by the cardVendorProductId code. Full card numbers are never visible.",
+    "prerequisites": "User is authenticated. Multiple cards exist with unique cardVendorProductId and cardSuffix values. Brand image repository is accessible. No previous client caches present.",
+    "stepsToPerform": "1. Navigate to card selection UI. 2. Initiate API call to fetch card list. 3. Observe UI rendering for each card. 4. Verify that only last four digits (e.g., '**** 1234') are shown for each card. 5. Confirm no other card number parts are visible. 6. Confirm brand image matches cardVendorProductId (e.g., VISA for code 2). 7. Inspect DOM and logs for absence of full card numbers. 8. Test across all card types (Mastercard, VISA, AMEX, Isracard). 9. Select a card and proceed to next screen. 10. Re-examine UI for compliance with masking and branding.",
+    "expectedResult": "UI shows last four digits only for each card (e.g. '**** 4242'), correct brand image is displayed, full card numbers are not exposed, no sensitive data in client logs or cache.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0003 -  מסך הצגת כרטיס/כרטיסים לבחירה, columns for cardSuffix/cardVendorProductId",
+      "excerpt": "יש לשלוף את התמונה הרלוונטית בהתאם לקוד שהתקבל בשדה cardVendorProductId, יש לבצע את שליפת התמונה ממאגר תמונות בקליינט."
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Single Card Selection Flow",
+    "description": "Tests that the card selection UI reliably restricts the display and selection to cards registered to the current user, and handles new card timing as the business logic requires. Prevents unauthorized viewing and confirms correct UI messaging for new cards.",
+    "testId": "TC-CSUI-03",
+    "testDescription": "User opens card selection UI. Only cards registered to their account are displayed. If a new card has been issued, it appears after a brief delay (up to one minute) as described. No cards from other users are shown.",
+    "prerequisites": "User is authenticated. At least one card is registered to the user. If testing new issuance, card has been recently approved but not yet appeared.",
+    "stepsToPerform": "1. Enter card selection UI. 2. Fetch card list for current user. 3. Observe UI for cards linked to user. 4. Confirm no cards not owned by user appear. 5. Issue new card for user and repeat steps after 30 seconds. 6. Observe if new card appears after delay. 7. Verify UI message about waiting for card registration. 8. Attempt to select any available card. 9. Proceed to next workflow. 10. Validate no unauthorized access is possible.",
+    "expectedResult": "Only user-owned cards shown, UI shows \"If you ordered a new card, it may take up to one minute to appear here.\", new cards appear after delay, no cross-account exposure.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for Sc0003, card display",
+      "excerpt": "ניתן לצפות רק בפרטי הכרטיסים הרשומים על שמך. אם הזמנת כרטיס חדש ייתכן שייקח לו כדקה להופיע כאן."
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Field Population from Service",
+    "description": "Ensures that all card selection screen fields (card list info, card type, card number) display text as returned from the backend service based on the specified schema fields, protecting against client-side hard-coding or mismatches. Automation: HIGH.",
+    "testId": "TC-CSUI-04",
+    "testDescription": "On the card selection screen, all text fields (cardListInfo, cardTypeTilte, cardNumberTitle) are populated using service response values, not local defaults. Each field reflects the text defined per backend mapping.",
+    "prerequisites": "Backend returns non-empty values for cardListInfo, cardTypeTilte, and cardNumberTitle. No local text is hard-coded in client.",
+    "stepsToPerform": "1. Log in as user. 2. Load card selection screen. 3. Capture service response for cardListInfo. 4. Capture service response for cardTypeTilte. 5. Capture service response for cardNumberTitle. 6. Verify UI matches service values exactly. 7. Change backend text and reload. 8. Confirm UI changes accordingly. 9. Test with missing/empty backend values. 10. Ensure fallback (if defined in source) is compliant.",
+    "expectedResult": "UI fields show text exactly as delivered (e.g., cardTypeTilte = 'Debit Card'), no hard-coding, text changes when service outputs change.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, fields for cardListInfo, cardTypeTilte, cardNumberTitle",
+      "excerpt": "יש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21000)"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Pre-View Privacy Guidance Display",
+    "description": "Validates that before viewing card details, UI shows explicit privacy guidance text fetched from backend — warning users to ensure no one else can see the screen. Protects against privacy breaches by reminding users, in compliance with regulatory obligations.",
+    "testId": "TC-PWE-01",
+    "testDescription": "Upon entering the privacy enforcement screen before card details are shown, the UI displays \"Make sure no one else is watching the screen\". The text is sourced from the backend and must match exactly.",
+    "prerequisites": "User has selected a card and is ready to proceed. Backend delivers cardConfirmationPrivacyInfo text. No other privacy warning overlays are active.",
+    "stepsToPerform": "1. Authenticate and select card. 2. Click 'continue' to reach privacy warning screen. 3. Observe displayed privacy warning text. 4. Compare UI to backend value. 5. Change backend value and reload. 6. Confirm UI updates accordingly. 7. Attempt to proceed without confirming. 8. Check audit/log for display event. 9. Verify UI does not permit bypassing without warning. 10. Inspect network logs for backend value.",
+    "expectedResult": "Privacy warning 'Make sure no one else is watching the screen' appears, matches backend, cannot proceed without seeing warning, audit recorded.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הכנה לפני צפייה, row for cardConfirmationPrivacyInfo",
+      "excerpt": "כדאי לוודא שאין אנשים נוספים שצופים במסך"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Regulatory Guidance About Data Saving",
+    "description": "Ensures explicit regulatory guidance text is shown to user before they view card details, warning against saving card numbers in local computer or phone and emphasizing confidentiality. Satisfies regulatory and PCI requirements.",
+    "testId": "TC-PWE-02",
+    "testDescription": "Privacy/warning enforcement screen displays 'It is recommended not to save the card number on your computer or mobile phone and to ensure confidentiality of card details'. Text is driven by backend and must be visible prior to any card data exposure.",
+    "prerequisites": "User is at pre-view privacy/warning screen. Backend returns cardConfirmationSecurityInfo text.",
+    "stepsToPerform": "1. Log in as user. 2. Select card to view. 3. Enter privacy enforcement screen. 4. Inspect for data-saving warning text. 5. Compare UI against backend response. 6. Change backend text and observe UI update. 7. Try to save card details locally and verify UI warning remains visible. 8. Check regulatory audit log for guidance display event. 9. Proceed to next step and check text remains until card details are viewed. 10. Confirm no unauthorized bypass.",
+    "expectedResult": "UI shows exact text 'It is recommended not to save the card number...', backend value matches, evidence of guidance in audit log, compliance upheld.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הכנה לפני צפייה, row for cardConfirmationSecurityInfo",
+      "excerpt": "מומלץ שלא לשמור את מספר הכרטיס במחשב או בטלפון הנייד ולהקפיד על סודיות פרטי הכרטיס"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Timer Warning for Card Details Exposure",
+    "description": "Verifies that the privacy enforcement screen displays a visible warning stating card details will be shown for 90 seconds only, as required for session management and sensitive data protection. Ensures timely closure of exposure windows.",
+    "testId": "TC-PWE-03",
+    "testDescription": "User reaches privacy/warning enforcement screen; UI displays 'Card details will be shown for 90 seconds' as a visible warning sourced by backend. This warning controls expectations for session timing and exposure duration.",
+    "prerequisites": "User is at privacy enforcement pre-view screen. Backend returns cardConfirmationTimerInfo value. No prior timer warning present.",
+    "stepsToPerform": "1. Authenticate and select card. 2. Enter privacy enforcement screen. 3. Observe warning about exposure duration. 4. Compare UI warning to backend value. 5. Change backend value and confirm UI reaction (if allowed). 6. Attempt to proceed and verify session timer is attached to data exposure. 7. Wait for timer expiry and confirm card data disappears. 8. Check audit/log entry for timer start/expiry. 9. Return to screen; confirm warning always appears.",
+    "expectedResult": "Warning 'Card details will be shown for 90 seconds' is visible, session expires after 90 seconds, backend warning matches, audit evidence for timer compliance.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הכנה לפני צפייה, row for cardConfirmationTimerInfo",
+      "excerpt": "פרטי הכרטיס יוצגו למשך 90 שניות"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Masked Phone Number Display in OTP Screen",
+    "description": "Ensures that the OTP delivery notification shows the target phone number in a properly masked format, using backend-driven placeholder, to protect PII and maintain user privacy. Prevents exposure of full mobile number.",
+    "testId": "TC-OTP-02",
+    "testDescription": "On the OTP entry screen, the user's phone number is shown as masked (e.g. '05X-XXXXXX') within the message 'To protect your account, we sent an authentication code to %@', where %@ is the masked value. No full mobile numbers are visible.",
+    "prerequisites": "OTP send action has occurred, user is at OTP entry screen, backend returns otpInfo + phoneNumber with masking applied.",
+    "stepsToPerform": "1. Trigger 'View card details' to send OTP. 2. Arrive at OTP entry screen. 3. Observe phone number display in notification. 4. Confirm value is masked (e.g., '052-6***53'). 5. Inspect backend response for mask format. 6. Attempt screen scrape, log, DOM and API replay to confirm masking. 7. Change backend masking and confirm UI update. 8. Try to reveal full phone via UI — verify not possible. 9. Test variation with different phone numbers. 10. Proceed to OTP entry step.",
+    "expectedResult": "UI shows masked phone (e.g. '052-6***53') in OTP notice, no full phone numbers exposed in UI, logs, or API responses, masking consistent across flows.",
+    "sourceCitation": {
+      "location": "Sheet: otp, row for otpInfo + phoneNumber",
+      "excerpt": "כדי לשמור על חשבונך, שלחנו לך קוד אימות ל- %@"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "OTP Verification Success and Transition",
+    "description": "Ensures that valid OTP code entry transitions user to card details view, protecting access and supporting regulatory authentication. Automation: HIGH – API and UI transition.",
+    "testId": "TC-OTPV-01",
+    "testDescription": "User enters a valid 6-digit OTP, clicks continue, and is taken to the next screen displaying card details.",
+    "prerequisites": "User has received a valid OTP code via SMS or voice, reached OTP input screen (Sc0005/Sc0006), session is active, valid orderId present.",
+    "stepsToPerform": "1. User lands on OTP input screen. 2. Enter masked test code (e.g., 123456). 3. Click 'Continue'. 4. API call made to /restore-card-information/verify-otp. 5. Backend verifies code, responds success. 6. UI transitions to card preview/privacy screen. 7. Card details UI loads and masks card number. 8. Timer for card exposure (90 seconds) starts. 9. Validate that code is not retained in logs/UI. 10. Confirm audit entry for authentication success.",
+    "expectedResult": "Transition to card details screen occurs after valid OTP, card details are masked, timer starts, and audit entries reflect successful authentication.",
+    "sourceCitation": {
+      "location": "Sheet: otp, Sc0005 + Sc0006 - מסך הזדהות מחמירה - OTP",
+      "excerpt": "לאחר הקלדת 6 ספרות ולחיצה על המשך יופעל שירות web-order /restore-card-information (verifyOtp)...אם חזרה תשובה תקינה בבדיקת קוד אימות יתבצע מעבר למסך הבא"
+    }
+  },
+  {
+    "type": "negative",
+    "title": "OTP Validation Incorrect Code Error",
+    "description": "Verifies error handling for incorrect OTP, ensuring access is denied and proper feedback is shown. Also clears input for privacy and retry. Automation: HIGH – UI and API.",
+    "testId": "TC-OTPV-02",
+    "testDescription": "User enters an invalid OTP, clicks continue, and receives an explicit error alert.",
+    "prerequisites": "User session active on OTP screen with valid orderId, but intentionally enters wrong code (e.g., 654321).",
+    "stepsToPerform": "1. Reach OTP input screen. 2. Enter invalid test code. 3. Click 'Continue'. 4. API call to /restore-card-information/verify-otp. 5. Backend responds with error, HttpStatusCode 203, ID=31. 6. UI displays red error message. 7. Input field is cleared/reset. 8. Error disappears on new entry attempt. 9. Try entering a new code, observe error handling. 10. Validate logs for no access granted.",
+    "expectedResult": "UI shows 'הקוד שהקלדת אינו תקין. יש לנסות שוב' in red, input resets, access is denied, error disappears on new input, and no sensitive data retained.",
+    "sourceCitation": {
+      "location": "Sheet: otp, row for Sc0007",
+      "excerpt": "הקוד שהקלדת אינו תקין. יש לנסות שוב"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "OTP Validation Input Reset after Error",
+    "description": "Checks that after a validation error, the OTP input field is immediately cleared, enforcing privacy and retry compliance. Automation: HIGH – UI observable.",
+    "testId": "TC-OTPV-03",
+    "testDescription": "Following a failed OTP validation, the input field is cleared to prevent exposing sensitive input, allowing the user to re-enter the code.",
+    "prerequisites": "User attempted one or more invalid codes, triggered validation error, input field visible.",
+    "stepsToPerform": "1. Reach OTP input screen. 2. Enter invalid code (e.g., 111111). 3. Click 'Continue'. 4. Observe error message. 5. Validate input field resets to empty. 6. Attempt to enter new code, error message disappears. 7. Repeat steps to check consistency. 8. Confirm that no input persists in logs/UI after error. 9. Validate error color and style compliance. 10. Check privacy and masking requirements on input field.",
+    "expectedResult": "OTP input field clears on validation error, error message disappears when a new code is entered, and input is never logged or persisted.",
+    "sourceCitation": {
+      "location": "Sheet: otp, text for validation error",
+      "excerpt": "שדה הזנת קוד אימות יתרוקן"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Validation for OTP Expiration – Code No Longer Valid",
+    "description": "Tests that the OTP code is invalidated after expiration, enforcing session expiry rules and protecting card data exposure. Automation: HIGH – backend simulation and UI response.",
+    "testId": "TC-OTPV-05",
+    "testDescription": "User attempts to validate OTP after code expiration, receiving explicit expiry error and session restart instruction.",
+    "prerequisites": "User receives OTP, waits past expiration (system-defined window, e.g., 5 min), code is still entered on OTP input screen.",
+    "stepsToPerform": "1. Receive OTP code. 2. Wait until code is expired per system (simulate expiration). 3. Enter expired code into input field. 4. Click 'Continue'. 5. Backend responds HttpStatusCode=203, ID=33. 6. UI displays red error message. 7. Field is cleared and disabled. 8. Attempt new entry – input is disabled. 9. Try session restart, observe prompt to restart recovery flow. 10. Validate logs/audit for failed/thwarted access.",
+    "expectedResult": "UI displays 'קוד האימות כבר לא בתוקף. יש להתחיל מחדש את תהליך השחזור', input is cleared and disabled, user must restart recovery process.",
+    "sourceCitation": {
+      "location": "Sheet: otp, row for Sc0008",
+      "excerpt": "קוד האימות כבר לא בתוקף. יש להתחיל מחדש את תהליך השחזור"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Exceeded OTP Request Attempts – Block Screen",
+    "description": "Verifies that after too many OTP requests, access is blocked, enforcing regulatory limits and preventing brute-force or abuse. Automation: HIGH – backend and UI.",
+    "testId": "TC-OTPB-01",
+    "testDescription": "User requests OTP too frequently (over max permitted), triggering blockscreen and denied access to card details.",
+    "prerequisites": "User has previously requested OTP max times allowed, session persists; backend tracks request count.",
+    "stepsToPerform": "1. On OTP screen, request OTP (SMS/Voice) repeatedly. 2. Track request counter; reach threshold. 3. Submit new OTP request; backend returns error. 4. HttpStatusCode=203 with ID=32. 5. UI displays blockscreen per Sc0010. 6. Card details and OTP input are hidden/inaccessible. 7. Error message specifies block reason. 8. Attempt to retry; access remains denied. 9. Validate block duration prompt appears. 10. Confirm audit entry for block event.",
+    "expectedResult": "UI shows 'הגישה לצפייה בפרטי הכרטיס נחסמה בעקבות מספר רב של בקשות לשליחת קוד אימות.', blockscreen prevents access, and block event is logged.",
+    "sourceCitation": {
+      "location": "Sheet: otp, Sc0010 text",
+      "excerpt": "הגישה לצפייה בפרטי הכרטיס נחסמה בעקבות מספר רב של בקשות לשליחת קוד אימות."
+    }
+  },
+  {
+    "type": "performance",
+    "title": "Block Duration for OTP Request Attempts",
+    "description": "Validates that block duration for exceeded OTP requests matches regulatory requirements (10 minutes), ensuring correct timeout enforcement. Automation: HIGH – time-based, backend and UI.",
+    "testId": "TC-OTPB-03",
+    "testDescription": "After request limit exceeded, user is shown blockscreen with wait time; test confirms 10-minute lock before retry is permitted.",
+    "prerequisites": "User has reached OTP request attempt limit, block active, no access during timeout period.",
+    "stepsToPerform": "1. Exceed request attempt limit with repeated OTP requests. 2. Receive blockscreen. 3. UI shows wait message. 4. Attempt to request OTP within 10 minutes – access denied. 5. Wait for 10 minutes. 6. Retry requesting OTP, access allowed. 7. Validate timer UI compliance. 8. Confirm logs reflect 10-minute block duration. 9. Confirm block is lifted after interval. 10. Confirm failed attempt to bypass timeout.",
+    "expectedResult": "UI displays 'יש להמתין 10 דקות ולנסות שוב', no access for 10 minutes, access restored after, wait enforced in both UI and backend.",
+    "sourceCitation": {
+      "location": "Sheet: otp, Sc0010",
+      "excerpt": "יש להמתין 10 דקות ולנסות שוב"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "OTP Expiry Handling – Disable Input",
+    "description": "Verifies that when an OTP code expires, the input field is cleared and further entry is disabled, preventing any attempt to reuse an expired code. This protects against unauthorized authentication attempts outside the permitted time window. Automation: HIGH — assertions based on UI and API response.",
+    "testId": "TC-OTPE-01",
+    "testDescription": "A user enters an OTP code after receiving it, but the session exceeds the code validity period before submission. On screen, the message indicates expiry and prohibits further code entry.",
+    "prerequisites": "OTP session initiated, code delivered to masked phone (e.g., 052-6***53), code validity period elapsed before entry submission, Sc0008 error state ready.",
+    "stepsToPerform": "1. Start card details authentication flow with valid card and phone.\n2. Trigger OTP delivery and display masked phone number (e.g., 052-6***53).\n3. Wait for code validity period to expire without entering any code.\n4. Attempt to input a 6-digit code into the OTP field.\n5. Observe the error message 'קוד האימות כבר לא בתוקף.' in red.\n6. Confirm the OTP input field is cleared and disabled (cannot type any digits).\n7. Attempt to click 'Continue' button; verify no new request is sent.\n8. Try to resend OTP; confirm flow does not permit reuse of expired session.\n9. Confirm code value is not persisted in logs or client cache after expiry.\n10. Assert audit log contains expiry event, excludes full code value.",
+    "expectedResult": "1. Expired code error message appears: 'קוד האימות כבר לא בתוקף. יש להתחיל מחדש את תהליך השחזור'.\n2. OTP input field is cleared and disabled—cannot enter any code.\n3. No authentication API calls allowed until restart initiated.\n4. Audit event logs expiry, code never logged or exposed post-expiry.",
+    "sourceCitation": {
+      "location": "Sheet: otp, row Sc0008, column otpErrorDesc",
+      "excerpt": "שדה הזנת קוד אימות יתרוקן ויהיה לא פעיל (לא יהיה ניתן להזין קוד חדש)."
+    }
+  },
+  {
+    "type": "functional",
+    "title": "OTP Expiry Handling – Instruction to Restart",
+    "description": "Ensures user receives explicit instruction to restart the recovery process upon OTP expiry, protecting against confusion and supporting regulatory requirements for precise messaging. Automation: HIGH — UI and error message assertion.",
+    "testId": "TC-OTPE-02",
+    "testDescription": "A user enters an expired OTP code and is informed not only that the code expired, but that they must restart the recovery workflow to proceed.",
+    "prerequisites": "OTP session has expired, user attempts OTP entry, cardDetails flow at Sc0008 error state.",
+    "stepsToPerform": "1. Begin flow for card details using valid account and card.\n2. Receive OTP on masked phone; display code entry field.\n3. Wait for code to expire prior to entry.\n4. Enter any code and click 'Continue'.\n5. Observe the UI for red error message.\n6. Validate message: 'קוד האימות כבר לא בתוקף. יש להתחיל מחדש את תהליך השחזור'.\n7. Confirm restart instruction is visible.\n8. Click any navigation or error-recovery button.\n9. Confirm process redirects to initial recovery flow — not simply to code resend.\n10. Validate restart triggers new session and audit trail.",
+    "expectedResult": "1. Error message with restart instruction is shown in red.\n2. User is guided to the start of the recovery process (not code entry).\n3. Audit event records restart action with no sensitive code leaked.",
+    "sourceCitation": {
+      "location": "Sheet: otp, row Sc0008, column otpErrorDesc",
+      "excerpt": "יש להתחיל מחדש את תהליך השחזור"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Non-AMEX Card Details Display with Session Timer",
+    "description": "Verifies that card details (number, expiry, etc.) are displayed for exactly the regulated session duration, ensuring compliance and security. Automation: HIGH — timer and UI assertions.",
+    "testId": "TC-CDE-01",
+    "testDescription": "After successful authentication, the user sees full non-AMEX card details. Details are available for a timed interval, at which point the session ends and details are hidden.",
+    "prerequisites": "Valid card selected, OTP verified, brandCode ≠ 3 (not AMEX), Sc0012 flow.",
+    "stepsToPerform": "1. User navigates to 'View Card Details' for a MasterCard/VISA/Isracard type.\n2. Complete OTP entry and verification flow.\n3. Access details screen (Sc0012).\n4. Observe 'cardNumberInfo', 'cardNumberTitle', masked 'cardSuffix'.\n5. Check session timer begins at 90 seconds (displayed prominently).\n6. Wait 45 seconds, then verify card details remain visible.\n7. Wait until timer reaches 0.\n8. Upon timer expiry, verify card details are auto-hidden and session ends.\n9. Try to refresh the page; confirm card details are not re-exposed.\n10. Validate audit logs for access and session end with no card data persistence.",
+    "expectedResult": "1. Card details available for 90 seconds only.\n2. On expiry, all details are hidden and session ended.\n3. Audit event for session end recorded with timestamp; card data not persisted.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, Sc0012 row, cardNumberDesc",
+      "excerpt": "פרטי הכרטיס יוצגו למשך"
+    }
+  },
+  {
+    "type": "security",
+    "title": "Masking/Display Rules for Card Number and Suffix",
+    "description": "Tests that card number and suffix are displayed according to security rules: only allowed portions visible, the rest masked/obfuscated, never full card number in UI or logs. This prevents unauthorized exposure. Automation: HIGH — UI and backend masking checks.",
+    "testId": "TC-CDE-02",
+    "testDescription": "On card details screen for non-AMEX card, user sees masked card number and unmasked suffix according to service-provided field rules. Confirm display always matches service description and full card numbers never appear outside permitted area.",
+    "prerequisites": "Valid card selection (non-AMEX), authenticated session, card details available.",
+    "stepsToPerform": "1. Successfully authenticate with OTP for a selected card.\n2. Open card details UI, validating against brandCode ≠ 3.\n3. Observe 'cardNumberTitle' — confirm masking format (e.g., '**** **** **** 1234').\n4. Check 'cardSuffix' shown only for last 4 digits.\n5. Review service response fields for expected masking.\n6. Inspect logs and DOM for forbidden card number exposure.\n7. Try to copy masked number; paste to clipboard, verify only permitted digits transfer.\n8. Capture screenshots; confirm full card number never exposed visually.\n9. Validate audit log records only masked numbers.\n10. User attempts browser back/forward or print; masking persists.",
+    "expectedResult": "1. Only masked format appears in UI and logs per service field definition.\n2. Last 4 digits visible in 'cardSuffix', no full numbers shown.\n3. Clipboard and audit log contain only permitted masked form.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, cardNumberTitle, cardSuffix rows",
+      "excerpt": "יש להציג טקסט מהשירות בהתאם לתיאור השדה"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Copy Card Number Functionality",
+    "description": "Validates that copy-to-clipboard works only while details are exposed and copies precisely the service-provided field in the masking format. Automation: MEDIUM — UI event plus clipboard assertions.",
+    "testId": "TC-CDE-03",
+    "testDescription": "User clicks 'Copy' icon on card details screen during active session, expecting to copy the masked card number as shown. Clipboard must match UI exactly and not persist after session end.",
+    "prerequisites": "Card details session active; timer > 0; copyDetailsInfo present; browser supports clipboard.",
+    "stepsToPerform": "1. Complete authentication and enter card details view.\n2. Observe 'copyDetailsInfo' text/icon.\n3. Click copy icon during session exposure.\n4. Paste contents to validate against visible card number (e.g., '**** **** **** 1234').\n5. Wait for timer expiry; attempt copy again — icon disabled.\n6. Try pasting post-expiry; clipboard cleared/does not persist.\n7. Confirm browser history and logs contain only masked card number.\n8. Audit logs verify copy action triggers access event.\n9. Automation: simulate copy/paste and time expiry actions.",
+    "expectedResult": "1. Clipboard matches masked number format shown in UI.\n2. Copy action unavailable after session expiration.\n3. Policy-compliant audit log of copy action; clipboard cleared post-session.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, copyDetailsInfo row",
+      "excerpt": "העתקה, ...יש להציג טקסט מהשירות בהתאם לתיאור השדה"
+    }
+  },
+  {
+    "type": "security",
+    "title": "Masked CVV Display for Non-AMEX",
+    "description": "Enforces regulatory masking for CVV: on non-AMEX cards, CVV is shown only when permitted and masked as required, never exposed in logs or cache. Automation: HIGH — UI and backend checks.",
+    "testId": "TC-CDE-04",
+    "testDescription": "User views CVV on card details screen for MasterCard/VISA/Isracard. CVV appears only in allowed area and service-provided format. Validate masking, clipboard, and audit all exclude unmasked CVV except during exposure.",
+    "prerequisites": "Valid card details session for non-AMEX card with CVV enabled, timer active.",
+    "stepsToPerform": "1. Enter card details for non-AMEX card.\n2. Click 'Show CVV' button prior to session expiry.\n3. Observe CVV in UI, confirm masking per service field.\n4. Copy CVV if allowed; verify clipboard matches masked format.\n5. Wait for timer to reach zero.\n6. Confirm CVV is removed from UI and copy is disabled.\n7. Inspect browser cache and logs for absence of unmasked CVV.\n8. Audit logs confirm CVV display and expiry action.\n9. Try to refresh/reload; CVV not exposed after expiry.",
+    "expectedResult": "1. CVV visible in masked form only during allowed session.\n2. Clipboard contains only masked CVV; clears on expiry.\n3. No unmasked CVV in logs, audits show relevant events.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, row for Sc0014, cvvNumberInfo",
+      "excerpt": "מספר ה-cvv של הכרטיס"
+    }
+  },
+  {
+    "type": "performance",
+    "title": "Timer Component Countdown and Session End",
+    "description": "Ensures timer starts correctly, counts down for 90 seconds, and triggers session end when finished. Critical for regulated exposure duration and session controls. Automation: HIGH — timer monitoring, assertions, and expiry events.",
+    "testId": "TC-CDE-05",
+    "testDescription": "During card details view, 90-second timer initiates and counts down. At zero, card details are hidden and session is ended. Timer accuracy is validated for UX and regulatory compliance.",
+    "prerequisites": "Valid card details session active, timer component present, browser/system time synchronized.",
+    "stepsToPerform": "1. Enter card details screen (Sc0012 or Sc0013/Sc0014 depending on card brand).\n2. Observe timer initialized to 90 seconds.\n3. Confirm timer display and countdown begin immediately.\n4. Monitor countdown every 10 seconds; verify accuracy.\n5. Observe UI for warning when timer is near zero.\n6. Wait until timer reaches zero.\n7. Confirm automatic session end and removal of all sensitive card details.\n8. Attempt to view card details after timer expiry; verify access denied.\n9. Check logs for session end event at exact timestamp.\n10. Confirm audit for access and expiry; no card data remains in client-side cache.",
+    "expectedResult": "1. Timer counts down from 90 seconds with <1 second jitter.\n2. On expiry, card details are hidden and session ended.\n3. Audit logs confirm session expiry at exact time; card details not accessible beyond expiry.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, timer row",
+      "excerpt": "רכיב טיימר של 90 שניות"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "AMEX Card Dual-CVV Display and Toggle",
+    "description": "Checks that AMEX cards (brandCode=3) display both front and back CVV numbers, with toggle buttons and valid field labels. This preserves compliance and avoids confusion for the end user. Automation: MEDIUM — UI element and toggle action checks.",
+    "testId": "TC-CDEA-01",
+    "testDescription": "User selects an AMEX card and on details screen sees two CVV numbers (front and back). UI must clearly differentiate, allow toggling between them, and label fields according to service logic.",
+    "prerequisites": "AMEX card selected (brandCode=3), OTP verified, Sc0013 state, CVV fields populated.",
+    "stepsToPerform": "1. Authenticate into card details for AMEX card.\n2. Access details screen (Sc0013).\n3. Confirm display of CVV labels and values for both front and back.\n4. Observe toggle button to switch CVV view.\n5. Click toggle to view back CVV; UI updates correctly.\n6. Click toggle to revert to front CVV; UI updates.\n7. Validate service-provided field titles and values are used.\n8. Check logs and DOM for correct field labeling and absence of unmasked CVV outside exposure.\n9. Audit logs record toggle actions for dual CVV.\n10. Timer expiry removes both CVV values from UI.",
+    "expectedResult": "1. Both CVV numbers for AMEX are shown, each with distinct labels.\n2. Toggle works and updates UI appropriately.\n3. No CVV exposed outside session; audits show toggle actions.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, Sc0013 fields",
+      "excerpt": "אם brandCode = 3 (אמקס): ...מספר cvv"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "AMEX Specialized Instruction Text",
+    "description": "Ensures AMEX card screens display unique instructional text highlighting dual CVV and payment guidance, matching service-provided description. Automation: HIGH — assertion on field content and UI label.",
+    "testId": "TC-CDEA-02",
+    "testDescription": "User views AMEX card details and sees specific instruction text about dual CVV numbers and required use for online and phone payments. Text matches service description exactly.",
+    "prerequisites": "AMEX card selected (brandCode=3), details screen active, amexInfo field populated.",
+    "stepsToPerform": "1. Authenticate and enter AMEX card details screen.\n2. Observe information area containing instructional text.\n3. Compare displayed wording to service-provided amexInfo.\n4. Confirm presence of second CVV reference in message.\n5. Attempt printing or screenshot; ensure instructional text persists and is clear.\n6. Check logs for audit trail of view event and instruction exposure.\n7. Validate instructional text absent for non-AMEX brands.\n8. Automation: Scrape and compare text for correctness.",
+    "expectedResult": "1. Instructional text about dual CVV is displayed exactly as service field.\n2. Audit logs record instructional view event.\n3. No instruction text appears for other brands.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, amexInfo row",
+      "excerpt": "בכרטיס אמריקן אקספרס יש 2 מספרי cvv. ...יש להציג טקסט מהשירות בהתאם לתיאור השדה"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "AMEX Front/Back CVV Toggle",
+    "description": "Validates AMEX cards provide toggle button for viewing back CVV and confirm correct state transitions between CVV displays. Automation: MEDIUM — UI and state transition assertions.",
+    "testId": "TC-CDEA-03",
+    "testDescription": "For AMEX cards, user can toggle between front and back CVV numbers using explicit button. Toggle logic works, UI updates fields correctly, and the transition is logged.",
+    "prerequisites": "Details screen active for AMEX (brandCode=3), CVV values available for both sides, toggle button present.",
+    "stepsToPerform": "1. Complete authentication for AMEX card and enter card details screen (Sc0013).\n2. Find 'Show Back CVV' button in UI.\n3. Click button to switch from front to back CVV.\n4. Confirm UI transitions smoothly and new CVV label/value appear.\n5. Toggle back; verify correct update.\n6. Attempt toggling during and after session expiry; confirm disabled after expiry.\n7. Validate audit logs for each toggle action.\n8. Attempt to view or copy CVV after expiry; confirm access denied.\n9. Automation: simulate repeated toggling and session end.",
+    "expectedResult": "1. Toggle button switches between front/back CVV for AMEX.\n2. UI updates field labels and values correctly.\n3. Switch action logged in audit; toggle disabled after expiry.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, row for Sc0013, button",
+      "excerpt": "לצפיה ב-cvv האחורי"
+    }
+  },
+  {
+    "type": "performance",
+    "title": "AMEX Timer Validation with Special CVV Exposure",
+    "description": "This test case verifies that for AMEX cards, card details are displayed for exactly 90 seconds and both CVV values are exposed in accordance with AMEX requirements. Ensures timer accuracy and compliance with regulatory exposure limits. Automation: HIGH – timer and data assertions can be automated.",
+    "testId": "TC-CDEA-04",
+    "testDescription": "For a user viewing AMEX card details, verify that the card details screen (Sc0013) displays both CVV values, and the timer restricts exposure to exactly 90 seconds.",
+    "prerequisites": "User is authenticated; user possesses an AMEX card (brandCode = 3); encrypted card data and OTT token available; card details retrieval completed; session initialized.",
+    "stepsToPerform": "1. Start session for AMEX card view.\n2. Retrieve card details using GetEncryptedCardData API with brandCode = 3.\n3. Decrypt card data using encryptionKey received in prior OTP verification.\n4. Display card details screen Sc0013 with card number, expiry, and both CVVs.\n5. Confirm timer component is visible and set to 90 seconds.\n6. Observe timer countdown from 90 to 0 seconds, confirming one-second intervals.\n7. Verify both CVVs (“front” and “back”) are visible for AMEX only.\n8. Attempt to copy CVV during exposure; confirm success.\n9. Once timer reaches 0, verify card details are masked/hidden.\n10. Confirm session is completed and user is redirected or blocked from further access.",
+    "expectedResult": "Card details are displayed for exactly 90 seconds; both CVV values are visible for AMEX; timer ticks accurately; at 90-second expiry, details are hidden and session ends; copying is only allowed during exposure.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, Sc0013 rows, column 'רכיב טיימר של 90 שניות'",
+      "excerpt": "אם brandCode = 3 (אמקס): ...רכיב טיימר של 90 שניות"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "CVV Separate Display Screen Transition",
+    "description": "Verifies that pressing the 'view CVV' button transitions to the dedicated CVV details screen (Sc0014). Ensures compliance with separate CVV exposure workflow for all brands. Automation: HIGH – UI/transition and API assertions.",
+    "testId": "TC-CVVE-01",
+    "testDescription": "When a user clicks the 'view CVV' button on card details screen, the app transitions to CVV view screen. The test confirms UI navigation and correct screen rendering.",
+    "prerequisites": "User has valid card (any brand) and has successfully accessed card details screen (Sc0012/Sc0013); card details cached; session active.",
+    "stepsToPerform": "1. User navigates to card details screen.\n2. Card details are displayed.\n3. Locate 'view CVV' button.\n4. Click 'view CVV' button.\n5. App transitions to CVV display screen (Sc0014).\n6. CVV field (masked/visible as per brand rules) is displayed.\n7. Confirm timer for CVV display is active (if present).\n8. Validate presence of 'back' and 'finish' buttons.\n9. Attempt to navigate back and confirm transition to prior screen.",
+    "expectedResult": "Pressing 'view CVV' transitions immediately to Sc0014, showing correct CVV and UI elements; navigation history is preserved.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, row for Sc0014, 'בעת הלחיצה הלקוח יועבר למסך צפיה ב-CVV'",
+      "excerpt": "בעת הלחיצה הלקוח יועבר למסך צפיה ב-CVV"
+    }
+  },
+  {
+    "type": "performance",
+    "title": "Session Timer Start and Countdown Accuracy",
+    "description": "Validates the initiation of session timer and accuracy of countdown for card details exposure. Ensures regulatory time limits on sensitive data exposure are enforced. Automation: HIGH – timer and latency assertions.",
+    "testId": "TC-SES-01",
+    "testDescription": "Upon card details screen presentation, verify that timer starts at 90 seconds and counts down at a consistent interval. Confirm that informational text and timer state are correct throughout exposure.",
+    "prerequisites": "Session initiated for card viewing; card details retrieved; timer UI enabled; no prior timer conflicts.",
+    "stepsToPerform": "1. Access card details screen (Sc0012/Sc0013).\n2. Confirm timer component is visible and set to 90 seconds.\n3. Observe informational text 'פרטי הכרטיס יוצגו למשך 90 שניות'.\n4. Validate countdown begins and decrements by one every second.\n5. Simulate half-second delay and confirm timer no skips.\n6. Approach boundary at 1 second remaining.\n7. Confirm timer expiry triggers session closure.\n8. Validate timer accuracy via backend logs/UI.",
+    "expectedResult": "Timer starts at 90 seconds for card details exposure; countdown is accurate and consistent; expiry triggers session end; timer never overcounts or undercounts.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הכנה לפני צפייה, rows 8, timer and מסך צפיה בפרטי הכרטיס timer fields",
+      "excerpt": "פרטי הכרטיס יוצגו למשך 90 שניות"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Explicit Session End via Button",
+    "description": "Ensures that the user can end the card details viewing session explicitly by pressing the 'finish' button, and this results in state transition to the session end screen. Protects regulatory requirement for user-initiated session completion. Automation: HIGH – UI transition and API assertion.",
+    "testId": "TC-SES-02",
+    "testDescription": "On card details screen, pressing the explicit end button immediately ends the session and transitions to the session end screen. Session state must be invalidated.",
+    "prerequisites": "Session active for card viewing; card details displayed; timer is running; explicit end button available.",
+    "stepsToPerform": "1. User logs in and accesses card details screen.\n2. Observe 'finish' button is enabled and visible.\n3. Press 'finish' button before timer expires.\n4. Confirm session token is invalidated.\n5. System transitions user to session end screen (Sc0015/Sc0016).\n6. Display end-of-session message.\n7. Validate backend records session closure.\n8. Attempt to re-access card details; confirm access blocked until new session.",
+    "expectedResult": "User-initiated 'finish' triggers immediate session end; session data is invalidated; end screen is shown; user cannot access card details post-session.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, row for סיום, button transition",
+      "excerpt": "בעת הלחיצה הלקוח יועבר למסך סיום"
+    }
+  },
+  {
+    "type": "performance",
+    "title": "Auto-Close Session When Timer Expires",
+    "description": "Verifies that the session automatically terminates and transitions to the session end screen when the timer reaches zero, even without user action. Ensures forced compliance with exposure limits. Automation: HIGH – timer and state assertions.",
+    "testId": "TC-SES-03",
+    "testDescription": "If a user continues viewing card details beyond 90 seconds, session auto-closes and redirects to the completion screen, invalidating session state.",
+    "prerequisites": "Session active for card viewing; timer started at 90 seconds; session end screen configured as next transition.",
+    "stepsToPerform": "1. Access card details and start timer.\n2. Wait for timer to countdown from 90 to 0 seconds.\n3. Do not interact with card details UI during timer.\n4. Observe session state after timer expiry.\n5. Confirm automatic transition to session end screen (Sc0015/Sc0016).\n6. Validate message indicating auto-close.\n7. Check session token is invalidated.\n8. Attempt to reload card view; confirm denied.",
+    "expectedResult": "Timer expiry leads to automatic session end; user is sent to session end screen; session is invalidated; card details no longer accessible.",
+    "sourceCitation": {
+      "location": "Sheet: מסך סיום, description column, rows for timer expiry",
+      "excerpt": "יופעל בלחיצה על \"סיום\" ... או לחילופין כאשר הקאונטר של הטיימר מגיע לאפס"
+    }
+  },
+  {
+    "type": "security",
+    "title": "Copy Card Data to Clipboard Only When Visible",
+    "description": "Validates that card data can only be copied to clipboard when visible, protecting against unauthorized copying when card details are masked. Enforces PCI DSS and privacy requirements. Automation: MEDIUM – requires clipboard and UI state checks.",
+    "testId": "TC-CLIP-01",
+    "testDescription": "Confirm that the 'copy to clipboard' option is available and functions only while card details are visible during exposure, not after timer expiry or masking.",
+    "prerequisites": "Session active; card details are visible; copy icon/button enabled; clipboard access permitted.",
+    "stepsToPerform": "1. Generate session and view card details.\n2. Confirm card details are visible.\n3. Click 'copy' icon/button.\n4. Inspect clipboard and confirm content matches synthetic card number (e.g., '**** **** **** 4242').\n5. Allow timer to expire; details are now hidden/masked.\n6. Attempt to copy again; confirm clipboard not updated with card data.\n7. Refresh page or revisit card details; repeat copy action when details are not visible.\n8. Ensure copying is denied whenever card data is not visible.",
+    "expectedResult": "'Copy to clipboard' copies card data only when visible; clipboard contains card number only during valid exposure; copy action is restricted post-exposure or masking.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, copyDetailsInfo",
+      "excerpt": "יש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21105)"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Explicit User Return from Any Stage",
+    "description": "Verifies that pressing the 'return' button at any stage in card viewing workflow returns the user to the originating screen, fulfilling required navigation and user control expectations. Automation: HIGH.",
+    "testId": "TC-NAV-01",
+    "testDescription": "User clicks 'Return' button during any stage (pre-view, OTP, card details, error, completion), and is returned to process origin or parent menu as defined by flow.",
+    "prerequisites": "User is authenticated, workflow initiated from card menu or post-issuance lobby. Return button is present on current screen; no block/error preventing navigation.",
+    "stepsToPerform": "1. Initiate card detail workflow from main menu.\n2. Progress to pre-view screen.\n3. Click 'Return' button; verify return to originating screen.\n4. Restart workflow, progress to OTP entry screen.\n5. Click 'Return' button; verify navigation.\n6. Repeat for card details screen.\n7. Repeat for error screens (invalid phone, block, failed OTP).\n8. Repeat for completion screen.\n9. Attempt return on each screen after an error or timeout.\n10. Verify UI/state reflects a fresh return—not partial session or cached details.",
+    "expectedResult": "User is returned to process origin or parent menu after clicking 'Return' at any stage. No sensitive card data remains exposed. Session state properly reset or ended as per screen.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הכנה לפני צפייה+otp, rows for 'חזור' button",
+      "excerpt": "לחיצה על כפתור חזור תוביל למסך הקורא לתהליך"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Closure Handling After Block or Timeout",
+    "description": "Ensures that after block events (max OTP attempts, missing phone, timeout), clicking closure or 'exit' triggers full process termination and user return to origin, as mandated for security. Automation: HIGH.",
+    "testId": "TC-NAV-02",
+    "testDescription": "User encounters block screen due to too many OTP attempts, missing phone, or timer expiry. On 'exit' or 'close', process is ended and user returned to calling/menu screen.",
+    "prerequisites": "User in blocked state (e.g., OTP failures, phone not in system, timer expired). Closure button or exit UI present.",
+    "stepsToPerform": "1. Initiate workflow, reach OTP screen.\n2. Enter wrong OTP 3 times; observe block error (Sc0011 block screen).\n3. Click 'Close' or 'Exit'; verify return to origin.\n4. Start workflow with missing phone scenario; trigger block (Sc0009).\n5. Click 'Close'; verify navigation.\n6. Wait for card details timer to expire; observe block overlay.\n7. Click 'Close'; verify origin return.\n8. Repeat closure from each block/error screen.\n9. Ensure card session is terminated, no residual data remains.",
+    "expectedResult": "Process is fully terminated after block/timeout screen. User returned to calling/menu screen. No card data remains exposed or cached.",
+    "sourceCitation": {
+      "location": "Sheet: otp, closure logic for error screens E,F,G",
+      "excerpt": "בעת הלחיצה ייסגר התהליך והלקוח יוחזר למסך הקורא לתהליך."
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Decision Table for All API Error/Status Outcomes",
+    "description": "This scenario validates handling for every API error/status combination (203+ID, 204, etc.), ensuring client shows correct branch-specific screen and wording per regulatory mandate. Automation: HIGH, covers all outcome branches.",
+    "testId": "TC-API-01",
+    "testDescription": "System responds to each API error/status outcome per exact decision table. UI/flow shows correct screens for 203/204/ID codes.",
+    "prerequisites": "System configured with simulated API responses. Test user prepared for each API branch (menu, post-issuance, etc.).",
+    "stepsToPerform": "1. Initiate 'card details' retrieval via API with HttpStatusCode = 203, ID=32.\n2. Observe 'No cards available' screen (Sc0001).\n3. Initiate via API with HttpStatusCode = 203, ID=31, from lobby.\n4. Observe 'No new card' screen (Sc0002).\n5. Initiate via API with HttpStatusCode = 204 from menu/world.\n6. Observe 'No cards found' UI (Sc0001).\n7. Initiate via API with HttpStatusCode = 204 after card issuance.\n8. Observe 'Try again later' or 'No card' screen.\n9. Repeat flow for each branch and confirm exact screen and wording per code.\n10. Verify no card detail exposure in error screens.",
+    "expectedResult": "Each API status/error outcome triggers correct screen with exact regulated text. No card detail exposure occurs in any error branch.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, rows mentioning HttpStatusCode",
+      "excerpt": "* אם בפלט התקבל HttpStatusCode = 203 עם ID=32  -  יש להציג מסך אין כרטיסים (Sc0001) ...* אם בפלט התקבל HttpStatusCode = 204  בהגעה מהתפריט/עולם כרטיסים"
+    }
+  },
+  {
+    "type": "security",
+    "title": "PII Masking on All Card/Phone Fields",
+    "description": "Validates that all card and phone number fields are masked in UI, logs, and API responses as required, confirming sensitive data protection per regulatory requirements. Automation: MEDIUM-HIGH: UI and backend log assertions.",
+    "testId": "TC-CDE-06",
+    "testDescription": "Card number and phone number fields must be masked in all UI displays and logs, showing only permitted fragments (e.g. last 4 of card, masked phone: 052-6***53).",
+    "prerequisites": "User session active, card detail workflow initiated, OTP sent and received, audit log backend enabled.",
+    "stepsToPerform": "1. Initiate card details view workflow, reach OTP screen.\n2. Observe UI for phone number masking (e.g. 'שלחנו לך קוד אימות ל- 052-6***53').\n3. Observe logs for masked phone value.\n4. Complete OTP, present card details.\n5. Confirm card number masking (only last 4 shown).\n6. Validate logs do not contain full card number or phone.\n7. Attempt audit log retrieval for OTP and card events.\n8. Confirm masking persists across all API, UI, and log flows.",
+    "expectedResult": "All UI, logs, and API responses show masked phone and card fields per format. No unmasked values leak in any place.",
+    "sourceCitation": {
+      "location": "Sheet: otp, field otpInfo + phoneNumber, masking",
+      "excerpt": "כדי לשמור על חשבונך, שלחנו לך קוד אימות ל- %@"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Field Population for Owner Name",
+    "description": "Verifies that owner name field in card selection UI is populated using partyFirstName and partyLastName from backend service, ensuring data accuracy and user confidence. Automation: HIGH.",
+    "testId": "TC-CSUI-05",
+    "testDescription": "Card selection UI correctly displays owner name populated from backend service fields partyFirstName + partyLastName as per field spec.",
+    "prerequisites": "User authenticated, card list includes at least one linked card, backend returns valid partyFirstName and partyLastName.",
+    "stepsToPerform": "1. Initiate card selection UI from main menu.\n2. Observe UI showing available cards.\n3. Inspect owner name field for each card.\n4. Confirm display includes service-supplied partyFirstName + partyLastName.\n5. For synthetic test data: partyFirstName='John', partyLastName='Doe'.\n6. UI displays: 'בעל הכרטיס: John Doe'.\n7. Confirm field populates even for multiple cards.\n8. Refresh UI, check for correct updates after backend changes.",
+    "expectedResult": "Owner name field in UI shows accurate service-driven values. No data mismatch or empty field for valid partyFirstName/partyLastName. Owner field is correctly populated for all cards.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for nameTitle, partyFirstName + partyLastName",
+      "excerpt": "יש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21004)"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Still Pending Card State Message",
+    "description": "This test verifies that the correctly worded informational message is displayed when a newly ordered card is not yet available for selection, ensuring accurate customer guidance and preventing premature support requests. Automation: HIGH — UI and state matching.",
+    "testId": "TC-NOC-05",
+    "testDescription": "When a customer has just ordered a card and attempts to view available cards, if the card is not yet approved, the system should display the message advising to check back in a few moments. This ensures clear communication regarding the approval delay.",
+    "prerequisites": "User has no approved cards but has completed an order for a new card, service API returns HttpStatusCode = 204 on card list request, user is authenticated and on the card selection screen.",
+    "stepsToPerform": "1. Log in as user test-user@example.com with no approved cards and a recently issued, unapproved card.\n2. Navigate to the main menu and select 'View Card Details'.\n3. Trigger the GET /card-account/cards/details with activityTypeCode=902 from the client.\n4. Simulate bank system response: HTTP 204 returned.\n5. Observe displayed UI for main content area.\n6. Capture all messages rendered on screen.\n7. Check presence and content of 'כרטיס שזה עתה הוזמן יופיע רק לאחר אישורו. ניתן לבדוק עוד כמה רגעים'.\n8. Confirm no card selection elements are present.\n9. Validate that no unsupported options (e.g., copy, continue, view details) are enabled.\n10. Assert that navigation options (e.g., order new card, return to homepage) are present.",
+    "expectedResult": "The message 'כרטיס שזה עתה הוזמן יופיע רק לאחר אישורו. ניתן לבדוק עוד כמה רגעים' is displayed in the no-cards state, no actionable card or copy buttons are present, user sees options only to order new card or return home.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row with text 'כרטיס שזה עתה הוזמן יופיע רק לאחר אישורו'",
+      "excerpt": "כרטיס שזה עתה הוזמן יופיע רק לאחר אישורו. ניתן לבדוק עוד כמה רגעים"
+    }
+  },
+  {
+    "type": "state-transition",
+    "title": "Attempt Retry for Card Retrieval Post-Issuance",
+    "description": "This test ensures that retrying card retrieval after freshly issuing a card results in a new invocation of the card details query, with correct state transition and messaging. Automation: HIGH — API and UI control with retry action.",
+    "testId": "TC-NOC-06",
+    "testDescription": "A user, seeing a 'no card found' state right after card order, selects 'Try Again'. The app must re-query card details and respond based on the new server response, enforcing the dynamic no-cards flow.",
+    "prerequisites": "User completed recent card issuance, is on the 'no card found' screen (Sc0002), previous attempt received HTTP 203 with ID=31, retry button is visible.",
+    "stepsToPerform": "1. Log in as a user with a fresh card order and no cards available for view.\n2. Navigate to card details through the completion/lobby path.\n3. On the 'no cards found' screen, verify message text and the presence of the retry button.\n4. Click the 'Try Again' button.\n5. Capture API call: GET /card-account/cards/details with matching parameters, including creditCardSerialId.\n6. Simulate another HTTP 203 with ID=31 (repeat no card state case).\n7. Observe that the screen persists with all 'no card' text and retry options.\n8. Repeat steps 4-7 but now simulate an HTTP 200 with card data present.\n9. Confirm that on a successful card retrieval, state transitions to preparing for viewing (pre-view screen is displayed).",
+    "expectedResult": "Each retry triggers a new card details fetch. If response remains HTTP 203/ID=31, the same no-card message and retry option are shown again. If card is found, the user proceeds to the privacy/warning enforcement screen.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הצגת כרטיס לבחירה-, row for try again button",
+      "excerpt": "בעת לחיצה יבוצע נסיון נוסף לביצוע התהליך (שליפת פרטי הכרטיס)"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Pre-View Image Asset Retrieval",
+    "description": "This test ensures that all required images on the privacy pre-view screen are sourced exclusively from the client image store and rendered according to the flow specification. Automation: MEDIUM — client-asset and UI rendering validation.",
+    "testId": "TC-PWE-04",
+    "testDescription": "When a user is shown the privacy and warning pre-view screen, all icon, banner, and privacy images must be fetched from the local client image assets, and display in the expected UI structure, not loaded from remote servers or skipped.",
+    "prerequisites": "User is authenticated and transitions from card selection to the privacy pre-view screen (Sc0004), client contains the image asset library, network access to image CDN is available but no fallback allowed.",
+    "stepsToPerform": "1. Log in as user with an approved card visible in selection.\n2. On card selection, pick card A and continue to the privacy pre-view (Sc0004).\n3. Verify each image placeholder is present in the screen spec ('eye', 'group', or 'clip').\n4. Inspect client network calls for each image load request.\n5. Trace the image asset resolution path to ensure it's the local asset library.\n6. Disconnect the client from external networks and reload the screen.\n7. Confirm images still appear (from cache/local library).\n8. Clear the local asset cache and reload the screen.\n9. Validate expected fallback behavior (missing asset markers or error message as per client logic).\n10. Verify all text and warning banners are present alongside images.",
+    "expectedResult": "All referenced images on pre-view screen are loaded from the local client asset library, with no network fetches for these objects and no image missing markers when assets are present.",
+    "sourceCitation": {
+      "location": "Sheet: מסך הכנה לפני צפייה, row for תמונה",
+      "excerpt": "*יש לבצע את שליפת התמונה ממאגר תמונות בקליינט."
+    }
+  },
+  {
+    "type": "state-transition",
+    "title": "OTP Error Message Disappears on Input Change",
+    "description": "This test case validates the OTP entry UI: specifically that if an OTP validation error is shown, it immediately disappears as soon as the customer starts entering a new code, per UX guidelines and security expectations. Automation: HIGH — UI live updates.",
+    "testId": "TC-OTPV-06",
+    "testDescription": "After the user enters an invalid OTP and sees the red error message, when they start typing a new OTP, the error disappears in real time and field is cleared, allowing clean entry of the new code.",
+    "prerequisites": "User is on OTP entry screen, has previously entered an incorrect OTP, server returns validation error, error message 'הקוד שהקלדת אינו תקין. יש לנסות שוב' is shown, text field is empty.",
+    "stepsToPerform": "1. Log in as an authenticated user with 'restore card information' in process.\n2. Reach OTP entry screen and submit a 6-digit invalid code (e.g., 123456).\n3. Simulate server response: validation error, display red error text in UI.\n4. Observe the OTP code input field is cleared after error display.\n5. Confirm error message persists and input field is enabled.\n6. Begin typing a new OTP digit (e.g., enter '4').\n7. Confirm that immediately upon entry of the first new digit, the error message is removed from the screen UI.\n8. Complete new OTP entry, confirm normal verify process resumes.\n9. Repeat with error text present and several digits entered in quick succession to check for race conditions.",
+    "expectedResult": "The red error message disappears as soon as the user starts entering a replacement OTP code. The input field content updates with only the new code, no stale error shown.",
+    "sourceCitation": {
+      "location": "Sheet: otp, validation error text",
+      "excerpt": "הודעת השגיאה תעלם כאשר המשתמש יתחיל להזין קוד חדש."
+    }
+  },
+  {
+    "type": "negative",
+    "title": "No Phone Detected for OTP – Blockscreen and Instruction",
+    "description": "This test confirms the security and process logic: if the requesting user's mobile phone number does not exist in the system, a blocking message appears, guiding the customer to update their number and preventing any OTP operation. Automation: HIGH — server error trap and blockscreen validation.",
+    "testId": "TC-OTPB-05",
+    "testDescription": "A user attempts to request an OTP for card viewing, but does not have a mobile number on record. The application must return a blocking popup with the precise text, and the process cannot continue.",
+    "prerequisites": "User does not have a mobile phone registered in core banking, initiates OTP process, API returns HTTP 203 with ID=31, front-end hooks to SC0009 error handler, user is authenticated.",
+    "stepsToPerform": "1. Authenticate as test user with no phone in profile.\n2. Navigate to view card details and progress to OTP send stage.\n3. Trigger initial POST to /restore-card-information (generateOtp) endpoint.\n4. Simulate the core system returning HTTP 203 with error ID=31.\n5. Ensure the UI immediately shows SC0009 block popup overlay.\n6. Validate the displayed text matches exactly: 'מספר הטלפון הנייד שלך לא קיים במערכת. כדי להמשיך בתהליך, יש לעדכן אותו'.\n7. Try closing or dismissing the blockscreen — confirm process is not allowed to continue.\n8. Attempt further actions (e.g., order card, view card list) and confirm the user must exit and cannot resume OTP until profile is updated.\n9. Check that no audit or OTP request entries are created for this failed session.",
+    "expectedResult": "The popup block screen with the stated error message appears and the flow is hard-blocked; user cannot proceed to receive OTP without updating their phone number.",
+    "sourceCitation": {
+      "location": "Sheet: otp, Sc0009 block for phone missing",
+      "excerpt": "מספר הטלפון הנייד שלך לא קיים במערכת. כדי להמשיך בתהליך, יש לעדכן אותו"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Completion Navigation from End Screen",
+    "description": "This test checks that the navigation at process-complete end screens correctly returns the user to the main credit card world on explicit action, preventing accidental session hanging. Automation: HIGH — button-to-navigation flow.",
+    "testId": "TC-NAV-03",
+    "testDescription": "After finishing the card details session, the user should be able to use the dedicated navigation button ('לעמוד הבית'), ensuring a return to the card main menu is always possible after card info exposure or timer expiry.",
+    "prerequisites": "User has exited the card viewing process via finish or timer outflow, is on the end screen (Sc0015 or Sc0016), the 'לעמוד הבית' button is displayed and enabled.",
+    "stepsToPerform": "1. Log in as user and perform flow through to viewing card details (manual path or timer expiry).\n2. After expiry or clicking 'סיום', confirm user lands on end screen.\n3. Locate and verify the 'לעמוד הבית' button is visible and enabled.\n4. Click the button.\n5. Confirm client triggers UI navigation to 'עולם כרטיסי אשראי'.\n6. Confirm no sensitive card data remains in session or UI components.\n7. In browser, simulate a back button; verify cannot return to exposure screen (session closed).\n8. Repeat with another exit path (direct close, timer expiry) to ensure navigation consistency.\n9. Check browser history/state to ensure direct navigation returns to menu.",
+    "expectedResult": "Clicking the finish/return button routes the user to the credit card main menu, ending their secure session properly and closing exposure context.",
+    "sourceCitation": {
+      "location": "Sheet: מסך סיום, end buttons",
+      "excerpt": "*בעת לחיצה הלקוח יועבר לעולם כרטיסי אשראי"
+    }
+  },
+  {
+    "type": "security",
+    "title": "Copy CVV Data to Clipboard When Permitted",
+    "description": "This test covers that when CVV is shown (and only when visible), the copy-to-clipboard function correctly copies the masked or unmasked data as allowed and clears it appropriately after exposure. Automation: HIGH — clipboard and UI controls.",
+    "testId": "TC-CLIP-04",
+    "testDescription": "User views card CVV and clicks the copy icon; the exact CVV value rendered is copied to system clipboard, only when UI shows it. Clipboard is cleared/blocked when not visible or timer expires.",
+    "prerequisites": "User is on card details/cvv view, CVV field rendered on screen, copy control is visible and enabled, browser supports clipboard API.",
+    "stepsToPerform": "1. Reach card details view, proceed to the CVV display (via navigation or dedicated button).\n2. Ensure the CVV number (e.g., 123) is displayed in the UI.\n3. Locate and activate the 'copy' control (icon or button) for CVV.\n4. Intercept clipboard content and verify it matches visible value.\n5. Close the CVV view, return to previous screen, and test copy function is no longer available.\n6. Allow timer to expire and attempt CVV copy afterwards.\n7. Attempt to trigger copy via browser JS (automation attack); verify prevention if value isn't visible.\n8. Open DOM inspector; ensure CVV isn't exposed elsewhere.\n9. Check audit log (if available) for a record of the copy action.",
+    "expectedResult": "CVV is only copied when visible and allowed, with no residual or unauthorized access after exposure, and clipboard is cleared/disabled post-exit.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, CVV exposure section",
+      "excerpt": "מספר cvv"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Card Brand-Dependent Image and Label Rendering",
+    "description": "This test ensures that card brand codes drive the correct image and label assets per the matrix (Mastercard, VISA, Amex, Isracard), with no brand confusion and consistent conditional logic. Automation: HIGH — input matrix and display validation.",
+    "testId": "TC-CDE-07",
+    "testDescription": "When a card details screen is shown, the visual and label elements are rendered to match the brandCode (e.g., brandCode=1 shows Mastercard image, 2=VISA, 3=AmEx, 7=Isracard). This assures branding accuracy and PCI compliance.",
+    "prerequisites": "User is viewing card with specified brandCode, images for all brands are present in client asset store, API provides brandCode values.",
+    "stepsToPerform": "1. Log in and fetch card details for cards with each of: brandCode 1, 2, 3, 7.\n2. For each card, observe the brand-representative image and label in UI.\n3. Cross-validate the image source (e.g., filename, alt-text) matches the correct brand specification.\n4. Check card label/title presented beside each card type matches the brand (e.g., 'MasterCard').\n5. Repeat with a mock/unrecognized brandCode (e.g., 99) and observe fallback behavior.\n6. Inspect for absence of incorrect brands (e.g., VISA logo for Amex card).\n7. Open browser network traffic to ensure images load from expected asset store.\n8. Audit the page source for any presence of brand-confused markup or labels.\n9. Repeat with multiple cards on screen to ensure no mixing.",
+    "expectedResult": "Cards with brandCode=1,2,3,7 show correct images/labels: MasterCard, VISA, AmEx, Isracard. Unrecognized code uses fallback or blank. No cross-brand assets ever appear.",
+    "sourceCitation": {
+      "location": "Sheet: מסך צפיה בפרטי הכרטיס, brandCode",
+      "excerpt": "אם brandCode = 1 - הצג תמונה של MasterCard... אם brandCode = 3 - הצג תמונה של AmEx"
+    }
+  },
+  {
+    "type": "audit",
+    "title": "Audit Event: Home or Origin Navigation",
+    "description": "This test verifies that an audit event is created when the process is closed and the user is redirected to the calling screen (origin) or home screen. It ensures regulatory compliance for navigation and session closure, preventing gaps in traceability for sensitive card-related operations. Automation: HIGH – API log assertions.",
+    "testId": "TC-AUD-05",
+    "testDescription": "A user views card details and then closes the process by clicking the 'X' or closing screen. The system must record an audit event documenting the closure and navigation back to the calling screen or home, including exact fields as required, and confirm persistence and immutability. This test is critical for ensuring full traceability and accountability in the handling of sensitive banking flows.",
+    "prerequisites": "User has successfully completed card detail viewing flow, session timer is active or complete, audit mechanism is enabled, user is authenticated, card retrieval log is in place.",
+    "stepsToPerform": "1. Authenticate as test user with masked credentials.\n2. Navigate to 'View Card Details' via main menu or issuance flow.\n3. Successfully pass OTP validation and view card details.\n4. Wait for session timer to end OR manually click the 'X' close button on completion screen.\n5. Observe user navigation back to the calling screen.\n6. Retrieve audit logs for this session via audit API or DB.\n7. Verify audit event exists matching session-close/navigation action.\n8. Assert presence of: timestamp, user ID (masked/test format), origin screen identifier, session ID, action type ('close', 'navigate'), card reference (last 4 digits only), and no full card or phone data.\n9. Assert immutability: event cannot be deleted/altered.\n10. Confirm field masking: only last 4 digits of card appear; full PAN never logs.\n11. Validate log is persisted and retrievable for regulatory audit.\n12. Remove test session/artifacts if necessary.",
+    "expectedResult": "Audit event for navigation/closure is recorded with exact fields: user ID (masked), timestamp, session ID, origin screen, action type, last 4 digits card. No full PAN, no sensitive data. Log is persistent, immutable, retrievable.",
+    "sourceCitation": {
+      "location": "Sheet: Card Details Retrieval Menu and מסך סיום, Row with 'בלחיצה על האיקס ייסגר התהליך והמשתמש יחזור למסך הקורא לתהליך.'",
+      "excerpt": "בלחיצה על האיקס ייסגר התהליך והמשתמש יחזור למסך הקורא לתהליך."
+    }
+  },
+  {
+    "type": "state-transition",
+    "title": "Attempt Counter Resets After Block Duration",
+    "description": "This test verifies that after the block period of 10 minutes has elapsed, the attempt counter for OTP entry or code requests resets to allow the user to try again. It covers regulatory-mandated authentication flow recovery after lockout, protecting against abuse but ensuring usability. Automation: HIGH – timer, API, and UI assertions.",
+    "testId": "TC-SES-06",
+    "testDescription": "A user is blocked after exceeding the allowed number of OTP requests or incorrect codes. After the mandated 10 minutes waiting period, the attempt counter must reset, allowing the user to retry authentication and view card details. This test is integral to balancing security (abuse suppression) with usability (timely recovery), ensuring compliance with banking standards.",
+    "prerequisites": "User is currently blocked from viewing card details due to excessive OTP requests or wrong codes, block timer is active, block event log exists, session persists across browser/app closure.",
+    "stepsToPerform": "1. Authenticate as test user.\n2. Initiate card detail retrieval flow and intentionally trigger block state by exceeding allowed OTP requests or code attempts (e.g., 6 incorrect codes).\n3. Observe blockscreen with exact wording 'יש להמתין 10 דקות ולנסות שוב'.\n4. Close browser/app and reopen to confirm block persists.\n5. Wait exactly 10 minutes from block time (simulate timer if necessary).\n6. Re-initiate card detail retrieval process after 10 minutes.\n7. Attempt new OTP request or enter correct code.\n8. Confirm that blockscreen does NOT appear, attempt counter is reset.\n9. Complete authentication flow successfully.\n10. Verify that prior block event is logged and cleared.\n11. Perform negative test: try again at 9:59 – blockscreen should persist.\n12. Remove test user/session after test.",
+    "expectedResult": "After 10 minutes, blockscreen is cleared and user can try again. Attempt counter is reset. Exact block wording appears during block, disappears after expiry. System logs show block resolution; no further block on retry until new limit is exceeded.",
+    "sourceCitation": {
+      "location": "Sheet: otp, block expiry text, Row 19-22: Blockscreen and recovery wording",
+      "excerpt": "יש להמתין 10 דקות ולנסות שוב"
+    }
+  }
+]
