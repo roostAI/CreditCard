@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "roost_test_1777543204",
+    "created_at": "2026-04-30T10:07:28.895Z",
+    "updated_at": "2026-04-30T10:07:28.895Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "roost_test_1777543204.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/1777543204/functional_tests/roost_test_1777543204/roost_test_1777543204.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "hapo1.xlsx",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/1777543204/functional_tests/roost_test_1777543204/hapo1.xlsx",
+        "fileSha": "1921256bc5"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
