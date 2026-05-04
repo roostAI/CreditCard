@@ -1,0 +1,660 @@
+[
+  {
+    "type": "functional",
+    "title": "Validate Dynamic VPA Success Response",
+    "description": "Validates successful response for Dynamic VPA Validation API when provided with a valid subscriberId and source. Ensures correct account details and subscriber information are returned by the API. Automation: HIGH—pure API assertions.",
+    "testId": "TC-DYNVPA-01",
+    "testDescription": "Merchant invokes the Dynamic VPA Validation API using a valid subscriberId and source. The API should return transStatus: Success, with correct accountDetails and subscriberName as specified. This scenario confirms proper field population and workflow compliance, ensuring seamless integration and accurate customer validation.",
+    "prerequisites": "Merchant is registered on HSBC system; valid subscriberId exists; API endpoint is accessible; backend HSBC service is running; encryption key and certificate are provisioned.",
+    "stepsToPerform": "1. Login to merchant portal using test credentials. 2. Navigate to the API integration section. 3. Select Dynamic VPA Validation API. 4. Input subscriberId: 'vznadt012310002' and source: 'SCB'. 5. Construct JSON request matching sample in the spec. 6. Send request through HTTPS endpoint. 7. Observe response from API. 8. Check response fields: transStatus, transMessage, accountDetails.subscriberId, accountDetails.accountStatus, accountDetails.subscriberName. 9. Compare values to the source sample response. 10. Validate absence of sensitive PII in logs.",
+    "expectedResult": "API responds with 'transStatus': 'Success', 'accountDetails' contains subscriberId 'VZNADT012310002' and accountStatus 'Success', subscriberName 'PARASURAM KUMAR A'. All fields match sample response. No sensitive data appears in system logs.",
+    "sourceCitation": {
+      "location": "Section 3.1, page 4",
+      "excerpt": "\"transStatus\": \"Success\", \"accountDetails\": [ { \"subscriberId\": \"VZNADT012310002\", \"accountStatus\": \"Success\", \"subscriberName\": \"PARASURAM KUMAR A\" } ]"
+    }
+  },
+  {
+    "type": "negative",
+    "title": "Validate Dynamic VPA Failure Response",
+    "description": "Validates API behavior for invalid subscriberId in Dynamic VPA Validation. Ensures error message and empty accountDetails are returned, confirming rejection and secure data handling. Automation: HIGH—API assertions only.",
+    "testId": "TC-DYNVPA-02",
+    "testDescription": "Merchant submits an invalid subscriberId to Dynamic VPA Validation API. The system must reject the request, respond with transStatus: Failure, and provide the exact error in transMessage. This test ensures robust error handling, preventing misuse and revealing absent accounts.",
+    "prerequisites": "Merchant is registered; invalid subscriberId ('vznadt012310003') exists in test data; API endpoint ready; backend HSBC VPA source contains no such subscriber record.",
+    "stepsToPerform": "1. Login to merchant portal using test credentials. 2. Access Dynamic VPA Validation API module. 3. Input subscriberId: 'vznadt012310003' and source: 'SCB'. 4. Construct JSON failure request as per the spec. 5. Send request over secured HTTPS connection. 6. Wait for API response. 7. Inspect response fields: transStatus, transMessage, accountDetails. 8. Record and validate error message content. 9. Ensure accountDetails array is empty. 10. Confirm 'Record not available for this Loan/Proposal No : vznadt012310003' appears in transMessage.",
+    "expectedResult": "API response includes 'transStatus': 'Failure', 'transMessage': 'Record not available for this Loan/Proposal No : vznadt012310003', and 'accountDetails': []. No sensitive data leaked in response or logs.",
+    "sourceCitation": {
+      "location": "Section 3.1, page 4",
+      "excerpt": "\"transStatus\": \"Failure\", \"transMessage\": \"Record not available for this Loan/Proposal No : vznadt012310003\", \"accountDetails\": []"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Check for subscriberId Field",
+    "description": "Verifies enforcement of field length constraint for subscriberId—min/max/just over/just below boundaries. Protects against invalid input handling and ensures strict conformance. Automation: HIGH—field-level API assertion.",
+    "testId": "TC-DYNVPA-03",
+    "testDescription": "Merchant submits requests to Dynamic VPA Validation API with subscriberId at minimum (1 char), maximum (typical sample, e.g., 15), under-minimum (empty), and over-maximum values. The test confirms proper acceptance at the boundary and rejection of out-of-bounds inputs.",
+    "prerequisites": "Merchant registered; API endpoints accessible; test data containing valid and invalid subscriberId values prepared; backend service online.",
+    "stepsToPerform": "1. Login to merchant portal. 2. Navigate to Dynamic VPA Validation API. 3. Prepare request with subscriberId='A' (min, 1 char). 4. Send request and verify successful response. 5. Prepare request with subscriberId='VZNADT012310002' (typical, max allowed per sample: 15 chars). 6. Send and validate response matches success sample. 7. Prepare request with subscriberId='' (empty, 0 chars). 8. Send request and expect validation error/failure. 9. Prepare request with subscriberId='TOOLONG0123100034AB' (over max, e.g., 20 chars). 10. Send and confirm error response, invalid input rejected.",
+    "expectedResult": "Requests with subscriberId at 1 char and max allowed pass; empty and over-max values are rejected with failure/validation errors; API does not accept invalid input per constraint—no data leakage.",
+    "sourceCitation": {
+      "location": "Section 3.1, page 3",
+      "excerpt": "subscriberId Validation field 1 Character Mandatory"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Optional Field Handling for Rmn",
+    "description": "Ensures correct behavior for optional Rmn field in Dynamic VPA Validation API both when present and absent. Validates system compliance with field requirements and flexible specification. Automation: HIGH—request parameter verification.",
+    "testId": "TC-DYNVPA-04",
+    "testDescription": "Merchant makes Dynamic VPA Validation API calls with and without optional Rmn field. Both cases should result in correct processing. Presence of Rmn does not affect workflow when absent; when present, system accepts without error.",
+    "prerequisites": "Merchant registration complete; API endpoints live; both subscriberId and source fields valid; test data includes sample Rmn values.",
+    "stepsToPerform": "1. Login to merchant portal. 2. Navigate to Dynamic VPA Validation API. 3. Construct request with subscriberId='vznadt012310002', source='SCB', Rmn omitted. 4. Send and observe response. 5. Construct request with subscriberId='vznadt012310002', source='SCB', Rmn='AB'. 6. Send and observe response. 7. Validate both responses for transStatus and accountDetails match success profile. 8. Confirm optional field handling in logs and API input processing. 9. Review backend logs for presence/absence of Rmn not impacting transaction outcome.",
+    "expectedResult": "Both requests (with and without Rmn) are processed successfully; API returns correct account details; no errors occur due to Rmn omission or inclusion.",
+    "sourceCitation": {
+      "location": "Section 3.1, page 3",
+      "excerpt": "Rmn Validation field 2 Character Optional"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Pre-Credit Validation Success Scenario",
+    "description": "Confirms Pre-Credit VPA Validation API handles valid inputs—resulting in 'S' status, correct transaction message, refNo, and transRRN. Ensures acceptance, workflow continuity, and correct data propagation. Automation: HIGH—API success path.",
+    "testId": "TC-PRECREDIT-01",
+    "testDescription": "Merchant invokes Pre-Credit VPA Validation API using all valid mandatory fields. Transaction is accepted, status S, with correct refNo and transRRN returned, confirming end-to-end workflow and payment lifecycle compliance.",
+    "prerequisites": "Merchant registered; valid refNo and transRRN in test data; payerId, transRemarks, transAmount, transID, and source are valid; API endpoint live.",
+    "stepsToPerform": "1. Login as merchant user. 2. Access Pre-Credit VPA Validation API. 3. Prepare request with refNo='12837', payerId='9820982020', transRemarks='Payment remarks', transAmount='100.00', transID='HSB527498730B1B1BC3E053142433823107', transRRN='717215233641', source='HSBC'. 4. Send request via HTTPS endpoint. 5. Wait for API response. 6. Inspect fields: transStatus, transMessage, refNo, transRRN. 7. Validate field values against sample. 8. Confirm 'transStatus'='S', 'transMessage'='Success', and correct refNo/transRRN. 9. Verify addInfo1 to 10 presence and correctness.",
+    "expectedResult": "API response has 'transStatus':'S', 'transMessage':'Success', 'refNo':'12837', 'transRRN':'717215233641'. All required fields match sample. No concealed errors or missing fields.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 8",
+      "excerpt": "\"transStatus\":\"S\", \"transMessage\":\"Success\", \"refNo\":\"12837\", \"transRRN\":\"717215233641\""
+    }
+  },
+  {
+    "type": "negative",
+    "title": "Pre-Credit Validation Invalid VPA Failure",
+    "description": "Confirms Pre-Credit VPA Validation API rejects invalid VPA, returning 'F' status, proper error message, and correct refNo. Ensures negative path/abuse prevention and data security. Automation: HIGH—error scenario.",
+    "testId": "TC-PRECREDIT-02",
+    "testDescription": "Merchant submits Pre-Credit VPA Validation API request with invalid payerVPA or payerId. API rejects transaction, responds with status F and message 'Invalid VPA', validating failure workflow and error handling.",
+    "prerequisites": "Merchant registered; refNo='12837' is valid; invalid payerId or payerVPA in test data; API endpoint accessible.",
+    "stepsToPerform": "1. Login as merchant user. 2. Access Pre-Credit VPA Validation API. 3. Prepare request with refNo='12837', invalid payerId (e.g. '99999999'), transRemarks, transAmount, transID, transRRN, source='HSBC'. 4. Send request over secure channel. 5. Await API response. 6. Inspect fields: transStatus, transMessage, refNo. 7. Validate 'transStatus':'F' and 'transMessage':'Invalid VPA'. 8. Confirm that refNo in response matches request. 9. Validate empty/blank transRRN. 10. Inspect addInfo1 to 10 correctness.",
+    "expectedResult": "API responds with 'transStatus':'F', 'transMessage':'Invalid VPA', 'refNo':'12837', blank 'transRRN'. Error is correct and per spec.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 9",
+      "excerpt": "\"transStatus\":\"F\", \"transMessage\":\"Invalid VPA\", \"refNo\":\"12837\""
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Check for refNo Field",
+    "description": "Verifies strict numeric length constraints for refNo in Pre-Credit API at min (6), max (16), under (5), and over (17). Ensures duplicity checks and regulatory compliance. Automation: HIGH—field validation.",
+    "testId": "TC-PRECREDIT-03",
+    "testDescription": "Merchant submits Pre-Credit API requests with refNo at minimum/maximum, one below/above. Test validates API acceptance at boundaries, rejection outside limits, and correct error codes/messages for invalid refNo.",
+    "prerequisites": "Merchant registered; API endpoint available; test data including refNo values of length 5, 6, 16, 17 prepared; back end online.",
+    "stepsToPerform": "1. Login as merchant user. 2. Access Pre-Credit API. 3. Prepare requests with refNo: '12345' (under min, 5). 4. Submit request and expect error. 5. Prepare request with refNo: '123456' (min, 6). 6. Submit and verify success. 7. Prepare request with refNo: '1234567890123456' (max, 16). 8. Submit and verify success. 9. Prepare request with refNo: '12345678901234567' (over, 17). 10. Submit and confirm error response. 11. Validate error codes/messages as per spec.",
+    "expectedResult": "Requests with refNo length 6 and 16 accepted and processed; lengths 5 and 17 rejected with validation error/response message per source. All responses are correct, secure, and per business rule.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 5",
+      "excerpt": "refNo HSBC generated serial number (for duplicity checks) Mandatory Number 6-16"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Conditional Field Test for transAmount",
+    "description": "Validates Pre-Credit API behavior with conditional transAmount field—acceptance when present, correct rejection when absent or invalid. Automation: HIGH—parameter acceptance and workflow compliance.",
+    "testId": "TC-PRECREDIT-04",
+    "testDescription": "Merchant submits Pre-Credit API request with transAmount present (e.g., '100.00') and absent. API correctly processes valid amount, rejects when missing or out of bounds, ensuring compliance with spec and financial correctness.",
+    "prerequisites": "Merchant registered; test refNo, payerId, and other mandatory fields; valid and invalid transAmount values in test data; API endpoint online.",
+    "stepsToPerform": "1. Login as merchant user. 2. Access Pre-Credit API. 3. Prepare request with transAmount='100.00' and all other fields valid. 4. Submit and check success response. 5. Prepare request omitting transAmount. 6. Submit and expect rejection/error per conditional requirement. 7. Prepare request with invalid transAmount='100000000000000000' (over max, 17). 8. Submit and confirm error response. 9. Prepare request with transAmount='-1' (invalid negative). 10. Submit and observe response. 11. Collect and validate all API responses for correctness.",
+    "expectedResult": "Requests with valid transAmount (1-16 decimals) accepted and processed; missing, negative, or over-max values are rejected per spec with proper error message.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 5",
+      "excerpt": "transAmount Transaction Amount (in two decimals) Conditional Decimal 1-16"
+    }
+  },
+  {
+    "type": "audit",
+    "title": "Check Duplicity Handling with refNo",
+    "description": "Ensures Pre-Credit API maintains duplicity check integrity using refNo—detects duplicate submissions and prevents replay/fraud. Automation: HIGH—system audit and workflow check.",
+    "testId": "TC-PRECREDIT-05",
+    "testDescription": "Merchant sends Pre-Credit API requests using same refNo for multiple attempts. API must detect duplicate and reject the second attempt, returning a duplicate warning/error. Audit trail must include refNo, detection result, timestamp, and action taken.",
+    "prerequisites": "Merchant registered; refNo is unique; API endpoint online; backend stores refNo; audit log enabled.",
+    "stepsToPerform": "1. Login as merchant. 2. Access Pre-Credit API. 3. Prepare valid request with refNo='ABC12345'. 4. Submit and expect success. 5. Prepare identical request with same refNo. 6. Submit duplicate request. 7. Observe API response—expect duplicate detection. 8. Check audit logs for duplicate attempt with refNo, action taken, and timestamp. 9. Validate proper fields are recorded as per audit requirements. 10. Attempt retrieval of audit record by refNo.",
+    "expectedResult": "First request processed successfully; all subsequent requests with same refNo rejected with audit record generated—fields: refNo, detection event, timestamp, rejection result present.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 5",
+      "excerpt": "refNo HSBC generated serial number (for duplicity checks)"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Test Optional Field addInfo1 to 10",
+    "description": "Tests handling of optional addInfo1 to addInfo10 in Pre-Credit VPA Validation API—verifies field presence, absence, value acceptance, and correct transmission. Automation: HIGH—parameter and response verification.",
+    "testId": "TC-PRECREDIT-06",
+    "testDescription": "Merchant submits Pre-Credit API requests with addInfo1 to addInfo10 populated with alphanumeric values, empty strings, and omitted. API correctly echoes values, accepts optional fields, and does not reject or alter when absent, fulfilling spec for future use.",
+    "prerequisites": "Merchant registered; valid refNo, payerId, and mandatory fields; test values for addInfo1-10 crafted; API endpoint accessible.",
+    "stepsToPerform": "1. Login as merchant user. 2. Access Pre-Credit VPA Validation API interface. 3. Construct request including addInfo1-10 with sample values ('TestVal1', '', '987', etc.). 4. Submit and await response. 5. Confirm each addInfo field echoed correctly in response. 6. Repeat request omitting addInfo fields. 7. Confirm API does not reject for absence. 8. Validate sample response for field limits and value types. 9. Inspect response logs for correctness (no corruption or loss).",
+    "expectedResult": "Request with addInfo1-10 present returns correct field values; omission does not cause errors. All optional fields correctly handled by API and response, matching source sample.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 8",
+      "excerpt": "addInfo1 to 10 Future Use Alpha-Numeric Optional 0-50"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Value for transID Field",
+    "description": "This test validates that the Pre-Credit VPA Validation API correctly enforces the mandatory 35-character length and format of the 'transID' field. Automation: HIGH — API request/response.",
+    "testId": "TC-PRECREDIT-07",
+    "testDescription": "A merchant submits Pre-Credit VPA Validation API requests with transID values at, below, and above the documented 35-character alphanumeric boundary to verify strict validation, rejecting any value not exactly 35 alphanumeric characters.",
+    "prerequisites": "Merchant integration is active; API credentials and encryption key available; test user is authorized; HSBC connectivity and endpoint whitelisting established.",
+    "stepsToPerform": "1. Log into the merchant system as a valid test user. 2. Prepare a valid request JSON for Pre-Credit VPA Validation with all required fields. 3. Set 'transID' to a 35-character alphanumeric string (e.g. 'HSB527498730B1B1BC3E053142433823107'). 4. Submit the API request and record the response. 5. Verify transStatus and transMessage indicate success. 6. Modify 'transID' to a 34-character string and resubmit. 7. Observe API rejects the request, with correct error message in transMessage. 8. Modify 'transID' to a 36-character string and resubmit, recording the error. 9. Set 'transID' to contain non-alphanumeric characters of 35 length and resubmit. 10. Validate response errors on all invalid cases. 11. Clean up any created state as per merchant system requirements.",
+    "expectedResult": "1. 35-character alphanumeric 'transID' is accepted; transStatus='S', descriptive Success message. 2. 34- or 36-character 'transID' causes transStatus='F', transMessage='Invalid transID'. 3. Non-alphanumeric 35-char 'transID' is rejected per error messaging.",
+    "sourceCitation": {
+      "location": "Section 3.2, page 5",
+      "excerpt": "transID Transaction ID (Unique 35 digit NPCI Trxn ID) Mandatory Alpha-Numeric 35"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Post Credit Final Notification Success",
+    "description": "Verifies that the Post Credit / Final Response-Notification API correctly processes and acknowledges a transaction success message, returning all mandatory acknowledgment fields including confStatus and confId. Automation: HIGH.",
+    "testId": "TC-POSTCREDIT-01",
+    "testDescription": "After the merchant posts a successful transaction notification, HSBC calls the Post Credit / Final Response-Notification endpoint, and the merchant responds with success, returning confStatus='SUCCESS', confMessage='SUCCESS', and a valid confId.",
+    "prerequisites": "Merchant final response API endpoint is up and whitelisted; Merchant test account is setup; HSBC can reach the endpoint from valid IP range.",
+    "stepsToPerform": "1. Log into the merchant management panel as an authorized user. 2. Ensure merchant's notification API endpoint is running and accessible. 3. Initiate a test transaction credited through the HSBC UPI flow. 4. Receive HSBC server's callback to the Post Credit / Final Response-Notification API with all required fields. 5. Prepare API response with confStatus='SUCCESS', confMessage='SUCCESS', confId as 13-digit numeric string (e.g. '1290381293989'). 6. Send the success notification response back to HSBC server. 7. Capture and log HSBC's validation of the API response. 8. Verify no retry or error callback occurs within a monitoring window. 9. Confirm successful recording/audit of the notification in merchant logs.",
+    "expectedResult": "Merchant returns valid JSON with confStatus='SUCCESS', confMessage='SUCCESS', confId set uniquely for the transaction; HSBC does not retry the notification; transaction is logged as successfully acknowledged.",
+    "sourceCitation": {
+      "location": "Section 3.3, page 16",
+      "excerpt": "\"confStatus\":\"SUCCESS\", \"confMessage\":\"SUCCESS\", \"confId\":\"1290381293989\""
+    }
+  },
+  {
+    "type": "negative",
+    "title": "Post Credit Final Notification Failure",
+    "description": "Checks that the Post Credit/Final Response-Notification API properly handles a failure scenario by receiving and returning the confStatus='FAILURE' outcome as per spec. Automation: HIGH.",
+    "testId": "TC-POSTCREDIT-02",
+    "testDescription": "Following a failed credit posting, HSBC notifies the merchant's endpoint. Merchant system responds with confStatus='FAILURE' (and supporting fields), and observes retry or escalation flow as applicable.",
+    "prerequisites": "Merchant endpoint online; functional logging enabled; test data for a failed transaction available.",
+    "stepsToPerform": "1. Log into the merchant portal as an authorized user. 2. Simulate a failed payment in the test environment so that HSBC triggers a failure notification. 3. Wait for HSBC to POST to the merchant's Post Credit / Final Response-Notification endpoint. 4. Prepare API response JSON with confStatus='FAILURE', confMessage set to a descriptive reason, and confId as blank or omitted. 5. Send the failure response to HSBC. 6. Monitor for repeated notification callback attempts from HSBC. 7. Check merchant logs to verify failure notification was recorded. 8. Confirm that the failed transaction is flagged for reconciliation review as per process. 9. Ensure no duplicate success is mistakenly recorded.",
+    "expectedResult": "API response has confStatus='FAILURE'; HSBC may retry/callback as per standard handling; failure event logged; merchant does not mark transaction as successful.",
+    "sourceCitation": {
+      "location": "Section 3.3, page 16",
+      "excerpt": "\"confStatus\":\"FAILURE\""
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Check for confId Field",
+    "description": "Validates the Post Credit / Final Response-Notification API's optional 'confId' field is correctly accepted and handled at its boundary (50 characters), rejected if exceeding, and can be omitted. Automation: HIGH.",
+    "testId": "TC-POSTCREDIT-03",
+    "testDescription": "Merchant sends Post Credit / Final Response-Notification API response with confId at 50-character, 49-character, 51-character, and omitted cases to HSBC, observing whether each response is accepted or properly rejected.",
+    "prerequisites": "Notification callback test environment available; merchant endpoint and unique transaction ready.",
+    "stepsToPerform": "1. Log into merchant test management console. 2. Receive notification POST from HSBC to merchant endpoint for a completed transaction. 3. In merchant API response, set confId to exactly 50 alphanumeric characters (e.g. 'ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789AB'). 4. Respond and validate the transaction is recorded with confId. 5. Edit and resend with confId as 49 characters (should still be accepted). 6. Retry with confId as 51 characters—observe if it's rejected or triggers error. 7. Send response with confId omitted entirely. 8. For each, monitor response acceptance/rejection, and review merchant/HSBC logs to confirm correct enforcement. 9. Clean up any created records for test.",
+    "expectedResult": "Responses with confId ≤50 chars accepted; >50 chars is rejected (error, logging); omitting confId causes no error as field is optional.",
+    "sourceCitation": {
+      "location": "Section 3.3, page 16",
+      "excerpt": "confId Payment Confirmation Id (Reporting Purpose) Optional Alpha-Numeric 50-"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Optional addInfo Fields Handling",
+    "description": "Tests if the Post Credit / Final Response-Notification API correctly receives, stores, and ignores optional addInfo1–addInfo10 fields whether present, omitted, or at max/min length. Automation: HIGH.",
+    "testId": "TC-POSTCREDIT-04",
+    "testDescription": "The merchant responds to a post-credit notification by sending varying combinations of addInfo fields: all omitted, a few present at maximum 50 characters, some empty, and confirming no error is returned, values are accurately echoed, and logs/audit fields are populated accordingly.",
+    "prerequisites": "Notification API accessible; logging enabled; merchant endpoint live.",
+    "stepsToPerform": "1. Log in as test merchant admin. 2. Wait for valid notification request from HSBC to the final response endpoint. 3. In the response payload, set addInfo1 to 'TestAddInfo1', leave others blank. 4. Submit response and verify successful completion. 5. Resend with all addInfo fields present, each at 50 characters. 6. Submit with all addInfo fields omitted. 7. Send with addInfo fields present but empty strings. 8. Observe and log responses for each permutation. 9. Review back-end audit/logs to ensure addInfo values are persisted where present.",
+    "expectedResult": "API accepts and processes responses regardless of addInfo field presence; logs/audit trails contain supplied addInfo values; missing/empty fields cause no error.",
+    "sourceCitation": {
+      "location": "Section 3.3, page 16",
+      "excerpt": "addInfo 1 to 10 Additional Fields for Future Reference Optional Alpha-Numeric 0-50"
+    }
+  },
+  {
+    "type": "state-transition",
+    "title": "State Transition: Credit Card Transaction Notification",
+    "description": "Verifies that the payment notification API correctly supports and logs state and field transitions for credit card transactions, specifically 'addInfo4':'CREDIT' and related parameters. Automation: HIGH.",
+    "testId": "TC-POSTCREDIT-05",
+    "testDescription": "For a credit card transaction, HSBC triggers Post Credit / Final Response-Notification with 'addInfo4':'CREDIT', 'transType':'PAY', 'payerAccNo', and 'payerBankIFSC'. The merchant acknowledges and logs the transaction, verifying all state changes and sensitive data field appearances as per spec.",
+    "prerequisites": "Merchant system supports credit card payments; test credit card transaction flow accessible; valid payer account and IFSC masked test values present.",
+    "stepsToPerform": "1. Log in as authorized merchant admin. 2. Initiate a simulated credit card payment flow up to credit posting. 3. HSBC posts notification to merchant endpoint with addInfo4='CREDIT', transType='PAY', payerAccNo='071107734006', payerBankIFSC='HSBC0560002'. 4. Merchant receives and parses the notification. 5. Validate 'addInfo4' is set to 'CREDIT'. 6. Confirm transaction state transitions to 'credit card transaction recorded'. 7. Acknowledge with success response as per standard. 8. Check merchant logs/audit trails for presence of addInfo4, transType, payerAccNo, and payerBankIFSC. 9. Assert sensitive fields are not exposed outside allowed audit trail/log usage.",
+    "expectedResult": "Merchant system records credit card transaction with proper state, fields, and redaction; logs show required values only in permitted context; acknowledgement is successful.",
+    "sourceCitation": {
+      "location": "Section 3.3, page 14",
+      "excerpt": "\"addInfo4\":\"CREDIT\", \"transType\":\"PAY\", \"payerAccNo\":\"071107734006\", \"payerBankIFSC\":\"HSBC0560002\""
+    }
+  },
+  {
+    "type": "functional",
+    "title": "VPA Status Validation Success Scenario",
+    "description": "Checks if VPA Status Validation API returns 'valStatusCode':'VE' and 'valStatusDesc':'VPA is valid' for valid VPA, confirming proper positive path operation. Automation: HIGH.",
+    "testId": "TC-VPASTATUS-01",
+    "testDescription": "The merchant queries the VPA Status Validation API with a known-existing payerVPA. The response includes valStatusCode VE and valStatusDesc 'VPA is valid', with payerName present if available.",
+    "prerequisites": "Merchant integration active; payerVPA is setup and guaranteed to be valid within HSBC test/data environment.",
+    "stepsToPerform": "1. Log in as authorized test merchant. 2. Select a VPA known to exist (e.g. 'aditya@hsbc'). 3. Generate valid meRefNo (e.g. '450824145'). 4. Build request: pgMerchantId='HSBB000000000001', meRefNo, payerVPA. 5. Send POST request to VPA Status Validation API endpoint. 6. Decrypt and decode response as per toolkit. 7. Examine valStatusCode and valStatusDesc. 8. Verify payerName is also present. 9. Store results for audit/compliance.",
+    "expectedResult": "Response contains valStatusCode='VE', valStatusDesc='VPA is valid', meRefNo, payerVPA, pgMerchantId, and payerName.",
+    "sourceCitation": {
+      "location": "Section 3.4, page 18",
+      "excerpt": "\"valStatusCode\":\"VE\", \"valStatusDesc\":\"VPA is valid\""
+    }
+  },
+  {
+    "type": "negative",
+    "title": "VPA Status Validation Not Available Negative",
+    "description": "Validates that the VPA Status Validation API returns the correct not-available code (valStatusCode='VN') when an invalid/non-existent payerVPA is submitted. Automation: HIGH.",
+    "testId": "TC-VPASTATUS-02",
+    "testDescription": "User attempts to fetch the status of a VPA using Status Validation API with a VPA not present in HSBC’s UPI records; expects valStatusCode 'VN' and proper error handling.",
+    "prerequisites": "Test payerVPA is not present in the UPI/HSBC system; integration toolkit enabled.",
+    "stepsToPerform": "1. Log in as merchant with valid credentials. 2. Generate/choose payerVPA known to be invalid, e.g. 'notfound99999@invalid'. 3. Craft valid request payload with real pgMerchantId, meRefNo, this payerVPA. 4. Encrypt and POST to VPA Status Validation endpoint. 5. Decrypt/parse response. 6. Examine valStatusCode and valStatusDesc. 7. Confirm valStatusCode is 'VN'. 8. Log the full interaction. 9. Confirm no payerName is returned.",
+    "expectedResult": "API emits valStatusCode='VN' and valStatusDesc describes VPA as not available; no payerName in response.",
+    "sourceCitation": {
+      "location": "Section 3.4, page 18",
+      "excerpt": "valStatusCode Status of the VPA if it exists or not. (VE=Available, VN=Not Available, V=Request Validation Error, E=Exception at UPI)"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Value for meRefNo Field",
+    "description": "Ensures the VPA Status Validation API strictly enforces the documented meRefNo length constraint (6–30 alphanumeric), accepting boundary values and rejecting out-of-range values. Automation: HIGH.",
+    "testId": "TC-VPASTATUS-03",
+    "testDescription": "The merchant attempts Status Validation with meRefNo at minimum (6), maximum (30), just below (5), and just above (31) lengths, expecting correct acceptance or rejection as per field spec.",
+    "prerequisites": "API test environment available; payerVPA valid; merchant is whitelisted and authenticated.",
+    "stepsToPerform": "1. Log into merchant test console. 2. Prepare requests with meRefNo: exactly 6 chars (e.g. 'ME0001'), 30 chars ('ME0000000000000000000000000001'), 5 chars, and 31 chars, all alphanumeric. 3. Populate all other required fields. 4. Encrypt and send each to VPA Status Validation API. 5. For each, decrypt and record response. 6. Check API accepts 6 and 30 char cases. 7. Confirm 5 and 31 char meRefNo are rejected by API (error in response). 8. Review logs/audits for each. 9. Clean up created test data as required.",
+    "expectedResult": "Requests with meRefNo >=6 and <=30 chars accepted; <6 or >30 return field length error as per API specification.",
+    "sourceCitation": {
+      "location": "Section 3.4, page 17",
+      "excerpt": "meRefNo Unique reference / serial no sent by Merchant for each VPA validation Alpha-Numeric 6-30 Mandatory"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Conditional payerName Field Retrieval",
+    "description": "Validates that the VPA Status Validation API returns payerName in the response when the VPA exists and the partner PSP provides the name, and omits/masks it otherwise. Automation: HIGH.",
+    "testId": "TC-VPASTATUS-04",
+    "testDescription": "For a valid VPA and meRefNo, merchant invokes VPA Status Validation. If payerName is provided by underlying system, it is returned in the payload; if not, field is omitted or empty (depending on bank/PSP).",
+    "prerequisites": "Test payerVPA exists and is linked to named account; alternate test VPA exists with no payerName available; merchant ID active.",
+    "stepsToPerform": "1. Log in as test merchant. 2. Choose payerVPA where payerName is known and resolvable. 3. Generate request JSON with this VPA and a valid meRefNo. 4. Encrypt and transmit to VPA Status Validation endpoint. 5. Decrypt and inspect payerName in response. 6. Repeat with a payerVPA for which payerName should not be available. 7. Observe response (payerName absent/empty). 8. Log and archive results for audit. 9. Assess field masking if present.",
+    "expectedResult": "For VPA with name, payerName is present, max 100 chars; for others, field is absent or blank. No sensitive leakage occurs.",
+    "sourceCitation": {
+      "location": "Section 3.4, page 18",
+      "excerpt": "payerName Payer Name Alpha-Numeric 100 Conditional"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Collect Request Initiation Success",
+    "description": "This test verifies that a Collect Request submitted by a merchant is successfully initiated, and the API responds with correct transaction details and initiation status. Ensures compliance to critical business rule for collect workflows and establishes the reliability of request processing. Automation: HIGH — pure API assertions.",
+    "testId": "TC-COLLECT-01",
+    "testDescription": "A merchant user, after authentication and VPA validation, initiates a collect request using the Collect Request API with valid required and optional fields. The API must return a response with status 'Initiated' (I) and the correct transaction identifiers.",
+    "prerequisites": "Merchant is configured and active on HSBC UPI system, Merchant Encryption Key is provisioned, required certificate is installed, payerVPA is already validated and available, backend collect workflow service is running.",
+    "stepsToPerform": "1. Log in to merchant portal with valid credentials. 2. Validate payerVPA using VPA Status Validation API and ensure status is 'VE'. 3. Retrieve or confirm pgMerchantID is active. 4. Generate a unique meOrderNo for the transaction (e.g. 'COLL10001'). 5. Prepare collect request payload with valid pgMerchantID, meOrderNo, payerVPA ('testuser@hsbc'), transAmount ('500.00'), expiryValue ('64800'), transRemarks ('Collect from testuser'), and optional addInfo fields. 6. Submit Collect Request API via the specified HTTPS endpoint using the merchant's key/certificate. 7. Receive and decrypt response payload using the toolkit. 8. Validate response: collStatus equals 'I', collStatusDesc is 'Transaction Initiated', transAmount matches sent value, correct identifiers returned. 9. Verify audit log records for this collect request contain all request and response fields and initiation timestamp. 10. Cleanup: Cancel/purge collect request if live transaction state is created.",
+    "expectedResult": "Collect response object contains collStatus:'I', collStatusDesc:'Transaction Initiated', transAmount: '500.00', correct meOrderNo, transID, transRRN, payerVPA, payeeVPA. All returned fields conform to spec requirements. Audit log is updated.",
+    "sourceCitation": {
+      "location": "Section 3.5, page 21",
+      "excerpt": "\"collStatus\":\"I\", \"collStatusDesc\":\"Transaction Initiated\""
+    }
+  },
+  {
+    "type": "negative",
+    "title": "Collect Request Failure Scenario",
+    "description": "This test validates that the Collect Request API responds correctly with failure codes when provided invalid input, ensuring robust error handling and data validation. This is critical for risk mitigation in payment flows.",
+    "testId": "TC-COLLECT-02",
+    "testDescription": "A merchant attempts to create a collect request with invalid or missing mandatory fields, triggering a failed transaction with correct API error codes and messages per the spec.",
+    "prerequisites": "Merchant configuration exists, backend collect workflow service is accessible, payerVPA does not exist or is not validated, merchant key/cert setup complete.",
+    "stepsToPerform": "1. Log in to merchant portal with valid credentials. 2. Intentionally skip VPA validation (use invalid payerVPA: 'invaliduser@hsbc'). 3. Confirm pgMerchantID is active. 4. Generate a unique meOrderNo (e.g. 'FAIL10001'). 5. Prepare collect request payload with invalid/missing all mandatory fields (e.g. transAmount: '', expiryValue: -5). 6. Submit Collect Request API via HTTPS endpoint using toolkit. 7. Receive and decrypt response using merchant key. 8. Validate response: collStatus equals 'F' or 'E', collStatusDesc indicates failure or exception, transAmount is not echoed back, error code returned per API spec. 9. Confirm no collect request record is persisted in backend or audit log (failure is not entered).",
+    "expectedResult": "API response contains collStatus:'F' or 'E' as specified, collStatusDesc reflecting correct failure (e.g., 'Exception at UPI'), and any error fields specified in the response; collect request not persisted.",
+    "sourceCitation": {
+      "location": "Section 3.5, page 21",
+      "excerpt": "collStatus Transaction status (I-Initiated , F-Failed, E -Exception at UPI)"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Value for expiryValue Field",
+    "description": "This test validates the Collect Request API enforces the upper boundary constraint for expiryValue, ensuring the expiry is not exceeded and the API rejects out-of-bounds values. Protects against faulty expiry logic and regulatory breach.",
+    "testId": "TC-COLLECT-03",
+    "testDescription": "Merchant submits Collect Request API with expiryValue at the maximum allowed (64800) and just above (64801), expecting normal processing at the boundary and error/failure for out-of-bound input.",
+    "prerequisites": "Merchant is set up and active, pgMerchantID exists, toolkit integration is working, backend collect workflow service running, payerVPA validated and available.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Validate payerVPA ('boundaryuser@hsbc') for test. 3. Prepare valid pgMerchantID and unique meOrderNo ('BDEXPV10001'). 4. Build collect request payload with expiryValue set to '64800' (boundary) and then '64801' (beyond boundary). 5. Submit Collect Request API with expiryValue = '64800', observe response. 6. Submit Collect Request API with expiryValue = '64801', observe response. 7. Decrypt and inspect both responses using toolkit. 8. Validate first response returns collStatus:'I', collStatusDesc:'Transaction Initiated'. 9. Validate second response returns collStatus:'F'/'E' or proper error code, and does not initiate the collect request. 10. Audit log check for both requests and error paths.",
+    "expectedResult": "With expiryValue=64800, collect request initiates successfully; with expiryValue=64801, the API responds with failure or validation error per the spec, no request is processed.",
+    "sourceCitation": {
+      "location": "Section 3.5, page 19",
+      "excerpt": "expiry value Collect Expiry value in minutes (Max. 64800) Number 5 Mandatory"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Optional payerName Field Handling",
+    "description": "This test verifies that the Collect Request API correctly accepts and processes the optional payerName field, ensuring system flexibility for payer info storage/display. Automation: HIGH.",
+    "testId": "TC-COLLECT-04",
+    "testDescription": "A merchant user includes the payerName in a Collect Request, confirms it is echoed in downstream responses, and verifies presence/absence as per spec for subsequent status and audit records.",
+    "prerequisites": "Merchant is active, backend collect workflow service running, payerVPA validated, payerName retrieved (e.g., from Validate VPA Response), toolkit integration available.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Validate payerVPA ('optionalname@hsbc') and retrieve payerName from Validate VPA Response ('OPTIONUSER TEST'). 3. Prepare pgMerchantID and unique meOrderNo ('OPTNAME1001'). 4. Build collect request payload with payerName='OPTIONUSER TEST', plus all required fields. 5. Submit Collect Request API using toolkit and merchant key. 6. Decrypt response. 7. Verify response contains payerName where specified and matches request. 8. Confirm that status enquiry and audit log records also reference payerName, or omit if not set. 9. Conduct negative test: Submit collect request without payerName, verify no error is thrown and payerName is absent from responses.",
+    "expectedResult": "Collect request successfully processes with or without payerName; when included, payerName appears in response and downstream records; when omitted, is not present.",
+    "sourceCitation": {
+      "location": "Section 3.5, page 19",
+      "excerpt": "payerName Payer Name received in Validate VPA Response Alpha-Numeric 100 Optional"
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Value for transAmount",
+    "description": "This test validates enforcement of min/max decimal and length constraints on transAmount in Collect Request API. Prevents overflows and regulatory breach for payment amount.",
+    "testId": "TC-COLLECT-05",
+    "testDescription": "A merchant submits collect requests at the lower ('0.01'), upper ('9999999999999999.99'), and over-bound ('10000000000000000') value limits for transAmount, verifying the API responses and errors.",
+    "prerequisites": "Merchant set up, backend collect workflow running, toolkit integration active, payerVPA validated and available.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Validate payerVPA ('boundaryamt@hsbc'). 3. Prepare pgMerchantID and unique meOrderNos (e.g. 'BAMT10001'). 4. Build collect request payload with transAmount='0.01', submit via API. 5. Build collect request payload with transAmount='9999999999999999.99', submit. 6. Build collect request payload with transAmount='10000000000000000', submit. 7. Decrypt and inspect responses for each scenario. 8. Validate success for boundary values; error/failure for over-bound value. 9. Audit log check for all requests and results; confirm only valid requests persisted.",
+    "expectedResult": "Request with transAmount='0.01' and '9999999999999999.99' succeed (collStatus:'I'), responses echo correct amount and identifiers; request with '10000000000000000' fails (collStatus:'F'/'E' or error), no transaction persists.",
+    "sourceCitation": {
+      "location": "Section 3.5, page 19",
+      "excerpt": "transAmount Transaction Amount (in two decimals e.g. 10.00) Decimal 1-16 Mandatory"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Test Optional addInfo Fields Usage",
+    "description": "This test verifies the Collect Request API's handling of optional addInfo1–addInfo10 fields, ensuring system accommodates future extensibility and no error occurs when fields are used, omitted, or left blank.",
+    "testId": "TC-COLLECT-06",
+    "testDescription": "A merchant submits collect requests using all addInfo fields filled, some filled, and all blank/omitted, confirming field propagation through response and audit flows.",
+    "prerequisites": "Merchant active, toolkit integration operational, backend collect workflow service running, payerVPA validated, all addInfo key-value pairs are synthetic/test-safe.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Validate payerVPA ('addinfouser@hsbc'). 3. Prepare pgMerchantID and meOrderNo ('ADDINFO1001'). 4. Construct collect request with addInfo1–addInfo10 populated ('TESTDATA1'...'TESTDATA10'). 5. Submit request, decrypt response. 6. Validate all addInfo fields present and match request in response. 7. Repeat: submit request with only addInfo1 filled, others blank/omitted; validate response. 8. Repeat: submit request omitting addInfo fields entirely; validate no error and optional fields omitted in response. 9. Check audit log or downstream transaction records for correct field presence/absence.",
+    "expectedResult": "Collect requests succeed regardless of addInfo presence/absence. All populated addInfo fields are returned unchanged in response and audit trail; unfilled fields omitted.",
+    "sourceCitation": {
+      "location": "Section 3.5, page 19",
+      "excerpt": "addInfo1 to 10 For future use Alpha-Numeric 0-50 Optional"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Transaction Status Enquiry Success",
+    "description": "This test verifies that Transaction Status Enquiry API returns success status and the correct message for a completed payment, validating the workflow and end-to-end traceability between merchant and UPI system. Automation: HIGH.",
+    "testId": "TC-TRANSENQ-01",
+    "testDescription": "A merchant performs a status enquiry for a known successful transaction, ensuring the API returns transStatus 'S' and transMessage 'Payment Successful' as per spec.",
+    "prerequisites": "Merchant is setup, transaction with meRefNo exists and is successful, backend status workflow active, toolkit integration ready.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Identify a meRefNo for a completed (successful) transaction ('ENQ1001'). 3. Prepare API request with valid pgMerchantID, meRefNo, transRRN, meOrderNo. 4. Submit Transaction Status Enquiry API using toolkit. 5. Decrypt response payload. 6. Validate transStatus field equals 'S'. 7. Validate transMessage equals 'Payment Successful'. 8. Confirm returned fields match original transaction details, and audit log reflects completion status. 9. Confirm no sensitive PII exposed in logs or response.",
+    "expectedResult": "API returns transStatus: 'S' and transMessage: 'Payment Successful', all returned fields match request and spec. Audit log records completion.",
+    "sourceCitation": {
+      "location": "Section 3.6, page 24",
+      "excerpt": "\"transStatus\":\"S\", \"transMessage\":\"Payment Successful\""
+    }
+  },
+  {
+    "type": "state-transition",
+    "title": "Transaction Status Enquiry Pending State",
+    "description": "This test verifies the Transaction Status Enquiry API recognizes and exposes the 'Pending' state for a payment awaiting approval, confirming the correct workflow transition and status reporting per UPI spec.",
+    "testId": "TC-TRANSENQ-02",
+    "testDescription": "Merchant queries transaction status for a payment in 'Pending' state, expecting transStatus 'P' and appropriate message, verifying state reporting and transition handling.",
+    "prerequisites": "Merchant set up, transaction in pending state (not authorized yet), backend workflow running, toolkit integration operational.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Identify/create a transaction with meRefNo ('ENQ1002') in 'Pending for Approval'. 3. Prepare API request with pgMerchantID, meRefNo, transRRN/meOrderNo as appropriate. 4. Submit Transaction Status Enquiry API via toolkit. 5. Decrypt response payload. 6. Validate transStatus equals 'P'. 7. Confirm transMessage indicates pending/awaiting approval. 8. Check that other fields (transAmount, transRRN, payerVPA, etc.) match original request, audit log notes pending state. 9. Confirm system rejects invalid status transitions (e.g., does not report 'Success' for unapproved transaction).",
+    "expectedResult": "API returns transStatus: 'P', transMessage indicates pending; all returned fields are accurate; audit log shows transaction in pending/awaiting approval.",
+    "sourceCitation": {
+      "location": "Section 3.6, page 24",
+      "excerpt": "transStatus Transaction status (S-Success, P-Pending for Approval, F-Failed, R-Rejected, X-Expired, E- Exception at UPI)"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Test Conditional transRRN Field Presence",
+    "description": "This test verifies the Transaction Status Enquiry API conditionally returns transRRN when available, ensuring system correctness and traceability for reconciliation and downstream audit.",
+    "testId": "TC-TRANSENQ-04",
+    "testDescription": "A merchant queries transaction status for a transaction where transRRN is available, confirms presence and correctness of transRRN field; repeats for scenario where not available, verifies absence.",
+    "prerequisites": "Merchant active, backend transaction status workflow live, toolkit integration enabled, test transaction with and without valid transRRN available.",
+    "stepsToPerform": "1. Log in to merchant portal. 2. Identify transaction with transRRN present ('700000000001'), prepare meRefNo and other required fields. 3. Submit status enquiry API request, decrypt response, validate transRRN present. 4. Identify transaction without assigned transRRN (e.g., pending/pre-authorized), prepare meRefNo. 5. Submit status enquiry, decrypt response, validate transRRN is absent or blank as per spec. 6. Verify all response fields match original transaction record. 7. Confirm audit log reflects conditional presence/absence of transRRN. 8. Test that no error occurs for missing transRRN if status is not yet final. 9. Ensure no sensitive identifiers or PII leak in logs/response.",
+    "expectedResult": "API response returns transRRN (12 digits) when available; omits or blanks transRRN when not; all fields accurate and compliant; audit log tracks both flows.",
+    "sourceCitation": {
+      "location": "Section 3.6, page 22",
+      "excerpt": "transRRN Unique 12 digit ref no as provided by NPCI for each Transaction Number 12 Conditional"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Refund API Success Scenario",
+    "description": "Verifies that the Refund API successfully processes a valid refund request and returns a success status and message as per UPI refund integration protocol. Success of this flow ensures correct fund reversals, with accurate status and message for merchant and customer reconciliation. Automation: HIGH—pure API assertion.",
+    "testId": "TC-REFUND-01",
+    "testDescription": "A merchant initiates a refund by invoking the Refund API with valid request parameters corresponding to a previously successful transaction. The API should acknowledge the request by returning a 'S' status and 'Success' message, verifying end-to-end refund capability for compliant merchant platforms.",
+    "prerequisites": "Valid original transaction exists with matching orgTransId and orgTransRRN, merchant onboarded with pgMerchantId, HSBC refund key properly configured, backend services operational.",
+    "stepsToPerform": "1. Log in to merchant backend as authorized test user. 2. Locate a recent successful transaction; capture orgTransId, orgTransRRN, orgMeOrderNo. 3. Generate a new unique newMeOrderNo and specify valid refundAmount (e.g., '100.00'). 4. Construct a Refund API request JSON with all mandatory and conditional fields: pgMerchantId, newMeOrderNo, orgMeOrderNo, orgTransId, orgTransRRN, refundAmount. 5. Set all addInfo1 to addInfo10 as empty or as needed. 6. Submit request to the /meRefund endpoint over HTTPS with valid merchant credentials and encryption (if required). 7. Parse the API response payload and log all fields. 8. Assert that refundStatus equals 'S' and refundMessage equals 'Success'. 9. Validate newMeOrderNo, refundAmount, and orgMeOrderNo match the request. 10. Check that transaction details are recorded in logs or reconciliation records as required.",
+    "expectedResult": "1. API response includes \"refundStatus\":\"S\" and \"refundMessage\":\"Success\". 2. newMeOrderNo and orgMeOrderNo returned and correspond to request. 3. refundAmount matches requested amount. 4. Refund transaction is present in audit/reconciliation report.",
+    "sourceCitation": {
+      "location": "Section 3.7, page 30",
+      "excerpt": "\"refundStatus\":\"S\", \"refundMessage\":\"Success\""
+    }
+  },
+  {
+    "type": "negative",
+    "title": "Refund API Failure Scenario",
+    "description": "Ensures the Refund API correctly handles invalid refund attempts—for example, wrong original transaction references or ineligible refunds—by returning the defined failure status. This test is critical for data integrity and fraud resistance (no double/spurious refunds). Automation: HIGH.",
+    "testId": "TC-REFUND-02",
+    "testDescription": "A merchant submits a Refund API request with an invalid or non-matching orgTransId or orgTransRRN (e.g., refunding a non-existent or already-refunded transaction). The API should reject the request, marking the refundStatus as 'F' and providing an appropriate failure message per the specification.",
+    "prerequisites": "Merchant onboarded, at least one invalid/irrelevant orgTransId available in test environment, refundAmount set to a realistic value.",
+    "stepsToPerform": "1. Authenticate to the merchant dashboard as test user. 2. Identify an orgTransId/orgTransRRN combination that does not correspond to any successful payment (e.g., use a random or already-refunded value). 3. Generate a new newMeOrderNo and set refundAmount. 4. Assemble the Refund API request with required/conditional params using invalid orgTransId/orgTransRRN. 5. Ensure addInfo fields are blank/empty. 6. Submit the request over HTTPS to /meRefund. 7. Parse the returned payload. 8. Assert that refundStatus equals 'F' and refundMessage is populated with a failure cause. 9. Verify that the refundAmount was not debited or credited. 10. Check that the error is logged appropriately.",
+    "expectedResult": "1. API response contains \"refundStatus\":\"F\". 2. refundMessage field details failure (e.g., 'Record not available'). 3. No refund transaction is recorded or executed. 4. Error is logged for reconciliation/audit.",
+    "sourceCitation": {
+      "location": "Section 3.7, page 30",
+      "excerpt": "\"refundStatus\":\"F\""
+    }
+  },
+  {
+    "type": "boundary",
+    "title": "Boundary Value for refundAmount Field",
+    "description": "Checks the Refund API's refundAmount parameter for proper numeric boundary enforcement as delineated in the specification. Ensures system does not allow underflow/overflow and validates amount precision. Automation: HIGH.",
+    "testId": "TC-REFUND-03",
+    "testDescription": "A merchant tests the Refund API with refundAmount at its minimum (1.00), maximum (16 digits, two decimals), just below minimum, and just above maximum values to verify proper field validation and error response for out-of-bounds data.",
+    "prerequisites": "Valid test merchant and at least one eligible original transaction present (for orgTransId, orgTransRRN, orgMeOrderNo). System configured to allow test variations.",
+    "stepsToPerform": "1. Sign in as merchant user to backend UI. 2. Retrieve valid orgTransId, orgTransRRN, orgMeOrderNo. 3. For minimum boundary, set refundAmount to '1.00'. 4. Construct and send Refund API request; record response. 5. For maximum, use '99999999999999.99' (16 digits incl. decimals); send and record. 6. For below minimum, use '0.99' or negative value; send and record. 7. For above maximum, use e.g., '1000000000000000.00'; send and record. 8. For invalid decimals, use e.g., '10.001'; send and record. 9. For each, validate server response: success only for valid boundary, failures for out-of-bounds. 10. Ensure error messages/codes are present as appropriate.",
+    "expectedResult": "1. refundAmount within [1.00, 99999999999999.99] accepted and processed (refundStatus:'S'). 2. Out-of-range/refused transactions return refundStatus:'F' and informative refundMessage. 3. No refund executed on failure cases.",
+    "sourceCitation": {
+      "location": "Section 3.7, page 26",
+      "excerpt": "refundAmount (in 2 decimals) Amount to be Refunded in rupees e.g. 10.00 Decimal 1-16 Mandatory"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Optional addInfo Fields Verification",
+    "description": "Confirms the Refund API processes optional addInfo1–addInfo10 correctly—accepting empty, partial, and populated values without affecting core processing. Proper handling is critical for forward compatibility and extensibility. Automation: HIGH.",
+    "testId": "TC-REFUND-04",
+    "testDescription": "Merchant executes refund requests with varying 'addInfo1' to 'addInfo10' values: all blank, some filled (with alphanumeric values up to 50 chars), and all filled, verifying that refunds proceed normally and addInfo fields are echoed or stored as needed per specification.",
+    "prerequisites": "Merchant account with valid/refundable original transaction; system allows test data variations; test harness for field population.",
+    "stepsToPerform": "1. Log in to merchant interface as test user. 2. Pull valid orgTransId, orgTransRRN, orgMeOrderNo. 3. For iteration one, set all addInfo fields to blank. 4. Submit Refund API request; record results. 5. For iteration two, set addInfo1, addInfo5, addInfo10 to 'testdata01', 'info88888', and a 50-char string. 6. For iteration three, populate all addInfo fields with unique valid data. 7. For each, send the request and note the API response. 8. Validate that refund proceeds with refundStatus 'S', and that addInfo fields are returned or stored as per request data. 9. Spot-check logs or downstream records as per audit/reconciliation rules.",
+    "expectedResult": "1. Refund successful (refundStatus:'S') regardless of addInfo fields being blank, partially or fully populated. 2. API response reflects provided addInfo values. 3. No errors or truncation unless input exceeds 50 chars.",
+    "sourceCitation": {
+      "location": "Section 3.7, page 26",
+      "excerpt": "addInfo1 to 10 Additional Field 1 to 10 Alpha-Numeric 0-50 Optional"
+    }
+  },
+  {
+    "type": "security",
+    "title": "API-Based Encryption with UPIKit",
+    "description": "Verifies that merchant constructs the request message as specified, encrypts using the merchant key, and interfaces securely with HSBC for request transmission. This protects sensitive data and maintains PCI/RBI compliance. Automation: HIGH for encryption validation.",
+    "testId": "TC-CRYPTO-01",
+    "testDescription": "A merchant crafts a refund or collect API request per the pipe-separated format, encrypts it using the merchant-provided symmetric key via the UPIKit library (DLL/JAR), and places the encrypted message in 'requestMsg'. Communication with HSBC is over HTTPS endpoint, assuring message integrity and confidentiality.",
+    "prerequisites": "Merchant key securely provisioned by HSBC, UPIKit library present in test environment, sample request message ready.",
+    "stepsToPerform": "1. Install/import the UPIKit library in .NET/Java as appropriate. 2. Prepare valid request (e.g., refund or collect) as specified in plain JSON. 3. Use UPIKit Encrypt() method to encrypt the message with the merchant key. 4. Place encrypted payload in 'requestMsg' field per spec. 5. Attach required pgMerchantId and construct final request JSON. 6. Initiate POST to the designated HSBC endpoint (e.g., /meCollect or /meRefund) using HTTPS. 7. Observe and record request and response. 8. Decode response (if encrypted) and validate that request message was properly encrypted (not in plaintext transmittal/logs). 9. Confirm that rejection occurs if the key is incorrect.",
+    "expectedResult": "1. Request is correctly encrypted (non-readable payload), and HSBC accepts the request. 2. Decryption and processing at HSBC is successful, as evidenced by valid API response. 3. Any incorrect key usage leads to error or API rejection.",
+    "sourceCitation": {
+      "location": "Section 4, page 35",
+      "excerpt": "Merchant builds the request message (in pipe separated) and encrypts it with merchant key."
+    }
+  },
+  {
+    "type": "security",
+    "title": "API-Based Decryption with UPIKit",
+    "description": "Ensures the merchant system can correctly decrypt an HSBC reply using its merchant key and the UPIKit Decrypt() method, maintaining transaction auditability and data integrity. Automation: HIGH.",
+    "testId": "TC-CRYPTO-02",
+    "testDescription": "Upon receiving a response from HSBC in encrypted format, the merchant uses UPIKit's Decrypt() with the correct merchant key to obtain the plaintext result, confirming full message round-trip security per contract.",
+    "prerequisites": "Valid encrypted response from HSBC available, merchant has correct merchant key and UPIKit library, system permissions for decryption.",
+    "stepsToPerform": "1. Complete a successful request to HSBC (e.g., refund/collect) that yields an encrypted response. 2. Extract 'response' field from reply. 3. Obtain the merchant key securely. 4. Use UPIKit's Decrypt() method, calling with the exact encrypted message and key. 5. Validate that decrypted message matches the expected response fields/values (e.g., check refundStatus, orgTransId). 6. Log decrypted data for compliance audit. 7. Try decrypting with an incorrect key and verify it fails. 8. Confirm decrypted message is not persisted in logs as plaintext prior to decryption.",
+    "expectedResult": "1. Decryption of valid responses yields accurate, complete transaction data. 2. Using an incorrect or missing key fails decryption. 3. Decrypted sensitive data is present only in memory/logs as mandated.",
+    "sourceCitation": {
+      "location": "Section 4, page 36",
+      "excerpt": "String resMsg = security.decrypt(\"1AD4F41171F0EA0C24A91CA5FA5807CD8704BAF9BA2DBBBF68...\", \"easd343dsdsdsdsde3243dfffdeerfff\");"
+    }
+  },
+  {
+    "type": "security",
+    "title": "Validate Correct Key Usage for Encryption",
+    "description": "Asserts that the merchant must use ONLY the HSBC-provided merchant key for encryption/decryption. Enforces key rotation and exclusivity required for compliance and fraud prevention. Automation: HIGH.",
+    "testId": "TC-CRYPTO-03",
+    "testDescription": "A merchant attempts request encryption and response decryption using both the correct HSBC-provided merchant key and a random/incorrect key. Only the correct key should succeed; use of any other key must fail or result in error as per the documented process.",
+    "prerequisites": "HSBC-provided merchant key is provisioned; alternative (incorrect) key available for misuse simulation; merchant knows which key is valid.",
+    "stepsToPerform": "1. Configure UPIKit or encryption component with the correct merchant key. 2. Prepare a test request (e.g., refund/collect) and encrypt using correct key. 3. Submit to HSBC endpoint and record successful response. 4. Now re-encrypt the same request using a wrong or random key. 5. Submit altered request; expect failure or rejection. 6. For response decryption, attempt with proper key; compare payload to expected. 7. Attempt to decrypt the same with the incorrect key; expect failure or garbage output. 8. Validate all errors, logs, and operational outcomes as required by security posture.",
+    "expectedResult": "1. Only requests encrypted with the correct merchant key are successfully processed. 2. Decryption only works with matching key; all other keys fail. 3. API/server rejects, fails, or logs error for invalid key usage.",
+    "sourceCitation": {
+      "location": "Section 4, page 35",
+      "excerpt": "This merchant key will be shared by the bank and the merchant has to use the key to encrypt/decrypt the message."
+    }
+  },
+  {
+    "type": "negative",
+    "title": "Test Certificate Exchange Failure",
+    "description": "Ensures that improper or failed import of HSBC-issued certificates (e.g., missing, invalid, or misconfigured cert files) blocks API connections, enforcing mutual TLS requirements for security and regulatory compliance. Automation: MEDIUM—requires environment manipulation.",
+    "testId": "TC-CRYPTO-04",
+    "testDescription": "The merchant simulates certificate import failure: does not import the HSBC-provided .cer into the keystore, imports with wrong alias, or uses an expired/invalid cert. The API call to HSBC should fail to authenticate or connect, demonstrating enforcement of mTLS/certificate posture.",
+    "prerequisites": "Merchant does NOT have HSBC's valid public certificate imported; test endpoint is live; keystore, mTLS config present.",
+    "stepsToPerform": "1. On test server, ensure HSBC-issued cert (.cer) is NOT imported into the keystore, or import it with an incorrect alias or corrupted cert file. 2. Configure application server to use this keystore. 3. Attempt outgoing API request to HSBC (e.g., collect or refund endpoint). 4. Observe the connection process and error returned. 5. Retry with the cert properly imported under wrong alias, again noting the result. 6. Now repeat the import steps per Appendix A, this time with valid alias and file. 7. Retry request; verify connectivity is restored. 8. Log and compare all error statuses/codes/messages. 9. Restore pre-existing, valid certs for normal operation.",
+    "expectedResult": "1. API request fails (e.g., TLS handshake error or refused connection) when HSBC-issued cert is missing or imported wrongly. 2. Success only when proper cert/key combination is present. 3. Audit/logs record failure diagnostics as per mTLS security baseline.",
+    "sourceCitation": {
+      "location": "Appendix A, page 40",
+      "excerpt": "Import HSBC Issued Cert keytool -import -alias mykey -trustcacerts -file HSBC_Public.cer -keystore 2_WAY_SSL_Cert.jks"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "DLL Integration for Encryption (DotNet)",
+    "description": "Validates merchant integration of the provided UPIKit.dll into a .NET stack for request encryption, ensuring compliance with spec and robust E2E encryption for sensitive fields. Automation: MEDIUM—requires .NET environment and code hook.",
+    "testId": "TC-TOOLKIT-01",
+    "testDescription": "A merchant system on .NET integrates upikit.dll, referencing and invoking UPISecurity.Encrypt() to encrypt a test message. The solution should perform correct encryption (per HSBC requirements) and embed encrypted string in API payload.",
+    "prerequisites": "upikit.dll is provided by HSBC and present in test system; Visual Studio/.NET dev toolkit is ready; merchant/HSBC keys available.",
+    "stepsToPerform": "1. Copy upikit.dll to merchant project directory. 2. Add the DLL as reference in the Visual Studio project. 3. Add necessary using/import statements per HSBC documentation. 4. In code, assign sample string to strParam (masked test value). 5. Assign valid EncKey per HSBC provisioned secret. 6. Call UPISecurity.Encrypt(strParam, EncKey). 7. Confirm returned EncData is a ciphertext string. 8. Embed EncData into required API request field (e.g., requestMsg). 9. Log enc/dec process per audit requirements. 10. Submit encrypted request to HSBC and verify valid/accepted response.",
+    "expectedResult": "1. upikit.dll integrates successfully in .NET project. 2. UPISecurity.Encrypt() produces valid encrypted output. 3. Encrypted string is used in API request and accepted by HSBC endpoint. 4. No sensitive data leaks in logs.",
+    "sourceCitation": {
+      "location": "Section 4.1.1, page 27",
+      "excerpt": "UPISecurity.Encrypt() method call to Encrypt Data"
+    }
+  },
+  {
+    "type": "functional",
+    "title": "Jar Integration for Encryption (Java)",
+    "description": "Ensures that Java merchants integrate UPIKit.jar per HSBC spec, properly invoking UPISecurity.encrypt() for data protection—confirming robust implementation in Java/enterprise stacks. Automation: MEDIUM.",
+    "testId": "TC-TOOLKIT-02",
+    "testDescription": "Merchant adds UPIKit.jar to Java project, instantiates UPISecurity, and calls encrypt() with sample message and provided key, verifying encrypted result is embedded into request and accepted by HSBC endpoint with compliant structure.",
+    "prerequisites": "UPIKit.jar present in Java classpath; HSBC merchant key ready; Java test project or service set up.",
+    "stepsToPerform": "1. Place UPIKit.jar in Java project libs. 2. Add JAR to project dependencies/build path. 3. Instantiate UPISecurity object in code. 4. Construct a synthetic message string for test (no live PII). 5. Assign HSBC-supplied encryption key. 6. Call UPISecurity.encrypt(message, key) and store the returned string. 7. Insert ciphertext into outbound request (e.g., as requestMsg). 8. Transmit API request to HSBC endpoint. 9. Validate response is accepted and decrypted by HSBC. 10. Review local code logs and response to confirm no plaintext leaks.",
+    "expectedResult": "1. UPIKit.jar integrates in project and encrypt() method functions correctly. 2. Encrypted data is accepted by HSBC endpoint. 3. Sensitive data is not exposed in code or logs.",
+    "sourceCitation": {
+      "location": "Section 4.1.2, page 28",
+      "excerpt": "UPISecurity.encrypt(\"message which needs to be encrypted\", \"encryption key\")"
+    }
+  },
+  {
+    "type": "audit",
+    "title": "PHP Toolkit Integration Zip Validation",
+    "description": "Verifies that the PHP toolkit file for UPI merchant integration is renamed correctly for proper installation, ensuring code reference integrity and compliance. Automation: HIGH — file system assertion and deployment check.",
+    "testId": "TC-TOOLKIT-03",
+    "testDescription": "A merchant downloads the UPI_Merchant_Tool_Kit_PHP.zip1 and attempts to integrate the PHP wrapper with their system, following documented toolkit installation steps for encryption/decryption functionality.",
+    "prerequisites": "Merchant system access with permissions to download and manage files, UPI_Merchant_Tool_Kit_PHP.zip1 file present in download directory, toolkit installation guide available.",
+    "stepsToPerform": "1. Login to merchant system with admin role. 2. Navigate to toolkit download section. 3. Download UPI_Merchant_Tool_Kit_PHP.zip1 to a controlled folder. 4. Check file extension is '.zip1'. 5. Rename 'UPI_Merchant_Tool_Kit_PHP.zip1' to 'UPI_Merchant_Tool_Kit_PHP.zip'. 6. Attempt to extract the contents from 'UPI_Merchant_Tool_Kit_PHP.zip'. 7. Validate extracted files match expected toolkit structure (e.g., PHP wrapper, sample code). 8. Attempt to reference wrapper files in sample PHP code. 9. Confirm toolkit functions (e.g., encrypt/decrypt) load as expected when referenced.",
+    "expectedResult": "1. File is renamed from .zip1 to .zip with no corruption; 2. Extraction succeeds, files are viewable; 3. Toolkit wrapper integrates with sample PHP code and exposes documented functions; 4. No installation errors or missing files.",
+    "sourceCitation": {
+      "location": "Section 4, page 38",
+      "excerpt": "UPI_Merchant_Tool_Kit_PHP.zip1 Rename .zip1 to .zip"
+    }
+  },
+  {
+    "type": "security",
+    "title": "SSL Certificate Validation for API Access",
+    "description": "Validates that merchant API access to HSBC is strictly over HTTPS with a valid SSL certificate, enforcing encryption and regulatory compliance. Protects transaction data in transit. Automation: HIGH — network layer and certificate assertion.",
+    "testId": "TC-APISAFE-01",
+    "testDescription": "Merchant attempts to connect to HSBC API endpoint for payments using their provided encryption key, initially over HTTPS with valid certificate, followed by connection attempts with invalid or missing certificates to test rejection.",
+    "prerequisites": "HSBC-provided Digital SSL Certificate (Class3, RSA 2048) installed; Merchant encryption key available; HSBC merchant ID configured; Merchant server network access.",
+    "stepsToPerform": "1. Login to merchant server as network admin. 2. Confirm SSL certificate is installed and valid in keystore. 3. Configure HTTPS endpoint URL for UPI API. 4. Initiate API POST request to HSBC endpoint over HTTPS with valid certificate. 5. Observe successful connection and response. 6. Remove (or replace) certificate with invalid certificate in keystore. 7. Initiate API POST request again over HTTPS with invalid certificate. 8. Attempt API request over HTTP (non-SSL). 9. Observe server responses for both attempts.",
+    "expectedResult": "1. With valid certificate, API request succeeds (200 or documented response); 2. With invalid/missing certificate, API request fails with documented error; 3. API request over HTTP (non-SSL) is rejected or fails per documented error handling.",
+    "sourceCitation": {
+      "location": "Prerequisites, page 1",
+      "excerpt": "Merchant to connect with HSBC over HTTPS (SSL)"
+    }
+  },
+  {
+    "type": "security",
+    "title": "Public IP Whitelisting for Receiving Final Response",
+    "description": "Ensures that merchant callback endpoint for final transaction responses only accepts requests from whitelisted HSBC proxy IPs, enforcing network boundary and preventing unauthorized access. Automation: MEDIUM — network/IP filter assertion.",
+    "testId": "TC-APISAFE-02",
+    "testDescription": "HSBC sends final response notifications for payment status to merchant's callback URL. Merchant verifies only requests from designated IPs are accepted, others are blocked or logged as intrusion attempts.",
+    "prerequisites": "Merchant callback URL registered with HSBC; Merchant firewall configured with IP whitelisting rules per documented HSBC public IP range; UPI_Merchant_Tool_Kit installed.",
+    "stepsToPerform": "1. Login to merchant firewall/admin console. 2. Retrieve HSBC whitelisted IPs: 203.171.209.5/6/7, 203.171.222.5/6/7. 3. Confirm firewall rules allow inbound traffic from only these IPs to callback endpoint. 4. HSBC triggers payment completion and sends final response from whitelisted IP. 5. Merchant callback receives response, logs transaction. 6. Simulate payment completion from non-whitelisted IP (e.g., 203.171.209.8). 7. Observe callback endpoint handling — request rejected or error logged. 8. Inspect logs to ensure only whitelisted IPs' requests processed, non-whitelisted flagged.",
+    "expectedResult": "1. Callback endpoint accepts requests only from whitelisted IPs; 2. Requests from non-whitelisted IPs are blocked/rejected; 3. Log entries show acceptance for whitelisted and rejection for others; 4. No unauthorized transaction notifications processed.",
+    "sourceCitation": {
+      "location": "Appendix B, page 41",
+      "excerpt": "Public IP: 203.171.209.5/6/7 , 203.171.222.5/6/7 [for receiving final response from HSBC Proxy Server] - Call back through India"
+    }
+  },
+  {
+    "type": "security",
+    "title": "HTTPS Communication Mandatory for API",
+    "description": "Verifies that all API communications between merchant and HSBC occur strictly over HTTPS (SSL), preventing insecure HTTP access to payment endpoints. Automation: HIGH — protocol enforcement test.",
+    "testId": "TC-APISAFE-03",
+    "testDescription": "Merchant attempts to access UPI APIs over both HTTPS and HTTP; verifies that HSBC only accepts encrypted HTTPS requests, and HTTP requests are rejected with clear failure messages.",
+    "prerequisites": "HSBC merchant ID present; Merchant server network access; Digital SSL Certificate installed.",
+    "stepsToPerform": "1. Login to merchant web server as admin. 2. Configure API endpoint for HTTPS connection (port 443). 3. Prepare valid API request payload per UPI spec. 4. Send payment API request over HTTPS (SSL). 5. Observe server response for successful connection. 6. Reconfigure endpoint for HTTP (port 80, non-SSL). 7. Send identical payment API request over HTTP. 8. Observe rejection response or connection failure. 9. Attempt additional request with HTTPS using expired certificate; observe error.",
+    "expectedResult": "1. All HTTPS requests succeed, transaction processed; 2. HTTP requests are not accepted, server responds with error or connection refused; 3. Expired/invalid certificate leads to documented error.",
+    "sourceCitation": {
+      "location": "Prerequisites, page 1",
+      "excerpt": "Merchant to connect with HSBC over HTTPS (SSL)"
+    }
+  },
+  {
+    "type": "e2e",
+    "title": "End-to-End Collect Request to Final Notification",
+    "description": "Tests the full payment collection journey — from collect initiation to receiving final transaction status notification from HSBC, covering multi-entity workflow and end-to-end field/response validation. Automation: HIGH — pure API and callback assertions.",
+    "testId": "TC-E2E-01",
+    "testDescription": "Merchant initiates a collect request for customer payment, customer approves at PSP app, UPI transaction is processed, and merchant receives FINAL Response notification reflecting transaction status. All steps and field values are traced across APIs.",
+    "prerequisites": "Merchant UPI integration complete; Valid pgMerchantId, meOrderNo, payerVPA available; Callback endpoint registered and whitelisted; Customer test VPA and PSP access.",
+    "stepsToPerform": "1. Login to merchant web portal as payment admin. 2. Prepare collect request payload per spec with masked test data (meOrderNo, payerVPA). 3. Send collect request API to HSBC endpoint. 4. Customer receives request in PSP app, approves payment. 5. HSBC processes payment, posts credit. 6. HSBC triggers FINAL Response callback to merchant endpoint with transaction status. 7. Merchant endpoint logs received transaction status, confirmation ID, and confMessage. 8. Inspect merchant transaction record for confirmation fields. 9. Validate meOrderNo, transID, transRRN, confStatus, confMessage and confId fields match across stages.",
+    "expectedResult": "1. Collect request accepted, transaction initiated; 2. PSP approval results in successful UPI payment; 3. FINAL Response callback is received at merchant endpoint with confStatus=\"SUCCESS\", confMessage=\"SUCCESS\", and confId present; 4. All transaction and confirmation IDs are consistent and traceable across logs.",
+    "sourceCitation": {
+      "location": "API List, page 2",
+      "excerpt": "FINAL Response API helps merchant to receive the transaction status from the bank UPI server."
+    }
+  },
+  {
+    "type": "e2e",
+    "title": "End-to-End Flow with Status Enquiry and Refund",
+    "description": "Verifies the complete payment journey, including status enquiry and refund, ensuring all APIs accept, process and report statuses correctly for each stage. Automation: HIGH — multi-API flow, status and refund field validation.",
+    "testId": "TC-E2E-02",
+    "testDescription": "Payment is collected, transaction status is requested via Status Enquiry API, followed by Refund API invocation for completed transaction. Response fields for transaction and refund are validated across APIs.",
+    "prerequisites": "Merchant UPI system setup and callback endpoint registered; Valid pgMerchantId, meOrderNo, payerVPA and orgTransRRN; Completed payment record for refund.",
+    "stepsToPerform": "1. Login to merchant portal with payment manager role. 2. Initiate collect request for test payerVPA. 3. Confirm transaction approval in PSP app. 4. Send status enquiry API request with meOrderNo and transRRN. 5. Receive transaction status response (e.g., transStatus=\"S\"). 6. Prepare refund API request with orgMeOrderNo and orgTransRRN from original transaction. 7. Send refund request API to HSBC endpoint. 8. Validate refund API response for refundStatus=\"S\" and refundMessage=\"Success\". 9. Confirm newMeOrderNo and newTransId are unique and consistent in refund logs.",
+    "expectedResult": "1. Status enquiry returns transaction details with transStatus \"S\" and correct meOrderNo/pgMerchantId; 2. Refund API responds with refundStatus \"S\" and refundMessage \"Success\"; 3. All IDs (orgTransRRN, newMeOrderNo, newTransId) are properly linked and returned; 4. Audit/logging of all stages in merchant record.",
+    "sourceCitation": {
+      "location": "API List, page 2",
+      "excerpt": "Customers can check their transactions status for the transactions. This API supports refund payments."
+    }
+  },
+  {
+    "type": "e2e",
+    "title": "End-to-End Payment Journey with VPA Validation",
+    "description": "Tests payment initiation with explicit VPA validation prior to collect request, ensuring the VPA is checked for validity and linked account before initiating collect workflow. Automation: HIGH — API request/response and account linking field assertion.",
+    "testId": "TC-E2E-03",
+    "testDescription": "Merchant validates payer VPA via VPA Status Validation API, checks returned payerName and valStatusCode before initiating collect transaction; ensures only valid VPA proceeds to payment.",
+    "prerequisites": "Merchant account setup; Valid pgMerchantId; Merchant API access; Test payerVPA available; Callback endpoint whitelisted.",
+    "stepsToPerform": "1. Login to merchant portal as payment operator. 2. Prepare VPA Status Validation API request with pgMerchantId and test payerVPA. 3. Submit API request to HSBC endpoint. 4. Receive response, check valStatusCode (e.g., \"VE\"). 5. Confirm payerName and VPA availability. 6. Prepare collect request payload for validated payerVPA. 7. Send collect API request for payment. 8. Complete payment at PSP app for payerVPA. 9. Receive final notification/callback and validate transaction outcome.",
+    "expectedResult": "1. VPA Status Validation API returns valStatusCode \"VE\" and payerName as documented; 2. Collect request proceeds only for valid VPA; 3. Payment completion results in successful transaction notification; 4. No invalid VPA payments are initiated.",
+    "sourceCitation": {
+      "location": "API List, page 2",
+      "excerpt": "Validates the Status of the VPA and provides the name of the default account linked to the VPA if the VPA exists"
+    }
+  },
+  {
+    "type": "state-transition",
+    "title": "Multi-stage Transaction Status State Checks",
+    "description": "Verifies all documented transaction status state transitions (S, P, F, R, X, E) via Transaction Status Enquiry API across varied scenarios, ensuring correct status codes and rejection of invalid status requests. Automation: HIGH — response code and transition check.",
+    "testId": "TC-E2E-04",
+    "testDescription": "Merchant requests transaction status for multiple transactions representing each possible status (Success, Pending, Failed, Rejected, Expired, Exception), checks each response for documented status code and message.",
+    "prerequisites": "Merchant UPI integration completed; Sample transactions exist in each documented state; API access to Status Enquiry endpoint; Transaction log for cross-validation.",
+    "stepsToPerform": "1. Login to merchant portal as audit operator. 2. For transaction with status \"S\", send status enquiry request (meOrderNo, transRRN). 3. Validate response transStatus is \"S\". 4. For \"P\" (pending) transaction, send status enquiry, validate response. 5. For \"F\" (failed) transaction, send status enquiry, validate response. 6. For \"R\" (rejected), send status enquiry, validate response. 7. For \"X\" (expired), send status enquiry, validate response. 8. For \"E\" (exception), send status enquiry, validate response. 9. Attempt status transition on completed transaction; validate rejection per source.",
+    "expectedResult": "1. Status enquiry responses show correct transStatus values: \"S\", \"P\", \"F\", \"R\", \"X\", \"E\"; 2. Invalid transition attempts are rejected or produce appropriate error/status as per source; 3. Status messages are consistent and recorded in merchant logs.",
+    "sourceCitation": {
+      "location": "Section 3.6, page 24",
+      "excerpt": "\"transStatus\": \"S\", \"transStatus\": \"P\", \"transStatus\": \"F\", \"transStatus\": \"R\", \"transStatus\": \"X\", \"transStatus\": \"E\""
+    }
+  }
+]
