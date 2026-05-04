@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "roost_test_1777900144",
+    "created_at": "2026-05-04T13:16:50.538Z",
+    "updated_at": "2026-05-04T13:16:50.538Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "roost_test_1777900144.txt",
+        "fileURI": "C:\\var\\tmp\\Roost\\RoostGPT\\functional-upi-apispec\\1777900144\\functional_tests\\roost_test_1777900144\\roost_test_1777900144.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "UPI Merchant API Specs_2023.pdf",
+        "fileURI": "C:\\var\\tmp\\Roost\\RoostGPT\\functional-upi-apispec\\1777900144\\functional_tests\\roost_test_1777900144\\UPI Merchant API Specs_2023.pdf",
+        "fileSha": "e135dfb735"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
