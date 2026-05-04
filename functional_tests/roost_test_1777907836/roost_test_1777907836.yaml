@@ -1,0 +1,1001 @@
+openapi: 3.0.0
+info:
+  title: HSBC UPI Merchant API
+  description: Comprehensive API for merchant onboarding, UPI integration, encryption, validation, transaction processing, callback, and security functions as per HSBC's end-to-end merchant onboarding and payment flow.
+  version: 1.0.0
+servers:
+  - url: https://api.hsbc.com/upi
+    description: Live Production Server
+  - url: https://uat.hsbc.com/upi
+    description: UAT/Test Server
+
+security:
+  - ApiKeyAuth: []
+  - MutualTLS: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    MutualTLS:
+      type: mutualTLS
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+    MerchantOnboardTestRequest:
+      type: object
+      properties:
+        testField:
+          type: string
+      required:
+        - testField
+    MerchantOnboardTestResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    MerchantValidateRequest:
+      type: object
+      properties:
+        pgMerchantID:
+          type: string
+          minLength: 16
+          maxLength: 16
+      required:
+        - pgMerchantID
+    MerchantValidateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    EncryptionKeyResponse:
+      type: object
+      properties:
+        EncKey:
+          type: string
+        format:
+          type: string
+        masked:
+          type: boolean
+    EncryptedPayloadRequest:
+      type: object
+      properties:
+        encryptedMsg:
+          type: string
+        pgMerchantId:
+          type: string
+      required:
+        - encryptedMsg
+        - pgMerchantId
+    EncryptedPayloadResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    DynamicVPAValidateRequest:
+      type: object
+      properties:
+        subscriberId:
+          type: string
+          minLength: 1
+          maxLength: 255
+        source:
+          type: string
+          minLength: 1
+          maxLength: 50
+        Rmn:
+          type: string
+          maxLength: 50
+      required:
+        - subscriberId
+        - source
+    DynamicVPAValidateResponse:
+      type: object
+      properties:
+        transStatus:
+          type: string
+          enum: [Success, Failure]
+        transMessage:
+          type: string
+        accountDetails:
+          type: array
+          items:
+            type: object
+            properties:
+              subscriberId:
+                type: string
+                minLength: 1
+                maxLength: 255
+              accountStatus:
+                type: string
+                enum: [Success, Failure]
+              subscriberName:
+                type: string
+    PreCreditVPAValidateRequest:
+      type: object
+      properties:
+        refNo:
+          type: string
+          minLength: 6
+          maxLength: 16
+        payerId:
+          type: string
+          minLength: 6
+          maxLength: 250
+        transAmount:
+          type: number
+          format: float
+          minimum: 1.00
+          maximum: 1000000000000000.00
+        payerName:
+          type: string
+          maxLength: 100
+        source:
+          type: string
+          minLength: 1
+          maxLength: 50
+        addInfo1:
+          type: string
+          maxLength: 50
+        pgMerchantId:
+          type: string
+          minLength: 16
+          maxLength: 16
+      required:
+        - refNo
+        - payerId
+        - transAmount
+        - source
+        - pgMerchantId
+    PreCreditVPAValidateResponse:
+      type: object
+      properties:
+        transStatus:
+          type: string
+          enum: [S, F, E]
+        transMessage:
+          type: string
+        refNo:
+          type: string
+        payerId:
+          type: string
+        transAmount:
+          type: number
+        payerName:
+          type: string
+        pgMerchantId:
+          type: string
+        addInfo1:
+          type: string
+    FinalResponseNotificationRequest:
+      type: object
+      properties:
+        transId:
+          type: string
+        confStatus:
+          type: string
+          minLength: 1
+          maxLength: 2
+        confMessage:
+          type: string
+          minLength: 1
+          maxLength: 100
+        confId:
+          type: string
+          maxLength: 20
+        addInfo1:
+          type: string
+          maxLength: 50
+      required:
+        - transId
+        - confStatus
+        - confMessage
+        - confId
+    FinalResponseNotificationResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        confId:
+          type: string
+    VPAStatusValidationRequest:
+      type: object
+      properties:
+        payerVPA:
+          type: string
+          minLength: 1
+          maxLength: 255
+        pgMerchantID:
+          type: string
+          minLength: 16
+          maxLength: 16
+        meRefNo:
+          type: string
+          minLength: 6
+          maxLength: 30
+      required:
+        - payerVPA
+        - pgMerchantID
+        - meRefNo
+    VPAStatusValidationResponse:
+      type: object
+      properties:
+        valStatusCode:
+          type: string
+          enum: [VE, VN, V, E]
+        valStatusDesc:
+          type: string
+        payerName:
+          type: string
+          maxLength: 100
+    CollectRequest:
+      type: object
+      properties:
+        pgMerchantID:
+          type: string
+          minLength: 16
+          maxLength: 16
+        meOrderNo:
+          type: string
+          minLength: 6
+          maxLength: 30
+        transAmount:
+          type: number
+          minimum: 1.00
+          maximum: 1000000000000000.00
+        payerVPA:
+          type: string
+          minLength: 1
+          maxLength: 255
+        transRemarks:
+          type: string
+          maxLength: 100
+        expiryValue:
+          type: integer
+          minimum: 1
+          maximum: 64800
+        addInfo1:
+          type: string
+          maxLength: 50
+      required:
+        - pgMerchantID
+        - meOrderNo
+        - transAmount
+        - payerVPA
+        - transRemarks
+        - expiryValue
+    CollectResponse:
+      type: object
+      properties:
+        collStatus:
+          type: string
+          enum: [I, F, E]
+        collStatusDesc:
+          type: string
+        pgMerchantID:
+          type: string
+        meOrderNo:
+          type: string
+        payerVPA:
+          type: string
+        transAmount:
+          type: number
+        expiryValue:
+          type: integer
+        addInfo1:
+          type: string
+    TransactionStatusEnquiryRequest:
+      type: object
+      properties:
+        meOrderNo:
+          type: string
+          minLength: 6
+          maxLength: 30
+        transRRN:
+          type: string
+          minLength: 1
+          maxLength: 30
+        meRefNo:
+          type: string
+          minLength: 6
+          maxLength: 30
+        addInfo1:
+          type: string
+          maxLength: 50
+      required:
+        - meOrderNo
+        - transRRN
+    TransactionStatusEnquiryResponse:
+      type: object
+      properties:
+        transStatus:
+          type: string
+          enum: [S, P, F, R, X, E]
+        transMessage:
+          type: string
+        meOrderNo:
+          type: string
+        transRRN:
+          type: string
+        meRefNo:
+          type: string
+        addInfo1:
+          type: string
+    RefundRequest:
+      type: object
+      properties:
+        pgMerchantID:
+          type: string
+          minLength: 16
+          maxLength: 16
+        newMeOrderNo:
+          type: string
+          minLength: 6
+          maxLength: 30
+        orgMeOrderNo:
+          type: string
+          minLength: 6
+          maxLength: 30
+        orgTransRRN:
+          type: string
+          minLength: 1
+          maxLength: 30
+        refundAmount:
+          type: number
+          minimum: 1.00
+          maximum: 1000000000000000.00
+        addInfo1:
+          type: string
+          maxLength: 50
+      required:
+        - pgMerchantID
+        - newMeOrderNo
+        - orgMeOrderNo
+        - orgTransRRN
+        - refundAmount
+    RefundResponse:
+      type: object
+      properties:
+        refundStatus:
+          type: string
+          enum: [S, F, E]
+        refundMessage:
+          type: string
+        newMeOrderNo:
+          type: string
+        orgMeOrderNo:
+          type: string
+        orgTransRRN:
+          type: string
+        refundAmount:
+          type: number
+        addInfo1:
+          type: string
+
+paths:
+  /upi/onboard/test:
+    post:
+      summary: Merchant API onboarding endpoint test
+      description: POST endpoint for HSBC to verify merchant upi/onboard/test hosting; expects test payload and logs request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MerchantOnboardTestRequest'
+      responses:
+        '200':
+          description: Merchant endpoint responded successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantOnboardTestResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - MutualTLS: []
+        - ApiKeyAuth: []
+  /api/merchant/validate:
+    post:
+      summary: Validate Merchant ID
+      description: Validate the assigned pgMerchantID during merchant onboarding.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MerchantValidateRequest'
+      responses:
+        '200':
+          description: Merchant ID accepted and validated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantValidateResponse'
+        '400':
+          description: Invalid or missing Merchant ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/encryption/key:
+    get:
+      summary: Retrieve the merchant encryption key
+      description: Returns the hex-format encryption key for merchant (never in plaintext).
+      responses:
+        '200':
+          description: Returns masked/hex key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptionKeyResponse'
+        '403':
+          description: Unauthorized/Forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/encryption/payload:
+    post:
+      summary: Submit encrypted payload
+      description: Submit encrypted payload, reject plaintext or wrong-key encryption; must use merchant key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptedPayloadRequest'
+      responses:
+        '200':
+          description: Payload accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptedPayloadResponse'
+        '400':
+          description: Invalid encryption or plaintext detected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Invalid key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - MutualTLS: []
+        - ApiKeyAuth: []
+  /api/vpa/validate:
+    post:
+      summary: Dynamic VPA Validation API
+      description: Validates VPA, accepts subscriberId, source, optional Rmn. Returns accountDetails.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DynamicVPAValidateRequest'
+      responses:
+        '200':
+          description: Returns transaction status, accountDetails.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicVPAValidateResponse'
+        '400':
+          description: Mandatory field error or boundary value violation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/upi/precredit:
+    post:
+      summary: Pre-Credit VPA Validation API
+      description: Initiate pre-credit VPA validation with all mandatory and optional fields.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreCreditVPAValidateRequest'
+      responses:
+        '200':
+          description: Pre-credit validation succeeded or failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreCreditVPAValidateResponse'
+        '400':
+          description: Field validation failed or duplication detected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/upi/callback:
+    post:
+      summary: Final Response-Notification API Callback
+      description: HSBC invokes merchant response callback after credit posting.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinalResponseNotificationRequest'
+      responses:
+        '200':
+          description: Callback processed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalResponseNotificationResponse'
+        '400':
+          description: Mandatory field/length/type violation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+      x-ip-whitelist:
+        description: Only requests from whitelisted IPs will be processed.
+  /api/vpa/status:
+    post:
+      summary: VPA Status Validation API
+      description: Validate payer VPA's existence, status, and name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VPAStatusValidationRequest'
+      responses:
+        '200':
+          description: Returns VPA validation status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VPAStatusValidationResponse'
+        '400':
+          description: Missing/invalid VPA or meRefNo; format boundary errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/upi/collect:
+    post:
+      summary: Collect Request API
+      description: Initiate collect request, boundary and addInfo1-10 handling; only encrypted request accepted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectRequest'
+      responses:
+        '200':
+          description: Collect initiated or error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectResponse'
+        '400':
+          description: Boundary violation, invalid input, addInfo1-10 exceeds max.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/upi/status:
+    post:
+      summary: Transaction Status Enquiry API
+      description: Enquire transaction status by meOrderNo and transRRN. Handles addInfo fields.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionStatusEnquiryRequest'
+      responses:
+        '200':
+          description: Status enquiry result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionStatusEnquiryResponse'
+        '400':
+          description: Boundary or reference value error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/upi/refund:
+    post:
+      summary: Refund API
+      description: Process refund against original transaction, boundary and duplicate prevention handled, only encrypted request accepted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '200':
+          description: Refund processed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '400':
+          description: Invalid, missing, duplicate refund.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Invalid encryption or key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - MutualTLS: []
+        - ApiKeyAuth: []
+  /api/encryption/toolkit:
+    get:
+      summary: Retrieve merchant encryption toolkit info
+      description: Returns toolkit installation guidelines for supported platforms (.NET/PHP/Java/Python).
+      parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            enum: [.NET, PHP, Java, Python]
+          required: true
+      responses:
+        '200':
+          description: Toolkit instructions provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  platform:
+                    type: string
+                  installationGuidelines:
+                    type: string
+        '400':
+          description: Unsupported platform.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+  /api/encryption/test:
+    post:
+      summary: Encrypt and decrypt data using toolkit
+      description: Test toolkit Encrypt/Decrypt methods, ensure correct encrypted/decoded output.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key:
+                  type: string
+                sample_message:
+                  type: string
+      responses:
+        '200':
+          description: Encrypted/Decrypted output returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  encrypted:
+                    type: string
+                  decrypted:
+                    type: string
+        '400':
+          description: Invalid key/message/data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Decryption with incorrect key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+
+  /api/encryption/rotate:
+    post:
+      summary: Rotate encryption key
+      description: Merchant rotates the encryption key; only newest key is valid.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_key:
+                  type: string
+                new_key:
+                  type: string
+      responses:
+        '200':
+          description: Key rotated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  validKey:
+                    type: string
+        '400':
+          description: Invalid key rotation attempt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+
+  /api/certificate/csr:
+    post:
+      summary: Submit Merchant CSR for certificate signing
+      description: Merchant submits CSR, receives signed certificate from HSBC.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                csr_file:
+                  type: string
+                platform:
+                  type: string
+      responses:
+        '201':
+          description: Certificate created and returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cert_file:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Invalid CSR or unsupported platform.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+
+  /api/certificate/import:
+    post:
+      summary: Import certificate to keystore/IIS
+      description: Merchant imports HSBC-issued, Root CA, or intermediate certificate; validates trust chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cert_file:
+                  type: string
+                keystore_file:
+                  type: string
+                alias:
+                  type: string
+      responses:
+        '200':
+          description: Certificate imported successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid certificate or keystore import failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MutualTLS: []
+  /api/certificate/validate:
+    post:
+      summary: Validate imported certificates
+      description: Merchant checks certificate expiry, validates trust chain, ensures handshake.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cert_file:
+                  type: string
+                keystore_file:
+                  type: string
+      responses:
+        '200':
+          description: Certificate validated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  message:
+                    type: string
+        '400':
+          description: Certificate expired, revoked, or handshake fails.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/callback/whitelist:
+    post:
+      summary: Register callback endpoint and static IP whitelist
+      description: Merchant registers callback API endpoint and IP(s) with HSBC.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callback_url:
+                  type: string
+                merchant_ip:
+                  type: string
+      responses:
+        '201':
+          description: Callback and IP whitelisted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid URL or IP.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/callback/validate:
+    post:
+      summary: Validate callback IP handling
+      description: Ensures callbacks are only delivered to whitelisted IPs/endpoints; rejects others.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callback_url:
+                  type: string
+                merchant_ip:
+                  type: string
+      responses:
+        '200':
+          description: Callback validated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  allowed:
+                    type: boolean
+                  message:
+                    type: string
+        '403':
+          description: IP/URL not whitelisted; callback rejected.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/callback/reject:
+    post:
+      summary: Reject disallowed/unregistered callbacks
+      description: API ignores requests/callbacks from non-whitelisted IPs; logs denied attempt.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                unregistered_ip:
+                  type: string
+      responses:
+        '403':
+          description: Callback rejected due to non-whitelisted IP.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+tags:
+  - name: Onboarding
+    description: Endpoints related to merchant onboarding and provisioning.
+  - name: Encryption
+    description: Endpoints for encryption key, toolkit, and payload validation.
+  - name: UPI Validation
+    description: APIs for UPI VPA, pre-credit & collect validation.
+  - name: Transaction & Refund
+    description: APIs for transaction status enquiry and refunds.
+  - name: Callback & Security
+    description: Callback, certificate, IP whitelisting, security enforcement.
+
