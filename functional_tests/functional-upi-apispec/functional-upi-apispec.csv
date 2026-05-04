@@ -1,0 +1,37 @@
+Dynamic VPA Validation API - Successful and Failure Response Verification
+Dynamic VPA Validation - Boundary SubscriberId Input Enforcement
+Dynamic VPA Validation API - Optional Field RMN Handling
+Pre-Credit VPA Validation API - Success and Failure
+Pre-Credit Validation API - Boundary Check for refNo Input Length
+Pre-Credit Validation API - Conditional transAmount Field
+Pre-Credit Validation API - Duplicity Handling with refNo
+Pre-Credit Validation API - Optional addInfo1-10 Handling
+Pre-Credit Validation API - Boundary Value for transID Field
+Post Credit / Final Response-Notification API - Success and Failure
+Post Credit / Final Response-Notification API - Boundary Check for confId Field
+Post Credit / Final Response-Notification API - Optional addInfo1-10 Handling
+Post Credit / Final Response-Notification - State Transition for Credit Card Transaction
+VPA Status Validation API - Success and Failure
+VPA Status Validation API - Boundary Value for meRefNo Field
+VPA Status Validation API - Conditional payerName Retrieval
+Collect Request API - Success and Failure Scenarios
+Collect Request API - Boundary Value for expiryValue
+Collect Request API - Optional payerName Field
+Collect Request API - Boundary Value for transAmount
+Collect Request API - Optional addInfo1-10 Field Usage
+Transaction Status Enquiry API - Success and Conditional Field Presence
+Transaction Status Enquiry API - Multi-stage State Checks
+Refund API - Success and Failure Scenarios
+Refund API - Optional addInfo1-10 Field Verification
+API Encryption and Decryption with UPIKit (DotNet/Java)
+Certificate Exchange and SSL Validation
+SSL Certificate Network Validation for API Access
+Public IP Whitelisting for Final Response Callback Acceptance
+HTTPS Communication Enforcement for API
+DLL Integration for Encryption (.NET Stack)
+Jar Integration for Encryption (Java Stack)
+PHP Toolkit Zip File Validation
+End-to-End Collect Request to Final Notification
+End-to-End Flow with Status Enquiry and Refund
+End-to-End Payment with VPA Validation prior to Collect
+Transaction Status Enquiry API - All State Transitions and Rejections

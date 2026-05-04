@@ -1,0 +1,598 @@
+openapi: 3.0.3
+info:
+  title: HSBC UPI Merchant API Suite
+  description: Comprehensive API specification based on functional, boundary, audit, security, and E2E Gherkin test scenarios for HSBC UPI Merchant APIs.
+  version: 1.0.0
+servers:
+  - url: https://api.hsbc.com/upi
+    description: HSBC UPI Merchant Production Server
+  - url: https://sandbox.hsbc.com/upi
+    description: HSBC UPI Merchant Sandbox Server
+security:
+  - ApiKeyAuth: []
+  - SSLClientCert: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    SSLClientCert:
+      type: mutualTLS
+  schemas:
+    DynamicVPAValidationRequest:
+      type: object
+      properties:
+        subscriberId:
+          type: string
+          description: Unique subscriber identifier
+        source:
+          type: string
+          description: Source system code
+        Rmn:
+          type: string
+          description: Optional registered mobile number
+      required:
+        - subscriberId
+        - source
+    DynamicVPAValidationResponse:
+      type: object
+      properties:
+        transStatus:
+          type: string
+          enum: [Success, Failure]
+        transMessage:
+          type: string
+        accountDetails:
+          type: array
+          items:
+            type: object
+            properties:
+              subscriberId:
+                type: string
+              accountStatus:
+                type: string
+              subscriberName:
+                type: string
+    PreCreditValidationRequest:
+      type: object
+      properties:
+        refNo:
+          type: string
+        payerId:
+          type: string
+        payerVPA:
+          type: string
+        transRemarks:
+          type: string
+        transAmount:
+          type: string
+        transID:
+          type: string
+        transRRN:
+          type: string
+        source:
+          type: string
+        addInfo1:
+          type: string
+        addInfo2:
+          type: string
+        addInfo3:
+          type: string
+        addInfo4:
+          type: string
+        addInfo5:
+          type: string
+        addInfo6:
+          type: string
+        addInfo7:
+          type: string
+        addInfo8:
+          type: string
+        addInfo9:
+          type: string
+        addInfo10:
+          type: string
+      required:
+        - refNo
+        - payerId
+        - payerVPA
+        - transRemarks
+        - transAmount
+        - transID
+        - source
+    PreCreditValidationResponse:
+      type: object
+      properties:
+        transStatus:
+          type: string
+        transMessage:
+          type: string
+        refNo:
+          type: string
+        transRRN:
+          type: string
+        addInfo1:
+          type: string
+        addInfo2:
+          type: string
+        addInfo3:
+          type: string
+        addInfo4:
+          type: string
+        addInfo5:
+          type: string
+        addInfo6:
+          type: string
+        addInfo7:
+          type: string
+        addInfo8:
+          type: string
+        addInfo9:
+          type: string
+        addInfo10:
+          type: string
+    PostCreditNotificationRequest:
+      type: object
+      properties:
+        confStatus:
+          type: string
+        confMessage:
+          type: string
+        confId:
+          type: string
+        addInfo1:
+          type: string
+        addInfo2:
+          type: string
+        addInfo3:
+          type: string
+        addInfo4:
+          type: string
+        addInfo5:
+          type: string
+        addInfo6:
+          type: string
+        addInfo7:
+          type: string
+        addInfo8:
+          type: string
+        addInfo9:
+          type: string
+        addInfo10:
+          type: string
+        transType:
+          type: string
+        payerAccNo:
+          type: string
+        payerBankIFSC:
+          type: string
+    PostCreditNotificationResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    VPAStatusValidationRequest:
+      type: object
+      properties:
+        meRefNo:
+          type: string
+        payerVPA:
+          type: string
+        pgMerchantId:
+          type: string
+      required:
+        - meRefNo
+        - payerVPA
+        - pgMerchantId
+    VPAStatusValidationResponse:
+      type: object
+      properties:
+        valStatusCode:
+          type: string
+        valStatusDesc:
+          type: string
+        payerName:
+          type: string
+    CollectRequest:
+      type: object
+      properties:
+        pgMerchantID:
+          type: string
+        meOrderNo:
+          type: string
+        payerVPA:
+          type: string
+        transAmount:
+          type: string
+        expiryValue:
+          type: string
+        transRemarks:
+          type: string
+        payerName:
+          type: string
+        addInfo1:
+          type: string
+        addInfo2:
+          type: string
+        addInfo3:
+          type: string
+        addInfo4:
+          type: string
+        addInfo5:
+          type: string
+        addInfo6:
+          type: string
+        addInfo7:
+          type: string
+        addInfo8:
+          type: string
+        addInfo9:
+          type: string
+        addInfo10:
+          type: string
+      required:
+        - pgMerchantID
+        - meOrderNo
+        - payerVPA
+        - transAmount
+        - expiryValue
+        - transRemarks
+    CollectResponse:
+      type: object
+      properties:
+        collStatus:
+          type: string
+          enum: [I, F, E]
+        collStatusDesc:
+          type: string
+        pgMerchantID:
+          type: string
+        meOrderNo:
+          type: string
+        payerVPA:
+          type: string
+        transAmount:
+          type: string
+        expiryValue:
+          type: string
+        payerName:
+          type: string
+        addInfo1:
+          type: string
+        addInfo2:
+          type: string
+        addInfo3:
+          type: string
+        addInfo4:
+          type: string
+        addInfo5:
+          type: string
+        addInfo6:
+          type: string
+        addInfo7:
+          type: string
+        addInfo8:
+          type: string
+        addInfo9:
+          type: string
+        addInfo10:
+          type: string
+    TransactionStatusEnquiryRequest:
+      type: object
+      properties:
+        meRefNo:
+          type: string
+        transRRN:
+          type: string
+        meOrderNo:
+          type: string
+        pgMerchantID:
+          type: string
+      required:
+        - meRefNo
+        - meOrderNo
+        - pgMerchantID
+    TransactionStatusEnquiryResponse:
+      type: object
+      properties:
+        transStatus:
+          type: string
+          enum: [S, P, F, R, X, E]
+        transMessage:
+          type: string
+        transRRN:
+          type: string
+        auditLogRef:
+          type: string
+    RefundRequest:
+      type: object
+      properties:
+        pgMerchantId:
+          type: string
+        newMeOrderNo:
+          type: string
+        orgMeOrderNo:
+          type: string
+        orgTransId:
+          type: string
+        orgTransRRN:
+          type: string
+        refundAmount:
+          type: string
+        addInfo1:
+          type: string
+        addInfo5:
+          type: string
+        addInfo10:
+          type: string
+      required:
+        - pgMerchantId
+        - newMeOrderNo
+        - orgMeOrderNo
+        - orgTransId
+        - orgTransRRN
+        - refundAmount
+    RefundResponse:
+      type: object
+      properties:
+        refundStatus:
+          type: string
+          enum: [S, F]
+        refundMessage:
+          type: string
+        refundAmount:
+          type: string
+        addInfo1:
+          type: string
+        addInfo5:
+          type: string
+        addInfo10:
+          type: string
+paths:
+  /api/dynamicVpaValidation:
+    post:
+      summary: Dynamic VPA Validation API
+      description: Validates the VPA and fetches account details for the subscriber.
+      operationId: dynamicVpaValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DynamicVPAValidationRequest'
+      responses:
+        '200':
+          description: VPA validation succeeded or failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicVPAValidationResponse'
+        '400':
+          description: Bad request or input validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transStatus:
+                    type: string
+                    enum: [Failure]
+                  transMessage:
+                    type: string
+  /api/preCreditValidation:
+    post:
+      summary: Pre-Credit VPA Validation API
+      description: Validates payer’s VPA before pre-credit payment, with boundary checks.
+      operationId: preCreditValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreCreditValidationRequest'
+      responses:
+        '200':
+          description: Pre-credit validation successful or failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreCreditValidationResponse'
+        '400':
+          description: Input validation error (for refNo length, transAmount validity, etc).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transStatus:
+                    type: string
+                  transMessage:
+                    type: string
+        '409':
+          description: Duplicate refNo detected.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transStatus:
+                    type: string
+                    example: "F"
+                  transMessage:
+                    type: string
+                    example: "Duplicate refNo error"
+  /api/vpaStatusValidation:
+    post:
+      summary: VPA Status Validation API
+      description: Checks validity and status of payer VPA, boundary value enforcement.
+      operationId: vpaStatusValidation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VPAStatusValidationRequest'
+      responses:
+        '200':
+          description: Valid VPA or error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VPAStatusValidationResponse'
+        '400':
+          description: Input validation or VPA not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valStatusCode:
+                    type: string
+                  valStatusDesc:
+                    type: string
+  /api/meCollect:
+    post:
+      summary: Collect Request API
+      description: Sends a collect request for payment initiation with boundary checks for expiry and amount.
+      operationId: meCollect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectRequest'
+      responses:
+        '200':
+          description: Transaction initiated, failed or exception.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectResponse'
+        '400':
+          description: Input validation error on expiry or transAmount.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collStatus:
+                    type: string
+                  collStatusDesc:
+                    type: string
+  /api/txnStatusEnquiry:
+    post:
+      summary: Transaction Status Enquiry API
+      description: Checks transaction status and state transitions.
+      operationId: txnStatusEnquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionStatusEnquiryRequest'
+      responses:
+        '200':
+          description: Transaction status and message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionStatusEnquiryResponse'
+        '400':
+          description: Validation error on meRefNo or missing parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transStatus:
+                    type: string
+                  transMessage:
+                    type: string
+  /api/meRefund:
+    post:
+      summary: Refund API
+      description: Refunds a successful transaction; enforces boundary on refundAmount, includes optional addInfo fields.
+      operationId: meRefund
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '200':
+          description: Refund successful or failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '400':
+          description: Input validation error or refund amount precision violation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refundStatus:
+                    type: string
+                  refundMessage:
+                    type: string
+        '409':
+          description: Duplicate refund request detected.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refundStatus:
+                    type: string
+                  refundMessage:
+                    type: string
+  /api/postCreditNotification:
+    post:
+      summary: Post Credit / Final Response Notification API
+      description: Merchant receives final payment response notification; supports boundary/optional addInfo fields.
+      operationId: postCreditNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCreditNotificationRequest'
+      responses:
+        '200':
+          description: Notification processed, status acknowledged.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostCreditNotificationResponse'
+        '400':
+          description: confId boundary/validation errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+security:
+  - SSLClientCert: []
+  - ApiKeyAuth: []
+tags:
+  - name: functional
+    description: Functional API operations.
+  - name: boundary
+    description: Boundary input and validation operations.
+  - name: audit
+    description: Operations with audit trail or logging.
+  - name: security
+    description: Security, encryption and network validation.
+  - name: state-transition
+    description: Transactional state handling.
+  - name: e2e
+    description: End-to-End payment flows.
