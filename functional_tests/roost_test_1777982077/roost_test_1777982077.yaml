@@ -1,0 +1,703 @@
+openapi: 3.0.3
+info:
+  title: HSBC UPI Merchant Integration API
+  version: '1.0.0'
+  description: |-
+    HSBC UPI suite for Merchant Onboarding, Encryption Key Delivery, Dynamic VPA Validation, Pre-Credit/Collect/Refund Transaction, Audit Logging, Security & Resilience.
+
+servers:
+  - url: https://api.hsbc.com/upi/v1
+    description: HSBC UPI Primary API Server
+
+security:
+  - MerchantCertificate: []
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    MerchantCertificate:
+      type: mutualTLS
+      description: 2-way SSL using merchant-issued certificate.
+    ApiKeyAuth:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: Merchant API key.
+
+  schemas:
+
+    OnboardingRequest:
+      type: object
+      required: [companyName, legalEntityId, contactEmail]
+      properties:
+        companyName:
+          type: string
+        legalEntityId:
+          type: string
+        contactEmail:
+          type: string
+          format: email
+
+    OnboardingResponse:
+      type: object
+      required: [merchantId]
+      properties:
+        merchantId:
+          type: string
+          format: uuid
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+
+    KeyAssignmentRequest:
+      type: object
+      required: [merchantId]
+      properties:
+        merchantId:
+          type: string
+
+    KeyAssignmentResponse:
+      type: object
+      required: [encryptionKey]
+      properties:
+        encryptionKey:
+          type: string
+          format: password
+
+    VpaValidationRequest:
+      type: object
+      required:
+        - subscriberId
+        - source
+      properties:
+        subscriberId:
+          type: string
+        source:
+          type: string
+        Rmn:
+          type: string
+          description: Optional field.
+
+    VpaValidationResponse:
+      type: object
+      required:
+        - transStatus
+        - transMessage
+        - accountDetails
+      properties:
+        transStatus:
+          type: string
+          description: S=Success, Failure=Failure
+        transMessage:
+          type: string
+        accountDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetail'
+
+    AccountDetail:
+      type: object
+      properties:
+        accountNo:
+          type: string
+        ifsc:
+          type: string
+
+    PreCreditValidationRequest:
+      type: object
+      required:
+        - refNo
+        - payerId
+        - transID
+        - transRRN
+      properties:
+        refNo:
+          type: string
+        payerId:
+          type: string
+        transID:
+          type: string
+        transRRN:
+          type: string
+
+    PreCreditValidationResponse:
+      type: object
+      required:
+        - transStatus
+        - transMessage
+        - pgMerchantId
+      properties:
+        transStatus:
+          type: string
+          description: S=Success, F=Failure
+        transMessage:
+          type: string
+        transRRN:
+          type: string
+        pgMerchantId:
+          type: string
+
+    VpaStatusRequest:
+      type: object
+      required:
+        - payerVPA
+      properties:
+        payerVPA:
+          type: string
+
+    VpaStatusResponse:
+      type: object
+      required:
+        - valStatusCode
+        - valStatusDesc
+        - payerVPA
+        - pgMerchantId
+      properties:
+        valStatusCode:
+          type: string
+        valStatusDesc:
+          type: string
+        payerName:
+          type: string
+        payerVPA:
+          type: string
+        pgMerchantId:
+          type: string
+
+    CollectRequest:
+      type: object
+      required:
+        - pgMerchantId
+        - meOrderNo
+        - payerVPA
+        - transAmount
+        - expiryValue
+      properties:
+        pgMerchantId:
+          type: string
+        meOrderNo:
+          type: string
+        payerVPA:
+          type: string
+        transAmount:
+          type: number
+          format: double
+        expiryValue:
+          type: integer
+        addInfo1:
+          type: string
+        addInfo2:
+          type: string
+        addInfo3:
+          type: string
+        addInfo4:
+          type: string
+        addInfo5:
+          type: string
+        addInfo6:
+          type: string
+        addInfo7:
+          type: string
+        addInfo8:
+          type: string
+        addInfo9:
+          type: string
+        addInfo10:
+          type: string
+
+    CollectResponse:
+      type: object
+      required:
+        - collStatus
+        - collStatusDesc
+        - meOrderNo
+      properties:
+        collStatus:
+          type: string
+        collStatusDesc:
+          type: string
+        meOrderNo:
+          type: string
+
+    StatusEnquiryRequest:
+      type: object
+      properties:
+        pgMerchantId:
+          type: string
+        meRefNo:
+          type: string
+        meOrderNo:
+          type: string
+        transRRN:
+          type: string
+
+    StatusEnquiryResponse:
+      type: object
+      required:
+        - transStatus
+        - transMessage
+      properties:
+        transStatus:
+          type: string
+        transMessage:
+          type: string
+        pgMerchantId:
+          type: string
+        meRefNo:
+          type: string
+        meOrderNo:
+          type: string
+        transRRN:
+          type: string
+
+    RefundRequest:
+      type: object
+      required:
+        - pgMerchantId
+        - newMeOrderNo
+        - orgTransId
+        - orgTransRRN
+        - refundAmount
+        - payerVPA
+      properties:
+        pgMerchantId:
+          type: string
+        newMeOrderNo:
+          type: string
+        orgTransId:
+          type: string
+        orgTransRRN:
+          type: string
+        refundAmount:
+          type: number
+          format: double
+        payerVPA:
+          type: string
+
+    RefundResponse:
+      type: object
+      required:
+        - refundStatus
+        - refundMessage
+      properties:
+        refundStatus:
+          type: string
+        refundMessage:
+          type: string
+
+    NotificationRequest:
+      type: object
+      required:
+        - refNo
+        - transRRN
+        - pgMerchantId
+      properties:
+        refNo:
+          type: string
+        transRRN:
+          type: string
+        pgMerchantId:
+          type: string
+
+    NotificationResponse:
+      type: object
+      required:
+        - confStatus
+        - confMessage
+        - confId
+      properties:
+        confStatus:
+          type: string
+        confMessage:
+          type: string
+        confId:
+          type: string
+
+    AuditLogEntry:
+      type: object
+      required:
+        - refNo
+        - transRRN
+        - confId
+        - timestamp
+      properties:
+        refNo:
+          type: string
+        transRRN:
+          type: string
+        confId:
+          type: string
+        transStatus:
+          type: string
+        transMessage:
+          type: string
+        pgMerchantId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+paths:
+
+  /onboarding:
+    post:
+      summary: Merchant Onboarding (generate merchantId)
+      tags: [Onboarding]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingRequest'
+      responses:
+        '201':
+          description: Merchant created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingResponse'
+        '400':
+          description: Invalid onboarding payload or duplicate legalEntityId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /encryption/key-assign:
+    post:
+      summary: Encryption Key Assignment (Symmetric Key Delivery)
+      tags: [Security]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeyAssignmentRequest'
+      responses:
+        '200':
+          description: Key assigned and securely delivered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyAssignmentResponse'
+        '400':
+          description: Invalid or unknown merchantId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /api/vpa/validate:
+    post:
+      summary: Dynamic VPA Validation
+      tags: [VPA Validation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VpaValidationRequest'
+      responses:
+        '200':
+          description: VPA validation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VpaValidationResponse'
+        '400':
+          description: Validation failed or mandatory/format error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /api/precredit/validate:
+    post:
+      summary: Pre-Credit VPA Validation
+      tags: [VPA Validation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreCreditValidationRequest'
+      responses:
+        '200':
+          description: Pre-Credit validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreCreditValidationResponse'
+        '400':
+          description: Validation failed or duplicate/refNo error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /api/vpastatus:
+    post:
+      summary: VPA Status Validation
+      tags: [VPA Validation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VpaStatusRequest'
+      responses:
+        '200':
+          description: Status result for queried VPA
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VpaStatusResponse'
+        '400':
+          description: Validation or field error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /collect:
+    post:
+      summary: Initiate Collect Request
+      tags: [Collect]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectRequest'
+      responses:
+        '200':
+          description: Collect initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectResponse'
+        '400':
+          description: Validation/Field error, boundary violation, or format error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /meStatus:
+    post:
+      summary: Transaction Status Enquiry
+      tags: [Status]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusEnquiryRequest'
+      responses:
+        '200':
+          description: Status response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusEnquiryResponse'
+        '400':
+          description: Field error, missing boundary values, or format error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /meRefund:
+    post:
+      summary: Refund API
+      tags: [Refund]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '200':
+          description: Refund processed (may be success/failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '400':
+          description: Field, format, range, or duplication error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /notification:
+    post:
+      summary: Post-Credit Notification from HSBC to Merchant
+      tags: [Notification]
+      description: |
+        HSBC calls merchant endpoint for post-credit notification.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRequest'
+      responses:
+        '200':
+          description: Merchant confirmation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+
+  /audit/logs:
+    get:
+      summary: Query Audit Logs
+      tags: [Audit]
+      parameters:
+        - name: refNo
+          in: query
+          schema: { type: string }
+          required: false
+        - name: transRRN
+          in: query
+          schema: { type: string }
+          required: false
+        - name: confId
+          in: query
+          schema: { type: string }
+          required: false
+      responses:
+        '200':
+          description: Audit log entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLogEntry'
+        '404':
+          description: No audit log found for query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+# Other endpoints (e.g., IP whitelisting, encryption SDK, certificate mgmt.)
+  /security/callback-whitelist:
+    post:
+      summary: Request Callback Endpoint IP Whitelisting
+      tags: [Security]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [responseEndpoint, staticIP]
+              properties:
+                responseEndpoint:
+                  type: string
+                  format: uri
+                staticIP:
+                  type: string
+      responses:
+        '200':
+          description: Whitelist request accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+        '400':
+          description: Invalid input or format error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+  /security/certificate/validate-access:
+    post:
+      summary: Check Certificate/Private Key File Permissions
+      tags: [Security]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                certfile:
+                  type: string
+      responses:
+        '200':
+          description: Access check result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  adminAccess:
+                    type: boolean
+                  nonAdminAccess:
+                    type: boolean
+                  auditLog:
+                    type: string
+        '400':
+          description: Input parameter error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - ApiKeyAuth: []
+        - MerchantCertificate: []
+
+tags:
+  - name: Onboarding
+  - name: Security
+  - name: VPA Validation
+  - name: Collect
+  - name: Status
+  - name: Refund
+  - name: Notification
+  - name: Audit
+
