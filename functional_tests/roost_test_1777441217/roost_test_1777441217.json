@@ -1,0 +1,482 @@
+[
+  {
+    "type": "functional",
+    "title": "Card List Screen – No Card Zero-State Main Menu (HTTP 204)",
+    "description": "Verifies the behavior of the main menu card list screen when no cards are found (HTTP 204), including displaying the zero-state text and actions.",
+    "testId": "TC-MAINMENU-01",
+    "testDescription": "When a user navigates to the 'View Card Details' via Main Menu and the service responds with HTTP 204, the application should show a zero-state screen, relevant informational text, and provide actionable options to order a card or return home.",
+    "prerequisites": "User is authenticated and successfully logged in. No eligible bank cards exist for the user profile.",
+    "stepsToPerform": "1. Log into digital banking application. 2. Navigate to 'Card Services' in main menu. 3. Select 'View Card Details'. 4. Ensure card-channel/web-order/card-account/cards/details is called with proper headers. 5. Ensure activityTypeCode is set to 902. 6. Service responds with HTTP 204. 7. Verify zero-state screen is displayed. 8. Confirm display of 'No cards found' text, eligible bank card info, new card waiting info, and actionable buttons to order new card or return home.",
+    "expectedResult": "Zero-state screen displays correct messaging, options to return home or order a card, and no card details or selection list are shown.",
+    "sourceRefs": [
+      "Sc0001"
+    ],
+    "sourceQuote": "* אם בפלט התקבל HttpStatusCode = 204  \nבהגעה מהתפריט/עולם כרטיסים\nהצג טקסט",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card List Screen – Show Card(s) for Selection",
+    "description": "Verifies that eligible cards are displayed for selection when available, including correct display text and images.",
+    "testId": "TC-MAINMENU-02",
+    "testDescription": "When the user accesses the card list screen and eligible cards exist, the system should present a list of cards, each with relevant details (card type, image, masked number), with instructions and eligibility text.",
+    "prerequisites": "User has eligible cards issued and registered to their name. User is authenticated.",
+    "stepsToPerform": "1. Log in to digital banking app. 2. Navigate to 'Card Services'. 3. Select 'View Card Details'. 4. Confirm request made to card-channel/web-order/card-account/cards/details with activityTypeCode=902. 5. Service responds with list of cards. 6. Verify cards and corresponding images are displayed according to cardVendorProductId. 7. Verify text: 'Select the card you want to view details for' is shown. 8. Confirm the eligibility text appears: 'You can only view cards registered to your name.'",
+    "expectedResult": "All eligible user cards are shown; images, masked numbers, and eligibility instruction text as defined.",
+    "sourceRefs": [
+      "Sc0003"
+    ],
+    "sourceQuote": "יש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21000)",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card List Screen – Multiple Cards, New Card Waiting State Message",
+    "description": "Tests that, in a multiple card scenario, the screen shows all eligible cards and includes the message about new cards potentially not appearing immediately.",
+    "testId": "TC-MAINMENU-03",
+    "testDescription": "When selecting between multiple eligible cards, if a user recently ordered a new card, the card list screen must display all current cards and a notice about new card appearance delay.",
+    "prerequisites": "User has more than one card, recently ordered a new card. User is authenticated.",
+    "stepsToPerform": "1. Log in to platform. 2. Go to main menu > 'View Card Details'. 3. Ensure HTTP call is made to card-channel/web-order/card-account/cards/details. 4. Confirm response includes multiple cards. 5. Check card details and images per cardVendorProductId. 6. Validate text: 'If you ordered a new card, it might take about a minute to appear here.' 7. Confirm card list is interactive for selection. 8. Choose any card and ensure selection proceeds as expected.",
+    "expectedResult": "The card list screen shows all cards, and new card waiting message is visible.",
+    "sourceRefs": [
+      "Sc0003"
+    ],
+    "sourceQuote": "אם הזמנת כרטיס חדש ייתכן שייקח לו כדקה להופיע כאן.",
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Card Selection – Only Show Eligible/User Cards",
+    "description": "Verifies that only cards registered to the user are listed for selection, applying eligibility filtering.",
+    "testId": "TC-MAINMENU-04",
+    "testDescription": "When listing cards for selection, the system must strictly display only cards registered or eligible for the authenticated user, not showing cards belonging to others or ineligible cards.",
+    "prerequisites": "Multiple cards exist in backend, some not registered to the current user.",
+    "stepsToPerform": "1. Log in. 2. Go to Card Services > View Card Details. 3. Confirm HTTP call includes correct headers for user. 4. Backend returns all cards, some not owned by current user. 5. UI should display only user-registered cards. 6. Verify text: 'You can only view details for cards registered to your name.' 7. Confirm ineligible cards are omitted. 8. Attempt to select user cards and check for correct navigation.",
+    "expectedResult": "Only cards registered to current user are shown and selectable; ineligible cards are not listed.",
+    "sourceRefs": [
+      "Sc0003"
+    ],
+    "sourceQuote": "ניתן לצפות רק בפרטי הכרטיסים הרשומים על שמך.",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card Selection – No Cards Return Home/Order Options",
+    "description": "Verifies that the card selection screen handles zero cards by presenting 'return home' and 'order card' options.",
+    "testId": "TC-MAINMENU-05",
+    "testDescription": "When the user accesses card selection and the card service returns zero eligible cards, the UI should present options to return to home or proceed to card order workflow.",
+    "prerequisites": "User has no eligible cards for viewing; service responds with HTTP 204 or 203/ID=31.",
+    "stepsToPerform": "1. Log in. 2. Navigate to Card Services > View Card Details. 3. Card details API returns HTTP 204 (no cards). 4. UI displays zero-state. 5. Verify display of text: 'No cards found you can view.' 6. Show info regarding card eligibility. 7. Verify presence of 'Order New Card' and 'Return Home' buttons. 8. Click 'Order New Card' and confirm navigation to card order flow.",
+    "expectedResult": "Card selection screen displays 'No cards found' message, options for home and card order, with correct navigation.",
+    "sourceRefs": [
+      "Sc0001"
+    ],
+    "sourceQuote": "בעת לחיצה הלקוח יופנה לתהליך הזמנת כרטיס חדש",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Order Lobby View Flow – New Card Data Eligible",
+    "description": "Ensures order lobby properly displays eligible new card after order completion, including retrieval of details.",
+    "testId": "TC-ORDERLOBBY-01",
+    "testDescription": "Following a card order, the order lobby should enable viewing eligible new card, showing correct details and linking to preparation screen for viewing card info.",
+    "prerequisites": "User completes new card order. Card is eligible and backend is updated.",
+    "stepsToPerform": "1. Complete card order flow. 2. Transition to Order Lobby screen. 3. Click 'View Card Details'. 4. Confirm HTTP call: card-channel/web-order/card-account/cards/details with activityTypeCode and new card serialId. 5. Service responds with new card details. 6. UI displays new card with masked details, eligibility text. 7. User proceeds to preparation screen. 8. Card details are shown only if eligible.",
+    "expectedResult": "Order lobby displays new card, card details are retrievable, preparation screen transition works.",
+    "sourceRefs": [
+      "Sc0002"
+    ],
+    "sourceQuote": "יופעל בלחיצה על \"צפיה בפרטי כרטיס\" במסך לובי פעולות בסיום הזמנת כרטיס",
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "Order Lobby Zero-State – HTTP 203/ID=31",
+    "description": "Verifies handling of order lobby zero-state when backend responds with HTTP 203/ID=31 for newly ordered card.",
+    "testId": "TC-ORDERLOBBY-02",
+    "testDescription": "When viewing a newly ordered card and backend returns HTTP 203/ID=31, the system must display a zero-state message, retry notice, and options as defined.",
+    "prerequisites": "User completes new card order. Card is not yet available; backend responds with HTTP 203/ID=31.",
+    "stepsToPerform": "1. Complete card order flow. 2. Go to Order Lobby. 3. Click 'View Card Details'. 4. Confirm backend returns HTTP 203/ID=31. 5. Zero-state screen is shown. 6. Text: 'No new card details found'. 7. Retry notice/message is visible. 8. Validate presence of 'Try Again' button and 'Return Home' options.",
+    "expectedResult": "Zero-state and retry options are presented when new card is not yet available (HTTP 203/ID=31).",
+    "sourceRefs": [
+      "Sc0002"
+    ],
+    "sourceQuote": "* אם בפלט התקבל HttpStatusCode = 203  עם ID=31  \nבהגעה מתהליך הזמנה-לובי פעולות\nהצג טקסט",
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Order Lobby 'Try Again' Action Retriggers Data Fetch",
+    "description": "Verifies that clicking 'Try Again' in the order lobby zero-state properly retriggers card data fetch workflow.",
+    "testId": "TC-ORDERLOBBY-03",
+    "testDescription": "When a user clicks 'Try Again' after the lobby returns zero-state (HTTP 203/ID=31), the app must reissue the backend request and update UI based on result.",
+    "prerequisites": "Order lobby is in zero-state after card order (HTTP 203/ID=31).",
+    "stepsToPerform": "1. Complete card order. 2. Lobby returns zero-state (no card found). 3. 'Try Again' button is visible. 4. Click 'Try Again'. 5. Ensure backend request is retried. 6. Await response (new card may now be available). 7. If card found, proceed to display. 8. If still not found, zero-state persists.",
+    "expectedResult": "Backend card lookup is retried; UI updates according to new backend response.",
+    "sourceRefs": [
+      "Sc0002"
+    ],
+    "sourceQuote": "בעת לחיצה יבוצע נסיון נוסף לביצוע התהליך (שליפת פרטי הכרטיס)",
+    "_groundingFailed": true
+  },
+  {
+    "type": "e2e",
+    "title": "View Card Details – Success, Entry by Main Menu",
+    "description": "Tests end-to-end flow for successfully viewing card details via main menu, including preparation, OTP, and card info screens.",
+    "testId": "TC-CARDDETAILS-01",
+    "testDescription": "User enters 'View Card Details' from the main menu, selects a card, completes preparation/OTP screens, and views card details within the secure time window.",
+    "prerequisites": "User has eligible cards and is authenticated; OTP system and backend services are operational.",
+    "stepsToPerform": "1. Log in. 2. Access main menu > Card Services > View Card Details. 3. Select eligible card. 4. Navigate to 'Preparation' screen (privacy/security). 5. Proceed to OTP screen. 6. Request OTP, receive code. 7. Enter code, validate. 8. On success, view card details screen for 90 seconds.",
+    "expectedResult": "Card details are shown after successful OTP and preparation flow, for 90 seconds, with correct masking and branding.",
+    "sourceRefs": [
+      "Sc0003",
+      "Sc0004",
+      "Sc0005",
+      "Sc0012"
+    ],
+    "sourceQuote": "פרטי הכרטיס יוצגו למשך 90 שניות",
+    "_groundingFailed": true
+  },
+  {
+    "type": "e2e",
+    "title": "View Card Details – Success, Entry from Card Order Completion",
+    "description": "Verifies end-to-end flow where user views card details after completing a card order (lobby flow), including preparation and OTP screens.",
+    "testId": "TC-CARDDETAILS-02",
+    "testDescription": "After card order completion, user transitions from order lobby to card details, completes OTP and preparation steps, and card details are displayed securely for the defined window.",
+    "prerequisites": "User completed card order, card is eligible and available. OTP system is functional.",
+    "stepsToPerform": "1. Complete card order. 2. Click 'View Card Details' in order lobby. 3. Transition to 'Preparation' screen. 4. Proceed to OTP screen. 5. Request and receive OTP. 6. Enter OTP, validate with backend. 7. On success, transition to card details screen. 8. View card details for 90 seconds with correct branding, masking, and CVV logic.",
+    "expectedResult": "Card details successfully shown, following order lobby OTP flow, within time window and with compliance requirements.",
+    "sourceRefs": [
+      "Sc0002",
+      "Sc0004",
+      "Sc0005",
+      "Sc0012"
+    ],
+    "sourceQuote": "פרטי הכרטיס יוצגו למשך 90 שניות",
+    "_groundingFailed": true
+  },
+  {
+    "type": "security",
+    "title": "Card Detail Masking – Only Last 4 Digits on Ineligible Screens",
+    "description": "Verifies that only the last four digits of the card are visible on screens that are not eligible to display full card numbers for security and privacy compliance.",
+    "testId": "TC-CARDDETAILS-03",
+    "testDescription": "A user views card details from a screen flagged as ineligible for full card number viewing. The card number should be masked, displaying only the final four digits. All other digits must be hidden, with no exceptions, to prevent leakage of PII and PCI-sensitive data.",
+    "prerequisites": "User has successfully navigated to a card detail screen marked as ineligible for full display. Card account exists and card suffix (last 4 digits) is present in system.",
+    "stepsToPerform": "1. Log in to digital banking as a valid user. 2. Navigate to the card selection or zero-state screen. 3. Select a card or attempt to view card details. 4. Ensure the screen is not eligible for full card number display. 5. Check the card number field. 6. Verify that only the last four digits are visible. 7. Confirm that all other digits are masked. 8. Validate that no exceptions or accidental full card number exposure occurs.",
+    "expectedResult": "On ineligible screens, the card number is shown as masked, with only the last four digits visible; no full card number exposure.",
+    "sourceRefs": [
+      "Sc0003"
+    ],
+    "sourceQuote": "4 ספרות אחרונות,פרמטר,cardSuffix,web-order/card-account",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card List Image – Brand Image By cardVendorProductId",
+    "description": "Validates that the brand image displayed in the card list corresponds accurately to the cardVendorProductId returned by the service.",
+    "testId": "TC-CARDDETAILS-04",
+    "testDescription": "When a user is presented with the card list for selection, the UI should show the relevant brand image for each card. The image must match the cardVendorProductId (e.g., MasterCard, Visa, Amex, Isracard) as specified by service response and must be fetched from the client image repository.",
+    "prerequisites": "User is on the card choice screen. Several cards with different cardVendorProductId codes are available.",
+    "stepsToPerform": "1. Log in to the banking platform. 2. Initiate the 'View Card Details' process. 3. Navigate to the card selection list. 4. Confirm multiple cards are available with different cardVendorProductId values. 5. For each card, locate its brand image. 6. Compare the shown image to the expected brand. 7. Validate that the image was fetched from the client-side image repository. 8. Confirm there are no mismatches or generic images.",
+    "expectedResult": "Each card in the list displays the correct brand image, accurately mapped by cardVendorProductId, sourced from client image repository.",
+    "sourceRefs": [
+      "Sc0003"
+    ],
+    "sourceQuote": "יש לשלוף את התמונה הרלוונטית בהתאם לקוד שהתקבל בשדה cardVendorProductId, יש לבצע את שליפת התמונה ממאגר תמונות בקליינט.",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card Detail Tab – Data Cached for Back Navigation",
+    "description": "Ensures that all card detail fields are cached in client session, enabling accurate data restoration when navigating back from subsequent screens.",
+    "testId": "TC-CARDCACHE-01",
+    "testDescription": "A user views card details and navigates forward (e.g., to preparation or OTP screens), then uses the back button to return. All previously loaded card fields must be preserved (not re-fetched), including sensitive masking and images, and must match the initial display.",
+    "prerequisites": "User has successfully loaded card detail tab and navigated away, cache mechanism is enabled.",
+    "stepsToPerform": "1. Log into the app. 2. Access the card details tab for a chosen card. 3. Review all fields (brand image, card type, card number, last 4 digits, cardholder, etc.) 4. Move to next screen (e.g., preparation). 5. Use back navigation. 6. Observe that card details restore instantly from cache. 7. No re-fetching or visible delays. 8. Validate that all fields match original and masking is intact.",
+    "expectedResult": "When back navigation is used, the card detail tab restores from cache, with all fields intact and identical to initial display.",
+    "sourceRefs": [
+      "Sc0003"
+    ],
+    "sourceQuote": "כרטיסיית פרטי הכרטיס (יש לשמור את כל השדות של כל כרטיס ב- Cache לטובת חזרה לאחור)",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Preparation Screen – Privacy and Security Messaging",
+    "description": "Verifies that the preparation screen before card detail viewing displays explicit privacy and security information as specified by service text.",
+    "testId": "TC-PREVIEW-01",
+    "testDescription": "Upon entering the preparation screen before viewing card details, the user must be presented with clear privacy and security instructions/warnings as returned by the backend service (cardConfirmationPrivacyInfo and cardConfirmationSecurityInfo), including reminders to keep card data confidential and avoid sharing.",
+    "prerequisites": "Card detail viewing process is started, and user arrives at preparation (Sc0004) screen. Service returns relevant texts.",
+    "stepsToPerform": "1. Log in to the digital banking platform. 2. Select a card and initiate card detail viewing. 3. Navigate to the preparation screen. 4. Wait for texts to be loaded from backend. 5. Identify cardConfirmationPrivacyInfo field. 6. Identify cardConfirmationSecurityInfo field. 7. Review both texts for content and accuracy. 8. Confirm messaging is clear, visible, and strictly matches service response.",
+    "expectedResult": "Preparation screen displays privacy and security texts matching the content from backend (cardConfirmationPrivacyInfo and cardConfirmationSecurityInfo).",
+    "sourceRefs": [
+      "Sc0004"
+    ],
+    "sourceQuote": "כדאי לוודא שאין אנשים נוספים שצופים במסך,טקסט,cardConfirmationPrivacyInfo,web-order/card-account",
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Preparation Screen – 90 Second Timer Message Visible",
+    "description": "Checks that the preparation screen informs the user of a strict 90 second window for viewing card details, including the visible timer message.",
+    "testId": "TC-PREVIEW-02",
+    "testDescription": "When a user arrives at the preparation screen, they must see explicit messaging (cardConfirmationTimerInfo) that card details will only be shown for 90 seconds on the subsequent screen. Messaging should be present, accurate, and returned from service.",
+    "prerequisites": "User has started card detail viewing workflow and reached preparation screen. Service delivers timer info message.",
+    "stepsToPerform": "1. Authenticate as an eligible user. 2. Begin card detail viewing. 3. Enter the preparation screen. 4. Await loading of timer information. 5. Locate text for 90 second duration. 6. Ensure the message is visible and accurate. 7. Check that it matches service response. 8. Validate that user is informed of time-bound nature before OTP or card reveal.",
+    "expectedResult": "Preparation screen shows a clear, accurate timer message specifying card details will be viewable for 90 seconds.",
+    "sourceRefs": [
+      "Sc0004"
+    ],
+    "sourceQuote": "פרטי הכרטיס יוצגו למשך 90 שניות,טקסט,cardConfirmationTimerInfo,web-order/card-account",
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Preparation Aborted – Back Navigation Returns To Caller",
+    "description": "Ensures that pressing the 'Back' button on the preparation screen correctly transitions the user back to the calling screen (card selection, lobby, or main menu).",
+    "testId": "TC-PREVIEW-03",
+    "testDescription": "In the event the user decides not to proceed with viewing card details, pressing 'Back' should reliably return them to the previous workflow step (either card selection or originating main menu). Screen state must be restored, and no card detail leakage should occur.",
+    "prerequisites": "User is at preparation screen (Sc0004) after card selection or order completion. Caller screen context is preserved.",
+    "stepsToPerform": "1. Log in and enter card detail viewing flow. 2. Proceed to preparation screen after card selection. 3. Observe current workflow context. 4. Press the 'Back' button. 5. Wait for navigation event. 6. Ensure user is transported to original calling screen. 7. Validate restoration of previous screen and UI state. 8. Confirm no card detail exposure or session artifacts.",
+    "expectedResult": "On pressing 'Back' at preparation screen, user returns to previous calling workflow in correct state, no card details exposed.",
+    "sourceRefs": [
+      "Sc0004"
+    ],
+    "sourceQuote": "לחיצה על כפתור חזור - תוביל למסך הקורא לתהליך",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "OTP Request – SMS Delivery Path",
+    "description": "Validates that requesting an OTP via SMS results in successful code dispatch, appropriate messaging, and correct service invocation.",
+    "testId": "TC-OTP-01",
+    "testDescription": "User requests OTP for card detail viewing. The SMS delivery path is used (smsByVoice=false), triggering code dispatch, confirmation message, and receiving the OTP at the registered mobile number.",
+    "prerequisites": "User on OTP screen, mobile phone number present and registered, smsByVoice=false, eligible for OTP.",
+    "stepsToPerform": "1. Log in to banking platform. 2. Navigate through preparation to OTP screen. 3. Press 'Request OTP' via SMS. 4. Verify 'smsByVoice=false' is set. 5. Confirm API call to generateOtp is made. 6. Observe message indicating code sent to mobile. 7. Wait for SMS arrival at registered number. 8. Validate message matches backend text and OTP is delivered.",
+    "expectedResult": "OTP code is delivered via SMS, matching confirmation text, following correct delivery path and API request.",
+    "sourceRefs": [
+      "Sc0006"
+    ],
+    "sourceQuote": "smsByVoice= false",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "OTP Request – Voice Call Delivery Path",
+    "description": "Validates the alternate OTP delivery via voice call is available and works, with service logic correctly setting 'smsByVoice=true'.",
+    "testId": "TC-OTP-02",
+    "testDescription": "User selects voice call path for OTP delivery. The service uses smsByVoice=true. Proper confirmation is displayed, and user receives the code via voice channel. Both resend and initial paths are checked.",
+    "prerequisites": "User on OTP screen, mobile phone number present and registered, flow allows voice option.",
+    "stepsToPerform": "1. Log in to the banking system. 2. Enter OTP screen after preparation. 3. Press 'Request OTP by Voice'. 4. Ensure smsByVoice=true flag is set. 5. Confirm resendOtp API is called (when retrying). 6. Observe confirmation message indicating voice delivery. 7. Wait for call and receive OTP. 8. Validate delivery and messaging per backend specification.",
+    "expectedResult": "OTP is delivered via voice call using smsByVoice=true, confirmation message is accurate, API call is correct.",
+    "sourceRefs": [
+      "Sc0006",
+      "Sc0007"
+    ],
+    "sourceQuote": "smsByVoice= בהתאם ללוגיקה המוגדרת בכפתור שליחת קוד חדש",
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "OTP Request – Mobile Phone Not Present (203/ID=31)",
+    "description": "Verifies proper error handling when the registered mobile phone number is not present, resulting in appropriate error pop-up and workflow block.",
+    "testId": "TC-OTP-03",
+    "testDescription": "If the API response indicates HttpStatusCode=203 with ID=31, the system must present a pop-up error (Sc0009), informing the user their phone number is missing and guiding them to update at the bank. No OTP is generated and card viewing cannot continue.",
+    "prerequisites": "User proceeds to OTP request; backend returns 203/ID=31 indicating missing mobile number.",
+    "stepsToPerform": "1. Log into the platform. 2. Start card detail viewing flow. 3. Proceed to OTP screen. 4. Trigger OTP request. 5. Simulate backend response 203/ID=31. 6. Observe pop-up error message (Sc0009) appears. 7. Verify message advises phone update at bank. 8. Confirm user cannot continue until updated.",
+    "expectedResult": "Error pop-up informs user their mobile is not present and they must update the number before proceeding.",
+    "sourceRefs": [
+      "Sc0006",
+      "Sc0009"
+    ],
+    "sourceQuote": "* אם בפלט התקבל HttpStatusCode = 203 עם ID=31- יש להציג שגיאה: טלפון לא קיים פופאפ שגיאה מסך Sc0009",
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "OTP Request – Exceeded Delivery Attempt Limit (203/ID=32)",
+    "description": "Confirms error handling for users who have exceeded the maximum allowed OTP delivery attempts, showing lockout and wait advice.",
+    "testId": "TC-OTP-04",
+    "testDescription": "When the API responds with HttpStatusCode=203 and ID=32, the user must receive a pop-up error (Sc0010), indicating their ability to request OTP is blocked due to too many attempts. The workflow lockout advice and retry timing should be clear.",
+    "prerequisites": "User triggers OTP generation after several attempts; backend returns 203/ID=32 attempt exceeded.",
+    "stepsToPerform": "1. Log in as user with eligible card. 2. Move through card selection and preparation. 3. Attempt multiple OTP requests. 4. On exceeding limit, simulate API response 203/ID=32. 5. Observe pop-up error (Sc0010). 6. Review lockout messaging, time to retry. 7. Confirm user cannot proceed until timeout expires. 8. Validate workflow is correctly blocked.",
+    "expectedResult": "Pop-up error appears for exceeded OTP attempts, clearly communicating lockout and retry wait. Card viewing cannot proceed.",
+    "sourceRefs": [
+      "Sc0006",
+      "Sc0010"
+    ],
+    "sourceQuote": "* אם בפלט התקבל HttpStatusCode = 203 עם ID=32- יש להציג שגיאה: כמות נסיונות חרגה מהמותר- פופאפ שגיאה מסך Sc0010",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "OTP Validation – Valid Code, Success Data Fetch",
+    "description": "Verifies successful OTP validation and subsequent card data fetch.",
+    "testId": "TC-OTP-05",
+    "testDescription": "A user enters a valid OTP code after requesting card details. The system validates the OTP, grants access, and retrieves the card's protected information.",
+    "prerequisites": "User must have an active order for card details. OTP sent via SMS or voice, user ready to input in OTP screen.",
+    "stepsToPerform": "1. Navigate to card details view. 2. Receive OTP code. 3. Enter valid 6-digit OTP. 4. Click 'Continue'. 5. System triggers verifyOtp API. 6. Receive success from backend. 7. Client fetches encrypted card data. 8. Card details (number, expiry, CVV if Amex) are decrypted and displayed.",
+    "expectedResult": "Card details are decrypted and displayed for the permitted duration. All sensitive fields follow masking and view rules. User journey transitions to data view screen.",
+    "sourceRefs": [
+      "Sc0005",
+      "Sc0012"
+    ],
+    "sourceQuote": "במקרה של תשובה תקינה מהשירות יש לעבור למסך צפיה בפרטי הכרטיס",
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "OTP Validation – Invalid Code, Show Error and Reset",
+    "description": "Verifies system behavior for entering an incorrect OTP code.",
+    "testId": "TC-OTP-06",
+    "testDescription": "A user enters an incorrect OTP code. The system detects the failed attempt, presents an error message, resets the input, and allows retry unless boundary is exceeded.",
+    "prerequisites": "User on OTP validation screen, at least one incorrect OTP attempt allowed.",
+    "stepsToPerform": "1. Navigate to OTP input. 2. Enter invalid 6-digit code. 3. Click 'Continue'. 4. System triggers verifyOtp API. 5. Backend responds with HttpStatusCode = 203 and ID=31. 6. Error displayed: 'OTP Code is invalid'. 7. Input field is reset. 8. User can re-enter a new code; error disappears on new input.",
+    "expectedResult": "The user sees a red error message, input is cleared, and can retry entering OTP until limit is reached.",
+    "sourceRefs": [
+      "Sc0007"
+    ],
+    "sourceQuote": "הקוד שהקלדת אינו תקין. יש לנסות שוב",
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "OTP Validation – Expired Code, Show 'Not Valid' State",
+    "description": "Verifies behavior when a user enters an expired OTP code.",
+    "testId": "TC-OTP-07",
+    "testDescription": "A user attempts to validate card access by entering an OTP code that has expired. The system recognizes expiry and blocks further input, showing a boundary error.",
+    "prerequisites": "User received OTP, waits until expiry, then attempts input.",
+    "stepsToPerform": "1. Request card details and OTP. 2. Wait until OTP expiry. 3. Enter expired code. 4. Click 'Continue'. 5. System triggers verifyOtp API. 6. Backend responds with HttpStatusCode = 203 and ID=33. 7. Error displayed: 'OTP code already expired'. 8. Input field is cleared and disabled.",
+    "expectedResult": "User cannot input OTP. Error message is shown, process restart required.",
+    "sourceRefs": [
+      "Sc0008"
+    ],
+    "sourceQuote": "קוד האימות כבר לא בתוקף. יש להתחיל מחדש את תהליך השחזור",
+    "_groundingFailed": true
+  },
+  {
+    "type": "negative",
+    "title": "OTP Validation – Exceeded Invalid Code Entry Lockout (203/ID=32/33)",
+    "description": "Verifies system lockout after multiple incorrect OTP entries.",
+    "testId": "TC-OTP-08",
+    "testDescription": "User repeatedly enters incorrect OTP codes, triggering backend lockout after threshold is met. System displays modal, blocks further attempts, and enforces waiting period.",
+    "prerequisites": "User on OTP validation screen, attempts OTP entry to the maximum allowed.",
+    "stepsToPerform": "1. Request OTP. 2. Enter wrong code. 3. Click 'Continue'. 4. Repeat up to maximum allowed attempts. 5. Last attempt triggers backend lockout with HttpStatusCode = 203 and ID=32/33. 6. System shows lockout error modal. 7. Input disabled. 8. Waiting period enforced as per backend response message.",
+    "expectedResult": "System displays lockout error popup, disables OTP input, user must wait for expiration to retry.",
+    "sourceRefs": [
+      "Sc0011"
+    ],
+    "sourceQuote": "הגישה לצפייה בפרטי הכרטיס נחסמה בעקבות הקלדת קוד אימות שגוי מספר פעמים.",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "OTP Validation – Retry with SMS and Voice",
+    "description": "Verifies the ability to resend OTP via SMS or voice channel.",
+    "testId": "TC-OTP-09",
+    "testDescription": "User requests to resend OTP after not receiving original code or invalid entry, and the system offers both SMS and voice resending channels.",
+    "prerequisites": "User on OTP input screen, code not yet validated, eligible for resend.",
+    "stepsToPerform": "1. Navigate to OTP input screen. 2. Click 'Resend SMS'. 3. System triggers resendOtp API (smsByVoice=false). 4. Receive new OTP via SMS. 5. Click 'Resend Voice'. 6. System triggers resendOtp API (smsByVoice=true). 7. Receive new OTP via voice call. 8. Input new OTP code in field.",
+    "expectedResult": "New code sent via SMS and voice, field updated, user proceeds to validation unless lockout.",
+    "sourceRefs": [
+      "Sc0007"
+    ],
+    "sourceQuote": "בעת הלחיצה יופעל שירות resendOtp\nsmsByVoice =  (false)\n",
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "OTP – Update Mobile Required Flow",
+    "description": "Verifies handling when user's mobile number is missing or needs update before OTP flow.",
+    "testId": "TC-OTP-10",
+    "testDescription": "User attempts OTP flow but mobile is absent or outdated. The system shows error modal, guides user to banker update before returning to card details.",
+    "prerequisites": "Phone number in system is missing or invalid.",
+    "stepsToPerform": "1. Navigate to card details. 2. Click 'Continue' to trigger OTP. 3. Backend responds HttpStatusCode = 203 with ID=31. 4. Mobile update error modal appears. 5. Message: 'Your mobile is not registered. Please update at banker.' 6. User clicks to exit. 7. Process aborts, user returned to main menu. 8. User updates phone, then resumes card details flow.",
+    "expectedResult": "Mobile update modal appears, process aborts, user cannot proceed without updating mobile number.",
+    "sourceRefs": [
+      "Sc0009"
+    ],
+    "sourceQuote": "מספר הטלפון הנייד שלך לא קיים במערכת. כדי להמשיך בתהליך, יש לעדכן אותו",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card Data Display – Front, Card Info, Brand, Expiry, Copy",
+    "description": "Verifies card data display, including masked card number, brand, expiry, and copy option.",
+    "testId": "TC-CARDDATA-01",
+    "testDescription": "After successful OTP validation and data fetch, the user views card's front data: masked number, expiry, brand image, and can use copy function securely.",
+    "prerequisites": "User completed OTP validation, valid encrypted card data available.",
+    "stepsToPerform": "1. Navigate to card details (front tab). 2. Await timer countdown. 3. View card brand image (e.g., MasterCard, Visa, AmEx). 4. View masked or partial card number. 5. View expiry date. 6. View copy details text and option. 7. Click copy; system copies masked number. 8. Timer enforces 90s session view duration.",
+    "expectedResult": "Card info (brand, number, expiry) is displayed, copy works, all fields correctly masked/secured.",
+    "sourceRefs": [
+      "Sc0012",
+      "Sc0013"
+    ],
+    "sourceQuote": "יש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21100)",
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Card Data Display – Timer 90s Controls View Duration",
+    "description": "Checks boundary condition for card details expiry after timer reaches zero.",
+    "testId": "TC-CARDDATA-02",
+    "testDescription": "User views card details. As timer counts down from 90 seconds, card info remains visible. On timer expiration, view auto-hides, session ends, user redirected.",
+    "prerequisites": "User on card details screen, timer active.",
+    "stepsToPerform": "1. Enter card details screen. 2. Observe timer begins countdown (90s). 3. Read card info and CVV if present. 4. Wait for timer to reach zero. 5. Observe auto-hide or modal prompt. 6. Attempt to copy or view data post-expiry. 7. Confirm redirection to end screen. 8. Try back navigation; view stays locked.",
+    "expectedResult": "Card info is hidden after 90s, session ends, user cannot access card details without repeating flow.",
+    "sourceRefs": [
+      "Sc0012",
+      "Sc0013"
+    ],
+    "sourceQuote": "רכיב טיימר של 90 שניות",
+    "_groundingFailed": true
+  },
+  {
+    "type": "boundary",
+    "title": "Card Data Display – Amex Dual CVV Handling",
+    "description": "Verifies correct display of dual CVVs for Amex cards only.",
+    "testId": "TC-CARDDATA-03",
+    "testDescription": "User views Amex card details; system presents two CVVs and distinctive guidance. All other cards show single CVV.",
+    "prerequisites": "User holds Amex (brandCode = 3), decrypted card data received.",
+    "stepsToPerform": "1. Complete OTP flow for Amex card. 2. Enter card details view. 3. Observe dual CVVs (front and back). 4. Guidance text visible. 5. Compare Amex view to other (MasterCard, Visa) views. 6. Switch to CVV tab. 7. Observe both CVVs present. 8. Read all guidance per Amex, timer applies.",
+    "expectedResult": "Amex card shows two CVVs and Amex-specific info, other cards do not.",
+    "sourceRefs": [
+      "Sc0013",
+      "Sc0014"
+    ],
+    "sourceQuote": "אם brandCode = 3 (אמקס):\nיש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21107)",
+    "_groundingFailed": true
+  },
+  {
+    "type": "functional",
+    "title": "Card Data Display – Back Tab, Show CVV with Mask/Instructions",
+    "description": "Verifies display of CVV info on card data back tab, including security guidance.",
+    "testId": "TC-CARDDATA-04",
+    "testDescription": "User navigates to card data back tab; system displays CVV (masked/partial), regulatory instructions, and security overlay as required.",
+    "prerequisites": "User completed OTP and fetch, navigated to CVV tab/back view.",
+    "stepsToPerform": "1. View card details. 2. Switch to back tab. 3. CVV displayed/masked. 4. Security instructions text appears. 5. Branding correct (Amex or otherwise). 6. Timer enforced per view. 7. Regulatory text visible. 8. Return to front tab.",
+    "expectedResult": "CVV displays with proper masking and instructions, field content matches service guidance.",
+    "sourceRefs": [
+      "Sc0014"
+    ],
+    "sourceQuote": "יש להציג טקסט מהשירות בהתאם לתיאור השדה.  (מספר 21107)",
+    "_groundingFailed": true
+  },
+  {
+    "type": "state-transition",
+    "title": "Card Data Display – Timer Expiry Auto-Navigate to End Screen",
+    "description": "Verifies the automatic navigation to the end screen when card data display timer expires.",
+    "testId": "TC-CARDDATA-05",
+    "testDescription": "A user views card details after authentication. The card information is shown for a limited period (90 seconds) controlled by a timer. When the timer reaches zero without user intervention, the user is automatically redirected to the end screen, completing the session securely.",
+    "prerequisites": "User authenticated with valid OTP, navigated to the card data display screen (Sc0012 or Sc0013), timer component visible, card details are currently visible.",
+    "stepsToPerform": "1. Launch the card data viewing workflow after successful authentication.\n2. Reach the card detail display screen (Sc0012 or Sc0013) showing card information.\n3. Confirm the timer component is present and shows 90 seconds.\n4. Do not perform any user interaction (do not press 'Finish' or navigate away).\n5. Wait for the timer to count down to zero.\n6. Observe behavior when timer expires.\n7. Verify session auto-navigates to the end screen (Sc0016).\n8. Check that card details are no longer visible and the completion message is shown.",
+    "expectedResult": "Upon timer expiration, the system automatically navigates to the end screen (Sc0016), card details are hidden, session is terminated, and completion messages from the end screen appear.",
+    "sourceRefs": [
+      "Sc0012",
+      "Sc0013",
+      "Sc0016"
+    ],
+    "sourceQuote": "יופעל בלחיצה על \"סיום\" במסך צפיה בפרטי כרטיס, , או לחילופין כאשר הקאונטר של הטיימר מגיע לאפס",
+    "_groundingFailed": true
+  }
+]

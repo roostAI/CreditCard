@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "credit",
+    "created_at": "2026-04-28T11:48:19.827Z",
+    "updated_at": "2026-04-28T11:48:19.827Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "credit.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/6b7a129e-c8a0-434f-88ef-136d53db3875/functional_tests/credit/credit.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "hapo1.xlsx",
+        "fileURI": "/var/tmp/Roost/RoostGPT/functional-user-story_hapo/6b7a129e-c8a0-434f-88ef-136d53db3875/functional_tests/credit/hapo1.xlsx",
+        "fileSha": "1921256bc5"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}

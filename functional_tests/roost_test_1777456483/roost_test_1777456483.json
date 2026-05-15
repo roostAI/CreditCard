@@ -1,0 +1,152 @@
+[
+  {
+    "type": "functional",
+    "title": "User registration with valid data triggers email verification",
+    "description": "Verifies that new user registration with all valid and required fields initiates the email verification workflow and returns the correct response.",
+    "testId": "TC-AUTH-01",
+    "testDescription": "A new user completes the registration form with a valid first and last name, a unique RFC 5322-compliant email, a password meeting complexity criteria, valid date of birth (age >= 18), phone in E.164 format, last 4 digits of SSN, and agreement to terms. Successful submission should result in an account creation and trigger a verification email.",
+    "prerequisites": "System has no pre-existing user with the provided email. Email/SMS channels are functional and accessible.",
+    "stepsToPerform": "1. Navigate to the web portal registration page. 2. Enter valid first_name (min 2, max 50 chars, alpha only). 3. Enter valid last_name (min 2, max 50 chars, alpha only). 4. Enter unique, valid email address (RFC 5322). 5. Enter strong password (min 12 chars, upper/lower/digit/symbol). 6. Input date_of_birth (ISO 8601, user age >= 18). 7. Enter phone_number in E.164 format. 8. Enter ssn_last4 (exactly 4 digits). 9. Check the box to agree to terms. 10. Click 'Submit' to create account.",
+    "expectedResult": "HTTP 201 response. Account created. Response includes user_id and verification_token. A verification email is sent to the provided address."
+  },
+  {
+    "type": "negative",
+    "title": "Registration fails with missing required fields",
+    "description": "Verifies that registration cannot proceed if any required field is missing, and the correct error response is returned for each.",
+    "testId": "TC-AUTH-02",
+    "testDescription": "A user attempts to register leaving one or more required fields blank (e.g., omitting password, date_of_birth, or not checking agree_terms). The system should reject the registration and return appropriate field-specific errors.",
+    "prerequisites": "Registration page is accessible. No existing user with test email. User is not logged in.",
+    "stepsToPerform": "1. Navigate to the registration page. 2. Leave first_name blank, fill all other fields validly. 3. Submit form and note error. 4. Repeat, this time omitting last_name. 5. Next, enter all fields but leave email blank. 6. Attempt registration with a missing password. 7. Attempt registration without selecting/agreeing to terms. 8. Try with missing date_of_birth. 9. Observe field-specific error messages for each case. 10. Note that registration does not succeed in any instance.",
+    "expectedResult": "HTTP 400 response for each attempt. Error message specifies the missing field. No user account is created. No verification email is sent."
+  },
+  {
+    "type": "state-transition",
+    "title": "Login fails after 5 incorrect attempts, triggers account lock",
+    "description": "Verifies the account lockout mechanism triggers after 5 consecutive failed login attempts, returning a lockout error and preventing further access.",
+    "testId": "TC-AUTH-03",
+    "testDescription": "A registered user intentionally attempts login with an incorrect password five consecutive times. After the fifth attempt, the system must lock the account, and subsequent login attempts return an account locked error message including unlock timing.",
+    "prerequisites": "User account exists and is unlocked. Correct credentials are known for subsequent reset. Rate limits allow for 5 login attempts.",
+    "stepsToPerform": "1. Go to login form. 2. Enter valid email, incorrect password. 3. Submit login form and observe failure. 4. Repeat invalid login attempt four more times (total 5 failures). 5. On the 5th attempt, note system response. 6. Try a 6th login attempt with the same wrong password. 7. Attempt login with the correct password. 8. Observe account lockout message with unlock_at timestamp. 9. Confirm no access granted while account is locked. 10. Record audit log entry if available.",
+    "expectedResult": "HTTP 403 error returned after 5th failed attempt with error: ACCOUNT_LOCKED and unlock_at timestamp. All subsequent login attempts are rejected until unlock time."
+  },
+  {
+    "type": "security",
+    "title": "Refresh token can be used only once, otherwise returns invalid",
+    "description": "Confirms that each refresh token is single-use only; subsequent or replayed usage returns an error and no access token is issued.",
+    "testId": "TC-AUTH-04",
+    "testDescription": "A logged-in user requests a new access token with a valid refresh token, then attempts to reuse the same (now invalidated) refresh token. The system should accept the first request but reject the second with an explicit error.",
+    "prerequisites": "User is logged in, has valid access/refresh tokens. No concurrent session activity. Refresh token not yet expired.",
+    "stepsToPerform": "1. Login via /v2/auth/login, receive access_token and refresh_token. 2. Wait until access_token expires (simulate or manipulate time). 3. Use refresh_token via /v2/auth/token/refresh to obtain new tokens. 4. Note success and retain old refresh_token. 5. Attempt another token/refresh call using the same (old) refresh_token. 6. Observe system response. 7. Attempt once more to ensure token cannot be reused. 8. Confirm new access/refresh pair only issued on first use. 9. Examine any relevant audit logs.",
+    "expectedResult": "First /token/refresh responds 200 with new tokens; second and subsequent uses of the same refresh_token respond 401 TOKEN_INVALID, no new tokens issued."
+  },
+  {
+    "type": "functional",
+    "title": "Start credit application with valid personal details",
+    "description": "Verifies that a user can successfully initiate the credit application with valid step 1 personal and identification info, receiving an application_id and session_token.",
+    "testId": "TC-APP-01",
+    "testDescription": "An authenticated user begins a new credit application, filling all Step 1 personal fields with valid data: full legal name, email, phone number (E.164), full address, ID type, ID number. With valid inputs, an application_id and session_token are returned for subsequent steps.",
+    "prerequisites": "User authenticated and email verified. No active application in progress for user. Required address and ID info available.",
+    "stepsToPerform": "1. Login to web portal. 2. Navigate to credit application start form. 3. Enter full_legal_name (<=100 chars, as on ID). 4. Confirm email auto-filled matches login. 5. Enter phone_number in E.164 format. 6. Enter address (street, city, province, postal_code, all valid as per schema). 7. Select valid id_type (e.g., DRIVERS_LICENSE). 8. Enter valid id_number (alphanumeric, <=20 chars). 9. Submit step 1 form. 10. Note application_id and session_token in response.",
+    "expectedResult": "HTTP 201 response with application_id and session_token. No errors occur. Ready for Step 2 financial information."
+  },
+  {
+    "type": "negative",
+    "title": "Prevent duplicate credit application for active user",
+    "description": "Validates that an authenticated user cannot start a new application while another is active; system returns duplicate error.",
+    "testId": "TC-APP-02",
+    "testDescription": "A user with an active application tries to start a second credit application. The system should detect the duplicate and reject the new application attempt, returning a duplicate application error.",
+    "prerequisites": "User is authenticated and already has one active, incomplete application in PENDING or IN_PROGRESS status.",
+    "stepsToPerform": "1. Ensure user's current application is still active. 2. Login to the web portal. 3. Attempt to start a new credit application. 4. Re-enter all Step 1 details as per requirements. 5. Submit the form. 6. Observe the system's response. 7. Check that no new application_id/session_token issued. 8. Repeat attempt with similar data. 9. Validate system does not progress to Step 2.",
+    "expectedResult": "HTTP 409 error with error: DUPLICATE_APPLICATION. No new application or session_token is created."
+  },
+  {
+    "type": "functional",
+    "title": "Submit financial information triggers soft credit pull",
+    "description": "Confirms that when valid financial data are submitted in Step 2, the API queues a soft credit bureau pull and responds with status.",
+    "testId": "TC-APP-03",
+    "testDescription": "Having started an application, the user enters all required financial and employment information (status, income, rent, debt, consent). On successful submission with a valid session_token, the system triggers a soft credit pull via credit bureau API and returns PENDING_REVIEW.",
+    "prerequisites": "Active application_id and valid session_token obtained from Step 1. Credit bureau integration available and not disabled.",
+    "stepsToPerform": "1. Login and authenticate. 2. Complete and submit Step 1 as per TC-APP-01, capture application_id and session_token. 3. Navigate to Step 2 financial info form. 4. Enter employment_status as EMPLOYED. 5. Enter employer_name. 6. Enter gross_annual_income (positive decimal in CAD). 7. Set monthly_rent and existing_debt_payments. 8. Check sin_consent (must be true). 9. Submit the form with headers including session_token. 10. Observe the response and verify status.",
+    "expectedResult": "HTTP 200 response with status: PENDING_REVIEW, fico_pull_id present. Soft credit pull initiated (verifiable via audit log or external stub)."
+  },
+  {
+    "type": "security",
+    "title": "Session token expiry error on financial submission",
+    "description": "Ensures expired or absent session_token prevents Step 2 submission and returns session expired error.",
+    "testId": "TC-APP-04",
+    "testDescription": "A user tries to submit Step 2 (financial info) after the session_token has expired (exceeds 30 minutes), or omits it entirely. Submission is rejected for session expiry/security, and financial data is not processed.",
+    "prerequisites": "Step 1 completed >30 mins ago (simulate passage of time), or omit session_token in submission.",
+    "stepsToPerform": "1. Complete Step 1 as above, note session_token and timestamp. 2. Wait (or simulate passage) until >30 minutes have elapsed. 3. Fill Step 2 form with valid financial data. 4. Attempt to submit with expired session_token. 5. Observe error response. 6. Repeat by omitting session_token in header. 7. Note whether any financial data processed. 8. Try with invalid session_token value as final check. 9. Inspect audit logs for access failure.",
+    "expectedResult": "HTTP 401 error with error: SESSION_EXPIRED on both expired and missing/invalid token submissions. No financial data stored, no credit pull triggered."
+  },
+  {
+    "type": "state-transition",
+    "title": "Decision logic: approved, pending, declined based on FICO",
+    "description": "Verifies that Step 3 (application decision) enforces correct approval logic based on FICO score: auto-approve (>680), pending (600-680), decline (<600).",
+    "testId": "TC-APP-05",
+    "testDescription": "An applicant submits all Step 3 data, and the system queries FICO score to trigger the correct outcome: approved (returns card_number_masked, credit_limit), referred for manual review, or declined with reason code. Validates the state transition and response payloads for each case.",
+    "prerequisites": "Step 1 and Step 2 completed, session_token valid, FICO score manipulation or stubbing available for all 3 branches.",
+    "stepsToPerform": "1. Complete Steps 1 and 2, obtain application_id. 2. For test case A (FICO > 680), stub or mock FICO response > 680. 3. Enter valid card_product_id, e_signature, and (optional) marketing_opt_in. 4. Submit application and observe response. 5. For test B (FICO 600-680), mock FICO within this band, repeat submission. 6. For test C (FICO < 600), mock score below 600, submit again. 7. For each, review returned fields (decision, credit_limit, reason_code, etc.). 8. Check application status and audit trail for each workflow. 9. Attempt to resubmit to ensure state is final.",
+    "expectedResult": "If FICO > 680: 200/APPROVED, credit_limit and card_number_masked in response. If 600-680: 200/PENDING, review_eta_hours. If <600: 200/DECLINED, reason_code. No further changes allowed after submission."
+  },
+  {
+    "type": "functional",
+    "title": "Initiate web payment with valid amount and merchant details",
+    "description": "Verifies that a user can submit a web payment transaction with a valid amount and merchant details, and the transaction is processed correctly.",
+    "testId": "TC-TRX-01",
+    "testDescription": "A user initiates a payment (e.g., online purchase) using a valid account_id, positive transaction_amount, correct merchant info, and appropriate transaction_type. The transaction is processed, balance is updated, and a response returned with transaction status and details.",
+    "prerequisites": "User account exists, is active and not frozen, has sufficient available credit. Merchant details (name/id/MCC) and positive payment amount decided.",
+    "stepsToPerform": "1. Login to the web portal. 2. Navigate to Payments/Transactions section. 3. Choose valid account_id and verify account is active. 4. Enter transaction_amount (> 0, e.g., $50.00 CAD). 5. Enter merchant_name (<= 100 chars) and merchant_id (alphanumeric). 6. Enter valid mcc_code (4-digit). 7. Set currency_code to CAD or valid ISO 4217 code. 8. Select transaction_type (PURCHASE). 9. (Optional) Enter description. 10. Submit payment form and confirm execution.",
+    "expectedResult": "HTTP 200 response with transaction_id, updated available_credit, and auth_code. Transaction appears in transaction history. over_limit_flag only set if essential buffer used."
+  },
+  {
+    "type": "negative",
+    "title": "Reject web payment with negative or zero amount",
+    "description": "Validates that the system strictly rejects web payment transactions when the amount is less than or equal to zero, enforcing core business rules and preventing invalid financial operations.",
+    "testId": "TC-TRX-02",
+    "testDescription": "As a cardholder, when I attempt to initiate a web payment transaction with an amount of zero or a negative value, the platform must deny the request and provide a clear error indicating the invalid input. No funds transfer or statement updates should occur, and a compliance-safe audit trail should be logged.",
+    "prerequisites": "User account must be authenticated with valid JWT, card status must be Active, account must have available credit, test account registered for transaction attempts.",
+    "stepsToPerform": "1. Login to the portal with a valid user account. 2. Navigate to Payments section for an active card and account. 3. Click 'Make Payment'. 4. Enter a payment amount as 0.00. 5. Complete all other required fields (merchant, merchant_id, mcc_code). 6. Submit the payment request. 7. Verify immediate error response. 8. Retry with payment amount as -100.00. 9. Submit second payment request. 10. Check statement and transaction history for no entries.",
+    "expectedResult": "Both payment attempts are rejected: system responds with error: INVALID_AMOUNT, HTTP 422, no transaction is created or posted, audit log records the rejection, no change on account balance or statement."
+  },
+  {
+    "type": "boundary",
+    "title": "Foreign currency payment applies fee and conversion formula",
+    "description": "Ensures that web payment transactions in non-CAD currencies apply both the correct exchange rate and a 3% itemized foreign transaction fee using the required calculation formula.",
+    "testId": "TC-TRX-03",
+    "testDescription": "As a cardholder, when I initiate a payment to an international merchant in USD via the web platform, the system must convert the amount using the provided exchange rate, apply 3% foreign transaction fee, and itemize the fee in transaction details. The conversion math and fee must match the documented formula.",
+    "prerequisites": "Authenticated user account, card status Active, sufficient available credit, exchange rate for selected currency known and valid, merchant categorized as international.",
+    "stepsToPerform": "1. Login to portal with valid credentials. 2. Navigate to payment screen for account. 3. Select an international merchant (country ≠ Canada). 4. Enter payment amount (e.g. 100.00 USD). 5. Choose currency_code as USD. 6. Enter valid exchange_rate (e.g. 1.36). 7. Complete other required fields. 8. Submit payment. 9. Verify response includes calculated CAD amount and itemized fee. 10. Check transaction history and statement for breakdown.",
+    "expectedResult": "Payment is approved; transaction shows CAD total calculated as (100 × 1.36) × 1.03, fee itemized as foreign_fee_amount, available credit updated correctly, transaction history and billing statement display fee and converted total separately."
+  },
+  {
+    "type": "functional",
+    "title": "Freeze card with OTP verification and audit log",
+    "description": "Verifies that card freeze actions require correct OTP verification and generate an immutable audit record, ensuring only allowed state transitions from 'Active' to 'Frozen'.",
+    "testId": "TC-DASH-01",
+    "testDescription": "As a cardholder, when I freeze my credit card, the platform must prompt for a valid OTP sent to my registered device, update card status to Frozen upon successful verification, display confirmation modals, and log a compliant audit trail. Invalid OTPs are rejected with appropriate error messaging and limited retry attempts.",
+    "prerequisites": "User is authenticated, owns at least one card in Active status, registered phone/email able to receive OTP, audit system enabled, card not already Frozen or Blocked.",
+    "stepsToPerform": "1. Login to web portal. 2. Navigate to Dashboard > Card Controls. 3. Select an Active credit card. 4. Click 'Freeze Card' button. 5. Trigger OTP, receive code on device. 6. Enter OTP into modal popup. 7. Confirm freeze reason (e.g. 'travel'). 8. Submit freeze request. 9. Validate card status changes to Frozen. 10. Attempt to freeze again (should receive INVALID_TRANSITION). 11. Access audit log to verify entry for freeze action.",
+    "expectedResult": "Card transitions to Frozen status, confirmation modal appears, new_status: 'Frozen', audit log contains user_id, session_id, ip_address, timestamp, OTP failure handled with error: OTP_FAILED, freeze reason recorded, further freezes denied until unfreeze."
+  },
+  {
+    "type": "e2e",
+    "title": "Report lost card triggers block and replacement workflow",
+    "description": "Validates that reporting a card as lost or stolen immediately blocks the card, prevents further transactions, and initiates an automated replacement process with delivery ETA and fraud case tracking.",
+    "testId": "TC-DASH-02",
+    "testDescription": "As a cardholder, when I report my card as lost or stolen via the dashboard, the system must block the card irreversibly, stop all pending or future transactions, create a replacement request (optionally with delivery address override), generate a case number, and notify fraud operations; replacement ETA must be provided.",
+    "prerequisites": "User account authenticated, card status Active (not already Blocked), loss reporting feature enabled, address available for card delivery, last_known_use optional for fraud tracking.",
+    "stepsToPerform": "1. Login to portal. 2. Navigate to Card Management dashboard. 3. Select card to report as lost/stolen. 4. Click 'Report Lost/Stolen' button. 5. Choose loss_type: LOST. 6. Optionally enter last_known_use timestamp. 7. Confirm delivery address or accept default. 8. Submit report. 9. Check card status immediately updated to Blocked. 10. Attempt a transaction on blocked card (should be denied). 11. Verify response includes new_card_eta and case_number. 12. Check notification for confirmation and fraud case creation.",
+    "expectedResult": "Card is permanently blocked, replacement issued with ETA, case_number generated, blocked_card_id returned, attempting any transaction returns CARD_BLOCKED error, notifications sent to cardholder and fraud team."
+  },
+  {
+    "type": "security",
+    "title": "PAN is always masked in browser, never transmitted full",
+    "description": "Ensures that full Primary Account Number (PAN) is never exposed in browser UI, API, or audit logs, and all displays show only a masked version as per PCI DSS L1 requirements.",
+    "testId": "TC-SEC-01",
+    "testDescription": "As a user or auditor accessing any card detail screen, transaction history, or statement via web portal, the system must display PAN only in masked format (**** **** **** 1234), never transmit or store full PAN in frontend, and never expose in DOM or audit logs. No iframe or API response may leak unmasked PAN.",
+    "prerequisites": "At least one card issued, user authenticated, access to transaction and card summary screens, PCI DSS masking code running, audit log entries enabled.",
+    "stepsToPerform": "1. Login to portal. 2. Navigate to account summary screen. 3. View card number display (check for masked format). 4. Open transaction history detail for card. 5. Download statement (PDF/JSON). 6. Inspect developer console and network requests for PAN exposure. 7. Check iframe embedding for tokenization (no raw PAN). 8. Access audit log for any card change. 9. Attempt to retrieve full PAN via API call (GET /cards/{id}). 10. Verify all PAN fields are masked or tokenized only. 11. Validate DOM does not contain full PAN. 12. Repeat for multi-session/device access.",
+    "expectedResult": "In all locations, PAN is rendered as **** **** **** 1234, never full; no API response, DOM, audit entry, or downloadable document exposes unmasked PAN; PCI DSS compliance maintained; attempted access to full PAN is refused with error or masked/tokenized substitute."
+  }
+]

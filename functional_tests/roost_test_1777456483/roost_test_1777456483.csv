@@ -1,0 +1,17 @@
+User registration with valid data triggers email verification
+Registration fails with missing required fields
+Login fails after 5 incorrect attempts, triggers account lock
+Refresh token can be used only once, otherwise returns invalid
+Start credit application with valid personal details
+Prevent duplicate credit application for active user
+Submit financial information triggers soft credit pull
+Session token expiry error on financial submission
+Decision logic: approved, pending, declined based on FICO
+Initiate web payment with valid amount and merchant details
+Reject web payment with negative or zero amount
+Foreign currency payment applies fee and conversion formula
+Freeze card with OTP verification and audit log
+Report lost card triggers block and replacement workflow
+PAN is always masked in browser, never transmitted full
+Registration form validates input and displays errors for missing fields
+Card details and transaction history displays masked PAN only
