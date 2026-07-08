@@ -19,11 +19,11 @@
   },
   "token_usage": {
     "total": {
-      "input": 1955282,
-      "output": 52471,
-      "total": 2007753,
+      "input": 396746,
+      "output": 8524,
+      "total": 405270,
       "cost": 0.0,
-      "cached_input": 465865
+      "cached_input": 0
     },
     "sessions": {
       "main_execution": {
@@ -34,45 +34,9 @@
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 0,
-        "start_time": 1783498525.312586,
-        "end_time": 1783501621.510266,
-        "duration": 3096.1976799964905
-      },
-      "worker_supervisor_WF001": {
-        "type": "worker_supervisor",
-        "input": 4865,
-        "output": 268,
-        "total": 5133,
-        "cost": 0.0,
-        "cached_input": 0,
-        "call_count": 2,
-        "start_time": 1783498525.608973,
-        "end_time": 1783499980.2133172,
-        "duration": 1454.6043441295624
-      },
-      "explore_worker_WF001_a1": {
-        "type": "auto_created",
-        "input": 808759,
-        "output": 17150,
-        "total": 825909,
-        "cost": 0.0,
-        "cached_input": 465865,
-        "call_count": 25,
-        "start_time": 1783498569.9100711,
-        "end_time": null,
-        "duration": null
-      },
-      "explore_synthesize_single_workflow": {
-        "type": "auto_created",
-        "input": 9792,
-        "output": 4096,
-        "total": 13888,
-        "cost": 0.0,
-        "cached_input": 0,
-        "call_count": 1,
-        "start_time": 1783500238.528176,
-        "end_time": null,
-        "duration": null
+        "start_time": 1783520520.187763,
+        "end_time": 1783520801.652538,
+        "duration": 281.4647750854492
       },
       "post_explore_testgen": {
         "type": "root",
@@ -82,41 +46,25 @@
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 0,
-        "start_time": 1783500259.473728,
-        "end_time": 1783501621.5090759,
-        "duration": 1362.0353479385376
+        "start_time": 1783520520.572673,
+        "end_time": 1783520801.65154,
+        "duration": 281.07886695861816
       },
       "pom_gen_flexjobscenario_01_1783500238": {
         "type": "test_generation",
-        "input": 636376,
-        "output": 23155,
-        "total": 659531,
+        "input": 396746,
+        "output": 8524,
+        "total": 405270,
         "cost": 0.0,
         "cached_input": 0,
-        "call_count": 11,
-        "start_time": 1783500259.4813929,
-        "end_time": null,
-        "duration": null
-      },
-      "test_gen_pom_flexjobscenario_01_1783500238": {
-        "type": "test_generation",
-        "input": 495490,
-        "output": 7802,
-        "total": 503292,
-        "cost": 0.0,
-        "cached_input": 0,
-        "call_count": 8,
-        "start_time": 1783501132.649745,
+        "call_count": 7,
+        "start_time": 1783520520.578748,
         "end_time": null,
         "duration": null
       }
     },
     "provider": "bedrock_ai",
     "model": "global.anthropic.claude-sonnet-5",
-    "timestamp": "2026-07-08T14:37:01.510582",
-    "cache_statistics": {
-      "total_cached_tokens": 465865,
-      "cache_hit_rate_percent": 23.8
-    }
+    "timestamp": "2026-07-08T19:56:41.652962"
   }
 }
