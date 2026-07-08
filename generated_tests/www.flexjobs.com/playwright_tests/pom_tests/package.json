@@ -1,0 +1,24 @@
+
+    {
+        "name": "pom-playwright-tests",
+        "version": "1.0.0",
+        "type": "module",
+        "description": "A robust suite of end-to-end tests using Playwright.",
+        "scripts": {
+        "test": "npx playwright test",
+        "test:headed": "npx playwright test --headed",
+        "report": "npx playwright show-report"
+        },
+        "keywords": [
+        "playwright",
+        "testing",
+        "e2e",
+        "automation"
+        ],
+        "author": "",
+        "license": "ISC",
+        "devDependencies": {
+        "@playwright/test": "1.55.0",
+        "dotenv": "^16.4.5"
+        }
+    }

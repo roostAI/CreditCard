@@ -1,0 +1,176 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-07-08T13:45:25.304935",
+  "last_updated": "2026-07-08T14:37:01.512227",
+  "output_dir": "RoostGPT/flexjobs/1783498461/source/CreditCard/generated_tests/www.flexjobs.com/playwright_tests",
+  "site_url": "https://www.flexjobs.com",
+  "pom_files": [
+    {
+      "url": "",
+      "file_name": "HomePage.js",
+      "file_path": "pom_tests/pom/HomePage.js"
+    }
+  ],
+  "Login_File": {
+    "name": null,
+    "path": null,
+    "hash": null,
+    "agent_workflow_completed": false,
+    "agent_workflow_file_path": null,
+    "agent_interaction_file_path": null,
+    "agent_activity_summary": null,
+    "agent_activity_error": null,
+    "agent_activity_outcome": null,
+    "agent_recommendation": null,
+    "agent_completion_level": null,
+    "agent_steps_completed": null,
+    "execution_flow_file_path": null,
+    "systematic_selectors_file_path": null,
+    "scenario_name": null,
+    "scenario_file_path": null,
+    "test_generated": false,
+    "test_generation_error": null,
+    "test_file_path": null,
+    "test_executed_success": null,
+    "test_execution_error": null,
+    "pom_test_name": null,
+    "pom_test_file_path": null,
+    "pom_test_executed_success": null,
+    "pom_test_execution_error": null,
+    "pom_files": null
+  },
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Flexjobscenario",
+      "goal": "Flexjobscenario",
+      "feature_area": "unknown",
+      "priority": "high",
+      "starting_hint": "1. Navigate to flexjobs.com\n2. Click on the button with label `Start Your Remote Job Search Now!` \n3. Select `I'm open to both` and click next\n4. Select `Career Progression` and click next\n5. Select `Just exploring` and click next\n6. Set desired salary as `$100,000` and click next\n7. In the `Search by location` textbox, enter India, select India in the dropdown and click next\n8. Select `My resume is up to date` and click next\n9. Upload the resume from the specified file path, after resume is uploaded, click next. Do not skip this section\n10. In the `Add up to 5 job titles` textbox, enter `Software Engineer`, select it from dropdown and click next\n11. Select `Communications +` job category and click next\n12. Select `3-5 Years` and click next\n13. Select `Master's or Higher` and click next\n14. Select `Health/Medical Insurance` and click `Find Your Next Remote Job`\n15. Confirm navigation to job search page\n16. Task is complete",
+      "discovery_source": "user_scenario",
+      "source_file": "/Users/harishagrawal/Downloads/flexjobs/flexjobscenario.md",
+      "source_file_hash": "d30f07afa2561693440763bee44bfe6950eb6565ed70b40358feedcd1efe9a5f",
+      "worker_completed": true,
+      "worker_result": "success",
+      "linked_scenario_name": "flexjobscenario_01_1783500238",
+      "error": null,
+      "scenario_name": "flexjobscenario_01_1783500238",
+      "scenario_file_path": "generated_tests/www.flexjobs.com/playwright_tests/scenarios/WF001_flexjobscenario.json",
+      "scenario_summary_file_path": "generated_tests/www.flexjobs.com/playwright_tests/scenarios/summaries/WF001_flexjobscenario.md",
+      "report_pdf_file_path": null,
+      "feature_file_path": null,
+      "feature_file_name": null,
+      "agent_workflow_file_path": "/private/var/tmp/Roost/RoostGPT/flexjobs/1783498461/temp_info/www.flexjobs.com/extracted_data/execution_flow_WF001_flexjobscenario.json",
+      "agent_workflow_completed": true,
+      "scenario_analysis_result_file_path": null,
+      "agent_activity_summary": [
+        "Agent executed the FlexJobs remote job search wizard end-to-end. It navigated to flexjobs.com, clicked the 'Find Your Next WFH Job!' entry button, and proceeded through the multi-step wizard: selected 'I'm open to both' for remote preference, chose 'Career progression' for job search motivation, selected 'Just exploring' for search style, set desired salary to $100,000, confirmed India as the target location, and reached the resume upload step. On the resume step, the agent clicked the 'No, skip the upload' option instead of uploading the resume file, then proceeded. It entered 'Software Engineer' in the job titles field and selected it from the dropdown, selected the 'Communications' job category, chose '3-5 Years' experience, selected 'Master's or Higher' education, selected 'Health/Medical Insurance' as a benefit, and clicked 'Find Your Next Remote Job!' to complete the wizard. The agent was redirected to the job search results page with query parameters reflecting the selections (categories, keyword, benefits, education, career level, location), and the task was marked done."
+      ],
+      "agent_activity_error": [
+        "Step 12: The scenario explicitly instructed the agent to 'Upload the resume from the specified file path... Do not skip this section.' However, the agent captured and clicked the '#no-resume-selected' ('No, skip the upload') option instead of performing the file upload, then proceeded to click Next. This is a deviation from explicit user instructions rather than a self-corrected misstep — no upload was attempted or recovered. No other errors, retries, or blocking issues were observed; all other wizard steps (radio/button selections, text input, dropdown selection) executed successfully on the first attempt with high-confidence selectors."
+      ],
+      "agent_activity_outcome": [
+        "The agent successfully completed the FlexJobs wizard and reached the final job search results page with parameters matching most of the specified selections (location: India, job title: Software Engineer, category: Communications, education: Master's, career level matching 3-5 Years, benefit: Health/Medical Insurance). However, the mandatory resume upload step was explicitly skipped instead of being fulfilled with the specified file, directly contradicting the scenario's explicit 'Do not skip this section' instruction. The overall navigation goal was achieved, but one required step was not correctly executed."
+      ],
+      "agent_recommendation": "Add an explicit runtime validation/guardrail to detect and prevent skip-actions on steps flagged as mandatory (e.g., resume upload) before allowing the agent to proceed. Consider adding a post-step verification check that confirms a file was actually attached/uploaded before clicking Next, and flag/halt execution if the file path was not utilized as instructed. Re-run the resume upload step with the specified file path to fully satisfy the original scenario requirements.",
+      "agent_completion_level": "complete",
+      "agent_steps_completed": 25,
+      "visited_urls": [
+        "https://www.flexjobs.com/",
+        "https://www.flexjobs.com/job_wizard/daily_commute/salary",
+        "https://www.flexjobs.com/job_wizard/daily_commute/search-style",
+        "https://www.flexjobs.com/job_wizard/daily_commute/relevant_experience",
+        "https://www.flexjobs.com/job_wizard/daily_commute/education_level",
+        "https://www.flexjobs.com/job_wizard/daily_commute/what_job",
+        "https://www.flexjobs.com/job_wizard/daily_commute/looking_for",
+        "https://www.flexjobs.com/job_wizard/daily_commute/benefits",
+        "https://www.flexjobs.com/search?&remoteoptions=100%25%20Remote%20Work&remoteoptions=Hybrid%20Remote%20Work&remoteoptions=Option%20for%20Remote%20Work&categories=10&searchkeyword=Software%20Engineer&boostbenefits=Health%2FMedical%20Insurance&careerlevel=Experienced&educations=Master%27s%20Degree&educations=Doctorate%20Degree&joblocations=India&anywhereinworld=1&anywhereinus=1",
+        "https://www.flexjobs.com/job_wizard/daily_commute/job_category",
+        "https://www.flexjobs.com/job_wizard/daily_commute/where_remote",
+        "about:blank",
+        "https://www.flexjobs.com/job_wizard/daily_commute/upload_resume",
+        "https://www.flexjobs.com/job_wizard/remote/why_remote"
+      ],
+      "execution_flow_file_path": null,
+      "test_generated": true,
+      "test_generation_error": null,
+      "test_name": "flexjobscenario_01_1783500238",
+      "test_file_path": null,
+      "test_executed_success": null,
+      "test_execution_error": null,
+      "pom_test_name": "flexjobscenario_01_1783500238_pom.noauth.spec.js",
+      "pom_test_file_path": "generated_tests/www.flexjobs.com/playwright_tests/pom_tests/flexjobscenario_01_1783500238_pom.noauth.spec.js",
+      "pom_test_executed_success": null,
+      "pom_test_execution_error": null,
+      "pom_files": [
+        {
+          "url": "",
+          "file_name": "HomePage.js",
+          "file_path": "pom_tests/pom/HomePage.js"
+        }
+      ],
+      "test_steps": null,
+      "video_recording_path": "/private/var/tmp/Roost/RoostGPT/flexjobs/1783498461/temp_info/www.flexjobs.com/extracted_data/recordings/WF001_a1/06a4e072-db46-7195-8000-3137f52333b3.mp4"
+    }
+  ],
+  "explore_focus_areas": [],
+  "Imported_Test_Coverage": null,
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 1955282,
+      "output_tokens": 52471,
+      "cached_input_tokens": 0,
+      "total_tokens": 2007753,
+      "total_cost_usd": 0.0
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-07-08T14:37:01.510582",
+        "provider": "bedrock_ai",
+        "model": "global.anthropic.claude-sonnet-5",
+        "input_tokens": 1955282,
+        "output_tokens": 52471,
+        "total_tokens": 2007753,
+        "cost_usd": 0.0,
+        "sessions": {
+          "main_execution": {
+            "input": 0,
+            "output": 0,
+            "cost": 0.0
+          },
+          "worker_supervisor_WF001": {
+            "input": 4865,
+            "output": 268,
+            "cost": 0.0
+          },
+          "explore_worker_WF001_a1": {
+            "input": 808759,
+            "output": 17150,
+            "cost": 0.0
+          },
+          "explore_synthesize_single_workflow": {
+            "input": 9792,
+            "output": 4096,
+            "cost": 0.0
+          },
+          "post_explore_testgen": {
+            "input": 0,
+            "output": 0,
+            "cost": 0.0
+          },
+          "pom_gen_flexjobscenario_01_1783500238": {
+            "input": 636376,
+            "output": 23155,
+            "cost": 0.0
+          },
+          "test_gen_pom_flexjobscenario_01_1783500238": {
+            "input": 495490,
+            "output": 7802,
+            "cost": 0.0
+          }
+        }
+      }
+    ]
+  }
+}
