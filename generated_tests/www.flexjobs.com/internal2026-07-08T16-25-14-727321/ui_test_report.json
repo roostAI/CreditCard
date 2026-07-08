@@ -15,21 +15,15 @@
       "description": "Scenario run is working",
       "testFilePath": "",
       "extracted_data": "www.flexjobs.com/extracted_data/captured_ui_data.json"
-    },
-    "flexjobscenario_02_1783507456": {
-      "test_name": "flexjobscenario_02_1783507456",
-      "description": "Scenario run is working",
-      "testFilePath": "",
-      "extracted_data": "www.flexjobs.com/extracted_data/captured_ui_data.json"
     }
   },
   "token_usage": {
     "total": {
-      "input": 2163623,
-      "output": 49123,
-      "total": 2212746,
+      "input": 1955282,
+      "output": 52471,
+      "total": 2007753,
       "cost": 0.0,
-      "cached_input": 405100
+      "cached_input": 465865
     },
     "sessions": {
       "main_execution": {
@@ -40,43 +34,43 @@
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 0,
-        "start_time": 1783506212.6308181,
-        "end_time": 1783508114.7216241,
-        "duration": 1902.0908060073853
+        "start_time": 1783498525.312586,
+        "end_time": 1783501621.510266,
+        "duration": 3096.1976799964905
       },
-      "worker_supervisor_WF002": {
+      "worker_supervisor_WF001": {
         "type": "worker_supervisor",
-        "input": 4860,
-        "output": 193,
-        "total": 5053,
+        "input": 4865,
+        "output": 268,
+        "total": 5133,
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 2,
-        "start_time": 1783506212.928766,
-        "end_time": 1783507383.420886,
-        "duration": 1170.4921200275421
+        "start_time": 1783498525.608973,
+        "end_time": 1783499980.2133172,
+        "duration": 1454.6043441295624
       },
-      "explore_worker_WF002_a1": {
+      "explore_worker_WF001_a1": {
         "type": "auto_created",
-        "input": 698010,
-        "output": 16682,
-        "total": 714692,
+        "input": 808759,
+        "output": 17150,
+        "total": 825909,
         "cost": 0.0,
-        "cached_input": 405100,
-        "call_count": 22,
-        "start_time": 1783506248.557525,
+        "cached_input": 465865,
+        "call_count": 25,
+        "start_time": 1783498569.9100711,
         "end_time": null,
         "duration": null
       },
       "explore_synthesize_single_workflow": {
         "type": "auto_created",
-        "input": 10326,
+        "input": 9792,
         "output": 4096,
-        "total": 14422,
+        "total": 13888,
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 1,
-        "start_time": 1783507456.818763,
+        "start_time": 1783500238.528176,
         "end_time": null,
         "duration": null
       },
@@ -88,53 +82,41 @@
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 0,
-        "start_time": 1783507479.250345,
-        "end_time": 1783508114.71959,
-        "duration": 635.4692449569702
+        "start_time": 1783500259.473728,
+        "end_time": 1783501621.5090759,
+        "duration": 1362.0353479385376
       },
       "pom_gen_flexjobscenario_01_1783500238": {
         "type": "test_generation",
-        "input": 449179,
-        "output": 11955,
-        "total": 461134,
+        "input": 636376,
+        "output": 23155,
+        "total": 659531,
         "cost": 0.0,
         "cached_input": 0,
-        "call_count": 8,
-        "start_time": 1783507479.260824,
+        "call_count": 11,
+        "start_time": 1783500259.4813929,
         "end_time": null,
         "duration": null
       },
-      "pom_gen_flexjobscenario_02_1783507456": {
+      "test_gen_pom_flexjobscenario_01_1783500238": {
         "type": "test_generation",
-        "input": 507929,
-        "output": 9429,
-        "total": 517358,
-        "cost": 0.0,
-        "cached_input": 0,
-        "call_count": 9,
-        "start_time": 1783507658.4334772,
-        "end_time": null,
-        "duration": null
-      },
-      "test_gen_pom_flexjobscenario_02_1783507456": {
-        "type": "test_generation",
-        "input": 493319,
-        "output": 6768,
-        "total": 500087,
+        "input": 495490,
+        "output": 7802,
+        "total": 503292,
         "cost": 0.0,
         "cached_input": 0,
         "call_count": 8,
-        "start_time": 1783507826.836962,
+        "start_time": 1783501132.649745,
         "end_time": null,
         "duration": null
       }
     },
     "provider": "bedrock_ai",
     "model": "global.anthropic.claude-sonnet-5",
-    "timestamp": "2026-07-08T16:25:14.722076",
+    "timestamp": "2026-07-08T14:37:01.510582",
     "cache_statistics": {
-      "total_cached_tokens": 405100,
-      "cache_hit_rate_percent": 18.7
+      "total_cached_tokens": 465865,
+      "cache_hit_rate_percent": 23.8
     }
   }
 }

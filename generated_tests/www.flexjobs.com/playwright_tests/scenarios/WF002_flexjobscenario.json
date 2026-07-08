@@ -1,0 +1,4009 @@
+{
+  "workflow_id": "WF002",
+  "title": "Flexjobscenario",
+  "goal": "Flexjobscenario",
+  "synthesis_status": "failed",
+  "captured_selectors": [
+    {
+      "index": 46,
+      "action": "click",
+      "selector": "page.getByRole('link', { name: 'Find Your Next WFH Job!' })",
+      "confidence": 99,
+      "input_value": "Find Your Next WFH Job!",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('link', { name: 'Find Your Next WFH Job!' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('link', { name: /Find Your Next WFH Job!/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.locator('[role=\"main\"]').getByRole('link', { name: /Find Your Next WFH Job!/ })",
+          "strategy": "parent_role_child_role_regex",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('Find Your Next WFH Job!')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#content').getByRole('link', { name: 'Find Your Next WFH Job!' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.getByText('Find Your Next')",
+          "strategy": "text_phrase",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('a.bUlzCo.find-job-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('a.bUlzCo')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: /^Find Your Next WFH Job!$/ })",
+          "strategy": "link_filter_exact",
+          "confidence": 74
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Find Your Next WFH Job!' }).first()",
+          "strategy": "link_first",
+          "confidence": 73
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Find Your Next WFH Job!' }).last()",
+          "strategy": "link_last",
+          "confidence": 72
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: 'Find Your Next WFH Job!' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/div/div/div[1]/section/div/div/a')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('link', { name: 'Find Your Next WFH Job!' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('link', { name: /Find Your Next WFH Job!/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('[role=\"main\"]').getByRole('link', { name: /Find Your Next WFH Job!/ })",
+          "strategy": "parent_role_child_role_regex",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Find Your Next WFH Job!')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('link', { name: 'Find Your Next WFH Job!' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Find Your Next')",
+          "strategy": "text_phrase",
+          "confidence": 80,
+          "element_count": 2,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "near_unique",
+          "warning": "Matches 2 elements",
+          "selector_with_index": "page.getByText('Find Your Next') >> nth=0"
+        },
+        {
+          "selector": "page.locator('a.bUlzCo.find-job-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 2,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "near_unique",
+          "warning": "Matches 2 elements",
+          "selector_with_index": "page.locator('a.bUlzCo.find-job-btn') >> nth=0"
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: /^Find Your Next WFH Job!$/ })",
+          "strategy": "link_filter_exact",
+          "confidence": 74,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: 'Find Your Next WFH Job!' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a.bUlzCo')",
+          "strategy": "css_stable_class",
+          "confidence": 68,
+          "element_count": 4,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 4 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('a.bUlzCo') >> nth=0"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/div/div/div[1]/section/div/div/a')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 11,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 3522,
+      "action": "click",
+      "selector": "page.getByRole('radio', { name: 'I\u2019m open to both' })",
+      "confidence": 99,
+      "input_value": "I\u2019m open to bothI\u2019m open to all work setups, 100% remote or hybrid.",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('radio', { name: 'I\u2019m open to both' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('radio', { name: /I\u2019m open to both/ })",
+          "strategy": "aria_label_regex",
+          "confidence": 96
+        },
+        {
+          "selector": "page.getByRole('radio', { name: /I\u2019m open to both/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.locator('[role=\"radiogroup\"]').getByRole('radio', { name: /I\u2019m open to both/ })",
+          "strategy": "parent_role_child_role_regex",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('I\u2019m open to bothI\u2019m open to all work setups, 100% remote or hybrid.')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('open', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 82,
+          "extracted_from": "I\u2019m open to bothI\u2019m open to all work setups, 100% remote or hybrid."
+        },
+        {
+          "selector": "page.locator('#what-kind-remote').getByRole('radio', { name: 'I\u2019m open to both' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.getByText('open', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 80,
+          "extracted_from": "I\u2019m open to bothI\u2019m open to all work setups, 100% remote or hybrid."
+        },
+        {
+          "selector": "page.locator('div.sc-1441389b-7.hZVRVG')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('div.sc-1441389b-7')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div[3]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('radio', { name: 'I\u2019m open to both' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('radio', { name: /I\u2019m open to both/ })",
+          "strategy": "aria_label_regex",
+          "confidence": 96,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByRole('radio', { name: /I\u2019m open to both/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('[role=\"radiogroup\"]').getByRole('radio', { name: /I\u2019m open to both/ })",
+          "strategy": "parent_role_child_role_regex",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#what-kind-remote').getByRole('radio', { name: 'I\u2019m open to both' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('div.sc-1441389b-7.hZVRVG')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 3,
+          "is_unique": false,
+          "target_index": 2,
+          "tier": "near_unique",
+          "warning": "Matches 3 elements",
+          "selector_with_index": "page.locator('div.sc-1441389b-7.hZVRVG') >> nth=2"
+        },
+        {
+          "selector": "page.locator('div.sc-1441389b-7')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 3,
+          "is_unique": false,
+          "target_index": 2,
+          "tier": "near_unique",
+          "warning": "Matches 3 elements",
+          "selector_with_index": "page.locator('div.sc-1441389b-7') >> nth=2"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div[3]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 8,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": false,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 3524,
+      "action": "click",
+      "selector": "page.getByRole('link', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('link', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('a.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('a.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#why-remote')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: /^Next$/ })",
+          "strategy": "link_filter_exact",
+          "confidence": 74
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' }).first()",
+          "strategy": "link_first",
+          "confidence": 73
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' }).last()",
+          "strategy": "link_last",
+          "confidence": 72
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/a')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('link', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#why-remote')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: /^Next$/ })",
+          "strategy": "link_filter_exact",
+          "confidence": 74,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/a')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 3710,
+      "action": "click",
+      "selector": "page.getByRole('listitem').filter({ hasText: 'Career progressionI want a' })",
+      "confidence": 99,
+      "input_value": "Career progressionI want a role aligned with  my background",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('listitem').filter({ hasText: 'Career progressionI want a' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByText('Career progressionI want a role aligned with  my background')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('want', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 82,
+          "extracted_from": "Career progressionI want a role aligned with  my background"
+        },
+        {
+          "selector": "page.getByText('role', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 80,
+          "extracted_from": "Career progressionI want a role aligned with  my background"
+        },
+        {
+          "selector": "page.locator('#content').locator('li')",
+          "strategy": "parent_id_tag",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Career progressionI want a role aligned with  my background' })",
+          "strategy": "list_item_filter_text",
+          "confidence": 76
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Career progressionI want a role aligned with  my background' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/ul/li[2]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('listitem').filter({ hasText: 'Career progressionI want a' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Career progressionI want a role aligned with  my background' })",
+          "strategy": "list_item_filter_text",
+          "confidence": 76,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Career progressionI want a role aligned with  my background' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').locator('li')",
+          "strategy": "parent_id_tag",
+          "confidence": 68,
+          "element_count": 4,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "semantic_fallback",
+          "warning": "Matches 4 elements (use .nth(1) for disambiguation)",
+          "selector_with_index": "page.locator('#content').locator('li') >> nth=1"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/ul/li[2]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 8,
+      "viable_count": 5,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": false,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 3718,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#profile-question-next-btn')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#profile-question-next-btn')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 3924,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Just exploring' })",
+      "confidence": 99,
+      "input_value": "Just exploring",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Just exploring' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Just exploring/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Just exploring')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('exploring', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 82,
+          "extracted_from": "Just exploring"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Just exploring' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.getByText('Just')",
+          "strategy": "text_phrase",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Just exploring$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Just exploring' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Just exploring' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Just exploring' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/button[2]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Just exploring' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Just exploring/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Just exploring')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Just exploring' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 2,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "near_unique",
+          "warning": "Matches 2 elements",
+          "selector_with_index": "page.locator('button.fITDQH.chips-btn') >> nth=1"
+        },
+        {
+          "selector": "page.getByText('Just')",
+          "strategy": "text_phrase",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 2,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "near_unique",
+          "warning": "Matches 2 elements",
+          "selector_with_index": "page.locator('button.fITDQH') >> nth=1"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Just exploring$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Just exploring' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/button[2]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 10,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 3926,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#search-style')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#search-style')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4096,
+      "action": "input",
+      "selector": "page.locator('#salary-range')",
+      "confidence": 99,
+      "input_value": "65000",
+      "all_selectors": [
+        {
+          "selector": "page.locator('#salary-range')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.locator('input[value=\"65000\"]')",
+          "strategy": "css_tag_value",
+          "confidence": 89
+        },
+        {
+          "selector": "page.locator('.sc-cc0717-2[value=\"65000\"]')",
+          "strategy": "css_class_value",
+          "confidence": 87
+        },
+        {
+          "selector": "page.locator('[value=\"65000\"]')",
+          "strategy": "css_value",
+          "confidence": 85
+        },
+        {
+          "selector": "page.locator('input.sc-cc0717-2')",
+          "strategy": "css_tag_semantic_empty",
+          "confidence": 84,
+          "semantic_class": true
+        },
+        {
+          "selector": "page.locator('.sc-cc0717-2')",
+          "strategy": "css_semantic_empty",
+          "confidence": 82,
+          "semantic_class": true
+        },
+        {
+          "selector": "page.locator('input.sc-cc0717-2.fAZvcs')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('#content').locator('input')",
+          "strategy": "parent_id_tag",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('input.sc-cc0717-2')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#salary-range')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/div/div/div[1]/input')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.locator('#salary-range')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.locator('input[value=\"65000\"]')",
+          "strategy": "css_tag_value",
+          "confidence": 89,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('.sc-cc0717-2[value=\"65000\"]')",
+          "strategy": "css_class_value",
+          "confidence": 87,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('[value=\"65000\"]')",
+          "strategy": "css_value",
+          "confidence": 85,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('input.sc-cc0717-2')",
+          "strategy": "css_tag_semantic_empty",
+          "confidence": 84,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('.sc-cc0717-2')",
+          "strategy": "css_semantic_empty",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('input.sc-cc0717-2.fAZvcs')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').locator('input')",
+          "strategy": "parent_id_tag",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('input.sc-cc0717-2')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#salary-range')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/div/div/div[1]/input')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 11,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": false,
+        "has_text_based": false,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4101,
+      "action": "click",
+      "selector": "page.getByRole('link', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('link', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('a.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('a.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#desired-salary')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: /^Next$/ })",
+          "strategy": "link_filter_exact",
+          "confidence": 74
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' }).first()",
+          "strategy": "link_first",
+          "confidence": 73
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' }).last()",
+          "strategy": "link_last",
+          "confidence": 72
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/footer/div[2]/a')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('link', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('link', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#desired-salary')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('a').filter({ hasText: /^Next$/ })",
+          "strategy": "link_filter_exact",
+          "confidence": 74,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/footer/div[2]/a')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4277,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#where-remote')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#where-remote')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4448,
+      "action": "click",
+      "selector": "page.locator('#no-resume-selected')",
+      "confidence": 99,
+      "input_value": "No, skip the uploadI want to answer a few more questions.",
+      "all_selectors": [
+        {
+          "selector": "page.locator('#no-resume-selected')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByText('No, skip the uploadI want to answer a few more questions.')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('skip', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 82,
+          "extracted_from": "No, skip the uploadI want to answer a few more questions."
+        },
+        {
+          "selector": "page.getByText('the', { exact: true })",
+          "strategy": "text_exact_extracted",
+          "confidence": 80,
+          "extracted_from": "No, skip the uploadI want to answer a few more questions."
+        },
+        {
+          "selector": "page.locator('div.sc-9f26cda1-5.fardDQ')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('#content').locator('div')",
+          "strategy": "parent_id_tag",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('div.sc-9f26cda1-5')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#no-resume-selected')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('div').filter({ hasText: 'No, skip the uploadI want to answer a few more questions.' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div[2]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.locator('#no-resume-selected')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.locator('div.sc-9f26cda1-5.fardDQ')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 2,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "near_unique",
+          "warning": "Matches 2 elements",
+          "selector_with_index": "page.locator('div.sc-9f26cda1-5.fardDQ') >> nth=1"
+        },
+        {
+          "selector": "page.locator('div.sc-9f26cda1-5')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 2,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "near_unique",
+          "warning": "Matches 2 elements",
+          "selector_with_index": "page.locator('div.sc-9f26cda1-5') >> nth=1"
+        },
+        {
+          "selector": "page.locator('#no-resume-selected')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('div').filter({ hasText: 'No, skip the uploadI want to answer a few more questions.' })",
+          "strategy": "tag_filter_text",
+          "confidence": 55,
+          "element_count": 8,
+          "is_unique": false,
+          "target_index": 5,
+          "tier": "semantic_fallback",
+          "warning": "Matches 8 elements (use .nth(5) for disambiguation)",
+          "selector_with_index": "page.locator('div').filter({ hasText: 'No, skip the uploadI want to answer a few more questions.' }) >> nth=5"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div[2]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 10,
+      "viable_count": 6,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": false,
+        "has_text_based": true,
+        "has_scoped": false,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4451,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#resume-upload')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#resume-upload')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4620,
+      "action": "input_text",
+      "selector": "page.getByRole('combobox', { name: 'Add up to 5 job titles' })",
+      "confidence": 99,
+      "input_value": "",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('combobox', { name: 'Add up to 5 job titles' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('combobox', { name: /Add up to 5 job titles/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByLabel('Add up to 5 job titles')",
+          "strategy": "label",
+          "confidence": 90
+        },
+        {
+          "selector": "page.getByPlaceholder('Add up to 5 job titles')",
+          "strategy": "placeholder",
+          "confidence": 85
+        },
+        {
+          "selector": "page.getByRole('heading', { name: 'Tell us what job title(s) you have in mind.' }).locator('..').getByPlaceholder('Add up to 5 job titles')",
+          "strategy": "heading_context_placeholder",
+          "confidence": 84
+        },
+        {
+          "selector": "page.locator('#job-title-wrapper').getByRole('combobox', { name: 'Add up to 5 job titles' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('input.sc-1cf0c832-0.ftqQsP')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('input.sc-1cf0c832-0')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#job_title')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/input')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('combobox', { name: 'Add up to 5 job titles' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByPlaceholder('Add up to 5 job titles')",
+          "strategy": "placeholder",
+          "confidence": 85,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByRole('heading', { name: 'Tell us what job title(s) you have in mind.' }).locator('..').getByPlaceholder('Add up to 5 job titles')",
+          "strategy": "heading_context_placeholder",
+          "confidence": 84,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('input.sc-1cf0c832-0.ftqQsP')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('input.sc-1cf0c832-0')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#job_title')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/input')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 10,
+      "viable_count": 7,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": false,
+        "has_text_based": true,
+        "has_scoped": false,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4779,
+      "action": "click",
+      "selector": "page.getByRole('option', { name: 'Software Engineer', exact: true })",
+      "confidence": 99,
+      "input_value": "Software Engineer",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('option', { name: 'Software Engineer', exact: true })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Software Engineer' })",
+          "strategy": "portal_role_name",
+          "confidence": 98,
+          "portal_scoped": true
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Software Engineer' })",
+          "strategy": "portal_role_child_role",
+          "confidence": 98,
+          "portal_scoped": true
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByText('Software Engineer')",
+          "strategy": "portal_text",
+          "confidence": 97,
+          "portal_scoped": true
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByText('Software Engineer')",
+          "strategy": "portal_role_scoped_text",
+          "confidence": 96,
+          "portal_scoped": true
+        },
+        {
+          "selector": "page.getByRole('option', { name: /Software Engineer/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: /Software Engineer/ })",
+          "strategy": "parent_role_child_role_regex",
+          "confidence": 88
+        },
+        {
+          "selector": "page.getByText('Software Engineer')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#listbox').getByRole('option', { name: 'Software Engineer' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('li.sc-1cf0c832-6.jDczOE')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('li.sc-1cf0c832-6')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Software Engineer' })",
+          "strategy": "list_item_filter_text",
+          "confidence": 76
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Software Engineer' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: /^Software Engineer$/ })",
+          "strategy": "tag_filter_exact",
+          "confidence": 67
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/ul/li[1]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('option', { name: 'Software Engineer', exact: true })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Software Engineer' })",
+          "strategy": "portal_role_name",
+          "confidence": 88,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Software Engineer' }) >> nth=0"
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Software Engineer' })",
+          "strategy": "portal_role_child_role",
+          "confidence": 88,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Software Engineer' }) >> nth=0"
+        },
+        {
+          "selector": "page.getByRole('option', { name: /Software Engineer/ })",
+          "strategy": "role_name_regex",
+          "confidence": 85,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.getByRole('option', { name: /Software Engineer/ }) >> nth=0"
+        },
+        {
+          "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: /Software Engineer/ })",
+          "strategy": "parent_role_child_role_regex",
+          "confidence": 78,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('[role=\"listbox\"]').getByRole('option', { name: /Software Engineer/ }) >> nth=0"
+        },
+        {
+          "selector": "page.getByText('Software Engineer')",
+          "strategy": "text",
+          "confidence": 78,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.getByText('Software Engineer') >> nth=0"
+        },
+        {
+          "selector": "page.locator('#listbox').getByRole('option', { name: 'Software Engineer' })",
+          "strategy": "parent_id_role",
+          "confidence": 72,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('#listbox').getByRole('option', { name: 'Software Engineer' }) >> nth=0"
+        },
+        {
+          "selector": "page.locator('li.sc-1cf0c832-6.jDczOE')",
+          "strategy": "css_combined_classes",
+          "confidence": 70,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('li.sc-1cf0c832-6.jDczOE') >> nth=0"
+        },
+        {
+          "selector": "page.locator('li.sc-1cf0c832-6')",
+          "strategy": "css_stable_class",
+          "confidence": 68,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('li.sc-1cf0c832-6') >> nth=0"
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: /^Software Engineer$/ })",
+          "strategy": "tag_filter_exact",
+          "confidence": 67,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Software Engineer' })",
+          "strategy": "list_item_filter_text",
+          "confidence": 66,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('li').filter({ hasText: 'Software Engineer' }) >> nth=0"
+        },
+        {
+          "selector": "page.locator('li').filter({ hasText: 'Software Engineer' })",
+          "strategy": "tag_filter_text",
+          "confidence": 59,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('li').filter({ hasText: 'Software Engineer' }) >> nth=0"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/ul/li[1]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 15,
+      "viable_count": 13,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 4640,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#job-category')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#job-category')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5040,
+      "action": "click",
+      "selector": "page.getByTestId('data-9')",
+      "confidence": 99,
+      "input_value": "Communications",
+      "all_selectors": [
+        {
+          "selector": "page.getByTestId('data-9')",
+          "strategy": "testid",
+          "confidence": 100
+        },
+        {
+          "selector": "page.getByTestId('data-9')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Communications' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Communications')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Communications' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#Communications')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Communications$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Communications' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Communications' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Communications' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div[1]/div/div/button[10]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByTestId('data-9')",
+          "strategy": "testid",
+          "confidence": 100,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByTestId('data-9')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Communications' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Communications')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Communications' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#Communications')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Communications$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Communications' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 62,
+          "element_count": 10,
+          "is_unique": false,
+          "target_index": 9,
+          "tier": "semantic_fallback",
+          "warning": "Matches 10 elements (use .nth(9) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH.chips-btn') >> nth=9"
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 60,
+          "element_count": 10,
+          "is_unique": false,
+          "target_index": 9,
+          "tier": "semantic_fallback",
+          "warning": "Matches 10 elements (use .nth(9) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH') >> nth=9"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div[1]/div/div/button[10]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 11,
+      "selector_metadata": {
+        "has_testid": true,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5043,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#relevant-exp-work')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#relevant-exp-work')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5249,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: '-5 Years' })",
+      "confidence": 99,
+      "input_value": "3-5 Years",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: '-5 Years' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /3-5 Years/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('3-5 Years')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: '3-5 Years' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.getByText('Years')",
+          "strategy": "text_phrase",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^3-5 Years$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: '3-5 Years' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: '3-5 Years' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: '3-5 Years' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/button[2]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: '-5 Years' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /3-5 Years/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('3-5 Years')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: '3-5 Years' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^3-5 Years$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Years')",
+          "strategy": "text_phrase",
+          "confidence": 70,
+          "element_count": 5,
+          "is_unique": false,
+          "target_index": 2,
+          "tier": "semantic_fallback",
+          "warning": "Matches 5 elements (use .nth(2) for disambiguation)",
+          "selector_with_index": "page.getByText('Years') >> nth=2"
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 70,
+          "element_count": 4,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "semantic_fallback",
+          "warning": "Matches 4 elements (use .nth(1) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH.chips-btn') >> nth=1"
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: '3-5 Years' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 68,
+          "element_count": 4,
+          "is_unique": false,
+          "target_index": 1,
+          "tier": "semantic_fallback",
+          "warning": "Matches 4 elements (use .nth(1) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH') >> nth=1"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/button[2]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 10,
+      "viable_count": 10,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5253,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#relevant-exp-work')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#relevant-exp-work')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5415,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Master\\'s or Higher' })",
+      "confidence": 99,
+      "input_value": "Master's or Higher",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Master\\'s or Higher' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Master's or Higher/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Master\\'s or Higher')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Master\\'s or Higher' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.getByText('Master')",
+          "strategy": "text_phrase",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.getByText('Higher')",
+          "strategy": "text_phrase",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Master's or Higher$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Master\\'s or Higher' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Master\\'s or Higher' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Master\\'s or Higher' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/button[4]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Master\\'s or Higher' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Master's or Higher/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Master\\'s or Higher')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Master\\'s or Higher' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Master')",
+          "strategy": "text_phrase",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Higher')",
+          "strategy": "text_phrase",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Master's or Higher$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Master\\'s or Higher' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 65,
+          "element_count": 6,
+          "is_unique": false,
+          "target_index": 3,
+          "tier": "semantic_fallback",
+          "warning": "Matches 6 elements (use .nth(3) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH.chips-btn') >> nth=3"
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 63,
+          "element_count": 6,
+          "is_unique": false,
+          "target_index": 3,
+          "tier": "semantic_fallback",
+          "warning": "Matches 6 elements (use .nth(3) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH') >> nth=3"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div/div/div/button[4]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 11,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5419,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Next' })",
+      "confidence": 99,
+      "input_value": "Next",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#education-level')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Next' })",
+          "strategy": "role_name",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Next')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Next' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#education-level')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Next$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 9,
+      "viable_count": 9,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5583,
+      "action": "click",
+      "selector": "page.getByTestId('data-0')",
+      "confidence": 99,
+      "input_value": "Health/Medical Insurance",
+      "all_selectors": [
+        {
+          "selector": "page.getByTestId('data-0')",
+          "strategy": "testid",
+          "confidence": 100
+        },
+        {
+          "selector": "page.getByTestId('data-0')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Health/Medical Insurance/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Health/Medical Insurance')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Health/Medical Insurance' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.getByText('Health')",
+          "strategy": "text_phrase",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.getByText('Medical Insurance')",
+          "strategy": "text_phrase",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#Health/Medical-Insurance')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Health\\/Medical Insurance$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Health/Medical Insurance' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Health/Medical Insurance' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Health/Medical Insurance' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div[1]/div/div/button[1]')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByTestId('data-0')",
+          "strategy": "testid",
+          "confidence": 100,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByTestId('data-0')",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Health/Medical Insurance/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Health/Medical Insurance')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#content').getByRole('button', { name: 'Health/Medical Insurance' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Health')",
+          "strategy": "text_phrase",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Medical Insurance')",
+          "strategy": "text_phrase",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Health/Medical Insurance' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.fITDQH.chips-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 62,
+          "element_count": 10,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 10 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH.chips-btn') >> nth=0"
+        },
+        {
+          "selector": "page.locator('button.fITDQH')",
+          "strategy": "css_stable_class",
+          "confidence": 60,
+          "element_count": 10,
+          "is_unique": false,
+          "target_index": 0,
+          "tier": "semantic_fallback",
+          "warning": "Matches 10 elements (use .nth(0) for disambiguation)",
+          "selector_with_index": "page.locator('button.fITDQH') >> nth=0"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/div/div[1]/div/div/button[1]')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 13,
+      "viable_count": 11,
+      "selector_metadata": {
+        "has_testid": true,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    },
+    {
+      "index": 5595,
+      "action": "click",
+      "selector": "page.getByRole('button', { name: 'Find Your Next Remote Job!' })",
+      "confidence": 99,
+      "input_value": "Find Your Next Remote Job!",
+      "all_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Find Your Next Remote Job!' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Find Your Next Remote Job!/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95
+        },
+        {
+          "selector": "page.getByText('Find Your Next Remote Job!')",
+          "strategy": "text",
+          "confidence": 88
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Find Your Next Remote Job!' })",
+          "strategy": "parent_id_role",
+          "confidence": 82
+        },
+        {
+          "selector": "page.getByText('Find Your Next Remote Job')",
+          "strategy": "text_phrase",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78
+        },
+        {
+          "selector": "page.locator('#job-benefits')",
+          "strategy": "id",
+          "confidence": 75
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Find Your Next Remote Job!$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Find Your Next Remote Job!' }).first()",
+          "strategy": "button_first",
+          "confidence": 71
+        },
+        {
+          "selector": "page.getByRole('button', { name: 'Find Your Next Remote Job!' }).last()",
+          "strategy": "button_last",
+          "confidence": 70
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Find Your Next Remote Job!' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50
+        }
+      ],
+      "web_component_parent": null,
+      "viable_selectors": [
+        {
+          "selector": "page.getByRole('button', { name: 'Find Your Next Remote Job!' })",
+          "strategy": "roost_primary",
+          "confidence": 99,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique",
+          "source": "roost-primary-selector"
+        },
+        {
+          "selector": "page.getByRole('button', { name: /Find Your Next Remote Job!/ })",
+          "strategy": "role_name_regex",
+          "confidence": 95,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Find Your Next Remote Job!')",
+          "strategy": "text",
+          "confidence": 88,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#wizard_footer').getByRole('button', { name: 'Find Your Next Remote Job!' })",
+          "strategy": "parent_id_role",
+          "confidence": 82,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.getByText('Find Your Next Remote Job')",
+          "strategy": "text_phrase",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY.active-btn')",
+          "strategy": "css_combined_classes",
+          "confidence": 80,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button.gSEjSY')",
+          "strategy": "css_stable_class",
+          "confidence": 78,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('#job-benefits')",
+          "strategy": "id",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Find Your Next Remote Job!$/ })",
+          "strategy": "button_filter_exact",
+          "confidence": 75,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('button').filter({ hasText: 'Find Your Next Remote Job!' })",
+          "strategy": "tag_filter_text",
+          "confidence": 69,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        },
+        {
+          "selector": "page.locator('xpath=html/body/div[1]/div/div/main/section/footer/div[2]/button')",
+          "strategy": "xpath",
+          "confidence": 50,
+          "element_count": 1,
+          "is_unique": true,
+          "target_index": 0,
+          "tier": "unique"
+        }
+      ],
+      "tested_count": 11,
+      "viable_count": 11,
+      "selector_metadata": {
+        "has_testid": false,
+        "has_role_based": true,
+        "has_text_based": true,
+        "has_scoped": true,
+        "best_strategy": "roost_primary",
+        "uniqueness_status": "unique",
+        "target_index": 0,
+        "selector_with_index": null,
+        "iframe_selector": null,
+        "web_component_parent": null
+      }
+    }
+  ],
+  "proposed_scenarios": [],
+  "note": "Synthesis LLM returned unparseable output. Selectors saved for manual review.",
+  "site_url": "https://www.flexjobs.com",
+  "site_type": "unknown",
+  "site_category": "unknown",
+  "test_name": "flexjobscenario_02_1783507456",
+  "login_mechanisms": [],
+  "user_journeys": [],
+  "login_completion_state": "failed",
+  "analysis_timestamp": "2026-07-08T16:14:16.831049",
+  "confidence_score": 0.0,
+  "auth_required": false,
+  "starting_url": null,
+  "api_assertions": []
+}
