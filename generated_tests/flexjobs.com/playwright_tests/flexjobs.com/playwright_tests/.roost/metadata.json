@@ -1,0 +1,67 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-06T05:29:55.893315",
+  "last_updated": "2026-08-06T05:29:56.440236",
+  "output_dir": "RoostGPT/UI-test-demo/7964561d-9a18-404c-b4d9-b997d32c25c3/source/CreditCard/generated_tests/flexjobs.com/playwright_tests/flexjobs.com/playwright_tests",
+  "site_url": "https://flexjobs.com",
+  "pom_files": null,
+  "Login_File": {
+    "name": null,
+    "path": null,
+    "hash": null,
+    "agent_workflow_completed": false,
+    "agent_workflow_file_path": null,
+    "agent_interaction_file_path": null,
+    "agent_activity_summary": null,
+    "agent_activity_error": null,
+    "agent_activity_outcome": null,
+    "agent_recommendation": null,
+    "agent_completion_level": null,
+    "agent_steps_completed": null,
+    "execution_flow_file_path": null,
+    "systematic_selectors_file_path": null,
+    "scenario_name": null,
+    "scenario_file_path": null,
+    "test_generated": false,
+    "test_generation_error": null,
+    "test_file_path": null,
+    "test_executed_success": null,
+    "test_execution_error": null,
+    "pom_test_name": null,
+    "pom_test_file_path": null,
+    "pom_test_executed_success": null,
+    "pom_test_execution_error": null,
+    "pom_files": null
+  },
+  "Workflows": [],
+  "explore_focus_areas": [],
+  "Imported_Test_Coverage": null,
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cached_input_tokens": 0,
+      "total_tokens": 0,
+      "total_cost_usd": 0.0
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-06T05:29:56.438802",
+        "provider": "azure_open_ai",
+        "model": "gpt-4.1",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+        "cost_usd": 0.0,
+        "sessions": {
+          "main_execution": {
+            "input": 0,
+            "output": 0,
+            "cost": 0.0
+          }
+        }
+      }
+    ]
+  }
+}
