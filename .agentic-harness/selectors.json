@@ -1,0 +1,85 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "GET STARTED NOW button on the home landing page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/home.page.ts#HomePage.getStartedButton",
+      "used_by": ["WF001:S01"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Welcome dialog heading 'Welcome to the NGPF Bank Simulator'",
+      "locator": "getByRole('heading', { name: 'Welcome to the NGPF Bank Simulator' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.welcomeDialogHeading",
+      "used_by": ["WF001:S01"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "Ok button in the welcome dialog",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.welcomeDialogOkButton",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Checking Account Activity heading on the dashboard",
+      "locator": "getByText('Checking Account Activity')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.checkingAccountHeading",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "Checking account available balance $216.04",
+      "locator": "getByText('$216.04')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.checkingAccountBalance",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Saving Account Activity heading on the dashboard",
+      "locator": "getByText('Saving Account Activity')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.savingsAccountHeading",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Savings account available balance $230.00",
+      "locator": "getByText('$230.00')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.savingsAccountBalance",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Upcoming Bills heading on the dashboard",
+      "locator": "getByText('Upcoming Bills')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.upcomingBillsHeading",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-10T14:09:00Z"
+    }
+  ]
+}
