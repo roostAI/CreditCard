@@ -1,0 +1,145 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "GET STARTED NOW button on the simulator landing page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "tests/pages/home.page.ts#HomePage.getStartedButton",
+      "used_by": ["WF001:S01", "WF001:S02"],
+      "last_verified_at": "2026-08-10T09:00:29Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Welcome dialog Ok button",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "tests/pages/home.page.ts#HomePage.welcomeDialogOkButton",
+      "used_by": ["WF001:S03"],
+      "last_verified_at": "2026-08-10T09:00:40Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "Checking Account Activity card header on the dashboard",
+      "locator": "locator('mat-card-header').filter({ hasText: 'Checking Account Activity' })",
+      "strategy": "stable-text-in-semantic-container",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/home.page.ts#HomePage.checkingAccountHeader",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-10T09:00:50Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Saving Account Activity card header on the dashboard",
+      "locator": "locator('mat-card-header').filter({ hasText: 'Saving Account Activity' })",
+      "strategy": "stable-text-in-semantic-container",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/home.page.ts#HomePage.savingAccountHeader",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-10T09:00:50Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "VIEW ACCOUNT button (first – Checking) on the dashboard",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' }).first()",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/home.page.ts#HomePage.viewCheckingAccountButton",
+      "used_by": ["WF001:S05"],
+      "last_verified_at": "2026-08-10T09:00:50Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Account Activity h2 heading on the account page",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.pageHeading",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "SELECT ACCOUNT h3 heading on the account page",
+      "locator": "getByRole('heading', { name: 'SELECT ACCOUNT' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.selectAccountHeading",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Checking tab button on the account activity page",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.checkingTabButton",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL009",
+      "description": "Saving tab button on the account activity page",
+      "locator": "getByRole('button', { name: 'Saving' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.savingTabButton",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL010",
+      "description": "Transaction table on the account activity page",
+      "locator": "getByRole('table')",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.transactionTable",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL011",
+      "description": "Account Opening cell in the transaction table",
+      "locator": "getByRole('cell', { name: 'Account Opening' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.accountOpeningCell",
+      "used_by": ["WF001:S07"],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL012",
+      "description": "Search textbox on the account activity page",
+      "locator": "getByRole('textbox', { name: 'Search' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.searchTextbox",
+      "used_by": [],
+      "last_verified_at": "2026-08-10T09:01:01Z"
+    },
+    {
+      "id": "SEL013",
+      "description": "Checking account available balance text on the dashboard",
+      "locator": "getByText('$216.04')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/home.page.ts#HomePage.checkingBalanceText",
+      "used_by": [],
+      "last_verified_at": "2026-08-10T09:00:50Z"
+    },
+    {
+      "id": "SEL014",
+      "description": "Saving account available balance text on the dashboard",
+      "locator": "getByText('$230.00')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/home.page.ts#HomePage.savingBalanceText",
+      "used_by": [],
+      "last_verified_at": "2026-08-10T09:00:50Z"
+    }
+  ]
+}
