@@ -1,0 +1,150 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-10T09:07:36.946Z",
+  "last_updated": "2026-08-10T09:07:36.946Z",
+  "output_dir": "/private/tmp/roostcode-ngpf-demo/github-runtime/ngpf-roostcode-github/1786352324/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "View checking account activity from the simulator home page",
+      "goal": "Landing page loads with GET STARTED NOW button visible; The simulator dashboard URL loads and welcome dialog appears; Welcome dialog closes and dashboard is fully visible; Both account card headers are visible on the dashboard; Browser navigates to /bank-sim/account?type=checking; Page heading, SELECT ACCOUNT section, Checking/Saving tabs, and transaction table are all visible; Account Opening row is visible in the transaction table",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Navigate to the simulator landing page — Landing page loads with GET STARTED NOW button visible\n2. Click GET STARTED NOW to enter the simulator — The simulator dashboard URL loads and welcome dialog appears\n3. Dismiss the welcome dialog by clicking Ok — Welcome dialog closes and dashboard is fully visible\n4. Verify the dashboard shows Checking and Saving account cards — Both account card headers are visible on the dashboard\n5. Click VIEW ACCOUNT on the Checking account card — Browser navigates to /bank-sim/account?type=checking\n6. Verify the Account Activity page loaded correctly — Page heading, SELECT ACCOUNT section, Checking/Saving tabs, and transaction table are all visible\n7. Confirm the seeded Account Opening transaction is present in the table — Account Opening row is visible in the transaction table",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "view checking account activity from the simulator home page",
+      "test_file_path": "tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "view checking account activity from the simulator home page",
+      "pom_test_file_path": "tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Navigate to the simulator landing page",
+          "implementation": [
+            "HomePage.goto",
+            "assertion:HomePage.getStartedButton.toBeVisible"
+          ],
+          "expected": "Landing page loads with GET STARTED NOW button visible",
+          "expected_selectors": [
+            "SEL001"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Click GET STARTED NOW to enter the simulator",
+          "implementation": [
+            "HomePage.clickGetStarted"
+          ],
+          "selector": "SEL001",
+          "expected": "The simulator dashboard URL loads and welcome dialog appears"
+        },
+        {
+          "id": "S03",
+          "action": "Dismiss the welcome dialog by clicking Ok",
+          "implementation": [
+            "HomePage.dismissWelcomeDialog"
+          ],
+          "selector": "SEL002",
+          "expected": "Welcome dialog closes and dashboard is fully visible"
+        },
+        {
+          "id": "S04",
+          "action": "Verify the dashboard shows Checking and Saving account cards",
+          "implementation": [
+            "assertion:HomePage.checkingAccountHeader.toBeVisible",
+            "assertion:HomePage.savingAccountHeader.toBeVisible"
+          ],
+          "expected": "Both account card headers are visible on the dashboard",
+          "expected_selectors": [
+            "SEL003",
+            "SEL004"
+          ]
+        },
+        {
+          "id": "S05",
+          "action": "Click VIEW ACCOUNT on the Checking account card",
+          "implementation": [
+            "HomePage.goToCheckingAccount"
+          ],
+          "selector": "SEL005",
+          "expected": "Browser navigates to /bank-sim/account?type=checking"
+        },
+        {
+          "id": "S06",
+          "action": "Verify the Account Activity page loaded correctly",
+          "implementation": [
+            "AccountActivityPage.waitUntilReady",
+            "assertion:AccountActivityPage.pageHeading.toBeVisible",
+            "assertion:AccountActivityPage.selectAccountHeading.toBeVisible",
+            "assertion:AccountActivityPage.checkingTabButton.toBeVisible",
+            "assertion:AccountActivityPage.savingTabButton.toBeVisible",
+            "assertion:AccountActivityPage.transactionTable.toBeVisible"
+          ],
+          "expected": "Page heading, SELECT ACCOUNT section, Checking/Saving tabs, and transaction table are all visible",
+          "expected_selectors": [
+            "SEL006",
+            "SEL007",
+            "SEL008",
+            "SEL009",
+            "SEL010"
+          ]
+        },
+        {
+          "id": "S07",
+          "action": "Confirm the seeded Account Opening transaction is present in the table",
+          "implementation": [
+            "assertion:AccountActivityPage.accountOpeningCell.toBeVisible"
+          ],
+          "expected": "Account Opening row is visible in the transaction table",
+          "expected_selectors": [
+            "SEL011"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 2595814,
+      "output_tokens": 23785,
+      "cached_input_tokens": 2531026,
+      "cache_creation_input_tokens": 64713,
+      "total_tokens": 2619599,
+      "total_cost_usd": 1.35898155,
+      "api_calls": 73
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-10T09:07:36.946Z",
+        "provider": "amazon-bedrock",
+        "model": "global.anthropic.claude-sonnet-4-6",
+        "input_tokens": 2595814,
+        "output_tokens": 23785,
+        "cached_input_tokens": 2531026,
+        "cache_creation_input_tokens": 64713,
+        "total_tokens": 2619599,
+        "cost_usd": 1.35898155,
+        "api_calls": 73,
+        "sessions": {
+          "roostcode": {
+            "input": 2595814,
+            "output": 23785,
+            "cached_input": 2531026,
+            "cache_creation_input": 64713,
+            "cost": 1.35898155
+          }
+        }
+      }
+    ]
+  }
+}
