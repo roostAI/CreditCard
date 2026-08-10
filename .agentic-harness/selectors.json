@@ -1,0 +1,105 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "GET STARTED NOW button on the bank simulator landing page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/simulator.page.ts#SimulatorPage.getStartedButton",
+      "used_by": ["WF002:S01"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Welcome dialog container shown after clicking GET STARTED NOW",
+      "locator": "locator('[role=\"dialog\"]')",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/simulator.page.ts#SimulatorPage.welcomeDialog",
+      "used_by": ["WF002:S01"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "ACCOUNTS nav menu text span in the sidebar – clicking it expands the submenu",
+      "locator": "getByText('ACCOUNTS', { exact: true }).first()",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/simulator.page.ts#SimulatorPage.accountsNavItem",
+      "used_by": ["WF002:S01"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "ACCOUNT ACTIVITY link in the expanded ACCOUNTS submenu – clicking it navigates to /bank-sim/account",
+      "locator": "getByText('ACCOUNT ACTIVITY', { exact: true })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/simulator.page.ts#SimulatorPage.accountActivityNavItem",
+      "used_by": ["WF002:S01"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "Checking account selector button on the Account Activity page (active by default)",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.checkingTabButton",
+      "used_by": ["WF002:S01", "WF002:S02"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Saving account selector button on the Account Activity page",
+      "locator": "getByRole('button', { name: 'Saving' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.savingTabButton",
+      "used_by": ["WF002:S03"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Transaction table on the Account Activity page (native HTML table rendered by Angular Material)",
+      "locator": "locator('table.mat-table').first()",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.transactionTable",
+      "used_by": ["WF002:S01"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Transaction table header row on the Account Activity page",
+      "locator": "locator('tr.mat-header-row').first()",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.tableHeaderRow",
+      "used_by": ["WF002:S01"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL009",
+      "description": "Transaction table data rows on the Account Activity page",
+      "locator": "locator('tr.mat-row')",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.tableRows",
+      "used_by": ["WF002:S02", "WF002:S03"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    },
+    {
+      "id": "SEL010",
+      "description": "Paginator range label showing the current record range and total count",
+      "locator": "locator('.mat-paginator-range-label')",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.paginatorRangeLabel",
+      "used_by": ["WF002:S03"],
+      "last_verified_at": "2026-08-10T15:30:00Z"
+    }
+  ]
+}

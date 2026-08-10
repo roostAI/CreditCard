@@ -1,0 +1,349 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-10T15:38:59.292Z",
+  "last_updated": "2026-08-10T15:38:59.292Z",
+  "output_dir": "/private/tmp/roostcode-ngpf-demo/approval-runtime/ngpf-roostcode-approved-flow/1786375288/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Launch the bank simulator and enter the dashboard",
+      "goal": "The browser navigates to /bank-sim/ and a welcome dialog appears with the heading 'Welcome to the NGPF Bank Simulator'; The welcome dialog closes and the dashboard is fully visible showing checking account balance of $216.04, savings account balance of $230.00, and upcoming bills",
+      "feature_area": "home",
+      "priority": "high",
+      "starting_hint": "1. Click the GET STARTED NOW button on the landing page — The browser navigates to /bank-sim/ and a welcome dialog appears with the heading 'Welcome to the NGPF Bank Simulator'\n2. Click Ok on the welcome dialog to dismiss it — The welcome dialog closes and the dashboard is fully visible showing checking account balance of $216.04, savings account balance of $230.00, and upcoming bills",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User navigates to https://www.ngpf.org/bank-sim/home"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-10T13:41:45Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click the GET STARTED NOW button on the landing page",
+          "implementation": [],
+          "expected": "The browser navigates to /bank-sim/ and a welcome dialog appears with the heading 'Welcome to the NGPF Bank Simulator'"
+        },
+        {
+          "id": "S02",
+          "action": "Click Ok on the welcome dialog to dismiss it",
+          "implementation": [],
+          "expected": "The welcome dialog closes and the dashboard is fully visible showing checking account balance of $216.04, savings account balance of $230.00, and upcoming bills"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF002",
+      "title": "View checking and savings account transaction history",
+      "goal": "The Account Activity page loads at /bank-sim/account with a transaction table showing columns Id, Date, Description, Amount, Balance, and Actions, with the Checking tab active by default; The Checking tab shows at least the 'Account Opening' row with $250.00 amount and a running balance, plus subsequent debit transactions; The Saving tab becomes active and the transaction table updates to show savings account rows including a Network ATM withdrawal and the account-opening entry; the pagination reads '1 – 2 of 2'",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Navigate to the landing page, click GET STARTED NOW, dismiss the welcome dialog, then open the ACCOUNTS nav menu and click ACCOUNT ACTIVITY — The Account Activity page loads at /bank-sim/account with a transaction table showing columns Id, Date, Description, Amount, Balance, and Actions, with the Checking tab active by default\n2. Verify the Checking tab is active and transaction rows are displayed including the account-opening entry — The Checking tab shows at least the 'Account Opening' row with $250.00 amount and a running balance, plus subsequent debit transactions\n3. Click the Saving tab to switch to the savings account view — The Saving tab becomes active and the transaction table updates to show savings account rows including a Network ATM withdrawal and the account-opening entry; the pagination reads '1 – 2 of 2'",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "WF002: view checking and savings account transaction history",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "WF002: view checking and savings account transaction history",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [
+        "An active simulator session exists (GET STARTED NOW has been clicked and the welcome dialog dismissed)",
+        "The simulator dashboard is displayed at /bank-sim/"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-10T15:35:00Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Navigate to the landing page, click GET STARTED NOW, dismiss the welcome dialog, then open the ACCOUNTS nav menu and click ACCOUNT ACTIVITY",
+          "implementation": [
+            "SimulatorPage.goto",
+            "SimulatorPage.startSimulator",
+            "SimulatorPage.dismissWelcomeDialog",
+            "SimulatorPage.goToAccountActivity",
+            "AccountActivityPage.waitForReady",
+            "AccountActivityPage.expectColumnHeaders"
+          ],
+          "selector": "SEL004",
+          "expected": "The Account Activity page loads at /bank-sim/account with a transaction table showing columns Id, Date, Description, Amount, Balance, and Actions, with the Checking tab active by default",
+          "expected_selectors": [
+            "SEL001",
+            "SEL002",
+            "SEL003",
+            "SEL005",
+            "SEL007",
+            "SEL008"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Verify the Checking tab is active and transaction rows are displayed including the account-opening entry",
+          "implementation": [
+            "AccountActivityPage.isCheckingTabActive",
+            "AccountActivityPage.getVisibleDescriptions",
+            "AccountActivityPage.getAmountForDescription"
+          ],
+          "selector": "SEL005",
+          "expected": "The Checking tab shows at least the 'Account Opening' row with $250.00 amount and a running balance, plus subsequent debit transactions",
+          "expected_selectors": [
+            "SEL009"
+          ]
+        },
+        {
+          "id": "S03",
+          "action": "Click the Saving tab to switch to the savings account view",
+          "implementation": [
+            "AccountActivityPage.selectSavingAccount",
+            "AccountActivityPage.isSavingTabActive",
+            "AccountActivityPage.isCheckingTabActive",
+            "AccountActivityPage.getVisibleDescriptions",
+            "AccountActivityPage.getPaginatorText"
+          ],
+          "selector": "SEL006",
+          "expected": "The Saving tab becomes active and the transaction table updates to show savings account rows including a Network ATM withdrawal and the account-opening entry; the pagination reads '1 – 2 of 2'",
+          "expected_selectors": [
+            "SEL009",
+            "SEL010"
+          ]
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF003",
+      "title": "Search transactions on the Account Activity page",
+      "goal": "The Account Activity page is displayed with the Checking transaction table showing multiple rows; The transaction table filters live to show only rows whose description contains 'Streamwave'; non-matching rows are hidden; The full unfiltered transaction list is restored in the table",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Navigate to ACCOUNTS > ACCOUNT ACTIVITY via the nav menu — The Account Activity page is displayed with the Checking transaction table showing multiple rows\n2. Type a transaction description keyword (for example 'Streamwave') into the Search textbox — The transaction table filters live to show only rows whose description contains 'Streamwave'; non-matching rows are hidden\n3. Clear the search textbox content — The full unfiltered transaction list is restored in the table",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "An active simulator session exists",
+        "The Account Activity page is loaded at /bank-sim/account with the Checking tab active"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-10T13:42:22Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Navigate to ACCOUNTS > ACCOUNT ACTIVITY via the nav menu",
+          "implementation": [],
+          "expected": "The Account Activity page is displayed with the Checking transaction table showing multiple rows"
+        },
+        {
+          "id": "S02",
+          "action": "Type a transaction description keyword (for example 'Streamwave') into the Search textbox",
+          "implementation": [],
+          "expected": "The transaction table filters live to show only rows whose description contains 'Streamwave'; non-matching rows are hidden"
+        },
+        {
+          "id": "S03",
+          "action": "Clear the search textbox content",
+          "implementation": [],
+          "expected": "The full unfiltered transaction list is restored in the table"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF004",
+      "title": "View the Monthly Statement page and observe the empty state before any statement period has elapsed",
+      "goal": "The Monthly Statement page loads at /bank-sim/account/monthly with Checking and Saving account tabs visible and a Search textbox; A heading reads 'No statements have been generated yet! Feel free to check back next month.' confirming the empty-state behavior when no statement period has closed",
+      "feature_area": "monthly-statement",
+      "priority": "high",
+      "starting_hint": "1. Open the ACCOUNTS nav menu and click MONTHLY STATEMENT — The Monthly Statement page loads at /bank-sim/account/monthly with Checking and Saving account tabs visible and a Search textbox\n2. Observe the content area of the Monthly Statement page — A heading reads 'No statements have been generated yet! Feel free to check back next month.' confirming the empty-state behavior when no statement period has closed",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "An active simulator session exists",
+        "The simulator calendar date is in the first month; no complete calendar month has yet passed"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-10T13:42:32Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the ACCOUNTS nav menu and click MONTHLY STATEMENT",
+          "implementation": [],
+          "expected": "The Monthly Statement page loads at /bank-sim/account/monthly with Checking and Saving account tabs visible and a Search textbox"
+        },
+        {
+          "id": "S02",
+          "action": "Observe the content area of the Monthly Statement page",
+          "implementation": [],
+          "expected": "A heading reads 'No statements have been generated yet! Feel free to check back next month.' confirming the empty-state behavior when no statement period has closed"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF005",
+      "title": "Open the Make a Transfer form and verify Save button is disabled with empty required fields",
+      "goal": "The Transfer Money form page loads at /bank-sim/transfer with required fields PAYMENT FREQUENCY, Transfer From, Transfer To, Amount, and Payment Date visible; All three comboboxes are empty and no transfer account is selected; The Save button is disabled, preventing submission when required fields are unfilled; No transfer is created; the user remains on or is navigated away from the transfer form without any mutation to account data",
+      "feature_area": "transfers",
+      "priority": "high",
+      "starting_hint": "1. Open the TRANSFERS nav menu and click MAKE A TRANSFER — The Transfer Money form page loads at /bank-sim/transfer with required fields PAYMENT FREQUENCY, Transfer From, Transfer To, Amount, and Payment Date visible\n2. Observe the PAYMENT FREQUENCY, Transfer From, and Transfer To comboboxes without selecting any value — All three comboboxes are empty and no transfer account is selected\n3. Observe the Save button state — The Save button is disabled, preventing submission when required fields are unfilled\n4. Click the Cancel button — No transfer is created; the user remains on or is navigated away from the transfer form without any mutation to account data",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "An active simulator session exists",
+        "The simulator dashboard is accessible"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-10T13:43:05Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the TRANSFERS nav menu and click MAKE A TRANSFER",
+          "implementation": [],
+          "expected": "The Transfer Money form page loads at /bank-sim/transfer with required fields PAYMENT FREQUENCY, Transfer From, Transfer To, Amount, and Payment Date visible"
+        },
+        {
+          "id": "S02",
+          "action": "Observe the PAYMENT FREQUENCY, Transfer From, and Transfer To comboboxes without selecting any value",
+          "implementation": [],
+          "expected": "All three comboboxes are empty and no transfer account is selected"
+        },
+        {
+          "id": "S03",
+          "action": "Observe the Save button state",
+          "implementation": [],
+          "expected": "The Save button is disabled, preventing submission when required fields are unfilled"
+        },
+        {
+          "id": "S04",
+          "action": "Click the Cancel button",
+          "implementation": [],
+          "expected": "No transfer is created; the user remains on or is navigated away from the transfer form without any mutation to account data"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF006",
+      "title": "Open the Pay a Bill form and verify SUBMIT button is disabled when required fields are empty",
+      "goal": "The Pay a Bill form page loads at /bank-sim/pay-bill with Pay From pre-filled as CHECKING (showing available balance), and empty fields for Payment Frequency, Recipient, Payment Date, and Amount; Both the Recipient and Payment Frequency comboboxes are displayed but unselected; The SUBMIT button is disabled, preventing bill payment submission until all required fields are populated",
+      "feature_area": "bills",
+      "priority": "high",
+      "starting_hint": "1. Open the BILLS nav menu and click PAY BILL — The Pay a Bill form page loads at /bank-sim/pay-bill with Pay From pre-filled as CHECKING (showing available balance), and empty fields for Payment Frequency, Recipient, Payment Date, and Amount\n2. Observe the Recipient combobox and Payment Frequency combobox without selecting any value — Both the Recipient and Payment Frequency comboboxes are displayed but unselected\n3. Observe the SUBMIT button state — The SUBMIT button is disabled, preventing bill payment submission until all required fields are populated",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "An active simulator session exists",
+        "The simulator dashboard is accessible"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-10T13:43:14Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the BILLS nav menu and click PAY BILL",
+          "implementation": [],
+          "expected": "The Pay a Bill form page loads at /bank-sim/pay-bill with Pay From pre-filled as CHECKING (showing available balance), and empty fields for Payment Frequency, Recipient, Payment Date, and Amount"
+        },
+        {
+          "id": "S02",
+          "action": "Observe the Recipient combobox and Payment Frequency combobox without selecting any value",
+          "implementation": [],
+          "expected": "Both the Recipient and Payment Frequency comboboxes are displayed but unselected"
+        },
+        {
+          "id": "S03",
+          "action": "Observe the SUBMIT button state",
+          "implementation": [],
+          "expected": "The SUBMIT button is disabled, preventing bill payment submission until all required fields are populated"
+        }
+      ]
+    }
+  ],
+  "Selection": {
+    "selected_workflow_ids": [
+      "WF002"
+    ]
+  },
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 8196868,
+      "output_tokens": 55234,
+      "cached_input_tokens": 8072544,
+      "cache_creation_input_tokens": 124195,
+      "total_tokens": 8252102,
+      "total_cost_usd": 3.7163914499999993,
+      "api_calls": 127
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-10T15:38:59.292Z",
+        "provider": "amazon-bedrock",
+        "model": "global.anthropic.claude-sonnet-4-6",
+        "input_tokens": 8196868,
+        "output_tokens": 55234,
+        "cached_input_tokens": 8072544,
+        "cache_creation_input_tokens": 124195,
+        "total_tokens": 8252102,
+        "cost_usd": 3.7163914499999993,
+        "api_calls": 127,
+        "sessions": {
+          "roostcode": {
+            "input": 8196868,
+            "output": 55234,
+            "cached_input": 8072544,
+            "cache_creation_input": 124195,
+            "cost": 3.7163914499999993
+          }
+        }
+      }
+    ]
+  }
+}
