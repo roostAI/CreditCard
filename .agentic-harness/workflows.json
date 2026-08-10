@@ -1,0 +1,211 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "home",
+      "scenario": "Launch the bank simulator and enter the dashboard",
+      "preconditions": [
+        "User navigates to https://www.ngpf.org/bank-sim/home"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click the GET STARTED NOW button on the landing page",
+          "implementation": [],
+          "expected": "The browser navigates to /bank-sim/ and a welcome dialog appears with the heading 'Welcome to the NGPF Bank Simulator'"
+        },
+        {
+          "id": "S02",
+          "action": "Click Ok on the welcome dialog to dismiss it",
+          "implementation": [],
+          "expected": "The welcome dialog closes and the dashboard is fully visible showing checking account balance of $216.04, savings account balance of $230.00, and upcoming bills"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-10T13:41:45Z"
+    },
+    {
+      "id": "WF002",
+      "feature": "account-activity",
+      "scenario": "View checking and savings account transaction history",
+      "preconditions": [
+        "An active simulator session exists (GET STARTED NOW has been clicked and the welcome dialog dismissed)",
+        "The simulator dashboard is displayed at /bank-sim/"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the ACCOUNTS nav menu and click ACCOUNT ACTIVITY",
+          "implementation": [],
+          "expected": "The Account Activity page loads at /bank-sim/account with a transaction table showing columns Id, Date, Description, Amount, Balance, and Actions, with the Checking tab active by default"
+        },
+        {
+          "id": "S02",
+          "action": "Verify the Checking tab is active and transaction rows are displayed including the account-opening entry",
+          "implementation": [],
+          "expected": "The Checking tab shows at least the 'Account Opening' row with $250.00 amount and a running balance, plus subsequent debit transactions"
+        },
+        {
+          "id": "S03",
+          "action": "Click the Saving tab to switch to the savings account view",
+          "implementation": [],
+          "expected": "The Saving tab becomes active and the transaction table updates to show savings account rows including a Network ATM withdrawal and the account-opening entry; the pagination reads '1 - 2 of 2'"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-10T13:42:22Z"
+    },
+    {
+      "id": "WF003",
+      "feature": "account-activity",
+      "scenario": "Search transactions on the Account Activity page",
+      "preconditions": [
+        "An active simulator session exists",
+        "The Account Activity page is loaded at /bank-sim/account with the Checking tab active"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Navigate to ACCOUNTS > ACCOUNT ACTIVITY via the nav menu",
+          "implementation": [
+            "BankSimPage.goto",
+            "BankSimPage.startSimulator",
+            "BankSimPage.goToAccountActivity",
+            "AccountActivityPage.waitForReady",
+            "AccountActivityPage.getVisibleRowCount"
+          ],
+          "selector": "SEL004",
+          "expected": "The Account Activity page is displayed with the Checking transaction table showing multiple rows",
+          "expected_selectors": ["SEL005", "SEL007", "SEL008"]
+        },
+        {
+          "id": "S02",
+          "action": "Type a transaction description keyword (for example 'Streamwave') into the Search textbox",
+          "implementation": [
+            "AccountActivityPage.searchFor",
+            "assertion:AccountActivityPage.paginationSummary.toContainText",
+            "assertion:AccountActivityPage.transactionTable.toContainText"
+          ],
+          "selector": "SEL006",
+          "expected": "The transaction table filters live to show only rows whose description contains 'Streamwave'; non-matching rows are hidden",
+          "expected_selectors": ["SEL007", "SEL008"]
+        },
+        {
+          "id": "S03",
+          "action": "Clear the search textbox content",
+          "implementation": [
+            "AccountActivityPage.clearSearch",
+            "assertion:AccountActivityPage.paginationSummary.toContainText",
+            "assertion:AccountActivityPage.transactionTable.toContainText"
+          ],
+          "selector": "SEL006",
+          "expected": "The full unfiltered transaction list is restored in the table",
+          "expected_selectors": ["SEL007", "SEL008"]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts#searches and clears transactions on the Account Activity page",
+      "status": "passed",
+      "last_verified_at": "2026-08-10T14:57:00Z"
+    },
+    {
+      "id": "WF004",
+      "feature": "monthly-statement",
+      "scenario": "View the Monthly Statement page and observe the empty state before any statement period has elapsed",
+      "preconditions": [
+        "An active simulator session exists",
+        "The simulator calendar date is in the first month; no complete calendar month has yet passed"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the ACCOUNTS nav menu and click MONTHLY STATEMENT",
+          "implementation": [],
+          "expected": "The Monthly Statement page loads at /bank-sim/account/monthly with Checking and Saving account tabs visible and a Search textbox"
+        },
+        {
+          "id": "S02",
+          "action": "Observe the content area of the Monthly Statement page",
+          "implementation": [],
+          "expected": "A heading reads 'No statements have been generated yet! Feel free to check back next month.' confirming the empty-state behavior when no statement period has closed"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-10T13:42:32Z"
+    },
+    {
+      "id": "WF005",
+      "feature": "transfers",
+      "scenario": "Open the Make a Transfer form and verify Save button is disabled with empty required fields",
+      "preconditions": [
+        "An active simulator session exists",
+        "The simulator dashboard is accessible"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the TRANSFERS nav menu and click MAKE A TRANSFER",
+          "implementation": [],
+          "expected": "The Transfer Money form page loads at /bank-sim/transfer with required fields PAYMENT FREQUENCY, Transfer From, Transfer To, Amount, and Payment Date visible"
+        },
+        {
+          "id": "S02",
+          "action": "Observe the PAYMENT FREQUENCY, Transfer From, and Transfer To comboboxes without selecting any value",
+          "implementation": [],
+          "expected": "All three comboboxes are empty and no transfer account is selected"
+        },
+        {
+          "id": "S03",
+          "action": "Observe the Save button state",
+          "implementation": [],
+          "expected": "The Save button is disabled, preventing submission when required fields are unfilled"
+        },
+        {
+          "id": "S04",
+          "action": "Click the Cancel button",
+          "implementation": [],
+          "expected": "No transfer is created; the user remains on or is navigated away from the transfer form without any mutation to account data"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-10T13:43:05Z"
+    },
+    {
+      "id": "WF006",
+      "feature": "bills",
+      "scenario": "Open the Pay a Bill form and verify SUBMIT button is disabled when required fields are empty",
+      "preconditions": [
+        "An active simulator session exists",
+        "The simulator dashboard is accessible"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the BILLS nav menu and click PAY BILL",
+          "implementation": [],
+          "expected": "The Pay a Bill form page loads at /bank-sim/pay-bill with Pay From pre-filled as CHECKING (showing available balance), and empty fields for Payment Frequency, Recipient, Payment Date, and Amount"
+        },
+        {
+          "id": "S02",
+          "action": "Observe the Recipient combobox and Payment Frequency combobox without selecting any value",
+          "implementation": [],
+          "expected": "Both the Recipient and Payment Frequency comboboxes are displayed but unselected"
+        },
+        {
+          "id": "S03",
+          "action": "Observe the SUBMIT button state",
+          "implementation": [],
+          "expected": "The SUBMIT button is disabled, preventing bill payment submission until all required fields are populated"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-10T13:43:14Z"
+    }
+  ]
+}
