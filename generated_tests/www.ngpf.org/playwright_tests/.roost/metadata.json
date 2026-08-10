@@ -1,0 +1,184 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-10T12:43:43.437Z",
+  "last_updated": "2026-08-10T12:43:43.437Z",
+  "output_dir": "/private/tmp/roostcode-ngpf-demo/docker-runtime/ngpf-roostcode-docker/1786364966/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Display the checking account transaction table from the home splash screen",
+      "goal": "The splash page loads and GET STARTED NOW button is visible; The browser navigates to /bank-sim/ and the dashboard begins loading; The dashboard is fully rendered and the welcome dialog is closed; The CHECKING ACCOUNT ACTIVITY card and its AVAILABLE BALANCE label are present; The browser navigates to /bank-sim/account?type=checking; The Account Activity heading and at least one data row are visible; H2 reads 'Account Activity' and URL contains /account?type=checking; Columns are ['Id', 'Date', 'Description', 'Amount', 'Balance', 'Actions']; rowCount is greater than 0; Pagination text matches pattern \\d+ – \\d+ of \\d+; SELECT ACCOUNT label and Checking button are visible",
+      "feature_area": "checking-account-activity",
+      "priority": "high",
+      "starting_hint": "1. Open the home splash screen — The splash page loads and GET STARTED NOW button is visible\n2. Click GET STARTED NOW to launch the simulator — The browser navigates to /bank-sim/ and the dashboard begins loading\n3. Wait for the dashboard and dismiss the welcome dialog if it appears — The dashboard is fully rendered and the welcome dialog is closed\n4. Verify the Checking Account Activity card and AVAILABLE BALANCE label are visible — The CHECKING ACCOUNT ACTIVITY card and its AVAILABLE BALANCE label are present\n5. Click VIEW ACCOUNT on the Checking Account Activity card — The browser navigates to /bank-sim/account?type=checking\n6. Wait for the Account Activity page to display the transaction table — The Account Activity heading and at least one data row are visible\n7. Assert the heading and URL are correct for the checking account page — H2 reads 'Account Activity' and URL contains /account?type=checking\n8. Verify the transaction table has the expected six column headers — Columns are ['Id', 'Date', 'Description', 'Amount', 'Balance', 'Actions']\n9. Verify at least one transaction row is present — rowCount is greater than 0\n10. Verify the pagination label shows row counts — Pagination text matches pattern \\d+ – \\d+ of \\d+\n11. Verify the SELECT ACCOUNT label and Checking toggle are visible — SELECT ACCOUNT label and Checking button are visible",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "displays the checking account transaction table from the home splash screen",
+      "test_file_path": "tests/checking-account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "displays the checking account transaction table from the home splash screen",
+      "pom_test_file_path": "tests/checking-account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the home splash screen",
+          "implementation": [
+            "HomeSplashPage.goto",
+            "assertion:HomeSplashPage.getStartedButton.toBeVisible"
+          ],
+          "selector": "SEL001",
+          "expected": "The splash page loads and GET STARTED NOW button is visible"
+        },
+        {
+          "id": "S02",
+          "action": "Click GET STARTED NOW to launch the simulator",
+          "implementation": [
+            "HomeSplashPage.getStarted"
+          ],
+          "selector": "SEL001",
+          "expected": "The browser navigates to /bank-sim/ and the dashboard begins loading"
+        },
+        {
+          "id": "S03",
+          "action": "Wait for the dashboard and dismiss the welcome dialog if it appears",
+          "implementation": [
+            "DashboardPage.waitForReady",
+            "DashboardPage.dismissWelcomeDialog"
+          ],
+          "selector": "SEL002",
+          "expected": "The dashboard is fully rendered and the welcome dialog is closed"
+        },
+        {
+          "id": "S04",
+          "action": "Verify the Checking Account Activity card and AVAILABLE BALANCE label are visible",
+          "implementation": [
+            "assertion:DashboardPage.checkingAccountCard.toBeVisible",
+            "assertion:DashboardPage.checkingAvailableBalance.toBeVisible"
+          ],
+          "expected": "The CHECKING ACCOUNT ACTIVITY card and its AVAILABLE BALANCE label are present",
+          "expected_selectors": [
+            "SEL003",
+            "SEL004"
+          ]
+        },
+        {
+          "id": "S05",
+          "action": "Click VIEW ACCOUNT on the Checking Account Activity card",
+          "implementation": [
+            "DashboardPage.openCheckingAccountActivity"
+          ],
+          "selector": "SEL005",
+          "expected": "The browser navigates to /bank-sim/account?type=checking"
+        },
+        {
+          "id": "S06",
+          "action": "Wait for the Account Activity page to display the transaction table",
+          "implementation": [
+            "AccountActivityPage.waitForReady"
+          ],
+          "expected": "The Account Activity heading and at least one data row are visible",
+          "expected_selectors": [
+            "SEL006",
+            "SEL008"
+          ]
+        },
+        {
+          "id": "S07",
+          "action": "Assert the heading and URL are correct for the checking account page",
+          "implementation": [
+            "assertion:AccountActivityPage.heading.toBeVisible"
+          ],
+          "expected": "H2 reads 'Account Activity' and URL contains /account?type=checking"
+        },
+        {
+          "id": "S08",
+          "action": "Verify the transaction table has the expected six column headers",
+          "implementation": [
+            "AccountActivityPage.getColumnHeaders"
+          ],
+          "expected": "Columns are ['Id', 'Date', 'Description', 'Amount', 'Balance', 'Actions']",
+          "expected_selectors": [
+            "SEL007"
+          ]
+        },
+        {
+          "id": "S09",
+          "action": "Verify at least one transaction row is present",
+          "implementation": [
+            "AccountActivityPage.getRowCount"
+          ],
+          "expected": "rowCount is greater than 0",
+          "expected_selectors": [
+            "SEL008"
+          ]
+        },
+        {
+          "id": "S10",
+          "action": "Verify the pagination label shows row counts",
+          "implementation": [
+            "AccountActivityPage.getPaginationText"
+          ],
+          "expected": "Pagination text matches pattern \\d+ – \\d+ of \\d+",
+          "expected_selectors": [
+            "SEL009"
+          ]
+        },
+        {
+          "id": "S11",
+          "action": "Verify the SELECT ACCOUNT label and Checking toggle are visible",
+          "implementation": [
+            "assertion:AccountActivityPage.selectAccountLabel.toBeVisible",
+            "assertion:AccountActivityPage.checkingToggleButton.toBeVisible"
+          ],
+          "expected": "SELECT ACCOUNT label and Checking button are visible",
+          "expected_selectors": [
+            "SEL010",
+            "SEL011"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 4539885,
+      "output_tokens": 35503,
+      "cached_input_tokens": 4444413,
+      "cache_creation_input_tokens": 95384,
+      "total_tokens": 4575388,
+      "total_cost_usd": 2.2238229,
+      "api_calls": 86
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-10T12:43:43.437Z",
+        "provider": "amazon-bedrock",
+        "model": "global.anthropic.claude-sonnet-4-6",
+        "input_tokens": 4539885,
+        "output_tokens": 35503,
+        "cached_input_tokens": 4444413,
+        "cache_creation_input_tokens": 95384,
+        "total_tokens": 4575388,
+        "cost_usd": 2.2238229,
+        "api_calls": 86,
+        "sessions": {
+          "roostcode": {
+            "input": 4539885,
+            "output": 35503,
+            "cached_input": 4444413,
+            "cache_creation_input": 95384,
+            "cost": 2.2238229
+          }
+        }
+      }
+    ]
+  }
+}

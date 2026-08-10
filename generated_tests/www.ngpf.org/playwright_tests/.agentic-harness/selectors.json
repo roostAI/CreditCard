@@ -1,0 +1,115 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "GET STARTED NOW button on the home splash screen",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "tests/pages/home-splash.page.ts#HomeSplashPage.getStartedButton",
+      "used_by": ["WF001:S01", "WF001:S02"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Welcome dialog OK button (appears on first load of the simulator dashboard)",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "tests/pages/dashboard.page.ts#DashboardPage.welcomeDialogOkButton",
+      "used_by": ["WF001:S03"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "Checking Account Activity card on the dashboard (mat-card.home-cards filtered to CHECKING title)",
+      "locator": ".locator('mat-card.home-cards')",
+      "strategy": "css+filter",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/dashboard.page.ts#DashboardPage.checkingAccountCard",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "AVAILABLE BALANCE label inside the Checking Account Activity card",
+      "locator": ".locator('.balance-text', { hasText: 'AVAILABLE BALANCE' })",
+      "strategy": "css+filter",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/dashboard.page.ts#DashboardPage.checkingAvailableBalance",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "First VIEW ACCOUNT button (Checking) on the dashboard",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' }).first()",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "tests/pages/dashboard.page.ts#DashboardPage.checkingViewAccountButton",
+      "used_by": ["WF001:S05"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Account Activity heading (H2) on the account page",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.heading",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Table header cells (th[mat-header-cell]); text: Id, Date, Description, Amount, Balance, Actions",
+      "locator": "locator('th[mat-header-cell]')",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.tableHeaderCells",
+      "used_by": ["WF001:S08"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Data rows in the account activity table (tr[mat-row]); 5 rows present in demo dataset",
+      "locator": "locator('tr[mat-row]')",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.tableRows",
+      "used_by": ["WF001:S06", "WF001:S09"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL009",
+      "description": "Pagination range label; text matches pattern: '1 – 5 of 5'",
+      "locator": "locator('.mat-paginator-range-label')",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.paginationLabel",
+      "used_by": ["WF001:S10"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL010",
+      "description": "SELECT ACCOUNT label above the Checking/Saving account toggle",
+      "locator": "getByText('SELECT ACCOUNT')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.selectAccountLabel",
+      "used_by": ["WF001:S11"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    },
+    {
+      "id": "SEL011",
+      "description": "Checking account toggle button on the account activity page",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "tests/pages/account-activity.page.ts#AccountActivityPage.checkingToggleButton",
+      "used_by": ["WF001:S11"],
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    }
+  ]
+}

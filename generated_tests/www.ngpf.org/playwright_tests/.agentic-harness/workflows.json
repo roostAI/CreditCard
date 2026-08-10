@@ -1,0 +1,110 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "checking-account-activity",
+      "scenario": "Display the checking account transaction table from the home splash screen",
+      "preconditions": [
+        "The NGPF Bank Simulator is accessible at https://www.ngpf.org/bank-sim/home",
+        "The simulator contains a pre-seeded checking account with at least one transaction"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the home splash screen",
+          "implementation": [
+            "HomeSplashPage.goto",
+            "assertion:HomeSplashPage.getStartedButton.toBeVisible"
+          ],
+          "selector": "SEL001",
+          "expected": "The splash page loads and GET STARTED NOW button is visible"
+        },
+        {
+          "id": "S02",
+          "action": "Click GET STARTED NOW to launch the simulator",
+          "implementation": ["HomeSplashPage.getStarted"],
+          "selector": "SEL001",
+          "expected": "The browser navigates to /bank-sim/ and the dashboard begins loading"
+        },
+        {
+          "id": "S03",
+          "action": "Wait for the dashboard and dismiss the welcome dialog if it appears",
+          "implementation": [
+            "DashboardPage.waitForReady",
+            "DashboardPage.dismissWelcomeDialog"
+          ],
+          "selector": "SEL002",
+          "expected": "The dashboard is fully rendered and the welcome dialog is closed"
+        },
+        {
+          "id": "S04",
+          "action": "Verify the Checking Account Activity card and AVAILABLE BALANCE label are visible",
+          "implementation": [
+            "assertion:DashboardPage.checkingAccountCard.toBeVisible",
+            "assertion:DashboardPage.checkingAvailableBalance.toBeVisible"
+          ],
+          "expected": "The CHECKING ACCOUNT ACTIVITY card and its AVAILABLE BALANCE label are present",
+          "expected_selectors": ["SEL003", "SEL004"]
+        },
+        {
+          "id": "S05",
+          "action": "Click VIEW ACCOUNT on the Checking Account Activity card",
+          "implementation": ["DashboardPage.openCheckingAccountActivity"],
+          "selector": "SEL005",
+          "expected": "The browser navigates to /bank-sim/account?type=checking"
+        },
+        {
+          "id": "S06",
+          "action": "Wait for the Account Activity page to display the transaction table",
+          "implementation": ["AccountActivityPage.waitForReady"],
+          "expected": "The Account Activity heading and at least one data row are visible",
+          "expected_selectors": ["SEL006", "SEL008"]
+        },
+        {
+          "id": "S07",
+          "action": "Assert the heading and URL are correct for the checking account page",
+          "implementation": [
+            "assertion:AccountActivityPage.heading.toBeVisible"
+          ],
+          "expected": "H2 reads 'Account Activity' and URL contains /account?type=checking"
+        },
+        {
+          "id": "S08",
+          "action": "Verify the transaction table has the expected six column headers",
+          "implementation": ["AccountActivityPage.getColumnHeaders"],
+          "expected": "Columns are ['Id', 'Date', 'Description', 'Amount', 'Balance', 'Actions']",
+          "expected_selectors": ["SEL007"]
+        },
+        {
+          "id": "S09",
+          "action": "Verify at least one transaction row is present",
+          "implementation": ["AccountActivityPage.getRowCount"],
+          "expected": "rowCount is greater than 0",
+          "expected_selectors": ["SEL008"]
+        },
+        {
+          "id": "S10",
+          "action": "Verify the pagination label shows row counts",
+          "implementation": ["AccountActivityPage.getPaginationText"],
+          "expected": "Pagination text matches pattern \\d+ – \\d+ of \\d+",
+          "expected_selectors": ["SEL009"]
+        },
+        {
+          "id": "S11",
+          "action": "Verify the SELECT ACCOUNT label and Checking toggle are visible",
+          "implementation": [
+            "assertion:AccountActivityPage.selectAccountLabel.toBeVisible",
+            "assertion:AccountActivityPage.checkingToggleButton.toBeVisible"
+          ],
+          "expected": "SELECT ACCOUNT label and Checking button are visible",
+          "expected_selectors": ["SEL010", "SEL011"]
+        }
+      ],
+      "test": "tests/checking-account-activity.spec.ts#displays the checking account transaction table from the home splash screen",
+      "status": "passed",
+      "last_verified_at": "2026-08-10T12:50:00Z"
+    }
+  ]
+}
