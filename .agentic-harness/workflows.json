@@ -1,0 +1,60 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "account-activity",
+      "scenario": "Start a bank simulator session, confirm the dashboard is usable, and view the checking account activity as a read-only journey",
+      "preconditions": [],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the public bank simulator home page",
+          "implementation": ["BankSimHomePage.goto"],
+          "expected": "The welcome page displays the Get Started button",
+          "expected_selectors": ["SEL001"]
+        },
+        {
+          "id": "S02",
+          "action": "Start a new simulator session",
+          "implementation": ["BankSimHomePage.startSimulatorSession"],
+          "selector": "SEL001",
+          "expected": "The dashboard loads and shows the first-run welcome dialog",
+          "expected_selectors": ["SEL010"]
+        },
+        {
+          "id": "S03",
+          "action": "Dismiss the welcome dialog",
+          "implementation": ["BankSimDashboardPage.dismissWelcomeDialog"],
+          "selector": "SEL002",
+          "expected": "The welcome dialog closes"
+        },
+        {
+          "id": "S04",
+          "action": "Verify the dashboard is usable",
+          "implementation": ["BankSimDashboardPage.expectDashboardUsable"],
+          "expected": "The dashboard displays the checking account activity card with an available balance",
+          "expected_selectors": ["SEL009", "SEL004"]
+        },
+        {
+          "id": "S05",
+          "action": "Open the checking account activity from the dashboard",
+          "implementation": ["BankSimDashboardPage.viewCheckingAccount"],
+          "selector": "SEL003",
+          "expected": "The browser navigates to the account activity page for the checking account"
+        },
+        {
+          "id": "S06",
+          "action": "Verify the checking account transaction history",
+          "implementation": ["AccountActivityPage.expectCheckingAccountActivityVisible"],
+          "expected": "The account activity page shows the checking account selected and lists the transaction history including the account opening entry",
+          "expected_selectors": ["SEL005", "SEL006", "SEL007", "SEL008"]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts#starts a simulator session and views the checking account activity",
+      "status": "passed",
+      "last_verified_at": "2026-08-11T15:49:30Z"
+    }
+  ]
+}
