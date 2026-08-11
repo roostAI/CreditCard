@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "account-activity",
+      "scenario": "Start a Bank Simulator session from the public NGPF landing page, confirm the account dashboard renders its checking and saving activity widgets, then view the checking account's read-only transaction activity.",
+      "preconditions": [
+        "The public NGPF Bank Simulator at https://www.ngpf.org/bank-sim/home is reachable without prior authentication or account setup."
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the Bank Simulator landing page",
+          "implementation": ["HomePage.goto"],
+          "expected": "The landing page displays the NGPF Bank Simulator introduction and a visible 'GET STARTED NOW' button",
+          "expected_selectors": ["SEL001"]
+        },
+        {
+          "id": "S02",
+          "action": "Start the simulator session",
+          "implementation": ["HomePage.startSimulator"],
+          "selector": "SEL001",
+          "expected": "The app navigates to the Bank Simulator dashboard and a one-time welcome dialog is displayed",
+          "expected_selectors": ["SEL002"]
+        },
+        {
+          "id": "S03",
+          "action": "Dismiss the welcome dialog",
+          "implementation": ["DashboardPage.dismissWelcomeDialog", "DashboardPage.expectDashboardIsUsable"],
+          "selector": "SEL002",
+          "expected": "The dialog closes and the dashboard shows the Checking Account Activity widget with its available balance label and a 'VIEW ACCOUNT' control",
+          "expected_selectors": ["SEL003", "SEL004", "SEL005"]
+        },
+        {
+          "id": "S04",
+          "action": "Open the checking account's read-only activity from the dashboard",
+          "implementation": ["DashboardPage.viewCheckingAccount", "AccountActivityPage.expectCheckingActivityIsDisplayed"],
+          "selector": "SEL005",
+          "expected": "The Account Activity page opens at type=checking with the 'Account Activity' heading, the 'Checking' account toggle, and the transaction table's 'Description' column displayed",
+          "expected_selectors": ["SEL006", "SEL007", "SEL008"]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts#starts a simulator session and views checking account activity",
+      "status": "passed",
+      "last_verified_at": "2026-08-11T17:20:33Z"
+    }
+  ]
+}
