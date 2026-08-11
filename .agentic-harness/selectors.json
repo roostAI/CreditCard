@@ -1,0 +1,85 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "Start a new bank simulator session from the public landing page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/landing.page.ts#LandingPage.getStartedButton",
+      "used_by": ["WF001:S01", "WF001:S02"],
+      "last_verified_at": "2026-08-11T14:09:44Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "One-time welcome dialog shown after starting a new dashboard session",
+      "locator": "getByRole('dialog', { name: 'Welcome to the NGPF Bank' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.welcomeDialog",
+      "used_by": ["WF001:S03"],
+      "last_verified_at": "2026-08-11T14:10:51Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "Ok button that dismisses the dashboard welcome dialog",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.welcomeDialogOkButton",
+      "used_by": ["WF001:S03"],
+      "last_verified_at": "2026-08-11T14:10:51Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Checking account summary card on the dashboard, scoped by its home-cards class and heading text",
+      "locator": "locator('mat-card.home-cards').filter({ hasText: 'Checking Account Activity' })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.checkingCard",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-11T14:17:26Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "VIEW ACCOUNT action inside the checking account summary card",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.checkingViewAccountButton",
+      "used_by": ["WF001:S05"],
+      "last_verified_at": "2026-08-11T14:10:51Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Account Activity page heading",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.heading",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T14:11:06Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Checking account toggle on the account activity page",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.checkingToggleButton",
+      "used_by": ["WF001:S07"],
+      "last_verified_at": "2026-08-11T14:11:06Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Transactions table on the account activity page",
+      "locator": "getByRole('table')",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.transactionsTable",
+      "used_by": ["WF001:S08"],
+      "last_verified_at": "2026-08-11T14:11:06Z"
+    }
+  ]
+}
