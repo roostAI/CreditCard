@@ -1,0 +1,70 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "account-activity",
+      "scenario": "Start a Bank Simulator session, verify the account dashboard is usable, and review the checking account's read-only activity ledger",
+      "preconditions": [],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the Bank Simulator welcome page",
+          "implementation": ["HomePage.goto"],
+          "expected": "The welcome page loads and offers a GET STARTED NOW button to begin a session",
+          "expected_selectors": ["SEL001"]
+        },
+        {
+          "id": "S02",
+          "action": "Start a new simulator session",
+          "implementation": ["HomePage.getStarted", "assertion:HomePage.getStartedButton.toBeVisible"],
+          "selector": "SEL001",
+          "expected": "The app navigates to the account dashboard and shows a one-time welcome dialog",
+          "expected_selectors": ["SEL002"]
+        },
+        {
+          "id": "S03",
+          "action": "Dismiss the welcome dialog",
+          "implementation": ["DashboardPage.dismissWelcomeDialog"],
+          "selector": "SEL002",
+          "expected": "The welcome dialog closes, revealing the account dashboard"
+        },
+        {
+          "id": "S04",
+          "action": "Verify the dashboard is usable",
+          "implementation": [
+            "assertion:DashboardPage.checkingAccountCardHeader.toBeVisible",
+            "assertion:DashboardPage.savingAccountCardHeader.toBeVisible",
+            "assertion:DashboardPage.checkingAvailableBalanceText.toBeVisible",
+            "assertion:DashboardPage.savingAvailableBalanceText.toBeVisible",
+            "DashboardPage.getCheckingAvailableBalanceText"
+          ],
+          "expected": "The dashboard shows a Checking Account Activity widget and a Saving Account Activity widget, each with a visible available balance",
+          "expected_selectors": ["SEL003", "SEL004", "SEL005", "SEL009"]
+        },
+        {
+          "id": "S05",
+          "action": "Open the checking account's activity from the dashboard",
+          "implementation": [
+            "DashboardPage.viewCheckingAccount",
+            "assertion:AccountActivityPage.heading.toBeVisible"
+          ],
+          "selector": "SEL006",
+          "expected": "The Account Activity page opens for the checking account and lists its transaction ledger",
+          "expected_selectors": ["SEL007"]
+        },
+        {
+          "id": "S06",
+          "action": "Confirm the checking ledger reflects the dashboard's available balance",
+          "implementation": ["AccountActivityPage.balanceCellByText"],
+          "expected": "The ledger's most recent transaction row shows a Balance cell matching the available balance shown on the dashboard",
+          "expected_selectors": ["SEL008"]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts#starts a simulator session and reviews checking account activity",
+      "status": "passed",
+      "last_verified_at": "2026-08-11T16:16:00Z"
+    }
+  ]
+}

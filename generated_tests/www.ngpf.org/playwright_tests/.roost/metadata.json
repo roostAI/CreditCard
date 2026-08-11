@@ -1,0 +1,145 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-11T16:16:52.229Z",
+  "last_updated": "2026-08-11T16:16:52.229Z",
+  "output_dir": "/private/tmp/roostcode-main/runtime/ngpf-roostcode-main/1786464223/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Start a Bank Simulator session, verify the account dashboard is usable, and review the checking account's read-only activity ledger",
+      "goal": "The welcome page loads and offers a GET STARTED NOW button to begin a session; The app navigates to the account dashboard and shows a one-time welcome dialog; The welcome dialog closes, revealing the account dashboard; The dashboard shows a Checking Account Activity widget and a Saving Account Activity widget, each with a visible available balance; The Account Activity page opens for the checking account and lists its transaction ledger; The ledger's most recent transaction row shows a Balance cell matching the available balance shown on the dashboard",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Open the Bank Simulator welcome page — The welcome page loads and offers a GET STARTED NOW button to begin a session\n2. Start a new simulator session — The app navigates to the account dashboard and shows a one-time welcome dialog\n3. Dismiss the welcome dialog — The welcome dialog closes, revealing the account dashboard\n4. Verify the dashboard is usable — The dashboard shows a Checking Account Activity widget and a Saving Account Activity widget, each with a visible available balance\n5. Open the checking account's activity from the dashboard — The Account Activity page opens for the checking account and lists its transaction ledger\n6. Confirm the checking ledger reflects the dashboard's available balance — The ledger's most recent transaction row shows a Balance cell matching the available balance shown on the dashboard",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "starts a simulator session and reviews checking account activity",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "starts a simulator session and reviews checking account activity",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [],
+      "safety": null,
+      "last_verified_at": "2026-08-11T16:16:00Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the Bank Simulator welcome page",
+          "implementation": [
+            "HomePage.goto"
+          ],
+          "expected": "The welcome page loads and offers a GET STARTED NOW button to begin a session",
+          "expected_selectors": [
+            "SEL001"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Start a new simulator session",
+          "implementation": [
+            "HomePage.getStarted",
+            "assertion:HomePage.getStartedButton.toBeVisible"
+          ],
+          "selector": "SEL001",
+          "expected": "The app navigates to the account dashboard and shows a one-time welcome dialog",
+          "expected_selectors": [
+            "SEL002"
+          ]
+        },
+        {
+          "id": "S03",
+          "action": "Dismiss the welcome dialog",
+          "implementation": [
+            "DashboardPage.dismissWelcomeDialog"
+          ],
+          "selector": "SEL002",
+          "expected": "The welcome dialog closes, revealing the account dashboard"
+        },
+        {
+          "id": "S04",
+          "action": "Verify the dashboard is usable",
+          "implementation": [
+            "assertion:DashboardPage.checkingAccountCardHeader.toBeVisible",
+            "assertion:DashboardPage.savingAccountCardHeader.toBeVisible",
+            "assertion:DashboardPage.checkingAvailableBalanceText.toBeVisible",
+            "assertion:DashboardPage.savingAvailableBalanceText.toBeVisible",
+            "DashboardPage.getCheckingAvailableBalanceText"
+          ],
+          "expected": "The dashboard shows a Checking Account Activity widget and a Saving Account Activity widget, each with a visible available balance",
+          "expected_selectors": [
+            "SEL003",
+            "SEL004",
+            "SEL005",
+            "SEL009"
+          ]
+        },
+        {
+          "id": "S05",
+          "action": "Open the checking account's activity from the dashboard",
+          "implementation": [
+            "DashboardPage.viewCheckingAccount",
+            "assertion:AccountActivityPage.heading.toBeVisible"
+          ],
+          "selector": "SEL006",
+          "expected": "The Account Activity page opens for the checking account and lists its transaction ledger",
+          "expected_selectors": [
+            "SEL007"
+          ]
+        },
+        {
+          "id": "S06",
+          "action": "Confirm the checking ledger reflects the dashboard's available balance",
+          "implementation": [
+            "AccountActivityPage.balanceCellByText"
+          ],
+          "expected": "The ledger's most recent transaction row shows a Balance cell matching the available balance shown on the dashboard",
+          "expected_selectors": [
+            "SEL008"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 5683800,
+      "output_tokens": 51201,
+      "cached_input_tokens": 5563910,
+      "cache_creation_input_tokens": 119742,
+      "total_tokens": 5735001,
+      "total_cost_usd": 1.9244429999999997,
+      "api_calls": 74
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-11T16:16:52.229Z",
+        "provider": "amazon-bedrock",
+        "model": "global.anthropic.claude-sonnet-5",
+        "input_tokens": 5683800,
+        "output_tokens": 51201,
+        "cached_input_tokens": 5563910,
+        "cache_creation_input_tokens": 119742,
+        "total_tokens": 5735001,
+        "cost_usd": 1.9244429999999997,
+        "api_calls": 74,
+        "sessions": {
+          "roostcode": {
+            "input": 5683800,
+            "output": 51201,
+            "cached_input": 5563910,
+            "cache_creation_input": 119742,
+            "cost": 1.9244429999999997
+          }
+        }
+      }
+    ]
+  }
+}
