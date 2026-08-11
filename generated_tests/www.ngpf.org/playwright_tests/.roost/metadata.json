@@ -1,0 +1,145 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-11T13:11:39.806Z",
+  "last_updated": "2026-08-11T13:11:39.806Z",
+  "output_dir": "/private/tmp/roostcode-main/runtime/ngpf-roostcode-main/1786453333/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Start a simulator session, verify the dashboard is usable, and view checking account activity",
+      "goal": "The dashboard page loads at /bank-sim/ and a welcome dialog is displayed; Heading 'Welcome to the NGPF Bank Simulator' is visible; The welcome dialog is no longer present and the dashboard content is visible; A non-empty checking account balance value is visible on the dashboard; The browser navigates to /bank-sim/account?type=checking; Account Activity heading is visible, Checking tab is present, the transaction table has Id/Date/Description/Amount/Balance column headers, and at least one transaction row is shown",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Navigate to the bank simulator home page and click GET STARTED NOW — The dashboard page loads at /bank-sim/ and a welcome dialog is displayed\n2. Observe the welcome dialog heading is present — Heading 'Welcome to the NGPF Bank Simulator' is visible\n3. Dismiss the welcome dialog by clicking Ok — The welcome dialog is no longer present and the dashboard content is visible\n4. Verify the checking account balance is displayed on the dashboard — A non-empty checking account balance value is visible on the dashboard\n5. Click VIEW ACCOUNT for the checking account — The browser navigates to /bank-sim/account?type=checking\n6. Verify the account activity table is visible with transaction data for the checking account — Account Activity heading is visible, Checking tab is present, the transaction table has Id/Date/Description/Amount/Balance column headers, and at least one transaction row is shown",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "displays checking account activity from the simulator dashboard",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "displays checking account activity from the simulator dashboard",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [],
+      "safety": null,
+      "last_verified_at": "2026-08-11T13:11:00Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Navigate to the bank simulator home page and click GET STARTED NOW",
+          "implementation": [
+            "BankSimHomePage.goto",
+            "BankSimHomePage.clickGetStarted"
+          ],
+          "selector": "SEL001",
+          "expected": "The dashboard page loads at /bank-sim/ and a welcome dialog is displayed",
+          "expected_selectors": [
+            "SEL002"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Observe the welcome dialog heading is present",
+          "implementation": [
+            "BankSimDashboardPage.waitForWelcomeDialog"
+          ],
+          "expected": "Heading 'Welcome to the NGPF Bank Simulator' is visible",
+          "expected_selectors": [
+            "SEL002"
+          ]
+        },
+        {
+          "id": "S03",
+          "action": "Dismiss the welcome dialog by clicking Ok",
+          "implementation": [
+            "BankSimDashboardPage.dismissWelcomeDialog"
+          ],
+          "selector": "SEL003",
+          "expected": "The welcome dialog is no longer present and the dashboard content is visible",
+          "expected_selectors": [
+            "SEL004"
+          ]
+        },
+        {
+          "id": "S04",
+          "action": "Verify the checking account balance is displayed on the dashboard",
+          "implementation": [
+            "BankSimDashboardPage.assertCheckingBalanceVisible"
+          ],
+          "expected": "A non-empty checking account balance value is visible on the dashboard",
+          "expected_selectors": [
+            "SEL004",
+            "SEL005"
+          ]
+        },
+        {
+          "id": "S05",
+          "action": "Click VIEW ACCOUNT for the checking account",
+          "implementation": [
+            "BankSimDashboardPage.openCheckingAccount"
+          ],
+          "selector": "SEL005",
+          "expected": "The browser navigates to /bank-sim/account?type=checking",
+          "expected_selectors": [
+            "SEL006"
+          ]
+        },
+        {
+          "id": "S06",
+          "action": "Verify the account activity table is visible with transaction data for the checking account",
+          "implementation": [
+            "BankSimAccountActivityPage.assertActivityTableVisible",
+            "BankSimAccountActivityPage.assertCheckingTabActive"
+          ],
+          "expected": "Account Activity heading is visible, Checking tab is present, the transaction table has Id/Date/Description/Amount/Balance column headers, and at least one transaction row is shown",
+          "expected_selectors": [
+            "SEL006",
+            "SEL007",
+            "SEL008",
+            "SEL009"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 3730910,
+      "output_tokens": 26824,
+      "cached_input_tokens": 3657333,
+      "cache_creation_input_tokens": 73490,
+      "total_tokens": 3757734,
+      "total_cost_usd": 1.7754084,
+      "api_calls": 85
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-11T13:11:39.806Z",
+        "provider": "amazon-bedrock",
+        "model": "global.anthropic.claude-sonnet-4-6",
+        "input_tokens": 3730910,
+        "output_tokens": 26824,
+        "cached_input_tokens": 3657333,
+        "cache_creation_input_tokens": 73490,
+        "total_tokens": 3757734,
+        "cost_usd": 1.7754084,
+        "api_calls": 85,
+        "sessions": {
+          "roostcode": {
+            "input": 3730910,
+            "output": 26824,
+            "cached_input": 3657333,
+            "cache_creation_input": 73490,
+            "cost": 1.7754084
+          }
+        }
+      }
+    ]
+  }
+}
