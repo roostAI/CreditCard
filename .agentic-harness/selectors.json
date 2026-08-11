@@ -1,0 +1,105 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "Start a new bank simulator session from the welcome page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-home.page.ts#BankSimHomePage.getStartedButton",
+      "used_by": ["WF001:S01", "WF001:S02"],
+      "last_verified_at": "2026-08-11T15:40:45Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Dismiss the first-run welcome dialog on the dashboard",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.welcomeDialogOkButton",
+      "used_by": ["WF001:S03"],
+      "last_verified_at": "2026-08-11T15:40:45Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "Open the checking account activity from the dashboard summary card",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.checkingViewAccountButton",
+      "used_by": ["WF001:S05"],
+      "last_verified_at": "2026-08-11T15:39:34Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Checking account available balance label on the dashboard summary card",
+      "locator": "getByText('AVAILABLE BALANCE')",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.checkingAvailableBalanceLabel",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-11T15:37:56Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "Account Activity page heading",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.heading",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T15:39:34Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Checking account toggle button on the account activity page",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.checkingToggleButton",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T15:39:34Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Transaction history table on the account activity page",
+      "locator": "getByRole('table')",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.transactionsTable",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T15:39:34Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Account Opening transaction row cell proving the checking transaction history loaded",
+      "locator": "getByRole('cell', { name: 'Account Opening' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.accountOpeningRowCell",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T15:39:34Z"
+    },
+    {
+      "id": "SEL009",
+      "description": "Checking Account Activity summary card container on the dashboard",
+      "locator": "locator('mat-card.home-cards', { has: page.locator('mat-card-header', { hasText: 'Checking Account Activity' }) })",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.checkingAccountCard",
+      "used_by": ["WF001:S04"],
+      "last_verified_at": "2026-08-11T15:48:50Z"
+    },
+    {
+      "id": "SEL010",
+      "description": "First-run welcome dialog container on the dashboard",
+      "locator": "getByRole('dialog')",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.welcomeDialog",
+      "used_by": ["WF001:S02"],
+      "last_verified_at": "2026-08-11T15:37:56Z"
+    }
+  ]
+}

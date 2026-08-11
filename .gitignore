@@ -1,0 +1,9 @@
+node_modules/
+playwright-report/
+test-results/
+blob-report/
+*.zip
+.playwright-cli/
+.env
+.env.*
+!.env.example
