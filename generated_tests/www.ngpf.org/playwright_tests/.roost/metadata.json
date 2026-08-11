@@ -1,0 +1,125 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-11T16:59:59.768Z",
+  "last_updated": "2026-08-11T16:59:59.768Z",
+  "output_dir": "/private/tmp/roostcode-main/runtime/ngpf-roostcode-main/1786467384/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Start a simulator session, verify the dashboard is usable, and cover one safe read-only account activity journey. Do not create an account, submit personal information, transfer funds, pay bills, or perform external financial activity.",
+      "goal": "The bank simulator dashboard renders with a welcome modal; The dashboard displays account activity summary cards; The Account Activity page displays the checking account transactions table; The transaction table updates to display saving account activity",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Open the simulator landing page and click GET STARTED NOW — The bank simulator dashboard renders with a welcome modal\n2. Dismiss the welcome modal dialog — The dashboard displays account activity summary cards\n3. Click VIEW ACCOUNT on Checking Account Activity — The Account Activity page displays the checking account transactions table\n4. Switch account view to Saving account — The transaction table updates to display saving account activity",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "verify bank simulator dashboard and view checking account activity",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "verify bank simulator dashboard and view checking account activity",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [
+        "User is on the NGPF bank simulator landing page"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-11T16:58:00Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the simulator landing page and click GET STARTED NOW",
+          "implementation": [
+            "HomePage.goto",
+            "HomePage.startSimulator"
+          ],
+          "selector": "SEL001",
+          "expected": "The bank simulator dashboard renders with a welcome modal",
+          "expected_selectors": [
+            "SEL002"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Dismiss the welcome modal dialog",
+          "implementation": [
+            "HomePage.dismissWelcomeModal"
+          ],
+          "selector": "SEL003",
+          "expected": "The dashboard displays account activity summary cards",
+          "expected_selectors": [
+            "SEL004"
+          ]
+        },
+        {
+          "id": "S03",
+          "action": "Click VIEW ACCOUNT on Checking Account Activity",
+          "implementation": [
+            "HomePage.openCheckingAccount",
+            "AccountActivityPage.expectLoaded"
+          ],
+          "selector": "SEL004",
+          "expected": "The Account Activity page displays the checking account transactions table",
+          "expected_selectors": [
+            "SEL005",
+            "SEL007"
+          ]
+        },
+        {
+          "id": "S04",
+          "action": "Switch account view to Saving account",
+          "implementation": [
+            "AccountActivityPage.selectSavingAccount",
+            "AccountActivityPage.expectLoaded"
+          ],
+          "selector": "SEL006",
+          "expected": "The transaction table updates to display saving account activity",
+          "expected_selectors": [
+            "SEL005",
+            "SEL007"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 2253393,
+      "output_tokens": 19428,
+      "cached_input_tokens": 1940128,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 2272821,
+      "total_cost_usd": 0.9066266999999999,
+      "api_calls": 54
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-11T16:59:59.768Z",
+        "provider": "google",
+        "model": "gemini-3.6-flash",
+        "input_tokens": 2253393,
+        "output_tokens": 19428,
+        "cached_input_tokens": 1940128,
+        "cache_creation_input_tokens": 0,
+        "total_tokens": 2272821,
+        "cost_usd": 0.9066266999999999,
+        "api_calls": 54,
+        "sessions": {
+          "roostcode": {
+            "input": 2253393,
+            "output": 19428,
+            "cached_input": 1940128,
+            "cache_creation_input": 0,
+            "cost": 0.9066266999999999
+          }
+        }
+      }
+    ]
+  }
+}
