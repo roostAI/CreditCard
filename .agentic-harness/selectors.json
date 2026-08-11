@@ -1,0 +1,95 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "GET STARTED NOW button on the bank simulator welcome/home page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-home.page.ts#BankSimHomePage.getStartedButton",
+      "used_by": ["WF001:S01"],
+      "last_verified_at": "2026-08-11T13:04:00Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Welcome dialog heading 'Welcome to the NGPF Bank Simulator'",
+      "locator": "getByRole('heading', { name: 'Welcome to the NGPF Bank' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.welcomeDialogHeading",
+      "used_by": ["WF001:S01", "WF001:S02"],
+      "last_verified_at": "2026-08-11T13:04:00Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "Ok button inside the welcome dialog on the dashboard",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.welcomeDialogOkButton",
+      "used_by": ["WF001:S03"],
+      "last_verified_at": "2026-08-11T13:04:07Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Checking account card header on the dashboard",
+      "locator": "locator('mat-card-header').filter({ hasText: 'Checking Account Activity' })",
+      "strategy": "css",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.checkingCardHeader",
+      "used_by": ["WF001:S03", "WF001:S04"],
+      "last_verified_at": "2026-08-11T13:04:07Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "VIEW ACCOUNT button for the checking account card (first occurrence)",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' }).first()",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-dashboard.page.ts#BankSimDashboardPage.viewCheckingAccountButton",
+      "used_by": ["WF001:S04", "WF001:S05"],
+      "last_verified_at": "2026-08-11T13:04:21Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Account Activity heading on the account activity page",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-account-activity.page.ts#BankSimAccountActivityPage.accountActivityHeading",
+      "used_by": ["WF001:S05", "WF001:S06"],
+      "last_verified_at": "2026-08-11T13:04:21Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Checking tab button on the account activity page",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-account-activity.page.ts#BankSimAccountActivityPage.checkingTabButton",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T13:04:21Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Id column header in the account activity transaction table",
+      "locator": "getByRole('columnheader', { name: 'Id' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-account-activity.page.ts#BankSimAccountActivityPage.tableIdColumnHeader",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T13:04:21Z"
+    },
+    {
+      "id": "SEL009",
+      "description": "Pagination range label showing item count for account transactions",
+      "locator": "getByText(/\\d+\\s*–\\s*\\d+\\s+of\\s+\\d+/)",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/bank-sim-account-activity.page.ts#BankSimAccountActivityPage.paginationLabel",
+      "used_by": ["WF001:S06"],
+      "last_verified_at": "2026-08-11T13:04:21Z"
+    }
+  ]
+}

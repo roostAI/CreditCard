@@ -1,0 +1,14 @@
+{
+  "name": "ngpf-bank-sim-playwright",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:list": "playwright test --list",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.44.0",
+    "@types/node": "^20.0.0"
+  }
+}
