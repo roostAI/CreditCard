@@ -1,0 +1,429 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-12T07:41:15.693Z",
+  "last_updated": "2026-08-12T07:41:15.693Z",
+  "output_dir": "/private/tmp/roostcode-main/runtime/ngpf-roostcode-main/1786520200/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Access simulator home page and dismiss welcome modal to view main dashboard",
+      "goal": "Welcome modal dialog appears; Main dashboard with account summaries and top navigation is displayed",
+      "feature_area": "home-dashboard",
+      "priority": "high",
+      "starting_hint": "1. Open home page and click GET STARTED NOW button — Welcome modal dialog appears\n2. Dismiss welcome modal by clicking Ok — Main dashboard with account summaries and top navigation is displayed",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "Bank simulator application is accessible"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:28:17Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open home page and click GET STARTED NOW button",
+          "implementation": [],
+          "selector": "SEL001",
+          "expected": "Welcome modal dialog appears",
+          "expected_selectors": [
+            "SEL002"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Dismiss welcome modal by clicking Ok",
+          "implementation": [],
+          "selector": "SEL002",
+          "expected": "Main dashboard with account summaries and top navigation is displayed"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF002",
+      "title": "View checking account activity and transaction history",
+      "goal": "Account Activity page loads showing checking transactions and balances",
+      "feature_area": "checking-account-activity",
+      "priority": "high",
+      "starting_hint": "1. Click VIEW ACCOUNT on Checking Account Activity card — Account Activity page loads showing checking transactions and balances",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "View checking account activity and transaction history",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/checking-account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "View checking account activity and transaction history",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/checking-account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [
+        "Simulator dashboard is open"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:40:47Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click VIEW ACCOUNT on Checking Account Activity card",
+          "implementation": [
+            "HomePage.goto",
+            "HomePage.getStarted",
+            "HomePage.dismissWelcomeDialog",
+            "HomePage.viewCheckingAccount",
+            "CheckingAccountActivityPage.isLoaded",
+            "assertion:CheckingAccountActivityPage.accountHeading.toBeVisible"
+          ],
+          "selector": "SEL003",
+          "expected": "Account Activity page loads showing checking transactions and balances",
+          "expected_selectors": [
+            "SEL014"
+          ]
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF003",
+      "title": "Switch to savings account view and inspect savings transactions",
+      "goal": "Savings account transaction list and balances are displayed",
+      "feature_area": "savings-account-activity",
+      "priority": "high",
+      "starting_hint": "1. Select Saving account tab button — Savings account transaction list and balances are displayed",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "Account Activity page is open"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:29:16Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Select Saving account tab button",
+          "implementation": [],
+          "selector": "SEL004",
+          "expected": "Savings account transaction list and balances are displayed"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF004",
+      "title": "Navigate to Notifications center to review account notifications",
+      "goal": "Notifications page is displayed with notification history table",
+      "feature_area": "notifications-center",
+      "priority": "high",
+      "starting_hint": "1. Click NOTIFICATIONS in navigation menu — Notifications page is displayed with notification history table",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:29:29Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click NOTIFICATIONS in navigation menu",
+          "implementation": [],
+          "selector": "SEL005",
+          "expected": "Notifications page is displayed with notification history table"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF005",
+      "title": "Open transfer money form to prepare an electronic transfer",
+      "goal": "Transfers sub-menu options are revealed; Transfer Money form page is displayed with payment frequency, source, destination, and amount fields",
+      "feature_area": "transfer-money-form",
+      "priority": "high",
+      "starting_hint": "1. Click TRANSFERS navigation menu item — Transfers sub-menu options are revealed\n2. Select MAKE A TRANSFER from sub-menu — Transfer Money form page is displayed with payment frequency, source, destination, and amount fields",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:29:54Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click TRANSFERS navigation menu item",
+          "implementation": [],
+          "selector": "SEL006",
+          "expected": "Transfers sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select MAKE A TRANSFER from sub-menu",
+          "implementation": [],
+          "selector": "SEL007",
+          "expected": "Transfer Money form page is displayed with payment frequency, source, destination, and amount fields"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF006",
+      "title": "Display all upcoming and past account transfers",
+      "goal": "Transfers sub-menu options are revealed; Upcoming Transfers and Past Transfers sections are displayed",
+      "feature_area": "transfer-history",
+      "priority": "high",
+      "starting_hint": "1. Click TRANSFERS navigation menu item — Transfers sub-menu options are revealed\n2. Select DISPLAY ALL TRANSFERS from sub-menu — Upcoming Transfers and Past Transfers sections are displayed",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:30:03Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click TRANSFERS navigation menu item",
+          "implementation": [],
+          "selector": "SEL006",
+          "expected": "Transfers sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select DISPLAY ALL TRANSFERS from sub-menu",
+          "implementation": [],
+          "selector": "SEL008",
+          "expected": "Upcoming Transfers and Past Transfers sections are displayed"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF007",
+      "title": "Navigate to pay a bill interface and prepare bill payment",
+      "goal": "Bills sub-menu options are revealed; Pay a Bill form is displayed with recipient selection, date, and amount fields",
+      "feature_area": "bill-payment-form",
+      "priority": "high",
+      "starting_hint": "1. Click BILLS navigation menu item — Bills sub-menu options are revealed\n2. Select PAY BILL from sub-menu — Pay a Bill form is displayed with recipient selection, date, and amount fields",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:30:25Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click BILLS navigation menu item",
+          "implementation": [],
+          "selector": "SEL009",
+          "expected": "Bills sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select PAY BILL from sub-menu",
+          "implementation": [],
+          "selector": "SEL010",
+          "expected": "Pay a Bill form is displayed with recipient selection, date, and amount fields"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF008",
+      "title": "Manage bill pay recipients list",
+      "goal": "Bills sub-menu options are revealed; Recipients management table and Add Recipient button are displayed",
+      "feature_area": "bill-recipients-management",
+      "priority": "high",
+      "starting_hint": "1. Click BILLS navigation menu item — Bills sub-menu options are revealed\n2. Select MANAGE RECIPIENT from sub-menu — Recipients management table and Add Recipient button are displayed",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:30:34Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click BILLS navigation menu item",
+          "implementation": [],
+          "selector": "SEL009",
+          "expected": "Bills sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select MANAGE RECIPIENT from sub-menu",
+          "implementation": [],
+          "selector": "SEL011",
+          "expected": "Recipients management table and Add Recipient button are displayed"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF009",
+      "title": "Open mobile check deposit form to submit check images",
+      "goal": "Deposit Checks form is displayed with account target, check amount, and front/back check photo upload buttons",
+      "feature_area": "mobile-check-deposit",
+      "priority": "high",
+      "starting_hint": "1. Click DEPOSIT CHECKS in navigation menu — Deposit Checks form is displayed with account target, check amount, and front/back check photo upload buttons",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:30:43Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click DEPOSIT CHECKS in navigation menu",
+          "implementation": [],
+          "selector": "SEL012",
+          "expected": "Deposit Checks form is displayed with account target, check amount, and front/back check photo upload buttons"
+        }
+      ]
+    },
+    {
+      "workflow_id": "WF010",
+      "title": "Access and view user profile information and account alert preferences",
+      "goal": "Manage User Profile page is displayed with Personal Info, Security Questions, and Alerts threshold settings",
+      "feature_area": "user-profile-management",
+      "priority": "high",
+      "starting_hint": "1. Click MANAGE PROFILE in navigation menu — Manage User Profile page is displayed with Personal Info, Security Questions, and Alerts threshold settings",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": false,
+      "worker_result": "discovered",
+      "test_generated": false,
+      "test_name": "",
+      "test_file_path": "",
+      "test_executed_success": false,
+      "test_execution_error": null,
+      "pom_test_name": "",
+      "pom_test_file_path": "",
+      "pom_test_executed_success": false,
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:31:03Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Click MANAGE PROFILE in navigation menu",
+          "implementation": [],
+          "selector": "SEL013",
+          "expected": "Manage User Profile page is displayed with Personal Info, Security Questions, and Alerts threshold settings"
+        }
+      ]
+    }
+  ],
+  "Selection": {
+    "selected_workflow_ids": [
+      "WF002"
+    ]
+  },
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 2521725,
+      "output_tokens": 27228,
+      "cached_input_tokens": 2188834,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 2548953,
+      "total_cost_usd": 1.0318716,
+      "api_calls": 49
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-12T07:41:15.693Z",
+        "provider": "google",
+        "model": "gemini-3.6-flash",
+        "input_tokens": 2521725,
+        "output_tokens": 27228,
+        "cached_input_tokens": 2188834,
+        "cache_creation_input_tokens": 0,
+        "total_tokens": 2548953,
+        "cost_usd": 1.0318716,
+        "api_calls": 49,
+        "sessions": {
+          "roostcode": {
+            "input": 2521725,
+            "output": 27228,
+            "cached_input": 2188834,
+            "cache_creation_input": 0,
+            "cost": 1.0318716
+          }
+        }
+      }
+    ]
+  }
+}
