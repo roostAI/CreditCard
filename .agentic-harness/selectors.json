@@ -1,0 +1,65 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "Get started button on the bank simulator landing page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/landing.page.ts#LandingPage.getStartedButton",
+      "used_by": [
+        "WF001:S01"
+      ],
+      "last_verified_at": "2026-08-12T06:09:10Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Welcome dialog dismiss button",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.dismissWelcomeButton",
+      "used_by": [
+        "WF001:S02"
+      ],
+      "last_verified_at": "2026-08-12T06:09:16Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "View account button for Checking Account Activity on the dashboard",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' }).first()",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/dashboard.page.ts#DashboardPage.checkingViewAccountButton",
+      "used_by": [
+        "WF001:S03"
+      ],
+      "last_verified_at": "2026-08-12T06:09:27Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Account Activity heading on checking account page",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.accountActivityHeading",
+      "used_by": [
+        "WF001:S04"
+      ],
+      "last_verified_at": "2026-08-12T06:09:27Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "Account selection checking tab/button on account activity page",
+      "locator": "getByRole('button', { name: 'Checking' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/account-activity.page.ts#AccountActivityPage.checkingAccountButton",
+      "used_by": [
+        "WF001:S04"
+      ],
+      "last_verified_at": "2026-08-12T06:09:27Z"
+    }
+  ]
+}

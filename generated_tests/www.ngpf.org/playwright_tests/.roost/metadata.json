@@ -1,0 +1,113 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-12T06:10:58.213Z",
+  "last_updated": "2026-08-12T06:10:58.213Z",
+  "output_dir": "/private/tmp/roostcode-main/runtime/ngpf-roostcode-main/1786514870/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Start a simulator session, verify the dashboard is usable, and view checking account activity",
+      "goal": "The bank simulator dashboard loads; The dashboard cards become interactive; The checking account activity view opens; Account Activity heading and Checking tab are visible",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Open the simulator landing page and click GET STARTED NOW — The bank simulator dashboard loads\n2. Dismiss the welcome dialog if visible — The dashboard cards become interactive\n3. Click VIEW ACCOUNT on the Checking Account Activity card — The checking account activity view opens\n4. Verify account activity heading and checking tab are visible — Account Activity heading and Checking tab are visible",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "verify dashboard and checking account activity",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "verify dashboard and checking account activity",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [
+        "Public NGPF bank simulator is accessible without credentials"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T06:10:38Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the simulator landing page and click GET STARTED NOW",
+          "implementation": [
+            "LandingPage.goto",
+            "LandingPage.clickGetStarted"
+          ],
+          "selector": "SEL001",
+          "expected": "The bank simulator dashboard loads"
+        },
+        {
+          "id": "S02",
+          "action": "Dismiss the welcome dialog if visible",
+          "implementation": [
+            "DashboardPage.dismissWelcomeDialogIfVisible"
+          ],
+          "selector": "SEL002",
+          "expected": "The dashboard cards become interactive"
+        },
+        {
+          "id": "S03",
+          "action": "Click VIEW ACCOUNT on the Checking Account Activity card",
+          "implementation": [
+            "DashboardPage.navigateToCheckingAccount"
+          ],
+          "selector": "SEL003",
+          "expected": "The checking account activity view opens"
+        },
+        {
+          "id": "S04",
+          "action": "Verify account activity heading and checking tab are visible",
+          "implementation": [
+            "assertion:AccountActivityPage.accountActivityHeading.toBeVisible",
+            "assertion:AccountActivityPage.checkingAccountButton.toBeVisible"
+          ],
+          "expected": "Account Activity heading and Checking tab are visible",
+          "expected_selectors": [
+            "SEL004",
+            "SEL005"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 1864908,
+      "output_tokens": 16491,
+      "cached_input_tokens": 1571595,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 1881399,
+      "total_cost_usd": 0.7993912499999999,
+      "api_calls": 44
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-12T06:10:58.213Z",
+        "provider": "google",
+        "model": "gemini-3.6-flash",
+        "input_tokens": 1864908,
+        "output_tokens": 16491,
+        "cached_input_tokens": 1571595,
+        "cache_creation_input_tokens": 0,
+        "total_tokens": 1881399,
+        "cost_usd": 0.7993912499999999,
+        "api_calls": 44,
+        "sessions": {
+          "roostcode": {
+            "input": 1864908,
+            "output": 16491,
+            "cached_input": 1571595,
+            "cache_creation_input": 0,
+            "cost": 0.7993912499999999
+          }
+        }
+      }
+    ]
+  }
+}
