@@ -1,0 +1,60 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "account-activity",
+      "scenario": "Start a simulator session, verify the dashboard is usable, and view checking account activity",
+      "preconditions": [
+        "Public NGPF bank simulator is accessible without credentials"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the simulator landing page and click GET STARTED NOW",
+          "implementation": [
+            "LandingPage.goto",
+            "LandingPage.clickGetStarted"
+          ],
+          "selector": "SEL001",
+          "expected": "The bank simulator dashboard loads"
+        },
+        {
+          "id": "S02",
+          "action": "Dismiss the welcome dialog if visible",
+          "implementation": [
+            "DashboardPage.dismissWelcomeDialogIfVisible"
+          ],
+          "selector": "SEL002",
+          "expected": "The dashboard cards become interactive"
+        },
+        {
+          "id": "S03",
+          "action": "Click VIEW ACCOUNT on the Checking Account Activity card",
+          "implementation": [
+            "DashboardPage.navigateToCheckingAccount"
+          ],
+          "selector": "SEL003",
+          "expected": "The checking account activity view opens"
+        },
+        {
+          "id": "S04",
+          "action": "Verify account activity heading and checking tab are visible",
+          "implementation": [
+            "assertion:AccountActivityPage.accountActivityHeading.toBeVisible",
+            "assertion:AccountActivityPage.checkingAccountButton.toBeVisible"
+          ],
+          "expected": "Account Activity heading and Checking tab are visible",
+          "expected_selectors": [
+            "SEL004",
+            "SEL005"
+          ]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts#verify dashboard and checking account activity",
+      "status": "passed",
+      "last_verified_at": "2026-08-12T06:10:38Z"
+    }
+  ]
+}
