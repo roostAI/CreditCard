@@ -1,0 +1,127 @@
+{
+  "metadata_version": "1.0",
+  "created_at": "2026-08-12T07:16:07.328Z",
+  "last_updated": "2026-08-12T07:16:07.328Z",
+  "output_dir": "/private/tmp/roostcode-main/runtime/ngpf-roostcode-main/1786518697/source/CreditCard/generated_tests/www.ngpf.org/playwright_tests",
+  "site_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "pom_files": [],
+  "Login_File": {},
+  "Workflows": [
+    {
+      "workflow_id": "WF001",
+      "title": "Start a bank simulator session, verify the dashboard is usable, and view account activity",
+      "goal": "The bank simulator landing page is loaded with the Get Started button; The main bank simulator dashboard is displayed with checking account view button; The Account Activity page is displayed showing account transactions; Account activity view updates to selected account tab",
+      "feature_area": "account-activity",
+      "priority": "high",
+      "starting_hint": "1. Open the bank simulator landing page — The bank simulator landing page is loaded with the Get Started button\n2. Start the simulator session and dismiss the welcome dialog — The main bank simulator dashboard is displayed with checking account view button\n3. Navigate to Checking Account Activity — The Account Activity page is displayed showing account transactions\n4. Switch account views between Savings and Checking — Account activity view updates to selected account tab",
+      "discovery_source": "roostcode_agentic_ui_harness",
+      "worker_completed": true,
+      "worker_result": "passed",
+      "test_generated": true,
+      "test_name": "User views checking account activity",
+      "test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "test_executed_success": true,
+      "test_execution_error": null,
+      "pom_test_name": "User views checking account activity",
+      "pom_test_file_path": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts",
+      "pom_test_executed_success": true,
+      "preconditions": [
+        "The public NGPF bank simulator is accessible"
+      ],
+      "safety": null,
+      "last_verified_at": "2026-08-12T07:15:00Z",
+      "test_steps": [
+        {
+          "id": "S01",
+          "action": "Open the bank simulator landing page",
+          "implementation": [
+            "BankSimulatorPage.goto"
+          ],
+          "expected": "The bank simulator landing page is loaded with the Get Started button",
+          "expected_selectors": [
+            "SEL001"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Start the simulator session and dismiss the welcome dialog",
+          "implementation": [
+            "BankSimulatorPage.startSimulator",
+            "BankSimulatorPage.dismissWelcomeDialog",
+            "assertion:BankSimulatorPage.viewCheckingAccountButton.toBeVisible"
+          ],
+          "selector": "SEL001",
+          "expected": "The main bank simulator dashboard is displayed with checking account view button",
+          "expected_selectors": [
+            "SEL002",
+            "SEL003"
+          ]
+        },
+        {
+          "id": "S03",
+          "action": "Navigate to Checking Account Activity",
+          "implementation": [
+            "BankSimulatorPage.viewCheckingAccount",
+            "assertion:BankSimulatorPage.accountActivityHeading.toBeVisible"
+          ],
+          "selector": "SEL003",
+          "expected": "The Account Activity page is displayed showing account transactions",
+          "expected_selectors": [
+            "SEL004"
+          ]
+        },
+        {
+          "id": "S04",
+          "action": "Switch account views between Savings and Checking",
+          "implementation": [
+            "BankSimulatorPage.selectSavingsAccount",
+            "assertion:BankSimulatorPage.savingsTabButton.toBeVisible",
+            "BankSimulatorPage.selectCheckingAccount",
+            "assertion:BankSimulatorPage.checkingTabButton.toBeVisible"
+          ],
+          "selector": "SEL005",
+          "expected": "Account activity view updates to selected account tab",
+          "expected_selectors": [
+            "SEL005",
+            "SEL006"
+          ]
+        }
+      ]
+    }
+  ],
+  "Token_Usage": {
+    "cumulative": {
+      "input_tokens": 1604099,
+      "output_tokens": 18767,
+      "cached_input_tokens": 1326997,
+      "cache_creation_input_tokens": 0,
+      "total_tokens": 1622866,
+      "total_cost_usd": 0.7554550499999999,
+      "api_calls": 42
+    },
+    "runs": [
+      {
+        "run_type": "generate",
+        "timestamp": "2026-08-12T07:16:07.328Z",
+        "provider": "google",
+        "model": "gemini-3.6-flash",
+        "input_tokens": 1604099,
+        "output_tokens": 18767,
+        "cached_input_tokens": 1326997,
+        "cache_creation_input_tokens": 0,
+        "total_tokens": 1622866,
+        "cost_usd": 0.7554550499999999,
+        "api_calls": 42,
+        "sessions": {
+          "roostcode": {
+            "input": 1604099,
+            "output": 18767,
+            "cached_input": 1326997,
+            "cache_creation_input": 0,
+            "cost": 0.7554550499999999
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "account-activity",
+      "scenario": "Start a bank simulator session, verify the dashboard is usable, and view account activity",
+      "preconditions": [
+        "The public NGPF bank simulator is accessible"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open the bank simulator landing page",
+          "implementation": [
+            "BankSimulatorPage.goto"
+          ],
+          "expected": "The bank simulator landing page is loaded with the Get Started button",
+          "expected_selectors": [
+            "SEL001"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Start the simulator session and dismiss the welcome dialog",
+          "implementation": [
+            "BankSimulatorPage.startSimulator",
+            "BankSimulatorPage.dismissWelcomeDialog",
+            "assertion:BankSimulatorPage.viewCheckingAccountButton.toBeVisible"
+          ],
+          "selector": "SEL001",
+          "expected": "The main bank simulator dashboard is displayed with checking account view button",
+          "expected_selectors": [
+            "SEL002",
+            "SEL003"
+          ]
+        },
+        {
+          "id": "S03",
+          "action": "Navigate to Checking Account Activity",
+          "implementation": [
+            "BankSimulatorPage.viewCheckingAccount",
+            "assertion:BankSimulatorPage.accountActivityHeading.toBeVisible"
+          ],
+          "selector": "SEL003",
+          "expected": "The Account Activity page is displayed showing account transactions",
+          "expected_selectors": [
+            "SEL004"
+          ]
+        },
+        {
+          "id": "S04",
+          "action": "Switch account views between Savings and Checking",
+          "implementation": [
+            "BankSimulatorPage.selectSavingsAccount",
+            "assertion:BankSimulatorPage.savingsTabButton.toBeVisible",
+            "BankSimulatorPage.selectCheckingAccount",
+            "assertion:BankSimulatorPage.checkingTabButton.toBeVisible"
+          ],
+          "selector": "SEL005",
+          "expected": "Account activity view updates to selected account tab",
+          "expected_selectors": [
+            "SEL005",
+            "SEL006"
+          ]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/account-activity.spec.ts#User views checking account activity",
+      "status": "passed",
+      "last_verified_at": "2026-08-12T07:15:00Z"
+    }
+  ]
+}
