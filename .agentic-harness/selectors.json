@@ -1,0 +1,176 @@
+{
+  "schema_version": "2.0",
+  "selectors": [
+    {
+      "id": "SEL001",
+      "description": "Get Started Now button on home welcome page",
+      "locator": "getByRole('button', { name: 'GET STARTED NOW' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/home*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/home.page.ts#HomePage.getStartedButton",
+      "used_by": [
+        "WF001:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:27:46Z"
+    },
+    {
+      "id": "SEL002",
+      "description": "Ok button on welcome dialog modal",
+      "locator": "getByRole('button', { name: 'Ok' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/home.page.ts#HomePage.welcomeOkButton",
+      "used_by": [
+        "WF001:S01",
+        "WF001:S02"
+      ],
+      "last_verified_at": "2026-08-12T07:28:17Z"
+    },
+    {
+      "id": "SEL003",
+      "description": "View Account button for checking account activity card",
+      "locator": "getByRole('button', { name: 'VIEW ACCOUNT' }).first()",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/home.page.ts#HomePage.viewCheckingAccountButton",
+      "used_by": [
+        "WF002:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:28:45Z"
+    },
+    {
+      "id": "SEL004",
+      "description": "Saving account tab button in account activity view",
+      "locator": "getByRole('button', { name: 'Saving' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "",
+      "used_by": [
+        "WF003:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:29:16Z"
+    },
+    {
+      "id": "SEL005",
+      "description": "Notifications item in top navigation menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: 'NOTIFICATIONS' })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF004:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:29:29Z"
+    },
+    {
+      "id": "SEL006",
+      "description": "Transfers item in top navigation menu",
+      "locator": "locator('a').filter({ hasText: 'TRANSFERS expand_more' })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF005:S01",
+        "WF006:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:29:41Z"
+    },
+    {
+      "id": "SEL007",
+      "description": "Make a Transfer item in Transfers sub-menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: /^MAKE A TRANSFER$/ })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF005:S02"
+      ],
+      "last_verified_at": "2026-08-12T07:29:54Z"
+    },
+    {
+      "id": "SEL008",
+      "description": "Display All Transfers item in Transfers sub-menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: /^DISPLAY ALL TRANSFERS$/ })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF006:S02"
+      ],
+      "last_verified_at": "2026-08-12T07:30:03Z"
+    },
+    {
+      "id": "SEL009",
+      "description": "Bills item in top navigation menu",
+      "locator": "locator('a').filter({ hasText: 'BILLS expand_more' })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF007:S01",
+        "WF008:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:30:11Z"
+    },
+    {
+      "id": "SEL010",
+      "description": "Pay Bill item in Bills sub-menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: /^PAY BILL$/ })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF007:S02"
+      ],
+      "last_verified_at": "2026-08-12T07:30:25Z"
+    },
+    {
+      "id": "SEL011",
+      "description": "Manage Recipient item in Bills sub-menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: /^MANAGE RECIPIENT$/ })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF008:S02"
+      ],
+      "last_verified_at": "2026-08-12T07:30:34Z"
+    },
+    {
+      "id": "SEL012",
+      "description": "Deposit Checks item in top navigation menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: 'DEPOSIT CHECKS' })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF009:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:30:43Z"
+    },
+    {
+      "id": "SEL013",
+      "description": "Manage Profile item in top navigation menu",
+      "locator": "locator('app-menu-list-item').filter({ hasText: 'MANAGE PROFILE' })",
+      "strategy": "text",
+      "url_pattern": "/bank-sim/*",
+      "page_object": "",
+      "used_by": [
+        "WF010:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:31:03Z"
+    },
+    {
+      "id": "SEL014",
+      "description": "Account Activity heading on account page",
+      "locator": "getByRole('heading', { name: 'Account Activity' })",
+      "strategy": "role",
+      "url_pattern": "/bank-sim/account*",
+      "page_object": "generated_tests/www.ngpf.org/playwright_tests/tests/pages/checking-account-activity.page.ts#CheckingAccountActivityPage.accountHeading",
+      "used_by": [
+        "WF002:S01"
+      ],
+      "last_verified_at": "2026-08-12T07:38:40Z"
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "schema_version": "2.0",
+  "base_url": "https://www.ngpf.org/bank-sim/home?returnUrl=%2F",
+  "workflows": [
+    {
+      "id": "WF001",
+      "feature": "home-dashboard",
+      "scenario": "Access simulator home page and dismiss welcome modal to view main dashboard",
+      "preconditions": [
+        "Bank simulator application is accessible"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Open home page and click GET STARTED NOW button",
+          "implementation": [],
+          "selector": "SEL001",
+          "expected": "Welcome modal dialog appears",
+          "expected_selectors": [
+            "SEL002"
+          ]
+        },
+        {
+          "id": "S02",
+          "action": "Dismiss welcome modal by clicking Ok",
+          "implementation": [],
+          "selector": "SEL002",
+          "expected": "Main dashboard with account summaries and top navigation is displayed"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:28:17Z"
+    },
+    {
+      "id": "WF002",
+      "feature": "checking-account-activity",
+      "scenario": "View checking account activity and transaction history",
+      "preconditions": [
+        "Simulator dashboard is open"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click VIEW ACCOUNT on Checking Account Activity card",
+          "implementation": [
+            "HomePage.goto",
+            "HomePage.getStarted",
+            "HomePage.dismissWelcomeDialog",
+            "HomePage.viewCheckingAccount",
+            "CheckingAccountActivityPage.isLoaded",
+            "assertion:CheckingAccountActivityPage.accountHeading.toBeVisible"
+          ],
+          "selector": "SEL003",
+          "expected": "Account Activity page loads showing checking transactions and balances",
+          "expected_selectors": [
+            "SEL014"
+          ]
+        }
+      ],
+      "test": "generated_tests/www.ngpf.org/playwright_tests/tests/checking-account-activity.spec.ts#View checking account activity and transaction history",
+      "status": "passed",
+      "last_verified_at": "2026-08-12T07:40:47Z"
+    },
+    {
+      "id": "WF003",
+      "feature": "savings-account-activity",
+      "scenario": "Switch to savings account view and inspect savings transactions",
+      "preconditions": [
+        "Account Activity page is open"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Select Saving account tab button",
+          "implementation": [],
+          "selector": "SEL004",
+          "expected": "Savings account transaction list and balances are displayed"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:29:16Z"
+    },
+    {
+      "id": "WF004",
+      "feature": "notifications-center",
+      "scenario": "Navigate to Notifications center to review account notifications",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click NOTIFICATIONS in navigation menu",
+          "implementation": [],
+          "selector": "SEL005",
+          "expected": "Notifications page is displayed with notification history table"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:29:29Z"
+    },
+    {
+      "id": "WF005",
+      "feature": "transfer-money-form",
+      "scenario": "Open transfer money form to prepare an electronic transfer",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click TRANSFERS navigation menu item",
+          "implementation": [],
+          "selector": "SEL006",
+          "expected": "Transfers sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select MAKE A TRANSFER from sub-menu",
+          "implementation": [],
+          "selector": "SEL007",
+          "expected": "Transfer Money form page is displayed with payment frequency, source, destination, and amount fields"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:29:54Z"
+    },
+    {
+      "id": "WF006",
+      "feature": "transfer-history",
+      "scenario": "Display all upcoming and past account transfers",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click TRANSFERS navigation menu item",
+          "implementation": [],
+          "selector": "SEL006",
+          "expected": "Transfers sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select DISPLAY ALL TRANSFERS from sub-menu",
+          "implementation": [],
+          "selector": "SEL008",
+          "expected": "Upcoming Transfers and Past Transfers sections are displayed"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:30:03Z"
+    },
+    {
+      "id": "WF007",
+      "feature": "bill-payment-form",
+      "scenario": "Navigate to pay a bill interface and prepare bill payment",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click BILLS navigation menu item",
+          "implementation": [],
+          "selector": "SEL009",
+          "expected": "Bills sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select PAY BILL from sub-menu",
+          "implementation": [],
+          "selector": "SEL010",
+          "expected": "Pay a Bill form is displayed with recipient selection, date, and amount fields"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:30:25Z"
+    },
+    {
+      "id": "WF008",
+      "feature": "bill-recipients-management",
+      "scenario": "Manage bill pay recipients list",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click BILLS navigation menu item",
+          "implementation": [],
+          "selector": "SEL009",
+          "expected": "Bills sub-menu options are revealed"
+        },
+        {
+          "id": "S02",
+          "action": "Select MANAGE RECIPIENT from sub-menu",
+          "implementation": [],
+          "selector": "SEL011",
+          "expected": "Recipients management table and Add Recipient button are displayed"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:30:34Z"
+    },
+    {
+      "id": "WF009",
+      "feature": "mobile-check-deposit",
+      "scenario": "Open mobile check deposit form to submit check images",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click DEPOSIT CHECKS in navigation menu",
+          "implementation": [],
+          "selector": "SEL012",
+          "expected": "Deposit Checks form is displayed with account target, check amount, and front/back check photo upload buttons"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:30:43Z"
+    },
+    {
+      "id": "WF010",
+      "feature": "user-profile-management",
+      "scenario": "Access and view user profile information and account alert preferences",
+      "preconditions": [
+        "User is logged into simulator"
+      ],
+      "steps": [
+        {
+          "id": "S01",
+          "action": "Click MANAGE PROFILE in navigation menu",
+          "implementation": [],
+          "selector": "SEL013",
+          "expected": "Manage User Profile page is displayed with Personal Info, Security Questions, and Alerts threshold settings"
+        }
+      ],
+      "test": "",
+      "status": "discovered",
+      "last_verified_at": "2026-08-12T07:31:03Z"
+    }
+  ]
+}
