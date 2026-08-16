@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "flexjobs-1",
+    "created_at": "2026-08-16T10:44:47.282Z",
+    "updated_at": "2026-08-16T10:44:47.282Z"
+  },
+  "files": {
+    "input_files": [
+      {
+        "fileName": "flexjobs-1.txt",
+        "fileURI": "/var/tmp/Roost/RoostGPT/flexjobs-1/cc6544a7-37d5-4a34-bf79-59bd9539bb73/functional_tests/flexjobs-1/flexjobs-1.txt",
+        "fileSha": "cf83e1357e"
+      },
+      {
+        "fileName": "flexjobs-seeker-onboarding.pdf",
+        "fileURI": "/var/tmp/Roost/RoostGPT/flexjobs-1/cc6544a7-37d5-4a34-bf79-59bd9539bb73/functional_tests/flexjobs-1/flexjobs-seeker-onboarding.pdf",
+        "fileSha": "1ed3589ecf"
+      }
+    ]
+  },
+  "api_files": {
+    "input_files": []
+  }
+}
