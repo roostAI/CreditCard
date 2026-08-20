@@ -1,0 +1,572 @@
+[
+  {
+    "type": "functional",
+    "title": "Verify the system captures all required preference fields through the onboarding questionnaire on first visit before account creation",
+    "description": "This test verifies that the full set of required seeker preference fields is presented and captured via the onboarding questionnaire on the home page before account creation. This ensures that key job-matching attributes are available before any user registration, supporting personalized listings from first visit. Automation: HIGH — most steps can be validated via UI automation and API state assertions.",
+    "testId": "TC-PRFCAP-01",
+    "testDescription": "On a user's first visit to the platform, they are prompted with a guided questionnaire from the home page. This test ensures that all required preference fields (working arrangement, motivator, activity, salary, location, job title, category, experience, education, workplace benefit) are each displayed, allow entry, and are recorded when submitted, prior to account existence.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Platform is running and accessible; no user account or cookies/session present for the user.",
+    "stepsToPerform": "1. Open a fresh browser session and clear all cache and cookies. 2. Navigate to the platform's home page as a new user. 3. Observe the prompt offering a guided onboarding questionnaire. 4. Begin the questionnaire; for each field, select or input a valid test value: (a) working arrangement: 'fully remote', (b) motivator: 'career progression', (c) activity: 'actively searching', (d) annual salary: '45000', (e) location: 'United Kingdom', (f) job title: 'Product Manager', (g) category: 'Product', (h) years experience: '5', (i) education: 'Bachelor’s Degree', (j) benefit: 'remote allowance'. 5. Progress through each field, verifying its presence and ability to enter/select data. 6. Complete all fields and submit the questionnaire. 7. Observe the confirmation screen or UI that indicates successful capture of preferences. 8. Check on the client-side storage (or via API, if exposed) that all entered fields are captured to the seeker's anonymous profile/session.",
+    "expectedResult": "All required preference fields are displayed, individually capturable, and persisted to the seeker's anonymous profile prior to account creation.",
+    "sourceCitation": {
+      "location": "Section 1. Seeker Preference Capture, Lines 21-24",
+      "excerpt": "Collect the seeker's requirements through a short guided questionnaire offered from the home page on a first visit, before any account exists."
+    },
+    "tags": [
+      "ui",
+      "happy-path",
+      "e2e",
+      "functional",
+      "smoke"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the system correctly records which preference fields are answered and which are left unanswered in the onboarding questionnaire",
+    "description": "This test assures that the platform distinctly records both answered and intentionally unanswered preference fields during onboarding. This supports accurate personalized matching, tracking user engagement, and provides flexibility for incomplete/optional responses. Automation: HIGH — assertions are via profile data or UI state.",
+    "testId": "TC-PRFCAP-02",
+    "testDescription": "A new user completes the onboarding questionnaire, choosing to fill out only a subset of the available preference fields. The system must accurately record which preferences were provided and which fields were skipped or left blank, and reflect this distinction in persistent user state prior to registration.",
+    "severity": "High",
+    "priority": "P0",
+    "prerequisites": "Platform is running and accessible; no prior user session or profile exists.",
+    "stepsToPerform": "1. Start a new browser session with all prior state cleared. 2. Navigate to the home page as a new visitor. 3. Initiate the onboarding questionnaire. 4. Enter values only for: working arrangement ('hybrid'), motivator ('flexibility'), location ('Canada'). 5. On all other fields (activity, salary, job title, category, experience, education, workplace benefit), leave them blank or skip (using skip/next mechanism if present). 6. Submit the questionnaire. 7. Observe the completion confirmation. 8. Access the resulting preference state (via UI 'Review Preferences' or profile API if available) to validate which fields are marked as answered and which as unanswered.",
+    "expectedResult": "The system marks 'working arrangement', 'motivator', and 'location' as answered and all other fields as unanswered, with the distinction clearly recorded.",
+    "sourceCitation": {
+      "location": "Section 1. Seeker Preference Capture, Lines 36-38",
+      "excerpt": "Record which preferences were provided and which were left unanswered."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "happy-path",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify a seeker can revisit and change any individual preference without completing the full questionnaire again",
+    "description": "This test checks that users can update any single preference field after initial onboarding without redoing the entire questionnaire, preserving flexibility and reducing friction in profile management. Automation: HIGH — change is directly observable on UI/profile.",
+    "testId": "TC-PRFCAP-03",
+    "testDescription": "After onboarding, a seeker needs to adjust one preference (e.g., update their targeted location or salary) without repeating the whole onboarding survey. The system should allow access to any individual field for editing, and persist only the change.",
+    "severity": "High",
+    "priority": "P0",
+    "prerequisites": "A freshly completed onboarding questionnaire exists (anonymous user); user session is active.",
+    "stepsToPerform": "1. Complete the full onboarding questionnaire as a new user, entering valid values for all fields. 2. Proceed to the matched listings or main dashboard UI. 3. Locate the mechanism to review or edit preferences (e.g., 'Edit my preferences' button). 4. Select a single field to edit (e.g., annual salary: change '45000' to '50000'). 5. Save the change. 6. Verify the UI or profile summary reflects the new value for only the updated field. 7. Check that all other fields remain unchanged. 8. Ensure the edit did not start the whole questionnaire from the beginning.",
+    "expectedResult": "Any single preference can be changed directly without triggering a full questionnaire; only the targeted field updates in the seeker profile.",
+    "sourceCitation": {
+      "location": "Section 1. Seeker Preference Capture, Lines 38-40",
+      "excerpt": "Allow preferences to be revisited and changed later without the seeker having to repeat the whole questionnaire."
+    },
+    "tags": [
+      "ui",
+      "happy-path",
+      "functional",
+      "regression"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the system supports capturing all specified preference enumerations (working arrangement, motivator, activity, salary, location, job title, category, experience, education, workplace benefit)",
+    "description": "This test confirms that each preference input defined in the business rules is present, uses documented enumeration lists or input controls, and captures the seeker's values correctly. This ensures all required candidate facets for job matching are supported. Automation: HIGH.",
+    "testId": "TC-PRFCAP-04",
+    "testDescription": "A new user is presented with and completes all preference fields specified in the requirement: working arrangement, motivator, activity, salary, location, job titles (up to max if defined), category, experience, education, and benefit. The workflow captures and stores each dimension.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "System accessible and ready for onboarding; no existing user profile/session.",
+    "stepsToPerform": "1. Start a fresh browser session to ensure user is treated as new. 2. Navigate to the platform home page. 3. Accept prompt to start the onboarding questionnaire. 4. Fill 'working arrangement' with 'no preference'. 5. Fill 'motivator' with 'income'. 6. Fill 'activity' with 'casually browsing'. 7. Enter 'salary' as '60000'. 8. Select 'location': 'United States'. 9. Input multiple job titles up to stated max (e.g., 'Designer', 'Front-end Developer'). 10. Choose category: 'Engineering'. 11. Set experience: '2'. 12. Set education: 'Master’s Degree'. 13. Select a workplace benefit: 'health insurance'. 14. Submit and check that all fields and values are present in the persisted state/profile.",
+    "expectedResult": "All enumerated preference fields are displayed, accept values as required, and are saved to the seeker's session/profile.",
+    "sourceCitation": {
+      "location": "Section 1. Seeker Preference Capture, Lines 25-36",
+      "excerpt": "The preferences captured cover: - the working arrangement ... - the workplace benefit the seeker values most"
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "happy-path",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the seeker can indicate current resume state (up to date, needs work, not written yet) in the onboarding process",
+    "description": "This test validates that the user can specify the status of their resume from three allowed options, ensuring the system accurately collects resume readiness as part of the onboarding journey. Automation: HIGH.",
+    "testId": "TC-RESUME-01",
+    "testDescription": "While onboarding, the seeker is given a choice to select among 'up to date', 'needs work', or 'not written yet' for their resume. The selection is recorded, informing subsequent flows and recommendations.",
+    "severity": "High",
+    "priority": "P0",
+    "prerequisites": "Platform running, onboarding in progress, at resume state capture screen.",
+    "stepsToPerform": "1. Open home page as a new user. 2. Begin the onboarding questionnaire. 3. Progress to the resume state question. 4. Check that all three options ('up to date', 'needs work', 'not written yet') are present as selectable elements. 5. Select 'up to date' and proceed to next step; observe value persists. 6. Revisit and select 'needs work', verify value updates and persists. 7. Repeat with 'not written yet'. 8. Complete onboarding and verify final resume state stored is last selection made.",
+    "expectedResult": "Resume state supports exactly the three enumerated values; selection is stored to the seeker profile/session.",
+    "sourceCitation": {
+      "location": "Section 2. Resume Handling, Lines 42-43",
+      "excerpt": "Capture the current state of the seeker's resume (up to date, needs work, not written yet)."
+    },
+    "tags": [
+      "ui",
+      "functional",
+      "happy-path",
+      "regression"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the system accepts resume uploads in any common document format under the defined file size limit",
+    "description": "This test ensures the platform accepts resumes uploaded in standard formats (e.g., PDF, DOC, DOCX, TXT) that do not exceed the stated size limit, storing them against the user profile for further use. Supports compliance and error-free user onboarding. Automation: HIGH — error/success are UI-detectable.",
+    "testId": "TC-RESUME-02",
+    "testDescription": "During onboarding, the seeker uploads their resume in common document formats (e.g., PDF, DOCX), each sized safely below the system's maximum allowed file size. The upload is accepted, confirmed, and the file is tied to the user's profile for later job applications.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Seeker is on the onboarding resume-upload screen; test documents of types .pdf, .doc, .docx, .txt are available, all < 5MB (ASSUMPTION: size limit is 5MB, since the source does not specify).",
+    "stepsToPerform": "1. Open the home page as a new anonymous user. 2. Begin onboarding questionnaire. 3. Proceed to the resume upload step. 4. Select 'test_resume.pdf' (2MB) and upload; verify success confirmation and file visible as uploaded. 5. Remove uploaded PDF; now upload 'test_resume.docx' (1MB); verify confirmation UI and no error. 6. Repeat for 'test_resume.txt' (500KB). 7. Check post-upload that each file is listed or previewed as accepted. 8. Submit the onboarding process and verify the uploaded resume persists to seeker's anonymous profile/session.",
+    "expectedResult": "System accepts .pdf, .doc, .docx, .txt files under the defined size limit and attaches the document to the seeker profile.",
+    "sourceCitation": {
+      "location": "Section 2. Resume Handling, Lines 44-46",
+      "excerpt": "Accept a resume upload in the common document formats, up to a defined size limit."
+    },
+    "tags": [
+      "ui",
+      "happy-path",
+      "functional",
+      "integration"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "negative",
+    "title": "Verify the system rejects resume files in unsupported formats with a clear reason prior to acceptance",
+    "description": "This test validates that the platform enforces resume-type restrictions by rejecting unsupported file formats (e.g., .jpg, .exe), displaying a clear explanatory message and refusing to store the file. Protects system integrity and user experience. Automation: HIGH.",
+    "testId": "TC-RESUME-03",
+    "testDescription": "A seeker attempts to upload resumes using non-supported formats (e.g., image or executable files). The system must prevent those files from being attached to the seeker’s profile and show a clear reason for rejection prior to finalizing the upload.",
+    "severity": "High",
+    "priority": "P0",
+    "prerequisites": "Seeker is on resume upload question; .jpg and .exe files are available for upload.",
+    "stepsToPerform": "1. Start onboarding as a new user. 2. Proceed to resume upload step. 3. Attempt to upload 'test_resume.jpg' (valid image, <5MB). 4. Observe system response: expect rejection message stating unsupported format. 5. Attempt to upload 'test_resume.exe' (<5MB). 6. Observe UI shows an explicit error and does not progress/attach file. 7. Try re-uploading a supported file (e.g., 'test_resume.pdf'); verify this is accepted. 8. Attempt to proceed with onboarding, confirming no evidence of rejected file(s) in profile/session.",
+    "expectedResult": "System rejects unsupported file formats (.jpg, .exe) and displays a clear rejection reason before accepting the upload.",
+    "sourceCitation": {
+      "location": "Section 2. Resume Handling, Lines 48-49",
+      "excerpt": "Reject unsupported formats ... with a clear reason."
+    },
+    "tags": [
+      "ui",
+      "negative",
+      "edge-case",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "boundary",
+    "title": "Verify the system rejects resume uploads exceeding the allowed size limit with an appropriate error message",
+    "description": "This test ensures the file size restriction on resume uploads is strictly enforced. Attempts to upload just-over-limit files are rejected, supporting system performance and data protection. Boundary Value Analysis applied. Automation: HIGH.",
+    "testId": "TC-RESUME-04",
+    "testDescription": "A seeker tries to upload resumes at, just below, and just above the stated file size limit. The system should accept files less than or equal to the limit, and reject those exceeding it with a clear error before storing.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Seeker is on the resume upload screen; test files sized at 4.9MB, 5MB, and 5.1MB are available with a supported file extension (ASSUMPTION: limit is 5MB).",
+    "stepsToPerform": "1. Begin onboarding as a new anonymous user. 2. Proceed to resume upload step. 3. Upload 'resume_4_9mb.pdf' (4.9MB) — accept and display as uploaded. 4. Remove previous and upload 'resume_5mb.pdf' (5MB) — accept if allowed. 5. Remove and attempt to upload 'resume_5_1mb.pdf' (5.1MB). 6. Observe system behavior—expect upload to be rejected with a clear message that size exceeds limit. 7. Try resubmitting onboarding, confirming refused file is not present in profile/session. 8. Verify error message content is user-friendly and clear regarding size constraint.",
+    "expectedResult": "Resume files above size limit are rejected prior to acceptance, with a clear error message. Files at or below the limit are accepted.",
+    "sourceCitation": {
+      "location": "Section 2. Resume Handling, Lines 44-49",
+      "excerpt": "Accept a resume upload ... up to a defined size limit."
+    },
+    "tags": [
+      "ui",
+      "boundary",
+      "edge-case",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the system produces a personalized set of job listings filtered and ranked by captured preferences",
+    "description": "This test verifies that after preference capture, seekers receive job results dynamically filtered and ranked based on their inputs—supporting the core business need for relevant, personalized matches driving user engagement. Automation: MEDIUM — depends on result data conformance.",
+    "testId": "TC-JMATCH-01",
+    "testDescription": "Upon completion of preference onboarding, a seeker is shown job listings tailored to their selected preferences. Test ensures the listings differ when preferences are changed and consistently reflect the captured values.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Seeker profile exists with a complete or partial preference set; job listings database is populated with diverse attributes.",
+    "stepsToPerform": "1. Begin as a new anonymous user. 2. Complete entire onboarding questionnaire with distinctive preferences (e.g., 'Engineering', 'remote', 'Canada', 'salary:80000'). 3. Submit preferences. 4. Arrive on results page showing matched listings. 5. Inspect top listings: validate matches for 'Engineering', 'remote', 'Canada', 'salary:80000'. 6. Change the preference (e.g., category to 'Design'). 7. Observe change in displayed listings to reflect new preference. 8. Repeat for narrowing or broadening a preference (e.g., change location to 'All').",
+    "expectedResult": "Listings shown directly reflect the seeker's current preferences, displaying relevant matches filtered and ranked accordingly.",
+    "sourceCitation": {
+      "location": "Section 3. Job Matching and Results, Lines 54-56",
+      "excerpt": "Produce a personalised set of listings once the seeker's preferences have been captured, filtered and ranked against those preferences."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "functional",
+      "happy-path"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "state-transition",
+    "title": "Verify the platform persists captured preferences and applies them to all subsequent searches in the current and future sessions when logged in",
+    "description": "This test verifies that both anonymous and registered users have consistent, persistent application of captured preferences across sessions and logins. Supports seamless experience and accurate personalization. Automation: HIGH — automation can verify persistence and preference-driven results.",
+    "testId": "TC-JMATCH-02",
+    "testDescription": "A user completes onboarding, then browses/searches listings in the same and a later session (after account creation). The system retains and reapplies all captured preferences so job results stay consistent regardless of session state.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Anonymous session with completed preferences; test account exists for registration step.",
+    "stepsToPerform": "1. Open home page as new anonymous user. 2. Complete onboarding with distinct preferences. 3. Observe initial job search results reflecting those preferences. 4. Open a new tab or browser/session (simulate new visit); attempt job search — observe preferences still applied. 5. Return to original session, act on a listing (e.g., trigger registration by applying/saving job). 6. Register for a new account (e.g., email test+timestamp@example.com, password 'Test@123!'). 7. Upon successful registration and login, land back on job search. 8. Perform new searches, ensuring previously set preferences still determine the results.",
+    "expectedResult": "Preferences captured before account creation persist and are applied to all subsequent searches both in the session and after login/registration.",
+    "sourceCitation": {
+      "location": "Section 3. Job Matching and Results, Lines 57-59",
+      "excerpt": "Apply the captured preferences to subsequent searches for the remainder of the visit, and to later visits once an account exists."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "functional",
+      "regression"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the seeker can widen, narrow, or clear any preference from search results and see updated listings live",
+    "description": "This test verifies that after entering preferences, a seeker can individually widen, narrow, or clear any preference filter from their personalized job results, and the listings will update immediately to reflect the adjusted criteria. Automation: HIGH — change triggers reflected in live UI/API response.",
+    "testId": "TC-JMATCH-03",
+    "testDescription": "A seeker completes the questionnaire, views their personalized job results, and then uses the filter controls to change individual preferences (such as location, salary, job title) by either broadening, tightening, or clearing each. The system should update the displayed job listings instantly to match the changed criteria. This ensures that seekers experience a dynamic, interactive search and can tune their preferences without restarting the process. DATA-INCONSISTENCY: Not applicable.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Home page and questionnaire UI available; System contains test job data varied by each preference field; No user logged in.",
+    "stepsToPerform": "1. Launch the FlexJobs home page as an anonymous user.\n2. Begin and complete the onboarding questionnaire, entering all preference fields with typical values (e.g., Remote, Income, Actively Searching, $100,000, United States, 'Marketing Manager', 'Marketing', 5 years, Bachelor's, 'Flexible Hours').\n3. Submit the questionnaire and wait for the personalized job listings to load.\n4. Observe the displayed results.\n5. Locate the filter controls for each preference in the results interface.\n6. Widen a preference (e.g., change 'Remote only' to 'Remote or Hybrid') and verify listings update live.\n7. Narrow a preference (e.g., increase minimum salary) and verify listings update live.\n8. Clear a preference (e.g., remove location constraint) and verify listings update live.\n9. Repeat for at least three different preferences.\n10. Confirm that each change only affects the relevant set of listings and no full questionnaire re-entry is required.",
+    "expectedResult": "Each time a preference is widened, narrowed, or cleared, the job results are instantly refreshed to reflect only those criteria. No preference change requires repeating the entire questionnaire. Results match the active filters.",
+    "sourceCitation": {
+      "location": "Section 3. Job Matching and Results, Lines 59-60",
+      "excerpt": "Allow the seeker to widen, narrow or clear any individual preference from the results."
+    },
+    "tags": [
+      "ui",
+      "happy-path",
+      "functional",
+      "regression"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the UI indicates when a combination of preferences yields very few results, specifying the narrowing constraint",
+    "description": "This test ensures the seeker sees a UI indicator when their selected set of preferences is too restrictive and results in very few jobs. The system must highlight the specific preference(s) that constrain matches. Automation: MEDIUM — requires visual assertion.",
+    "testId": "TC-JMATCH-04",
+    "testDescription": "A seeker completes the onboarding questionnaire with a highly restrictive set of preferences (e.g., rare job title + high salary range + niche location), then views the personalized results. The system should detect that few or no matches are found, display an alert or indicator about the result scarcity, and highlight which chosen preference(s) are narrowing the listings. This ensures users can take corrective action and are not confused by empty or scant results.",
+    "severity": "High",
+    "priority": "P0",
+    "prerequisites": "System contains limited job data so that certain combinations yield zero or very few matches; Questionnaire and results UI active.",
+    "stepsToPerform": "1. Open the FlexJobs home page as a new anonymous user.\n2. Start the onboarding questionnaire.\n3. Choose highly restrictive answers (e.g., 'Astronaut' for job title, 'Iceland' for location, $250,000 salary).\n4. Complete and submit the questionnaire.\n5. Observe the personalized job results page loads.\n6. Check if the number of results is very low or zero.\n7. Look for a UI alert or indicator communicating few/zero results.\n8. Verify the UI explicitly identifies which filter(s) are causing the narrowing (e.g., 'Job Title: Astronaut', 'Salary: $250,000').\n9. Optionally, adjust or clear that constraint and watch results update.",
+    "expectedResult": "The UI displays a clear indicator when very few jobs are returned due to user preferences, and specifies the exact constraints responsible.",
+    "sourceCitation": {
+      "location": "Section 3. Job Matching and Results, Lines 61-62",
+      "excerpt": "Where a combination of preferences returns very few listings, indicate which constraint is narrowing the set."
+    },
+    "tags": [
+      "ui",
+      "edge-case",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify an anonymous seeker can browse listings, complete the onboarding questionnaire, and view matched results without an account or payment",
+    "description": "Confirms that essential platform experiences — browsing jobs, filling the questionnaire, and seeing tailored matches — do not require registration or payment. Protects frictionless user acquisition. Automation: HIGH.",
+    "testId": "TC-ACCESS-01",
+    "testDescription": "A first-time, not-logged-in user navigates through the entire seeker workflow — browsing job listings, completing the onboarding questionnaire, and viewing matched job results — without being prompted for sign-in or payment at any point. The absence of access or payment friction is validated at each step.",
+    "severity": "Critical",
+    "priority": "P1",
+    "prerequisites": "No user logged in; Public listings and questionnaire enabled; Registration/payment wall inactive.",
+    "stepsToPerform": "1. Navigate to the FlexJobs home page.\n2. Begin browsing available job listings as an anonymous visitor.\n3. Select the option to complete the onboarding questionnaire.\n4. Fill out all required preferences with valid test data.\n5. Submit the questionnaire.\n6. Review the personalized matched results page that loads.\n7. Check that no account registration or payment prompt appears throughout.\n8. Refresh or return to the results to verify continued access in the session.",
+    "expectedResult": "User is able to browse listings, complete the initial questionnaire, and view personalized job matches at no point requiring account registration or payment.",
+    "sourceCitation": {
+      "location": "Section 4. Access and Accounts, Lines 66-67",
+      "excerpt": "Browsing listings, completing the questionnaire and viewing matched results require no account and no payment."
+    },
+    "tags": [
+      "ui",
+      "happy-path",
+      "functional",
+      "smoke"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the system enforces that registration is only requested when the seeker applies, saves, or sets alerts for a listing",
+    "description": "Checks that account registration is only enforced when the user acts on a listing (apply, save, or set alert), and never before. Reduces user dropoff and respects business logic. Automation: HIGH.",
+    "testId": "TC-ACCESS-02",
+    "testDescription": "An anonymous user browses, completes onboarding, views matches, and is not prompted for an account. Only when attempting to take an action on a specific job (apply, save, set alert) does the system request registration. Ensures the registration wall is tightly scoped.",
+    "severity": "Critical",
+    "priority": "P1",
+    "prerequisites": "User not logged in; Listings and all preference workflows enabled; Actions available on at least one job.",
+    "stepsToPerform": "1. Launch the FlexJobs main page without authentication.\n2. Browse job listings freely as an anonymous user.\n3. Start and complete the onboarding questionnaire, entering valid test values for all fields.\n4. Submit to see personalized results.\n5. Attempt to apply for one of the displayed jobs.\n6. Observe system behavior regarding registration.\n7. Cancel and repeat for the 'save job' action.\n8. Cancel and repeat for 'set alert'.\n9. Confirm at no earlier point was registration or payment requested.",
+    "expectedResult": "Registration is only prompted exactly when the user: applies, saves, or sets an alert for a listing. General browsing and onboarding remain open.",
+    "sourceCitation": {
+      "location": "Section 4. Access and Accounts, Lines 68-69",
+      "excerpt": "Registration is requested only when the seeker acts on a listing — applying, saving it, or setting up alerts."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "happy-path",
+      "functional",
+      "regression"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "e2e",
+    "title": "Verify all preferences captured during anonymous use automatically carry over to the seeker's account upon registration",
+    "description": "Ensures that preferences supplied before account creation are automatically imported into the new seeker profile post-registration, maintaining continuity and user effort. Automation: MEDIUM-HIGH.",
+    "testId": "TC-ACCT-01",
+    "testDescription": "A user completes the onboarding questionnaire anonymously, then triggers the registration flow (by acting on a listing). Upon successful account setup and login, the user's profile should display all previously supplied preferences, and future matches should use these without re-entry.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "User not logged in; Preferences captured during the current anonymous session; Accounts can be created via the UI.",
+    "stepsToPerform": "1. Start new browser session and open FlexJobs home page.\n2. Complete the onboarding questionnaire with unique test preferences.\n3. Submit and view personalized job matches.\n4. Attempt to apply to a job, triggering the registration UI.\n5. Complete account registration (e.g., with test+acct1@example.com, password: Test123!).\n6. Log in with new credentials if not auto-logged-in.\n7. Navigate to the seeker preferences section in the profile/account area.\n8. Verify all preferences match those entered in the earlier anonymous session.\n9. View recommended jobs and confirm they are matched against the saved preferences.",
+    "expectedResult": "All preferences entered before registration persist and are associated with the new account after signup, visible in the user profile and used for future matches.",
+    "sourceCitation": {
+      "location": "Section 4. Access and Accounts, Lines 69-70",
+      "excerpt": "Preferences captured before registration carry over into the account when the seeker signs up."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "regression",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "e2e",
+    "title": "Verify all uploaded resume documents persist and attach to the seeker's newly created account after registration",
+    "description": "This test checks that any resume uploaded before a user registers is seamlessly associated with their new account upon signup — no need for re-uploading. Automation: MEDIUM.",
+    "testId": "TC-ACCT-02",
+    "testDescription": "A user, operating anonymously, uploads a resume document during onboarding or profile setup, then completes registration by acting on a listing. After account creation and login, the resume should be available in their profile, ready for applications, with all document metadata intact.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Resume upload possible without authentication; Test upload file available in common format; Registration enabled.",
+    "stepsToPerform": "1. Open FlexJobs home page as an anonymous user.\n2. Navigate to or trigger the onboarding workflow that requests a resume upload.\n3. Choose 'Up-to-date' for resume state and upload a test resume in a supported format/size (e.g., resume_tc123.pdf, 500kB).\n4. Submit to complete onboarding and receive personalized results.\n5. Act on a listing (apply/save) to trigger account registration.\n6. Register a new account with test+resume01@example.com.\n7. Log in if not auto-logged-in post-registration.\n8. Go to the user's profile resume section.\n9. Confirm the uploaded resume is present, available, and can be attached to a new job application.",
+    "expectedResult": "Resume uploaded when anonymous is retained and made available in the user's profile post-registration, with correct filename and status.",
+    "sourceCitation": {
+      "location": "Section 5. Data Handling, Lines 71-73",
+      "excerpt": "Hold preferences and uploaded documents against the seeker for the duration of an anonymous visit, and against the account thereafter."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "functional",
+      "happy-path"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify all preferences and resumes are retained for the duration of an anonymous visit and persist into the account once registered",
+    "description": "Ensures that all preference/profile data and uploaded resumes are available throughout a single anonymous session and are seamlessly persisted into the seeker's account when they register. Automation: HIGH.",
+    "testId": "TC-DATA-01",
+    "testDescription": "An anonymous seeker completes all preference capture and uploads a resume in a supported format. Before registration, data persists on page reloads and is accessible in all workflows. After registering/account creation, all data appears in their profile, with no loss.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Anonymous session support enabled; Resume upload and preference capture UI active; Registration enabled.",
+    "stepsToPerform": "1. Start anonymous session on FlexJobs home page.\n2. Complete the onboarding questionnaire with diverse preference values.\n3. Upload a resume (test_resume_retention.pdf, 1.2MB, supported format).\n4. Submit questionnaire, view personalized results.\n5. Refresh the results page; verify all preferences/resume data persists.\n6. Navigate to any accessible section (profile or matches), validate persistence.\n7. Take action on a listing (apply/save) to trigger registration.\n8. Register a new account with test+persist01@example.com and log in.\n9. Verify that all previous preferences AND the resume are associated with and visible in the new account.",
+    "expectedResult": "All preferences and resume data persist for the entire anonymous session and are seamlessly retained in the newly created account with no loss.",
+    "sourceCitation": {
+      "location": "Section 5. Data Handling, Lines 71-73",
+      "excerpt": "Hold preferences and uploaded documents against the seeker for the duration of an anonymous visit, and against the account thereafter."
+    },
+    "tags": [
+      "ui",
+      "e2e",
+      "regression",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "functional",
+    "title": "Verify the seeker can explicitly remove their resume and clear all stored preferences from their profile, both as a guest and as a registered user",
+    "description": "Validates that users (anonymous AND registered) can delete their uploaded resume and clear all stored preferences via explicit action, confirming immediate deletion and privacy. Automation: MEDIUM.",
+    "testId": "TC-DATA-02",
+    "testDescription": "Seeker uploads a resume and fills out preferences, then uses the available UI actions to explicitly remove the resume and clear preferences. This is tested for both anonymous and logged-in users. After each removal, resume and preferences must be wholly deleted and not present upon reload.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "System supports explicit removal actions for resumes/preferences; Features enabled for both guest and logged-in states.",
+    "stepsToPerform": "1. As an anonymous user, open FlexJobs and complete the onboarding questionnaire.\n2. Upload a resume (test_resume_remove.pdf, 900kB).\n3. Submit and receive personalized results.\n4. Use the profile/setting UI to delete the resume.\n5. Use the UI to clear all preferences.\n6. Refresh or navigate away and back; confirm resume and preference data are absent.\n7. Register a new account (test+remove01@example.com), complete sign in.\n8. Repeat resume upload and preference entry for registered user.\n9. Remove both using UI actions; verify data is deleted immediately.",
+    "expectedResult": "Resume and preferences are instantly deleted and remain absent on refresh, both for anonymous sessions and registered accounts.",
+    "sourceCitation": {
+      "location": "Section 5. Data Handling, Lines 74-75",
+      "excerpt": "Allow the seeker to remove their resume and clear their preferences."
+    },
+    "tags": [
+      "ui",
+      "functional",
+      "regression",
+      "edge-case"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "security",
+    "title": "Verify the system handles all uploaded documents and captured personal details according to applicable data protection rules",
+    "description": "Checks that resume and PII fields are managed per privacy requirements, not exposed in insecure locations, and erased on user deletion. Supports regulatory compliance. Automation: LOW-MEDIUM (auditing required).",
+    "testId": "TC-DATA-03",
+    "testDescription": "Upload a resume and fill in all PII. Then, delete the resume and clear preferences. Validate that sensitive files/fields are deleted from DB, cache, UI, and not shown in logs. No resume or PII should remain after removal, and they must not be leaked outside the user session at any time.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "System logs/audit trail accessible; Data protection features enabled; Mock/masked PII and resume for test.",
+    "stepsToPerform": "1. Open platform as a new user, submit onboarding with full PII (e.g., test names, job roles, location).\n2. Upload a resume (resume_privacy_check.docx).\n3. Complete process and observe that only hashed tokens or redacted IDs are visible in session/UI/API.\n4. Check accessibility of resume and PII via profile and download actions.\n5. Remove/deletes resume and clear all preferences.\n6. Check DB, logs, network payloads for any leftover artifact or record with PII or resumes.\n7. Register; repeat upload and deletion.\n8. Validate compliance with GDPR-like obligations — full data disappearance after explicit removal.",
+    "expectedResult": "All uploaded and captured sensitive data is properly erased, is not present in logs or UI after deletion, and is handled in line with listed data protection obligations.",
+    "sourceCitation": {
+      "location": "Section 5. Data Handling, Lines 76-77",
+      "excerpt": "Handle uploaded documents and personal details in line with applicable data protection obligations."
+    },
+    "tags": [
+      "api",
+      "security",
+      "non-functional",
+      "edge-case"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "boundary",
+    "title": "Verify the system enforces the defined maximum for job titles and prevents entering more than allowed",
+    "description": "Tests the upper boundary on the number of job titles a seeker can enter during preference capture, validating system restricts excess and prevents overflows. Automation: HIGH.",
+    "testId": "TC-BOUND-01",
+    "testDescription": "Seeker attempts to enter job titles: below max, at max, and at max+1 (if max=5: try 4, 5, and 6). Tests that only up to max are accepted. When exceeding, system must prevent extra entry and show a validation error matching the requirement.",
+    "severity": "High",
+    "priority": "P0",
+    "prerequisites": "Job title input field in onboarding UI; Configured max value from requirements (ASSUMPTION: max=5 for test purpose).",
+    "stepsToPerform": "1. Begin onboarding as new user.\n2. At the job titles section, enter four job titles (\"Data Analyst\", \"Marketing Manager\", \"Product Owner\", \"UX Designer\"); submit and verify acceptance.\n3. Start over; enter five job titles; submit and verify acceptance.\n4. Start over; enter six job titles (\"...\", total 6); attempt to submit.\n5. Observe system's immediate reaction — no more than five inputs allowed.\n6. Attempt to submit extra; check for clear error message (e.g., 'Maximum 5 job titles allowed').\n7. Repeat entry with non-unique job titles to ensure dedupe not enforced unless source states.\n8. Refresh/reload; verify constraining behavior persists.",
+    "expectedResult": "Up to the maximum number of job titles are accepted. Entry of more than the allowed maximum is blocked and triggers the exact validation error specified in system requirements.",
+    "sourceCitation": {
+      "location": "Section 1. Seeker Preference Capture, Lines 34-35",
+      "excerpt": "the job titles the seeker is targeting, up to a defined maximum"
+    },
+    "tags": [
+      "ui",
+      "boundary",
+      "negative",
+      "functional"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  },
+  {
+    "type": "boundary",
+    "title": "Verify the system properly validates file format and size for resume uploads, accepting only listed formats and rejecting files at the boundary values",
+    "description": "This test ensures the resume upload feature enforces permitted file types and size limits, as required for compliance and user experience, preventing unsupported or oversized resumes from being attached to a seeker profile. Automation: HIGH — validations and UI messages are fully checkable via automated scripts.",
+    "testId": "TC-BOUND-02",
+    "testDescription": "A new seeker uses the resume upload interface to submit resume files across critical boundaries: valid and invalid file formats, valid size, maximum allowable size, and files exceeding size limit. The system should only accept files in common supported formats (such as PDF or DOC/DOCX) and within the prescribed maximum size. It must reject unsupported formats (e.g., .exe, .jpg) and any file exceeding the defined size cap (e.g., 5MB, 5MB+1byte), displaying a clear rejection message with the specific reason. The system must confirm successful uploads before attaching the document to the seeker’s profile.",
+    "severity": "Critical",
+    "priority": "P0",
+    "prerequisites": "Backend resume storage and validation services are operational; Defined list of supported formats and max file size is configured; No prior resume attached to seeker; Home page and onboarding flow accessible to anonymous users; Test files prepared in valid/invalid formats and boundary sizes.",
+    "stepsToPerform": "1. Navigate to the home page as an anonymous user. 2. Begin onboarding workflow and advance to the 'Resume Upload' step. 3. Select a valid resume file (e.g., 'resume_valid.pdf', 4.9MB, PDF format) and submit. 4. Verify upload succeeds, confirmation message is shown, and resume is attached to profile. 5. Attempt to upload a file in an unsupported format (e.g., 'resume_invalid.exe', 1MB). 6. Verify upload is rejected, system displays reason: 'unsupported format'. 7. Attempt to upload a file in valid format at exact max allowable size (e.g., 'resume_max.docx', 5MB). 8. Verify upload succeeds, confirmation shown, and resume is attached. 9. Attempt to upload a file in valid format exceeding max size by 1 byte (e.g., 'resume_over.docx', 5MB+1byte). 10. Verify upload is rejected with reason: 'file size exceeds limit'. 11. Attempt to upload a file in valid format but clearly corrupted (e.g., 'resume_corrupt.pdf', 4MB). 12. Verify upload is rejected or flagged, and message clearly states the problem.",
+    "expectedResult": "Uploads in supported formats and within size limit are accepted with confirmation before being attached to the seeker profile. Files in unsupported formats or exceeding size limit (by any amount) are rejected, with a clear error message stating the precise reason ('unsupported format' or 'file size exceeds limit'). No unsupported or oversized resumes are added to the seeker profile. Upload status is visible in the UI.",
+    "sourceCitation": {
+      "location": "Section 2. Resume Handling, Lines 45-49",
+      "excerpt": "Accept a resume upload in the common document formats, up to a defined size limit. ... Reject unsupported formats and oversized documents with a clear reason."
+    },
+    "tags": [
+      "ui",
+      "boundary",
+      "negative",
+      "e2e",
+      "functional",
+      "regression"
+    ],
+    "roles": "",
+    "filesInvolved": "",
+    "orderStateTransitions": "",
+    "reconStatus": "",
+    "maskingNotes": ""
+  }
+]
