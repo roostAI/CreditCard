@@ -1,0 +1,20 @@
+Capture all required preference fields via onboarding questionnaire
+Distinctly record answered and unanswered preference fields
+Seeker can revisit and change any individual preference without retaking the entire questionnaire
+Seeker can indicate resume state during onboarding
+Upload resumes in supported formats under size limit
+Reject unsupported resume formats with clear reason
+Validate boundary values for resume file size
+Personalized job listings shown after preference onboarding
+Persist preferences across searches in current and future sessions after login
+Seeker can widen, narrow, or clear preferences from search results
+UI indicates constraints when few results are returned
+Anonymous seeker can browse listings, complete questionnaire, and view results without account or payment
+Registration requested only when seeker acts on a listing
+Preferences captured during anonymous use carry over to account after registration
+Uploaded resumes persist and attach to new account after registration
+Preferences and resume data persist for duration of anonymous visit and carry into account
+Seeker can remove resume and clear preferences, both as guest and registered user
+Job title entry respects maximum allowed
+Resume upload accepts/rejects files based on format and size boundaries
+System compliance with data protection obligations - resume and PII removal
